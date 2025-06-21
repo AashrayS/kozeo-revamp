@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1,
+    "title": "Code Ninja Sticker Pack",
+    "displayPicture": "https://imgs.search.brave.com/Hl3TaL3gFlvYjR-pWDhbQwxoa_GHNYOFzqm8kE-lZ3Q/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9paDEu/cmVkYnViYmxlLm5l/dC9pbWFnZS4zMzE5/MTg0MDk3LjAzNjgv/c3Qsc21hbGwsNTA3/eDUwNy1wYWQsNjAw/eDYwMCxmOGY4Zjgu/anBn",
+    "creditsAmount": 30,
+    "description": "A set of glossy vinyl stickers featuring witty programming phrases and icons.",
+    "type": "Sticker"
+  },
+  {
+    "id": 2,
+    "title": "Kozeo Logo T-Shirt",
+    "displayPicture": "https://imgs.search.brave.com/yU1ztl1RPWUd-Zi6ZkPtE1TwPUiXPOuTRDJNNnA6-kE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjQv/MjA5LzMzMy9zbWFs/bC9ibGFjay10LXNo/aXJ0LWZvci15b3Vy/LWRlc2lnbnMtbW9j/a3VwLWFpLWdlbmVy/YXRlZC1waG90by5q/cGc",
+    "creditsAmount": 100,
+    "description": "Premium cotton t-shirt with the Kozeo logo. Show off your dev pride in style!",
+    "type": "Tshirt"
+  },
+  {
+    "id": 3,
+    "title": "Debug Mode Cap",
+    "displayPicture": "https://imgs.search.brave.com/VrpQ0Dghr_iruRsN--Cmc6g2RwCLab0_4xk3_FdaJ-A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNDcv/NjA4LzEyOS9zbWFs/bC9zbGVlay1ibGFj/ay1jYXAtb24td2hp/dGUtd29vZGVuLXRh/YmxlLXBlcmZlY3Qt/Zm9yLWN1c3RvbS1k/ZXNpZ24tbW9ja3Vw/cy1pZGVhbC1mb3It/YnJhbmRpbmctYW5k/LWZhc2hpb24tcHJv/amVjdHMtcGhvdG8u/anBn",
+    "creditsAmount": 70,
+    "description": "A sleek black cap embroidered with 'Debug Mode' – perfect for coders on the go.",
+    "type": "Cap"
+  },
+  {
+    "id": 4,
+    "title": "Dark Theme Poster",
+    "displayPicture": "https://imgs.search.brave.com/FuSUb-1B14pQ40YHkK4xzi6QooH_RVonTsDN2DSG1LU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9paDEu/cmVkYnViYmxlLm5l/dC9pbWFnZS40ODgz/NTQzNzQ0LjE0MTcv/ZnBvc3RlcixzbWFs/bCx3YWxsX3RleHR1/cmUsc3F1YXJlX3By/b2R1Y3QsNjAweDYw/MC5qcGc",
+    "creditsAmount": 50,
+    "description": "An aesthetic poster inspired by popular IDEs’ dark themes – a must-have for your desk wall.",
+    "type": "Poster"
+  },
+  {
+    "id": 5,
+    "title": "Git Commit Sticker Set",
+    "displayPicture": "https://imgs.search.brave.com/2tEbgrdRHF_HfN8wqqZ6uc61cqmibgMzb4b14dA2L-k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmV0/c3lzdGF0aWMuY29t/LzQxNjYzMjY5L3Iv/aWwvNjZmNzExLzUz/OTk4ODU2MDAvaWxf/NjAweDYwMC41Mzk5/ODg1NjAwX3BwZHcu/anBn",
+    "creditsAmount": 25,
+    "description": "Set of funny Git-themed stickers like 'git push', 'blame', and 'force with care'.",
+    "type": "Sticker"
+  },
+  {
+    "id": 6,
+    "title": "Code Like a Pro Hoodie",
+    "displayPicture": "https://imgs.search.brave.com/7ehEVFJne_9pUyYzoa0RDewVtM5ShoTz08FT-LyJ3yg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjkv/ODgzLzY0MS9zbWFs/bC9ibGFjay1ob29k/aWUtbW9ja3VwLXdp/dGgtd29vZGVuLWJh/Y2tncm91bmQtYWkt/Z2VuZXJhdGUtZnJl/ZS1waG90by5qcGc",
+    "creditsAmount": 150,
+    "description": "A comfy hoodie with clean typography and a printed back-end flowchart.",
+    "type": "Tshirt"
+  },
+  {
+    "id": 7,
+    "title": "Stack Overflow Mug",
+    "displayPicture": "https://imgs.search.brave.com/hnR2wA3MyhQlBERQIwtDjzL_CfHKfubE4np735_6vL0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmV0/c3lzdGF0aWMuY29t/LzM5NTI0ODQyL2Mv/MTUyOC8xNTI4LzEy/NC8yNDEvaWwvODZl/ZmJkLzQ1NzcyMTM2/OTEvaWxfNjAweDYw/MC40NTc3MjEzNjkx/XzZrYWguanBn",
+    "creditsAmount": 60,
+    "description": "Start your mornings right with coffee and a dose of Stack Overflow wisdom.",
+    "type": "Merch"
+  },
+  {
+    "id": 8,
+    "title": "Binary Enamel Pin",
+    "displayPicture": "https://imgs.search.brave.com/6OBQ6rKfmiIHk1Ify4XpB-b9SVS7wAzDL_aeTSKUJJQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmV0/c3lzdGF0aWMuY29t/LzE3NzExNTQ4L3Iv/aWwvZmUyODliLzQ4/NTQ2NzQ5MjQvaWxf/NjAweDYwMC40ODU0/Njc0OTI0X3NzazMu/anBn",
+    "creditsAmount": 40,
+    "description": "A subtle yet stylish binary pin (‘011001’) for your backpack or lanyard.",
+    "type": "Accessory"
+  },
+  {
+    "id": 9,
+    "title": "Frontend Flowchart Poster",
+    "displayPicture": "https://imgs.search.brave.com/37n_D3VnWcYAG5LvWWyBDkagRNBZQ6I1JT49ujeCJTk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTE1ZGJ3d3BCM0wu/anBn",
+    "creditsAmount": 55,
+    "description": "A visual flowchart of modern frontend stacks and component trees.",
+    "type": "Poster"
+  }
+  
+]
