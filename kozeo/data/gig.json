@@ -1,10 +1,10 @@
 [
-  {
+    {
     "gigId": 1,
     "host": "@bigball",
     "Title": "Full Stack Developer for Startup MVP",
     "Looking_For": "React + Node.js Expert",
-    "Description": "We're building an MVP for a fintech idea. Looking for someone to take ownership of the stack.",
+    "Description": "We’re working on a financial technology product targeted toward emerging markets. The MVP will include user authentication, a dashboard for analytics, and transaction support. We're looking for a highly experienced developer who can own the full stack, make architectural decisions, and collaborate closely with the design team to iterate rapidly. Clean, modular code and agile thinking are a must.",
     "Skills": ["React", "Node.js", "MongoDB", "Express"],
     "currency": "USD",
     "Amount": 1200.5,

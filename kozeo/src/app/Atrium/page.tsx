@@ -5,8 +5,10 @@ import Sidebar from "@/components/common/Sidebar";
 import { FiSearch } from "react-icons/fi";
 import gigs from "../../../data/gig.json"; // Adjust this path based on your project structure
 import { FiStar } from "react-icons/fi";
-
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
       <Header logoText="Kozeo" />
@@ -21,7 +23,7 @@ export default function Home() {
             {/* Search & Create Gig Section */}
             <div className="flex justify-center items-center gap-4 mb-8">
               <div className="relative w-full max-w-xl">
-                <input
+                <input   
                   type="text"
                   placeholder="What are you looking for?"
                   className="w-full py-2 pl-4 pr-10 rounded-md bg-neutral-900 border border-neutral-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-600"
@@ -31,7 +33,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <button className="px-5 py-2 rounded-md font-semibold text-black bg-white hover:bg-neutral-200 transition-colors">
+              <button className="px-5 py-2 rounded-md font-semibold text-black bg-white hover:bg-neutral-200 w-auto  transition-colors">
                 Create Gig
               </button>
             </div>
@@ -43,74 +45,67 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
               {gigs.map((gig) => (
                 <div
-                  key={gig.gigId}
-                  className="relative bg-gradient-to-br from-[#111] to-[#1a1a1a] 
-            border border-neutral-700 
-            rounded-lg p-5 
-            shadow-md transition-transform duration-200 ease-in-out 
-            hover:scale-[1.03] 
-            hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
-                >
-                  {/* ⭐ Host Rating Top-Right */}
-                  <div className="absolute top-3 right-3 text-xs text-gray-300 bg-neutral-800 bg-opacity-80 px-2 py-0.5 rounded-sm border border-neutral-600 backdrop-blur-sm flex items-center gap-1">
-                    <FiStar className="text-sm text-gray-400" fill="white" />
-                    <span className="font-medium">
-                      {gig.hostRating.toFixed(1)}
-                    </span>
-                  </div>
+  key={gig.gigId}
+  onClick={() => {
+    router.push(`/Atrium/description?gigId=${gig.gigId}`);
+  }}
+  className="relative flex flex-col justify-between h-full min-h-[320px] bg-gradient-to-br from-[#111] to-[#1a1a1a]
+             rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out 
+             hover:scale-[1.03] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
+>
+  {/* ⭐ Host Rating Top-Right */}
+  <div className="absolute top-3 right-3 text-xs text-gray-300 bg-neutral-800 bg-opacity-80 px-2 py-0.5 rounded-sm border border-neutral-600 backdrop-blur-sm flex items-center gap-1">
+    <FiStar className="text-sm text-gray-400" fill="white" />
+    <span className="font-medium">{gig.hostRating.toFixed(1)}</span>
+  </div>
 
-                  {/* Host */}
-                  <div className="text-sm text-cyan-400 font-medium mb-1">
-                    {gig.host}
-                  </div>
+  {/* Top Content */}
+  <div>
+    <div className="text-sm text-cyan-400 font-medium mb-1">{gig.host}</div>
 
-                  {/* Title */}
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    {gig.Title}
-                  </h3>
+    <h3 className="text-lg font-semibold text-white mb-2">{gig.Title}</h3>
 
-                  {/* Description */}
-                  <p
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                    className="text-sm text-gray-300 mb-3"
-                  >
-                    {gig.Description}
-                  </p>
+    <p
+      style={{
+        display: "-webkit-box",
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+      className="text-sm text-gray-300 mb-3"
+    >
+      {gig.Description}
+    </p>
 
-                  {/* Looking For */}
-                  <p className="text-sm mb-2">
-                    <span className="text-gray-400">Looking For: </span>
-                    <span className="text-white">{gig.Looking_For}</span>
-                  </p>
+    <p className="text-sm mb-2">
+      <span className="text-gray-400">Looking For: </span>
+      <span className="text-white">{gig.Looking_For}</span>
+    </p>
 
-                  {/* Skills */}
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {gig.Skills.map((skill: string, idx: number) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-0.5 text-xs bg-neutral-800 border border-neutral-600 text-gray-300 rounded-md"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+    <div className="flex flex-wrap gap-2 mb-3">
+      {gig.Skills.map((skill: string, idx: number) => (
+        <span
+          key={idx}
+          className="px-2 py-0.5 text-xs bg-neutral-800 border border-neutral-600 text-gray-300 rounded-md"
+        >
+          {skill}
+        </span>
+      ))}
+    </div>
+  </div>
 
-                  {/* Bottom Bar */}
-                  <div className="flex justify-between items-center border-t border-neutral-800 pt-3 mt-3">
-                    <span className="text-sm font-semibold text-emerald-400">
-                      {gig.currency} {gig.Amount}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {gig.active_request} active requests
-                    </span>
-                  </div>
-                </div>
+  {/* Bottom Bar */}
+  <div className="flex justify-between items-center border-t border-neutral-800 pt-3 mt-4">
+    <span className="text-sm font-semibold text-emerald-400">
+      {gig.currency} {gig.Amount}
+    </span>
+    <span className="text-xs text-gray-500">
+      {gig.active_request} active requests
+    </span>
+  </div>
+</div>
+
               ))}
             </div>
           </main>

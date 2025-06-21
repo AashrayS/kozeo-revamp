@@ -1,0 +1,62 @@
+[
+  {
+    "username": "@codequeen",
+    "profilePictureLink": "https://randomuser.me/api/portraits/women/45.jpg",
+    "Rating": 4.8,
+    "bio": "Frontend developer with a keen eye for detail and clean, maintainable code. Specializes in delivering pixel-perfect designs and fast turnarounds.",
+    "reviews": [
+      {
+        "title": "Fast and Clean Work",
+        "description": "Delivered the project ahead of time and exceeded expectations. Code was well-structured and maintainable.",
+        "username": "@devmark",
+        "rating": 5
+      },
+      {
+        "title": "Solid Frontend Skills",
+        "description": "Handled the UI with great detail. Pixel perfect implementation of the design.",
+        "username": "@uihero",
+        "rating": 4.5
+      }
+    ]
+  },
+  {
+    "username": "@aitech",
+    "profilePictureLink": "https://randomuser.me/api/portraits/men/32.jpg",
+    "Rating": 4.6,
+    "bio": "AI and chatbot developer with strong expertise in OpenAI APIs and LangChain. Builds intelligent, responsive, and context-aware conversational systems.",
+    "reviews": [
+      {
+        "title": "Brilliant Chatbot",
+        "description": "Created a very intuitive and responsive AI chatbot with excellent context retention.",
+        "username": "@saasboss",
+        "rating": 4.7
+      },
+      {
+        "title": "Knowledgeable in AI",
+        "description": "Knew exactly what to use and when. Great use of OpenAI and LangChain.",
+        "username": "@datadev",
+        "rating": 4.5
+      }
+    ]
+  },
+  {
+    "username": "@nocoder",
+    "profilePictureLink": "https://randomuser.me/api/portraits/men/88.jpg",
+    "Rating": 4.9,
+    "bio": "No-code enthusiast and Webflow expert with a passion for smooth animations, modern UI design, and rapid project delivery.",
+    "reviews": [
+      {
+        "title": "Beautiful Webflow Work",
+        "description": "The animations and transitions were very smooth. Great sense of modern UI.",
+        "username": "@designjunkie",
+        "rating": 5
+      },
+      {
+        "title": "Fast Turnaround",
+        "description": "Completed the site refresh within 2 days. Very impressed!",
+        "username": "@clientx",
+        "rating": 4.8
+      }
+    ]
+  }
+]

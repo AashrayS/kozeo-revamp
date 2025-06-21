@@ -7,32 +7,36 @@ import {
   FiMessageSquare,
   FiChevronLeft,
   FiChevronRight,
+  FiHome,
 } from "react-icons/fi";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const tabs = [
-  { name: "Profile", icon: FiUser },
-  { name: "Store", icon: FiShoppingBag },
-  { name: "Open Gigs", icon: FiBriefcase },
-  { name: "Discussion Rooms", icon: FiMessageSquare },
+  { name: "Home", icon: FiHome, path: "/Atrium" },
+  { name: "Profile", icon: FiUser, path: "/profile" },
+  { name: "Store", icon: FiShoppingBag, path: "/store" },
+  { name: "Your Gigs", icon: FiBriefcase, path: "/gigs" },
+  { name: "Discussion Rooms", icon: FiMessageSquare, path: "/Atrium/discussion" },
 ];
 
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const router = useRouter();
 
   return (
     <div className="relative">
-      {/* Sidebar main */}
       <aside
-        className={`sticky top-0 h-screen border-r text-white  border-neutral-700 flex flex-col justify-between transition-all duration-300 ${
+        className={`sticky top-0 h-screen border-r text-white border-neutral-700 flex flex-col justify-between transition-all duration-300 ${
           collapsed ? "w-20" : "w-64"
         }`}
       >
         <div className="flex flex-col p-4 space-y-6">
           <nav className="space-y-8">
-            {tabs.map(({ name, icon: Icon }) => (
+            {tabs.map(({ name, icon: Icon, path }) => (
               <button
                 key={name}
+                onClick={() => router.push(path)}
                 className="flex items-center gap-3 w-full px-4 py-2 rounded-md hover:bg-neutral-800 transition-colors"
               >
                 <Icon className="text-2xl shrink-0" />
