@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { theme } from "../../theme";
 import { useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";;
 
 export default function LoginSignupPage() {
   const [showLogin, setShowLogin] = useState(true);
+  const router = useRouter();
 
   const isDark = true;
   const currentTheme = isDark ? theme.dark : theme.light;
@@ -52,7 +54,7 @@ export default function LoginSignupPage() {
           Kozeo
         </h1>
         <p className="mb-4 md:mb-6 text-sm md:text-base" style={{}}>
-          A place to get your work done.
+         Get your hands dirty with real life projects
         </p>
         <div
         className="w-full sm:w-[90%] md:w-1/4 h-auto relative flex flex-col items-center justify-center px-6 py-10  overflow-hidden"
@@ -135,6 +137,13 @@ export default function LoginSignupPage() {
 
               <button
                 type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Handle login logic here
+                  router.push("/Atrium");
+                }
+
+                }
                 className="w-full py-3 rounded-md text-white"
                 style={{ background: currentTheme.colors.primary }}
               >
@@ -321,6 +330,11 @@ export default function LoginSignupPage() {
 
                   <button
                     type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Handle signup logic here
+                      router.push("/Atrium");
+                    }}
                     className="w-full py-3 rounded-md text-white"
                     style={{ background: currentTheme.colors.primary }}
                   >
