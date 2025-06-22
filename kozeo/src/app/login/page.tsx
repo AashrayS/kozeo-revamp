@@ -11,6 +11,7 @@ export default function LoginSignupPage() {
 
   const isDark = true;
   const currentTheme = isDark ? theme.dark : theme.light;
+  
 
   const [signupStep, setSignupStep] = useState(1);
   const [signupEmail, setSignupEmail] = useState("");
@@ -20,8 +21,8 @@ export default function LoginSignupPage() {
   const [resendCooldown, setResendCooldown] = useState(0);
 
   // Refs for autofocus
-  const otpRef = useRef(null);
-  const nameRef = useRef(null);
+const otpRef = useRef<HTMLInputElement>(null);
+const nameRef = useRef<HTMLInputElement>(null);
 
   // Countdown for resend
 

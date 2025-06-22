@@ -7,6 +7,15 @@ import { FiSearch, FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 
+export interface StoreItem {
+  id: number;
+  title: string;
+  description: string;
+  displayPicture: string;
+  type: string; // e.g., "tshirt", "mug", etc.
+  creditsAmount: number;
+}
+
 export default function StorePage() {
   //   const [cart, setCart] = useState([]);
   const [cart, setCart] = useState<number[]>([]);
