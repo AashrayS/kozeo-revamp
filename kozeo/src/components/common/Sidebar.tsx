@@ -11,12 +11,13 @@ import {
 } from "react-icons/fi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IconType } from "react-icons";
 
-const tabs = [
+const tabs: { name: string; icon: IconType; path: string }[] = [
   { name: "Home", icon: FiHome, path: "/Atrium" },
   { name: "Profile", icon: FiUser, path: "/profile" },
   { name: "Store", icon: FiShoppingBag, path: "/store" },
-  { name: "Your Gigs", icon: FiBriefcase, path: "/Gig/1" },,
+  { name: "Your Gigs", icon: FiBriefcase, path: "/Gig/1" },
   { name: "Discussion Rooms", icon: FiMessageSquare, path: "/Atrium/discussion" },
 ];
 
@@ -44,6 +45,7 @@ export default function Sidebar() {
               </button>
             ))}
           </nav>
+
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="flex items-center gap-3 w-full px-4 py-2 rounded-md hover:bg-neutral-800 transition-colors"

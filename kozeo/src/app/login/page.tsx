@@ -137,9 +137,14 @@ export default function LoginSignupPage() {
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    const email = document.getElementById("login-email")?.value;
-                    const password =
-                      document.getElementById("login-password")?.value;
+                    const email = (
+                      document.getElementById("login-email") as HTMLInputElement
+                    )?.value;
+                    const password = (
+                      document.getElementById(
+                        "login-password"
+                      ) as HTMLInputElement
+                    )?.value;
 
                     if (email === "boobs@boobs.com" && password === "boobs") {
                       router.push("/Atrium"); // Simulate successful login

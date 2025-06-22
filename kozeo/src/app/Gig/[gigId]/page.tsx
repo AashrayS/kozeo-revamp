@@ -183,7 +183,7 @@ export default function GigPage({
                         onEmojiClick={(emojiData) =>
                           setInput((prev) => prev + emojiData.emoji)
                         }
-                        theme="dark"
+                        
                         height={500}
                       />
                     </div>
