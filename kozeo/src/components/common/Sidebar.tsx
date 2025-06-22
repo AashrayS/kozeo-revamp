@@ -16,7 +16,7 @@ const tabs = [
   { name: "Home", icon: FiHome, path: "/Atrium" },
   { name: "Profile", icon: FiUser, path: "/profile" },
   { name: "Store", icon: FiShoppingBag, path: "/store" },
-  { name: "Your Gigs", icon: FiBriefcase, path: "/gigs" },
+  { name: "Your Gigs", icon: FiBriefcase, path: "/Gig/1" },,
   { name: "Discussion Rooms", icon: FiMessageSquare, path: "/Atrium/discussion" },
 ];
 
