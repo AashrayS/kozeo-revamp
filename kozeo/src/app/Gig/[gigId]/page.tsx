@@ -19,6 +19,7 @@ interface Props {
     gigId: string;
   };
 }
+type Socket = ReturnType<typeof io>;
 
 export default function GigPage({
   params: paramsPromise,
@@ -281,7 +282,7 @@ export default function GigPage({
       ...messages,
       { sender: "Bob", time: new Date().toLocaleTimeString(), message: input },
     ]);
-    socketRef.current.emit("chat-message", {
+    socketRef.current?.emit("chat-message", {
       sender: "bob",
       time: new Date().toLocaleTimeString(),
       message: input,
