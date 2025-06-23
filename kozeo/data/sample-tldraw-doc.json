@@ -1,0 +1,40 @@
+{
+  "id": "doc:smiley",
+  "store": {
+    "shapes": {
+      "shape:1": {
+        "typeName": "shape",
+        "id": "shape:1",
+        "type": "ellipse",
+        "x": 300,
+        "y": 300,
+        "props": {
+          "color": "yellow",
+          "w": 100,
+          "h": 100
+        }
+      }
+    },
+    "assets": {},
+    "bindings": {},
+    "pageStates": {
+      "page:1": {
+        "selectedIds": [],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        }
+      }
+    },
+    "pages": {
+      "page:1": {
+        "id": "page:1",
+        "shapes": {
+          "shape:1": true
+        },
+        "bindings": {}
+      }
+    }
+  }
+}

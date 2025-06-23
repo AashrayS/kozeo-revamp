@@ -11,7 +11,9 @@ import TldrawWrapper from "@/components/common/TldrawWrapper";
 import EmojiPicker from "emoji-picker-react";
 import chatData from "../../../../data/chat.json";
 import { FaRegSmile } from "react-icons/fa";
+import { createTLStore, defaultShapeUtils } from "tldraw";
 
+const tldrawStore = createTLStore({ shapeUtils: defaultShapeUtils });
 import { io } from "socket.io-client";
 
 interface Props {
@@ -560,7 +562,7 @@ export default function GigPage({
             {/* Row containing all three columns */}
             <div className=" md:flex flex-1 flex-row h-full">
               {/* Chat Column */}
- <div
+              <div
                 className="flex flex-col h-full overflow-x-hidden border-neutral-700"
                 style={{ width }}
               >
@@ -640,11 +642,11 @@ export default function GigPage({
                   <>
                     <div
                       style={{ height: topHeight }}
-                      className="relative p-4 rounded-xl bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a] shadow-lg"
+                      className="relative p-4 rounded-xl bg-transparent shadow-lg"
                     >
-                      {/* <span className="font-semibold text-gray-100 text-md mb-2 block">
-                        📺 Screen Share Area
-                      </span> */}
+                      <span className="font-semibold text-gray-100 text-md mb-2 block absolute">
+                        📺 Screen is being Shared
+                      </span>
 
                       <video
                         ref={screenShareRef}
@@ -666,7 +668,7 @@ export default function GigPage({
 
                 {/* Bottom - Tldraw Area */}
                 <div className="flex-1 overflow-hidden flex flex-col">
-                  <TldrawWrapper />
+                  <TldrawWrapper gigId="canvas-memories-001" />{" "}
                 </div>
               </div>
 

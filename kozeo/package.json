@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tldraw/sync": "^3.13.1",
     "@tldraw/tldraw": "^3.13.1",
     "emoji-picker-react": "^4.12.2",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "sync-server": "^2.0.0-beta.7",
+    "tldraw": "^3.13.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
