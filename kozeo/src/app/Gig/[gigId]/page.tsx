@@ -11,7 +11,7 @@ import TldrawWrapper from "@/components/common/TldrawWrapper";
 import EmojiPicker from "emoji-picker-react";
 import chatData from "../../../../data/chat.json";
 import { FaRegSmile } from "react-icons/fa";
-import { createTLStore, defaultShapeUtils } from "tldraw";
+// import { createTLStore, defaultShapeUtils } from "tldraw";/
 
 import { io } from "socket.io-client";
 
