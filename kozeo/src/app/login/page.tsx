@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { theme } from "../../theme";
 import { useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigationLoader } from "../../components/common/useNavigationLoader";
 
 export default function LoginSignupPage() {
   const [showLogin, setShowLogin] = useState(true);
-  const router = useRouter();
+  const { navigateWithLoader } = useNavigationLoader();
 
   const isDark = true;
   const currentTheme = isDark ? theme.dark : theme.light;
@@ -48,9 +48,9 @@ export default function LoginSignupPage() {
         backgroundColor: currentTheme.colors.background,
       }}
     >
-       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-      
+
       <div className="md:w-full w-full flex flex-col items-center justify-items-start md:justify-center p-6 md:p-10 text-center text-white bg-[radial-gradient(circle_at_center,_#111,_#000)] md:bg-[radial-gradient(circle_at_center,_#111,_#000)]">
         <h1
           className="font-bold mb-2 md:mb-4 text-4xl mt-16 md:mt-0 md:text-8xl"
@@ -150,7 +150,7 @@ export default function LoginSignupPage() {
                     )?.value;
 
                     if (email === "boobs@boobs.com" && password === "boobs") {
-                      router.push("/Atrium"); // Simulate successful login
+                      navigateWithLoader("/Atrium"); // Simulate successful login
                     } else {
                       alert("Invalid credentials");
                     }
@@ -345,7 +345,7 @@ export default function LoginSignupPage() {
                       onClick={(e) => {
                         e.preventDefault();
                         // Handle signup logic here
-                        router.push("/profile/setupprofile");
+                        navigateWithLoader("/profile/setupprofile");
                       }}
                       className="w-full py-3 rounded-md text-white"
                       style={{ background: currentTheme.colors.primary }}

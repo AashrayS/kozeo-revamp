@@ -10,20 +10,29 @@ import {
   FiHome,
 } from "react-icons/fi";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { IconType } from "react-icons";
+import { useNavigationLoader } from "./useNavigationLoader";
 
 const tabs: { name: string; icon: IconType; path: string }[] = [
   { name: "Home", icon: FiHome, path: "/Atrium" },
-  { name: "Profile", icon: FiUser, path: "/profile" },
+  { name: "Profile", icon: FiUser, path: "/profile/shashwat_tripathi" },
   { name: "Store", icon: FiShoppingBag, path: "/store" },
   { name: "Your Gigs", icon: FiBriefcase, path: "/Gig/1" },
-  { name: "Discussion Rooms", icon: FiMessageSquare, path: "/Atrium/discussion" },
+  {
+    name: "Discussion Rooms",
+    icon: FiMessageSquare,
+    path: "/Atrium/discussion",
+  },
 ];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
-  const router = useRouter();
+  const { navigateWithLoader, startLoading } = useNavigationLoader();
+
+  const handleNavigation = (path: string) => {
+    // Always trigger loader immediately for any navigation
+    navigateWithLoader(path);
+  };
 
   return (
     <div className="relative">
@@ -37,7 +46,7 @@ export default function Sidebar() {
             {tabs.map(({ name, icon: Icon, path }) => (
               <button
                 key={name}
-                onClick={() => router.push(path)}
+                onClick={() => handleNavigation(path)}
                 className="flex items-center gap-3 w-full px-4 py-2 rounded-md hover:bg-neutral-800 transition-colors"
               >
                 <Icon className="text-2xl shrink-0" />

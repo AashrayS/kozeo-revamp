@@ -1,0 +1,112 @@
+{
+    "username3": "shashwat_tripathi",
+    "profilePic": "https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://media.easy-peasy.ai/0f15c789-f296-45ec-922c-31a6bcc42b63/d1aca026-0605-4e55-a77f-3a0dcd22b273.png",
+    "bio": "Full-stack developer passionate about real-time apps, WebRTC, and creative tools like Tldraw.",
+    "links": [
+        "https://github.com/shashwat-tripathi",
+        "https://leetcode.com/shashwat_tripathi",
+        "https://www.linkedin.com/in/shashwat-tripathi"
+    ],
+    "achievements": [
+        "https://cdn1.iconfinder.com/data/icons/badges-achievements-001-solid/68/Artboard_9-512.png",
+        "https://static.vecteezy.com/system/resources/previews/010/577/201/non_2x/premium-quality-achievement-badge-icon-logo-illustration-certificate-symbol-template-for-graphic-and-web-design-collection-free-vector.jpg",
+        "https://static.vecteezy.com/system/resources/previews/026/693/614/non_2x/achievement-badge-icon-and-glyph-free-vector.jpg",
+        "https://static.vecteezy.com/system/resources/previews/033/256/018/non_2x/achievement-badge-3d-icon-png.png"
+    ],
+    "wallet": {
+        "amount": 2750,
+        "currency": "INR"
+    },
+    "collaboratedGigs": [
+        {
+            "title": "WebRTC Voice+Video Chat",
+            "description": "Built signaling + media handling for a WebRTC feature in a React/Next app.",
+            "lookingFor": "WebRTC debugging help",
+            "rating": 4.8,
+            "review": {
+                "title": "Great collaborator on media layer!",
+                "description": "Shashwat handled media permissions, stream toggling, and UI sync beautifully.",
+                "username": "arjun_dev"
+            }
+        }
+    ],
+    "gigsHosted": [
+        {
+            "title": "MemoLens - Steganography App",
+            "description": "App to encode text and voice notes in images and share securely.",
+            "lookingFor": "Android testers and UI refiners",
+            "rating": 4.9,
+            "review": {
+                "title": "Innovative idea with clean execution",
+                "description": "Loved contributing UI tweaks. The concept of embedding voice in photos is super cool.",
+                "username": "anika_ui"
+            }
+        },
+        {
+            "title": "Tldraw Whiteboard Collab Plugin",
+            "description": "Developed custom sync logic for real-time multi-user collaboration on whiteboards.",
+            "lookingFor": "Frontend performance optimizers",
+            "rating": 4.7,
+            "review": {
+                "title": "Seamless sync engine!",
+                "description": "Handled merge conflicts and drawing latency issues effectively.",
+                "username": "devops_rahul"
+            }
+        },
+        {
+            "title": "Next.js OTP Auth System",
+            "description": "Multi-step login/signup flow with Firebase SMS OTP and custom UI.",
+            "lookingFor": "Security auditors",
+            "rating": 5.0,
+            "review": {
+                "title": "Rock-solid and smooth UX",
+                "description": "The loading state, auto-focus, and resend timer were cleanly implemented.",
+                "username": "frontend_sam"
+            }
+        }
+    ],
+    "transactions": [
+        {
+            "gigTitle": "MemoLens - Steganography App",
+            "dateOfTransaction": "2025-06-25",
+            "confirmationNumber": "TXN987654321",
+            "amount": 500
+        },
+        {
+            "gigTitle": "WebRTC Voice+Video Chat",
+            "dateOfTransaction": "2025-06-12",
+            "confirmationNumber": "TXN123456789",
+            "amount": 1250
+        },
+        {
+            "gigTitle": "Tldraw Whiteboard Collab Plugin",
+            "dateOfTransaction": "2025-06-15",
+            "confirmationNumber": "TXN456789123",
+            "amount": 700
+        },
+        {
+            "gigTitle": "Next.js OTP Auth System",
+            "dateOfTransaction": "2025-06-10",
+            "confirmationNumber": "TXN321654987",
+            "amount": 300
+        }
+    ],
+    "previouslyWorkedWith": [
+        {
+            "username": "anika_ui",
+            "profilePic": "https://pngtree.com/freepng/web-programmer-avatar_15495273.html"
+        },
+        {
+            "username": "devops_rahul",
+            "profilePic": "https://pngtree.com/freepng/web-programmer-avatar_15495272.html"
+        },
+        {
+            "username": "frontend_sam",
+            "profilePic": "https://depositphotos.com/vector-image-id17348292.html"
+        },
+        {
+            "username": "arjun_dev",
+            "profilePic": "https://www.dreamstime.com/illustration/avatar-programmer.html"
+        }
+    ]
+}
