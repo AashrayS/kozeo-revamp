@@ -4,12 +4,15 @@ import { useState } from "react";
 import { FiLogOut, FiBell } from "react-icons/fi";
 import { logout } from "../../../utilities/operation"; // adjust path if needed
 import NotificationBox from "./NotificationBox";
+import { useNotificationContext } from "./NotificationContext";
 
 export default function Header({
   logoText = "YourApp",
 }: {
   logoText?: string;
 }) {
+  const { notifications, markAsRead, markAllAsRead, unreadCount } =
+    useNotificationContext();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   const toggleNotifications = () => {
@@ -36,7 +39,9 @@ export default function Header({
             <FiBell className="text-xl" />
             <span className="hidden sm:inline">Notifications</span>
             {/* Notification Badge */}
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full animate-pulse" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full animate-pulse" />
+            )}
           </button>
 
           {/* Logout Button */}
@@ -54,6 +59,9 @@ export default function Header({
       <NotificationBox
         isOpen={isNotificationOpen}
         onClose={closeNotifications}
+        notifications={notifications}
+        markAsRead={markAsRead}
+        markAllAsRead={markAllAsRead}
       />
     </>
   );

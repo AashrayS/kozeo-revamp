@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
 import {
   FiX,
   FiBell,
@@ -9,7 +7,9 @@ import {
   FiInfo,
   FiAlertTriangle,
   FiClock,
+  FiExternalLink,
 } from "react-icons/fi";
+import { useNotificationContext } from "./NotificationContext";
 
 interface Notification {
   id: string;
@@ -18,172 +18,64 @@ interface Notification {
   message: string;
   timestamp: string;
   read: boolean;
+  username?: string;
+  action?: string;
+  actionLabel?: string;
 }
 
 interface NotificationBoxProps {
   isOpen: boolean;
   onClose: () => void;
+  notifications: Notification[];
+  markAsRead: (id: string) => void;
+  markAllAsRead: () => void;
 }
 
-type Socket = ReturnType<typeof io>;
-
-// Sample notifications data
+// Sample notifications with new structure
 const sampleNotifications: Notification[] = [
   {
     id: "1",
     type: "success",
     title: "Gig Completed",
-    message:
-      "Your WebRTC Voice+Video Chat gig has been successfully completed!",
+    message: "Your gig with john_doe has been completed successfully.",
     timestamp: "2 hours ago",
     read: false,
+    username: "john_doe",
+    action: "view_results",
+    actionLabel: "View Results",
   },
   {
     id: "2",
     type: "info",
     title: "New Collaboration Request",
-    message: "John Doe wants to collaborate on your Tldraw Whiteboard project.",
+    message: "jane_smith wants to collaborate on your project.",
     timestamp: "5 hours ago",
     read: false,
+    username: "jane_smith",
+    action: "view_request",
+    actionLabel: "View Request",
   },
   {
     id: "3",
     type: "warning",
     title: "Payment Pending",
-    message: "Your payment for MemoLens project is pending verification.",
+    message: "Payment from alex_wilson is pending verification.",
     timestamp: "1 day ago",
     read: true,
-  },
-  {
-    id: "4",
-    type: "info",
-    title: "Profile Updated",
-    message: "Your profile information has been successfully updated.",
-    timestamp: "2 days ago",
-    read: true,
-  },
-  {
-    id: "5",
-    type: "success",
-    title: "New Achievement Unlocked",
-    message: "You've earned a new CodeChef certification badge!",
-    timestamp: "3 days ago",
-    read: true,
+    username: "alex_wilson",
+    action: "check_status",
+    actionLabel: "Check Status",
   },
 ];
 
-const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(sampleNotifications);
-  const socketRef = useRef<Socket | null>(null);
-
-  // WebSocket connection setup
-  useEffect(() => {
-    // Only connect when component mounts
-    // const socket = io("wss://kozeo-ws-production.up.railway.app", { // production url
-
-    //   query: { gigID: "notifications" }, // Use a special room for notifications
-    // });
-
-  //local url conncetion
-    const socket = io("http://localhost:3001", { // Use your local server URL
-      query: { gigID: "notifications" }, // Use a special room for notifications
-    });
-
-    socketRef.current = socket;
-
-    socket.on("connect", () => {
-      console.log("Notifications WebSocket Connected:", socket.id);
-      socket.emit("join-room", "notifications");
-      // Also join user-specific notification room
-      socket.emit("join-notification-room", "default"); // In production, use actual userId
-    });
-
-    // Listen for new notifications from server
-    socket.on("new-notification", (notification: Notification) => {
-      console.log("Received new notification:", notification);
-      setNotifications((prev) => [notification, ...prev]);
-    });
-
-    // Listen for notification updates (mark as read, etc.)
-    socket.on("notification-update", (updatedNotification: Notification) => {
-      console.log("Notification updated:", updatedNotification);
-      setNotifications((prev) =>
-        prev.map((notif) =>
-          notif.id === updatedNotification.id ? updatedNotification : notif
-        )
-      );
-    });
-
-    // Listen for notifications response from server
-    socket.on(
-      "notifications-response",
-      (serverNotifications: Notification[]) => {
-        console.log("Received notifications from server:", serverNotifications);
-        setNotifications(serverNotifications);
-      }
-    );
-
-    // Listen for bulk notification updates
-    socket.on(
-      "notifications-bulk-update",
-      (updatedNotifications: Notification[]) => {
-        console.log("Bulk notification update:", updatedNotifications);
-        setNotifications(updatedNotifications);
-      }
-    );
-
-    // Cleanup on unmount
-    return () => {
-      console.log("Disconnecting notifications WebSocket");
-      socket.disconnect();
-    };
-  }, []); // Empty dependency array - only run once on mount
-
-  // Close on Escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = "hidden";
-
-      // Request latest notifications from server when modal opens
-      if (socketRef.current) {
-        socketRef.current.emit("get-notifications");
-      }
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen, onClose]);
-
-  const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
-    );
-
-    // Emit to server to sync with other clients/database
-    if (socketRef.current) {
-      socketRef.current.emit("mark-notification-read", { notificationId: id });
-    }
-  };
-
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
-
-    // Emit to server to sync with other clients/database
-    if (socketRef.current) {
-      socketRef.current.emit("mark-all-notifications-read");
-    }
-  };
+const NotificationBox = ({
+  isOpen,
+  onClose,
+  notifications,
+  markAsRead,
+  markAllAsRead,
+}: NotificationBoxProps) => {
+  const { setUnreadCount } = useNotificationContext();
 
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
@@ -198,21 +90,24 @@ const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
     }
   };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const handleAction = (notification: Notification) => {
+    markAsRead(notification.id);
+    // Here you would handle the actual action (navigate, open modal, etc.)
+  };
 
   if (!isOpen) return null;
 
   return (
     <>
-      {/* Backdrop with blur */}
+      {/* Backdrop with lighter blur */}
       <div
-        className="fixed inset-0 bg-black opacity-50 backdrop-blur-sm z-40 transition-opacity duration-300"
+        className="fixed inset-0 bg-black opacity-70 backdrop-blur-sm z-40 transition-opacity duration-300"
         onClick={onClose}
       />
 
-      {/* Notification Box */}
+      {/* Notification Box - Top Left Corner */}
       <div className="fixed top-4 right-4 z-50 w-full max-w-sm md:max-w-md lg:max-w-lg">
-        <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-xl shadow-2xl border border-neutral-700 max-h-[80vh] flex flex-col animate-slideDown">
+        <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-xl border border-neutral-700 max-h-[80vh] flex flex-col animate-slideDown">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-neutral-700">
             <div className="flex items-center gap-3">
@@ -220,17 +115,17 @@ const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
               <h2 className="text-xl font-semibold text-white">
                 Notifications
               </h2>
-              {unreadCount > 0 && (
-                <span className="bg-cyan-500 text-white text-xs px-2 py-1 rounded-full">
-                  {unreadCount}
+              {notifications.filter((n) => !n.read).length > 0 && (
+                <span className="bg-cyan-700 text-white text-xs px-2 py-1 rounded-full">
+                  {notifications.filter((n) => !n.read).length}
                 </span>
               )}
             </div>
             <div className="flex items-center gap-2">
-              {unreadCount > 0 && (
+              {notifications.filter((n) => !n.read).length > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
+                  className="text-sm text-cyan-600 hover:text-cyan-300 transition-colors"
                 >
                   Mark all read
                 </button>
@@ -259,12 +154,11 @@ const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`p-4 border-l-4 cursor-pointer transition-colors hover:bg-neutral-800 hover:bg-opacity-30 ${
+                    className={`p-4 border-l-4 transition-colors hover:bg-cyan-900 hover:bg-opacity-30 ${
                       notification.read
                         ? "border-gray-600 bg-opacity-20"
-                        : "border-cyan-400 bg-cyan-500 bg-opacity-10"
+                        : "border-cyan-400 bg-cyan-800 bg-opacity-10"
                     }`}
-                    onClick={() => markAsRead(notification.id)}
                   >
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 mt-1">
@@ -284,7 +178,7 @@ const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
                           )}
                         </div>
                         <p
-                          className={`text-sm leading-relaxed ${
+                          className={`text-sm leading-relaxed mb-2 ${
                             notification.read
                               ? "text-gray-400"
                               : "text-gray-200"
@@ -292,9 +186,28 @@ const NotificationBox = ({ isOpen, onClose }: NotificationBoxProps) => {
                         >
                           {notification.message}
                         </p>
-                        <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-                          <FiClock className="text-xs" />
-                          <span>{notification.timestamp}</span>
+
+                        {/* Action Button */}
+                        {notification.action && notification.actionLabel && (
+                          <button
+                            onClick={() => handleAction(notification)}
+                            className="inline-flex items-center gap-1 px-3 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition-colors"
+                          >
+                            {notification.actionLabel}
+                            <FiExternalLink className="text-xs" />
+                          </button>
+                        )}
+
+                        <div className="flex items-center justify-between mt-2">
+                          <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <FiClock className="text-xs" />
+                            <span>{notification.timestamp}</span>
+                          </div>
+                          {notification.username && (
+                            <span className="text-xs text-cyan-400">
+                              @{notification.username}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
