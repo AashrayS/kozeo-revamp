@@ -23,11 +23,25 @@ interface OngoingGig {
 
 export default function GigListPage() {
   const [gigs, setGigs] = useState<OngoingGig[]>([]);
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     setGigs(gigdata as OngoingGig[]); // Cast gigdata to OngoingGig[]
   }, []);
+
+  const handleGigNavigation = (gigId: number) => {
+    setIsNavigating(true);
+    router.push(`/Gig/${gigId}`);
+  };
+
+  if (isNavigating) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -43,7 +57,7 @@ export default function GigListPage() {
               {gigs.map((gig) => (
                 <div
                   key={gig.gigId}
-                  onClick={() => router.push(`/Gig/${gig.gigId}`)}
+                  onClick={() => handleGigNavigation(gig.gigId)}
                   className="relative flex flex-col justify-between h-full min-h-[320px] bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out hover:scale-[1.03] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))] cursor-pointer"
                 >
                   {/* ⭐ Host Rating Top-Right */}
@@ -104,7 +118,7 @@ export default function GigListPage() {
                       className="ml-4 px-3 py-1 rounded border border-neutral-700 bg-transparent text-neutral-200 hover:bg-neutral-800 hover:text-white text-xs font-medium transition-colors shadow-none"
                       onClick={(e) => {
                         e.stopPropagation();
-                        router.push(`/Gig/${gig.gigId}`);
+                        handleGigNavigation(gig.gigId);
                       }}
                     >
                       Enter
