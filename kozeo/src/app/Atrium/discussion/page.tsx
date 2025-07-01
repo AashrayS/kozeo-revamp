@@ -26,11 +26,11 @@ export default function DiscussionPage() {
           <Sidebar />
 
           <main className="flex-1 p-6 overflow-y-auto">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-full mx-auto">
               {/* Header */}
               <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-                  <FaComments className="text-cyan-400" />
+                  {/* <FaComments className="text-cyan-400" /> */}
                   Discussion Rooms
                 </h1>
                 <p className="text-gray-400">
@@ -105,7 +105,7 @@ export default function DiscussionPage() {
               </div>
 
               {/* Create Room CTA */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border border-cyan-500/20 rounded-xl text-center">
+              {/* <div className="mt-8 p-6 bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border border-cyan-500/20 rounded-xl text-center">
                 <h3 className="text-xl font-semibold text-white mb-2">
                   Want to create your own room?
                 </h3>
@@ -116,7 +116,7 @@ export default function DiscussionPage() {
                 <button className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-lg font-medium hover:from-cyan-700 hover:to-purple-700 transition-all duration-200">
                   Request Custom Room
                 </button>
-              </div>
+              </div> */}
             </div>
           </main>
         </div>
