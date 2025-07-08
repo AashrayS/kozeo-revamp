@@ -4,6 +4,7 @@ import "./globals.css";
 import Head from "next/head";
 import { NavigationWrapper } from "@/components/common/NavigationWrapper";
 import NotificationProviderClient from "@/components/common/NotificationProviderClient";
+import { ReduxProvider } from "../../store/Provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,9 +37,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NotificationProviderClient>
-          <NavigationWrapper>{children}</NavigationWrapper>
-        </NotificationProviderClient>
+        <ReduxProvider>
+          <NotificationProviderClient>
+            <NavigationWrapper>{children}</NavigationWrapper>
+          </NotificationProviderClient>
+        </ReduxProvider>
       </body>
     </html>
   );

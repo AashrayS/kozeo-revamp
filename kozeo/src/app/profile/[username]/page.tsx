@@ -5,22 +5,37 @@ import { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import { FiStar, FiCalendar, FiDollarSign, FiUsers } from "react-icons/fi";
-import profileData from "../../../../data/profile.json";
+import {
+  getUserByUsername,
+  getCurrentUser,
+} from "../../../../utilities/kozeoApi";
+import { isAuthenticated } from "../../../../utilities/api";
 
 interface ProfileData {
-  username3: string;
-  profilePic: string;
+  id: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  profile_Picture: string;
   bio: string;
   links: string[];
-  achievements: string[];
-  wallet: {
+  achievements: any[];
+  wallet?: {
     amount: number;
     currency: string;
   };
-  collaboratedGigs: any[];
+  gigsCollaborated: any[];
   gigsHosted: any[];
-  transactions: any[];
-  previouslyWorkedWith: any[];
+  rating: number;
+  workedWith?: any[];
+  collaboratedGigs?: any[];
+  transactions?: any[];
+  previouslyWorkedWith?: any[];
+  reviewsReceived: any[];
+  role: string;
+  email?: string;
+  phone?: string;
+  country_Code?: string;
 }
 
 // ProfileImage component with fallback handling
@@ -92,26 +107,151 @@ export default function UserProfilePage() {
   const router = useRouter();
   const username = params.username as string;
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   useEffect(() => {
-    // In a real app, you'd fetch based on username
-    // For now, we'll use the static data
-    setProfile(profileData as ProfileData);
-  }, [username]);
+    // Check authentication
+    if (!isAuthenticated()) {
+      router.push("/login");
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+
+        // Get current user first to check if this is their own profile
+        const currentUser = await getCurrentUser();
+        const isOwn = (currentUser as any).username === username;
+        setIsOwnProfile(isOwn);
+
+        // Fetch the profile data
+        console.log("Fetching profile for username:", username);
+        const profileData = await getUserByUsername(username);
+        console.log("Profile data received:", profileData);
+
+        if (profileData) {
+          setProfile(profileData as any);
+        } else {
+          console.log("No profile data returned");
+          setError("User not found");
+        }
+      } catch (error: any) {
+        console.error("Error fetching profile:", error);
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+        setError(`Failed to load profile: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (username) {
+      fetchProfile();
+    }
+  }, [username, router]);
+
+  // Add a test button for debugging (only in development)
+  const testGetUserByUsername = async () => {
+    try {
+      console.log("Testing getUserByUsername...");
+      const result = await getUserByUsername(username as string);
+      console.log("Test result:", result);
+      alert("Test successful! Check console for details.");
+    } catch (error: any) {
+      console.error("Test failed:", error);
+      alert(`Test failed: ${error.message}`);
+    }
+  };
+
+  const testConnection = async () => {
+    try {
+      console.log("Testing connection...");
+      const { testGraphQLSchema, testConnection } = await import("../../../../utilities/kozeoApi");
+      const connected = await testConnection();
+      console.log("Connection test:", connected);
+      
+      if (connected) {
+        const schema = await testGraphQLSchema();
+        console.log("Schema test result:", schema);
+      }
+      
+      alert("Connection test completed! Check console for details.");
+    } catch (error: any) {
+      console.error("Connection test failed:", error);
+      alert(`Connection test failed: ${error.message}`);
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Header logoText="Kozeo" />
+        <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+          <Sidebar />
+          <div className="flex flex-1">
+            <main className="flex-1 p-6 overflow-y-auto">
+              <div className="flex justify-center items-center py-20">
+                <div className="text-gray-400">Loading profile...</div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header logoText="Kozeo" />
+        <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+          <Sidebar />
+          <div className="flex flex-1">
+            <main className="flex-1 p-6 overflow-y-auto">
+              <div className="flex flex-col justify-center items-center py-20">
+                <div className="text-red-400 mb-4">{error}</div>
+                
+                {/* Debug Panel - Only show in development */}
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="bg-gray-800 p-4 rounded-lg mt-4">
+                    <h3 className="text-white mb-2">Debug Options</h3>
+                    <div className="space-x-2">
+                      <button
+                        onClick={testGetUserByUsername}
+                        className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                      >
+                        Test getUserByUsername
+                      </button>
+                      <button
+                        onClick={testConnection}
+                        className="bg-green-600 text-white px-3 py-1 rounded text-sm"
+                      >
+                        Test Connection
+                      </button>
+                    </div>
+                    <p className="text-gray-400 text-xs mt-2">
+                      Username: {username} | Check browser console for detailed logs
+                    </p>
+                  </div>
+                )}
+              </div>
+            </main>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (!profile) {
     return <div className="text-white">Loading...</div>;
   }
 
-  const totalEarnings = profile.transactions.reduce(
-    (sum, transaction) => sum + transaction.amount,
-    0
-  );
-  const avgRating =
-    profile.gigsHosted.length > 0
-      ? profile.gigsHosted.reduce((sum, gig) => sum + gig.rating, 0) /
-        profile.gigsHosted.length
-      : 0;
+  // Calculate stats from the API data
+  const totalEarnings = profile.wallet?.amount || 0;
+  const avgRating = profile.rating || 0;
 
   return (
     <>
@@ -132,8 +272,8 @@ export default function UserProfilePage() {
                 <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-6">
                   {/* Avatar */}
                   <ProfileImage
-                    profilePic={profile.profilePic}
-                    username={profile.username3}
+                    profilePic={profile.profile_Picture || ""}
+                    username={profile.username}
                     size="lg"
                   />
 
@@ -142,15 +282,20 @@ export default function UserProfilePage() {
                     <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-2 mb-2">
                       <div className="flex items-center gap-2">
                         <h3 className="text-xl lg:text-2xl font-semibold text-white">
-                          {profile.username3 || "Unknown User"}
+                          {profile.first_name} {profile.last_name} (@
+                          {profile.username})
                         </h3>
-                        <button
-                          onClick={() => router.push(`/profile/${username}/edit`)}
-                          className="ml-2 px-2 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
-                          type="button"
-                        >
-                          Edit
-                        </button>
+                        {isOwnProfile && (
+                          <button
+                            onClick={() =>
+                              router.push(`/profile/${username}/edit`)
+                            }
+                            className="ml-2 px-2 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+                            type="button"
+                          >
+                            Edit
+                          </button>
+                        )}
                       </div>
                       {/* Achievements beside username for lg+ screens */}
                       {profile.achievements &&
@@ -248,12 +393,12 @@ export default function UserProfilePage() {
                   color: "text-white",
                 },
                 {
-                  count: profile.collaboratedGigs.length,
+                  count: profile.gigsCollaborated?.length || 0,
                   label: "Collaborations",
                   color: "text-white",
                 },
                 {
-                  count: `${totalEarnings} ${profile.wallet.currency}`,
+                  count: `${totalEarnings} ${profile.wallet?.currency || 'USD'}`,
                   label: "Wallet Balance",
                   extra: (
                     <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition text-sm font-semibold">
@@ -337,7 +482,7 @@ export default function UserProfilePage() {
                 Collaborations
               </h3>
               <div className="space-y-4">
-                {profile.collaboratedGigs.map((gig, index) => (
+                {(profile.collaboratedGigs || profile.gigsCollaborated || []).map((gig: any, index: number) => (
                   <div
                     key={index}
                     className="border-l-1 border-purple-700 pl-4 py-3 bg-opacity-30 rounded-r-lg"
@@ -382,7 +527,7 @@ export default function UserProfilePage() {
                 Recent Transactions
               </h3>
               <div className="space-y-3">
-                {profile.transactions.slice(0, 5).map((transaction, index) => (
+                {(profile.transactions || []).slice(0, 5).map((transaction: any, index: number) => (
                   <div
                     key={index}
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-neutral-800 bg-opacity-30 rounded-lg"
@@ -402,7 +547,7 @@ export default function UserProfilePage() {
                       </div>
                     </div>
                     <div className="text-emerald-400 font-semibold self-start sm:self-center">
-                      +{profile.wallet.currency} {transaction.amount}
+                      +{profile.wallet?.currency || 'USD'} {transaction.amount}
                     </div>
                   </div>
                 ))}
@@ -415,7 +560,7 @@ export default function UserProfilePage() {
                 Previously Worked With
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {profile.previouslyWorkedWith.map((collaborator, index) => (
+                {(profile.previouslyWorkedWith || []).map((collaborator: any, index: number) => (
                   <div key={index} className="text-center">
                     <div className="flex justify-center mb-2">
                       <ProfileImage

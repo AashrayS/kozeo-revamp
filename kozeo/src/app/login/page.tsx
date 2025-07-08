@@ -4,19 +4,43 @@ import { useState } from "react";
 import { theme } from "../../theme";
 import { useRef, useEffect } from "react";
 import { useNavigationLoader } from "../../components/common/useNavigationLoader";
+import { loginUser, registerUser } from "../../../utilities/kozeoApi";
+import { setToken } from "../../../utilities/api";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../store/userSlice";
 
 export default function LoginSignupPage() {
   const [showLogin, setShowLogin] = useState(true);
   const { navigateWithLoader } = useNavigationLoader();
+  const dispatch = useDispatch();
 
   const isDark = true;
   const currentTheme = isDark ? theme.dark : theme.light;
 
+  // Login state
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Signup state
   const [signupStep, setSignupStep] = useState(1);
-  const [signupEmail, setSignupEmail] = useState("");
+  const [signupData, setSignupData] = useState({
+    email: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    country_Code: "US",
+    role: "freelancer",
+  });
   const [otp, setOtp] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [signupError, setSignupError] = useState("");
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
 
   // Refs for autofocus
@@ -38,6 +62,7 @@ export default function LoginSignupPage() {
   useEffect(() => {
     if (signupStep === 2 && otpRef.current) otpRef.current.focus();
     if (signupStep === 3 && nameRef.current) nameRef.current.focus();
+    console.log("Signup step changed to:", signupStep);
   }, [signupStep]);
 
   return (
@@ -51,17 +76,17 @@ export default function LoginSignupPage() {
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
 
-      <div className="md:w-full w-full flex flex-col items-center justify-items-start md:justify-center p-6 md:p-10 text-center text-white bg-[radial-gradient(circle_at_center,_#111,_#000)] md:bg-[radial-gradient(circle_at_center,_#111,_#000)]">
+      <div className="md:w-full w-full flex  flex-col items-center justify-items-start md:justify-center p-6 md:p-10 text-center text-white bg-[radial-gradient(circle_at_center,_#111,_#000)] md:bg-[radial-gradient(circle_at_center,_#111,_#000)]">
         <h1
           className="font-bold mb-2 md:mb-4 text-4xl mt-16 md:mt-0 md:text-8xl"
           style={{}}
         >
-          Kozeo
+         KOZEO
         </h1>
         <p className="mb-4 md:mb-6 text-sm md:text-base" style={{}}>
           Get your hands dirty with real life projects
         </p>
-        <div className="w-full sm:w-[90%] md:w-1/4 h-auto relative flex flex-col items-center justify-center px-6 py-10  overflow-hidden">
+        <div className="w-full sm:w-[90%] md:w-1/4 h-full  border-amber-50 relative flex flex-col items-center justify-center px-6 py-10  overflow-hidden">
           <div className="flex mb-6 ">
             <button
               onClick={() => setShowLogin(true)}
@@ -84,9 +109,9 @@ export default function LoginSignupPage() {
           </div>
 
           {/* Sliding Form Container */}
-          <div className="relative w-full min-h-[300px] overflow-hidden sm:h-auto">
+          <div className="relative w-full  overflow-x-hidden sm:h-auto">
             <div
-              className="absolute top-0 left-0 w-full h-full flex transition-transform duration-500 ease-in-out"
+              className="   w-full h-full flex transition-transform duration-500 ease-in-out"
               style={{
                 transform: `translateX(${showLogin ? "0%" : "-50%"})`,
                 width: "200%",
@@ -106,6 +131,8 @@ export default function LoginSignupPage() {
                     id="login-email"
                     type="email"
                     placeholder="you@example.com"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
                     className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                     style={{
                       borderColor: currentTheme.colors.border,
@@ -127,6 +154,8 @@ export default function LoginSignupPage() {
                     id="login-password"
                     type="password"
                     placeholder="Enter your password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
                     className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                     style={{
                       borderColor: currentTheme.colors.border,
@@ -136,29 +165,50 @@ export default function LoginSignupPage() {
                   />
                 </div>
 
+                {loginError && (
+                  <p className="text-red-500 text-sm mb-4">{loginError}</p>
+                )}
+
                 <button
                   type="submit"
-                  onClick={(e) => {
+                  disabled={isLoggingIn}
+                  onClick={async (e) => {
                     e.preventDefault();
-                    const email = (
-                      document.getElementById("login-email") as HTMLInputElement
-                    )?.value;
-                    const password = (
-                      document.getElementById(
-                        "login-password"
-                      ) as HTMLInputElement
-                    )?.value;
+                    setLoginError("");
 
-                    if (email === "boobs@boobs.com" && password === "boobs") {
-                      navigateWithLoader("/Atrium"); // Simulate successful login
-                    } else {
-                      alert("Invalid credentials");
+                    if (!loginEmail || !loginPassword) {
+                      setLoginError("Please fill in all fields");
+                      return;
+                    }
+
+                    setIsLoggingIn(true);
+
+                    try {
+                      // Pass as object, not as separate args
+                      const response = await loginUser({
+                        email: loginEmail,
+                        password: loginPassword,
+                      });
+
+                      // Save token
+                      setToken((response as any).token);
+
+                      // Save user to Redux and localStorage
+                      dispatch(setUser((response as any).user));
+
+                      navigateWithLoader("/Atrium");
+                    } catch (error: any) {
+                      setLoginError(
+                        error?.message || "Login failed. Please try again."
+                      );
+                    } finally {
+                      setIsLoggingIn(false);
                     }
                   }}
                   className="w-full py-3 rounded-md text-white"
                   style={{ background: currentTheme.colors.primary }}
                 >
-                  Login
+                  {isLoggingIn ? "Logging in..." : "Login"}
                 </button>
               </form>
 
@@ -179,8 +229,13 @@ export default function LoginSignupPage() {
                       <input
                         type="email"
                         placeholder="you@example.com"
-                        value={signupEmail}
-                        onChange={(e) => setSignupEmail(e.target.value)}
+                        value={signupData.email}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            email: e.target.value,
+                          })
+                        }
                         className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                         style={{
                           borderColor: currentTheme.colors.border,
@@ -198,7 +253,7 @@ export default function LoginSignupPage() {
                       className="w-full py-3 rounded-md text-white flex items-center justify-center"
                       style={{ background: currentTheme.colors.primary }}
                       onClick={() => {
-                        const valid = /\S+@\S+\.\S+/.test(signupEmail);
+                        const valid = /\S+@\S+\.\S+/.test(signupData.email);
                         if (!valid) {
                           setEmailError("Please enter a valid email.");
                           return;
@@ -206,15 +261,16 @@ export default function LoginSignupPage() {
                         setEmailError("");
                         setIsSendingOtp(true);
 
-                        // Simulate API call
+                        // Simulate sending OTP and move to step 2
                         setTimeout(() => {
+                          console.log("Moving to OTP verification step");
                           setIsSendingOtp(false);
-                          setSignupStep(2);
-                          setResendCooldown(30);
+                          setSignupStep(2); // Go to OTP verification step
+                          setResendCooldown(30); // Start resend cooldown
                         }, 1500);
                       }}
                     >
-                      {isSendingOtp ? "Sending OTP..." : "Send OTP"}
+                      {isSendingOtp ? "Processing..." : "Continue"}
                     </button>
                   </>
                 )}
@@ -228,12 +284,18 @@ export default function LoginSignupPage() {
                       >
                         Enter OTP
                       </label>
+                      <p className="text-xs text-gray-500 mb-2">
+                        For testing, use OTP: 123123
+                      </p>
                       <input
                         ref={otpRef}
                         type="text"
-                        placeholder="123456"
+                        placeholder="Enter OTP (Test: 123123)"
                         value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
+                        onChange={(e) => {
+                          setOtp(e.target.value);
+                          setOtpError(""); // Clear error when user types
+                        }}
                         className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                         style={{
                           borderColor: currentTheme.colors.border,
@@ -242,14 +304,25 @@ export default function LoginSignupPage() {
                         }}
                       />
                     </div>
+                    {otpError && (
+                      <p className="text-red-500 text-sm">{otpError}</p>
+                    )}
 
                     <button
                       type="button"
                       className="w-full py-3 rounded-md text-white"
                       style={{ background: currentTheme.colors.primary }}
                       onClick={() => {
-                        if (otp == "boobs") {
+                        console.log("OTP verification attempt:", otp);
+                        if (otp === "123123") {
+                          console.log(
+                            "OTP verified successfully, moving to step 3"
+                          );
                           setSignupStep(3);
+                          setOtpError("");
+                        } else {
+                          console.log("Invalid OTP entered");
+                          setOtpError("Invalid OTP. Please use: 123123");
                         }
                       }}
                     >
@@ -281,8 +354,69 @@ export default function LoginSignupPage() {
                   </>
                 )}
 
+                {/* Show debug info in development */}
+                {process.env.NODE_ENV === "development" && (
+                  <div className="text-xs text-gray-500 mt-2">
+                    Current step: {signupStep}, isSendingOtp:{" "}
+                    {isSendingOtp.toString()}
+                  </div>
+                )}
+
                 {signupStep === 3 && (
                   <>
+                    <div>
+                      <label
+                        className="block w-full text-left mb-1 text-sm font-medium"
+                        style={{ color: currentTheme.colors.text }}
+                      >
+                        First Name
+                      </label>
+                      <input
+                        ref={nameRef}
+                        type="text"
+                        placeholder="John"
+                        value={signupData.first_name}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            first_name: e.target.value,
+                          })
+                        }
+                        className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
+                        style={{
+                          borderColor: currentTheme.colors.border,
+                          background: currentTheme.colors.input,
+                          color: currentTheme.colors.text,
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className="block w-full text-left mb-1 text-sm font-medium"
+                        style={{ color: currentTheme.colors.text }}
+                      >
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Doe"
+                        value={signupData.last_name}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            last_name: e.target.value,
+                          })
+                        }
+                        className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
+                        style={{
+                          borderColor: currentTheme.colors.border,
+                          background: currentTheme.colors.input,
+                          color: currentTheme.colors.text,
+                        }}
+                      />
+                    </div>
+
                     <div>
                       <label
                         className="block w-full text-left mb-1 text-sm font-medium"
@@ -291,9 +425,15 @@ export default function LoginSignupPage() {
                         Username
                       </label>
                       <input
-                        ref={nameRef}
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="johndoe"
+                        value={signupData.username}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            username: e.target.value,
+                          })
+                        }
                         className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                         style={{
                           borderColor: currentTheme.colors.border,
@@ -313,6 +453,13 @@ export default function LoginSignupPage() {
                       <input
                         type="password"
                         placeholder="Enter your password"
+                        value={signupData.password}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            password: e.target.value,
+                          })
+                        }
                         className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                         style={{
                           borderColor: currentTheme.colors.border,
@@ -331,6 +478,13 @@ export default function LoginSignupPage() {
                       <input
                         type="password"
                         placeholder="Confirm your password"
+                        value={signupData.confirmPassword}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            confirmPassword: e.target.value,
+                          })
+                        }
                         className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg"
                         style={{
                           borderColor: currentTheme.colors.border,
@@ -340,17 +494,76 @@ export default function LoginSignupPage() {
                       />
                     </div>
 
+                    {signupError && (
+                      <p className="text-red-500 text-sm">{signupError}</p>
+                    )}
+
                     <button
                       type="submit"
-                      onClick={(e) => {
+                      disabled={isSigningUp}
+                      onClick={async (e) => {
                         e.preventDefault();
-                        // Handle signup logic here
-                        navigateWithLoader("/profile/setupprofile");
+                        setSignupError("");
+
+                        // Validation
+                        if (
+                          !signupData.first_name ||
+                          !signupData.last_name ||
+                          !signupData.username ||
+                          !signupData.password
+                        ) {
+                          setSignupError("Please fill in all fields");
+                          return;
+                        }
+
+                        if (
+                          signupData.password !== signupData.confirmPassword
+                        ) {
+                          setSignupError("Passwords do not match");
+                          return;
+                        }
+
+                        if (signupData.password.length < 6) {
+                          setSignupError(
+                            "Password must be at least 6 characters"
+                          );
+                          return;
+                        }
+
+                        setIsSigningUp(true);
+
+                        try {
+                          // Pass as object, not as separate args
+                          const response = await registerUser({
+                            first_name: signupData.first_name,
+                            last_name: signupData.last_name,
+                            email: signupData.email,
+                            username: signupData.username,
+                            password: signupData.password,
+                            country_Code: signupData.country_Code,
+                            role: signupData.role,
+                          });
+
+                          // Save token
+                          setToken((response as any).token);
+
+                          // Save user to Redux and localStorage
+                          dispatch(setUser((response as any).user));
+
+                          navigateWithLoader("/profile/setupprofile");
+                        } catch (error: any) {
+                          setSignupError(
+                            error?.message ||
+                              "Registration failed. Please try again."
+                          );
+                        } finally {
+                          setIsSigningUp(false);
+                        }
                       }}
                       className="w-full py-3 rounded-md text-white"
                       style={{ background: currentTheme.colors.primary }}
                     >
-                      Complete Sign Up
+                      {isSigningUp ? "Creating Account..." : "Complete Sign Up"}
                     </button>
                   </>
                 )}

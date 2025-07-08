@@ -2,8 +2,10 @@
 
 // GraphQL API configuration
 const GRAPHQL_ENDPOINT =
-  process.env.NEXT_PUBLIC_GRAPHQL_URL ||
-  "https://your-graphql-endpoint.com/graphql";
+  process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4001/graphql";
+
+// Log the endpoint being used for debugging
+console.log("GraphQL Endpoint:", GRAPHQL_ENDPOINT);
 
 // Token management
 const TOKEN_KEY = "kozeo_auth_token";
@@ -58,6 +60,7 @@ export const clearTokens = () => {
   if (typeof window !== "undefined") {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem("kozeo_user"); // Also clear user data
   }
 };
 
@@ -71,7 +74,7 @@ export const isAuthenticated = () => {
 
 /**
  * Refresh JWT token using refresh token
- * @returns {Promise<boolean>} True if refresh was successful
+ * @returns {Promise<boolean>}
  */
 export const refreshAuthToken = async () => {
   const refreshToken = getRefreshToken();
@@ -130,120 +133,46 @@ export const refreshAuthToken = async () => {
 };
 
 /**
- * Main GraphQL API call function with JWT authentication
- * @param {string} query - GraphQL query or mutation string
- * @param {Object} variables - Variables for the GraphQL operation
- * @param {Object} options - Additional options
- * @param {boolean} options.requireAuth - Whether authentication is required (default: true)
- * @param {boolean} options.autoRetry - Whether to retry with token refresh on auth failure (default: true)
- * @returns {Promise<Object>} API response data
- */
-export const callApi = async (query, variables = {}, options = {}) => {
-  const { requireAuth = true, autoRetry = true } = options;
-
-  // Prepare headers
-  const headers = {
-    "Content-Type": "application/json",
-  };
-
-  // Add JWT token if available and required
-  if (requireAuth) {
-    const token = getToken();
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    } else {
-      throw new Error("Authentication token not found. Please log in.");
-    }
-  }
-
-  try {
-    // Make the GraphQL request
-    const response = await fetch(GRAPHQL_ENDPOINT, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-    });
-
-    // Parse response
-    const result = await response.json();
-
-    // Handle GraphQL errors
-    if (result.errors) {
-      // Check for authentication errors
-      const authError = result.errors.find(
-        (error) =>
-          error.extensions?.code === "UNAUTHENTICATED" ||
-          error.message.includes("token") ||
-          error.message.includes("unauthorized")
-      );
-
-      if (authError && autoRetry && requireAuth) {
-        console.log(
-          "Authentication error detected, attempting token refresh..."
-        );
-
-        // Try to refresh token
-        const refreshSuccess = await refreshAuthToken();
-
-        if (refreshSuccess) {
-          console.log("Token refreshed successfully, retrying request...");
-          // Retry the original request with new token
-          return callApi(query, variables, { ...options, autoRetry: false });
-        } else {
-          // Refresh failed, redirect to login or handle as needed
-          console.error("Token refresh failed, user needs to log in again");
-          clearTokens();
-
-          // You can customize this behavior based on your app's needs
-          if (typeof window !== "undefined") {
-            window.location.href = "/login";
-          }
-
-          throw new Error("Session expired. Please log in again.");
-        }
-      }
-
-      // For other GraphQL errors, throw with details
-      console.error("GraphQL errors:", result.errors);
-      throw new Error(result.errors.map((err) => err.message).join(", "));
-    }
-
-    // Handle HTTP errors
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    // Return successful response data
-    return result.data;
-  } catch (error) {
-    console.error("API call failed:", error);
-
-    // Re-throw the error for the calling code to handle
-    throw error;
-  }
-};
-
-/**
  * Convenience function for queries
  * @param {string} query - GraphQL query string
  * @param {Object} variables - Query variables
  * @param {Object} options - Additional options
  * @returns {Promise<Object>} Query result
  */
+
 export const query = (queryString, variables = {}, options = {}) => {
-  return callApi(queryString, variables, options);
+  return callApi({ query: queryString, variables, ...options });
 };
 
-/**
- * Convenience function for mutations
- * @param {string} mutation - GraphQL mutation string
- * @param {Object} variables - Mutation variables
- * @param {Object} options - Additional options
- * @returns {Promise<Object>} Mutation result
- */
 export const mutate = (mutationString, variables = {}, options = {}) => {
-  return callApi(mutationString, variables, options);
+  return callApi({ query: mutationString, variables, ...options });
 };
+
+// Generic GraphQL API call function
+export async function callApi({ query, variables = {}, token = null }) {
+  // Validate variables for common GraphQL input mistakes
+  if (variables && typeof variables === "object") {
+    // Check for $input being a string (should be an object)
+    if ("input" in variables && typeof variables.input !== "object") {
+      throw new Error(
+        "GraphQL $input variable must be an object (e.g., { email, password }), not a string."
+      );
+    }
+  }
+  const endpoint =
+    process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4001/graphql";
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ query, variables }),
+  });
+  const result = await res.json();
+  if (result.errors)
+    throw new Error(result.errors.map((e) => e.message).join(", "));
+  return result.data;
+}
