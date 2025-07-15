@@ -6,6 +6,8 @@ import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import { FiStar, FiCalendar, FiDollarSign, FiUsers } from "react-icons/fi";
 import { getUserByUsername } from "../../../../utilities/kozeoApi";
+import { useUser } from "../../../../store/hooks";
+import { isAuthenticated } from "../../../../utilities/api";
 
 interface ProfileData {
   id: string;
@@ -101,6 +103,21 @@ export default function UserProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  // Get current user data for authentication checks
+  const { user: currentUser, isAuthenticated: userLoggedIn } = useUser();
+  
+  // Check if user is viewing their own profile
+  const isOwnProfile = userLoggedIn && currentUser?.username === username;
+  const canViewSensitiveInfo = isOwnProfile;
+
+  console.log("Profile access check:", {
+    username,
+    currentUser: currentUser?.username,
+    isOwnProfile,
+    userLoggedIn,
+    canViewSensitiveInfo
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -207,13 +224,15 @@ export default function UserProfilePage() {
                         <h3 className="text-xl lg:text-2xl font-semibold text-white">
                           {profile.first_name} {profile.last_name} (@{profile.username})
                         </h3>
-                        <button
-                          onClick={() => router.push(`/profile/${username}/edit`)}
-                          className="ml-2 px-2 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
-                          type="button"
-                        >
-                          Edit
-                        </button>
+                        {canViewSensitiveInfo && (
+                          <button
+                            onClick={() => router.push(`/profile/${username}/edit`)}
+                            className="ml-2 px-2 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+                            type="button"
+                          >
+                            Edit
+                          </button>
+                        )}
                       </div>
                       {/* Achievements beside username for lg+ screens */}
                       {profile.achievements &&
@@ -291,6 +310,31 @@ export default function UserProfilePage() {
               </div>
             </div>
 
+            {/* Privacy Notice for non-owners */}
+            {!canViewSensitiveInfo && userLoggedIn && (
+              <div className="mb-6 p-4 bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg">
+                <p className="text-sm text-blue-300">
+                  <FiUsers className="inline mr-2" />
+                  You are viewing {profile.first_name}'s public profile. Some information like wallet details are private.
+                </p>
+              </div>
+            )}
+
+            {/* Login prompt for non-authenticated users */}
+            {!userLoggedIn && (
+              <div className="mb-6 p-4 bg-amber-900 bg-opacity-30 border border-amber-700 rounded-lg">
+                <p className="text-sm text-amber-300">
+                  <FiUsers className="inline mr-2" />
+                  <button 
+                    onClick={() => router.push('/login')}
+                    className="underline hover:text-amber-100 transition"
+                  >
+                    Login
+                  </button> to view more details and interact with this profile.
+                </p>
+              </div>
+            )}
+
             {/* Profile Stats Grid */}
             <div className="flex flex-col md:flex-row w-full justify-between gap-4 mb-8">
               {[
@@ -316,6 +360,12 @@ export default function UserProfilePage() {
                   color: "text-white",
                 },
                 {
+                  count: profile.reviewsReceived?.length || 0,
+                  label: "Reviews Received",
+                  color: "text-white",
+                },
+                // Only show wallet info if user can view sensitive information
+                ...(canViewSensitiveInfo ? [{
                   count: `${totalEarnings} ${profile.wallet?.currency || 'USD'}`,
                   label: "Wallet Balance",
                   extra: (
@@ -324,7 +374,7 @@ export default function UserProfilePage() {
                     </button>
                   ),
                   color: "text-emerald-400",
-                },
+                }] : []),
               ].map((item, idx) => (
                 <div
                   key={idx}
