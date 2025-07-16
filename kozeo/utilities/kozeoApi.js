@@ -333,6 +333,7 @@ export async function fetchUserProfile({ id, username, email }) {
             reviews {
               id
               title
+              description
               rating
               author {
                 username
@@ -375,6 +376,7 @@ export async function fetchUserProfile({ id, username, email }) {
             reviews {
               id
               title
+              description
               rating
               author {
                 username
@@ -499,6 +501,45 @@ export const getUserByUsername = async (username) => {
   return await fetchUserProfile({ username });
 };
 
+/** 
+ * getuser basic profile (only basics and reviews)
+ * @param {string} username - Username to fetch
+ * @returns {Promise<Object>} User profile data
+
+ */
+export const getUserBasicProfile = async (username) => {
+  const userQuery = `
+    query GetUserBasicProfile($username: String!) {
+      userByUsername(username: $username) {
+        id
+        username
+        bio
+        country_Code
+        rating
+        profile_Picture
+        reviewsReceived {
+          id
+          title
+          description
+          rating
+          author {
+            username
+           
+          }
+          gig {
+            title
+          }
+          createdAt
+        }
+        links
+      }
+    }
+  `;
+
+  const result = await query(userQuery, { username });
+  return result.userByUsername;
+};
+
 /**
  * Change user password
  * @param {string} currentPassword - Current password
@@ -539,16 +580,14 @@ export const getAllGigs = async () => {
         currency
         amount
         status
+        activeRequest {
+            id
+        }
         host {
           id
           username
           profile_Picture
           rating
-        }
-        guest {
-          id
-          username
-          profile_Picture
         }
         createdAt
       }
@@ -631,10 +670,6 @@ export const getGigById = async (gigId) => {
             username
             profile_Picture
           }
-          message
-          proposedAmount
-          status
-          sentTime
         }
         createdAt
         updatedAt

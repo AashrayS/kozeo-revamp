@@ -177,10 +177,10 @@ export default function UserProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // Get current user data for authentication checks
   const { user: currentUser, isAuthenticated: userLoggedIn } = useUser();
-  
+
   // Check if user is viewing their own profile
   const isOwnProfile = userLoggedIn && currentUser?.username === username;
   const canViewSensitiveInfo = isOwnProfile;
@@ -190,7 +190,7 @@ export default function UserProfilePage() {
     currentUser: currentUser?.username,
     isOwnProfile,
     userLoggedIn,
-    canViewSensitiveInfo
+    canViewSensitiveInfo,
   });
 
   useEffect(() => {
@@ -198,10 +198,10 @@ export default function UserProfilePage() {
       try {
         setLoading(true);
         setError("");
-        
+
         console.log("Fetching profile for username:", username);
         const userData = await getUserByUsername(username);
-        
+
         if (userData) {
           setProfile(userData as ProfileData);
         } else {
@@ -255,7 +255,7 @@ export default function UserProfilePage() {
       </>
     );
   }
-  
+
   if (!profile) {
     return <div className="text-white">No profile data available</div>;
   }
@@ -267,8 +267,7 @@ export default function UserProfilePage() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" 
-        />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
       <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
         {/* Main Layout */}
@@ -294,11 +293,14 @@ export default function UserProfilePage() {
                     <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-2 mb-2">
                       <div className="flex items-center gap-2">
                         <h3 className="text-xl lg:text-2xl font-semibold text-white">
-                          {profile.first_name} {profile.last_name} (@{profile.username})
+                          {profile.first_name} {profile.last_name} (@
+                          {profile.username})
                         </h3>
                         {canViewSensitiveInfo && (
                           <button
-                            onClick={() => router.push(`/profile/${username}/edit`)}
+                            onClick={() =>
+                              router.push(`/profile/${username}/edit`)
+                            }
                             className="ml-2 px-2 py-1 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
                             type="button"
                           >
@@ -383,7 +385,8 @@ export default function UserProfilePage() {
               <div className="mb-6 p-4 bg-blue-900 bg-opacity-30 border border-blue-700 rounded-lg">
                 <p className="text-sm text-blue-300">
                   <FiUsers className="inline mr-2" />
-                  You are viewing {profile.first_name}'s public profile. Some information like wallet details are private.
+                  You are viewing {profile.first_name}'s public profile. Some
+                  information like wallet details are private.
                 </p>
               </div>
             )}
@@ -393,12 +396,13 @@ export default function UserProfilePage() {
               <div className="mb-6 p-4 bg-amber-900 bg-opacity-30 border border-amber-700 rounded-lg">
                 <p className="text-sm text-amber-300">
                   <FiUsers className="inline mr-2" />
-                  <button 
-                    onClick={() => router.push('/login')}
+                  <button
+                    onClick={() => router.push("/login")}
                     className="underline hover:text-amber-100 transition"
                   >
                     Login
-                  </button> to view more details and interact with this profile.
+                  </button>{" "}
+                  to view more details and interact with this profile.
                 </p>
               </div>
             )}
@@ -427,22 +431,24 @@ export default function UserProfilePage() {
                   label: "Collaborations",
                   color: "text-white",
                 },
-                {
-                  count: profile.reviewsGiven?.length || 0,
-                  label: "Reviews Given",
-                  color: "text-white",
-                },
+
                 // Only show wallet info if user can view sensitive information
-                ...(canViewSensitiveInfo ? [{
-                  count: `${totalEarnings} ${profile.wallet?.currency || 'USD'}`,
-                  label: "Wallet Balance",
-                  extra: (
-                    <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition text-sm font-semibold">
-                      Withdraw
-                    </button>
-                  ),
-                  color: "text-emerald-400",
-                }] : []),
+                ...(canViewSensitiveInfo
+                  ? [
+                      {
+                        count: `${totalEarnings} ${
+                          profile.wallet?.currency || "USD"
+                        }`,
+                        label: "Wallet Balance",
+                        extra: (
+                          <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition text-sm font-semibold">
+                            Withdraw
+                          </button>
+                        ),
+                        color: "text-emerald-400",
+                      },
+                    ]
+                  : []),
               ].map((item, idx) => (
                 <div
                   key={idx}
@@ -483,9 +489,15 @@ export default function UserProfilePage() {
                           fill="currentColor"
                         />
                         <span className="text-sm text-yellow-400">
-                          {gig.reviews && gig.reviews.length > 0 
-                            ? (gig.reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / gig.reviews.length).toFixed(1)
-                            : 'No rating'}
+                          {gig.reviews && gig.reviews.length > 0
+                            ? (
+                                gig.reviews.reduce(
+                                  (sum: number, review: any) =>
+                                    sum + review.rating,
+                                  0
+                                ) / gig.reviews.length
+                              ).toFixed(1)
+                            : "No rating"}
                         </span>
                       </div>
                     </div>
@@ -516,65 +528,100 @@ export default function UserProfilePage() {
 
             {/* Collaborations Section */}
             <div className="relative flex flex-col justify-between bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-4 lg:p-6 shadow-md mb-6">
-              <h3 className="text-lg font-semibold text-white mb-4">
-                Collaborations
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <FiUsers className="text-purple-400" />
+                Collaborations ({profile.gigsCollaborated?.length || 0})
               </h3>
               <div className="space-y-4">
-                {(profile.gigsCollaborated || []).map((gig: any, index: number) => (
-                  <div
-                    key={index}
-                    className="border-l-1 border-purple-700 pl-4 py-3 bg-opacity-30 rounded-r-lg"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                      <h4 className="text-white font-medium">{gig.title}</h4>
-                      <div className="flex items-center gap-1">
-                        <FiStar
-                          className="text-yellow-400 text-sm"
-                          fill="currentColor"
-                        />
-                        <span className="text-sm text-yellow-400">
-                          {gig.rating || 0}
+                {(profile.gigsCollaborated || []).map(
+                  (gig: any, index: number) => (
+                    <div
+                      key={index}
+                      className="border-l-1 border-purple-700 pl-4 py-3 bg-opacity-10 rounded-r-lg"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                        <h4 className="text-white font-medium">{gig.title}</h4>
+                        <div className="flex items-center gap-1">
+                          <FiStar
+                            className="text-yellow-400 text-sm"
+                            fill="currentColor"
+                          />
+                          <span className="text-sm text-yellow-400">
+                            {gig.reviews && gig.reviews.length > 0
+                              ? (
+                                  gig.reviews.reduce(
+                                    (sum: number, review: any) =>
+                                      sum + review.rating,
+                                    0
+                                  ) / gig.reviews.length
+                                ).toFixed(1)
+                              : "No rating"}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-300 mb-2">
+                        {gig.description}
+                      </p>
+                      <div className="text-xs text-gray-400">
+                        Looking for:{" "}
+                        <span className="text-purple-400">
+                          {gig.looking_For}
                         </span>
                       </div>
+                      {gig.reviews && gig.reviews.length > 0 && (
+                        <div className="mt-3 p-3 bg-neutral-900 border border-neutral-700 bg-opacity-50 rounded-lg">
+                          <div className="text-sm text-white font-medium mb-1">
+                            "{gig.reviews[0].title}"
+                          </div>
+                          <div className="text-xs text-gray-300 mb-1">
+                            {gig.reviews[0].description}
+                          </div>
+                          <div className="text-xs text-purple-400">
+                            - @{gig.reviews[0].author?.username}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      {gig.description}
-                    </p>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </div>
 
             {/* Reviews Section */}
-            <div className="relative flex flex-col justify-between bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-4 lg:p-6 shadow-md mb-6">
+            {/* <div className="relative flex flex-col justify-between bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-4 lg:p-6 shadow-md mb-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <FiStar className="text-yellow-400" />
                 Reviews Given ({profile.reviewsGiven?.length || 0})
               </h3>
               <div className="space-y-3">
-                {(profile.reviewsGiven || []).slice(0, 5).map((review: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-neutral-800 bg-opacity-30 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="text-sm text-white font-medium">
-                        {review.title || "Review"}
+                {(profile.reviewsGiven || [])
+                  .slice(0, 5)
+                  .map((review: any, index: number) => (
+                    <div
+                      key={index}
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-neutral-800 bg-opacity-30 rounded-lg"
+                    >
+                      <div className="flex-1">
+                        <div className="text-sm text-white font-medium">
+                          {review.title || "Review"}
+                        </div>
+                        <div className="text-xs text-gray-300 mt-1">
+                          {review.description}
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-300 mt-1">
-                        {review.description}
+                      <div className="flex items-center gap-1">
+                        <FiStar
+                          className="text-yellow-400 text-sm"
+                          fill="currentColor"
+                        />
+                        <span className="text-yellow-400 font-semibold">
+                          {review.rating || 0}
+                        </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <FiStar className="text-yellow-400 text-sm" fill="currentColor" />
-                      <span className="text-yellow-400 font-semibold">
-                        {review.rating || 0}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
-            </div>
+            </div> */}
           </main>
         </div>
       </div>

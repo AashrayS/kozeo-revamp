@@ -131,7 +131,7 @@ export default function Home() {
                     <div
                       key={gig.id}
                       onClick={() => {
-                        router.push(`/Gig/${gig.id}`);
+                        router.push(`/Atrium/description?gigId=${gig.id}`);
                       }}
                       className="relative flex flex-col justify-between h-full min-h-[320px] bg-gradient-to-br from-[#111] to-[#1a1a1a]
                rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out 
