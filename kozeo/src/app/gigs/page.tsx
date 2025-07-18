@@ -41,6 +41,7 @@ export default function GigListPage() {
         <div className="text-xl">Loading...</div>
       </div>
     );
+  
   }
 
   return (

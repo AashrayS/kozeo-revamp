@@ -687,6 +687,11 @@ export const getGigById = async (gigId) => {
  * @returns {Promise<Object>} Created gig data
  */
 export const createGig = async (gigData) => {
+  // Validate input
+  if (!gigData.title || !gigData.looking_For || !gigData.description || !gigData.skills || !gigData.amount) {
+    throw new Error("All required fields must be provided");
+  }
+
   const createGigMutation = `
     mutation CreateGig($input: CreateGigInput!) {
       createGig(input: $input) {
@@ -698,17 +703,33 @@ export const createGig = async (gigData) => {
         currency
         amount
         status
+        isActive
         host {
           id
           username
+          first_name
+          last_name
+          profile_Picture
+          rating
         }
         createdAt
+        updatedAt
       }
     }
   `;
 
-  const result = await mutate(createGigMutation, { input: gigData });
-  return result.createGig;
+  try {
+    const result = await mutate(createGigMutation, { input: gigData });
+    
+    if (result.errors) {
+      throw new Error(result.errors[0].message);
+    }
+    
+    return result.createGig;
+  } catch (error) {
+    console.error("Error creating gig:", error);
+    throw error;
+  }
 };
 
 /**

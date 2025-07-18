@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NotificationProvider } from "./NotificationContext";
 import { io, Socket } from "socket.io-client";
 import { WEBSOCKET_URL } from "@/config";
+import { useUser } from "../../../store/hooks";
 
 export interface Notification {
   id: string;
@@ -63,13 +64,21 @@ export default function NotificationProviderClient({
     useState<Notification[]>(sampleNotifications);
   const [unreadCount, setUnreadCount] = useState(0);
   const socketRef = useRef<Socket | null>(null);
+  const { username } = useUser();
 
   useEffect(() => {
     setUnreadCount(notifications.filter((n) => !n.read).length);
   }, [notifications]);
 
   useEffect(() => {
+    // Don't connect if no username is available
+    if (!username) {
+      console.log("No username available, skipping WebSocket connection");
+      return;
+    }
+
     console.log("Attempting to connect to WebSocket at:", WEBSOCKET_URL);
+    console.log("Using username:", username);
     const socket = io(WEBSOCKET_URL, {
       transports: ["websocket", "polling"],
       upgrade: true,
@@ -79,15 +88,15 @@ export default function NotificationProviderClient({
       withCredentials: false,
       query: {
         roomId: "notifications",
-        userId: "default",
+        userId: username,
       },
     });
     socketRef.current = socket;
 
     socket.on("connect", () => {
       console.log("WebSocket connected!", socket.id);
-      socket.emit("join-notification-room", "default");
-      socket.emit("get-notifications", "default");
+      socket.emit("join-notification-room", username);
+      socket.emit("get-notifications", username);
     });
     socket.on("new-notification", (notification) => {
       console.log("Received new-notification event:", notification);
@@ -114,25 +123,25 @@ export default function NotificationProviderClient({
         socketRef.current = null;
       }
     };
-  }, []);
+  }, [username]);
 
   // Mark as read helpers for NotificationBox
   const markAsRead = (id: string) => {
     setNotifications((prev) =>
       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
     );
-    if (socketRef.current && socketRef.current.connected) {
+    if (socketRef.current && socketRef.current.connected && username) {
       socketRef.current.emit("mark-notification-read", {
         notificationId: id,
-        userId: "default",
+        userId: username,
       });
     }
   };
   const markAllAsRead = () => {
     setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
-    if (socketRef.current && socketRef.current.connected) {
+    if (socketRef.current && socketRef.current.connected && username) {
       socketRef.current.emit("mark-all-notifications-read", {
-        userId: "default",
+        userId: username,
       });
     }
   };

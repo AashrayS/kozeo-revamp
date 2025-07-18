@@ -1,11 +1,11 @@
 // config.js
 
 // Use NEXT_PUBLIC_WEBSOCKET_URL for client-side config
-export const WEBSOCKET_URL =
-  process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
-  "wss://kozeo-ws-production.up.railway.app";
+// export const WEBSOCKET_URL =
+//   process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
+//   "wss://kozeo-ws-production.up.railway.app";
 //dev endpoint
-// export const WEBSOCKET_URL =  "ws://localhost:3001";
+export const WEBSOCKET_URL =  "ws://localhost:3001";
 
 // GraphQL API endpoint
 export const GRAPHQL_URL =

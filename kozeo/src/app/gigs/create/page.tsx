@@ -4,11 +4,12 @@ import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import { useRouter } from "next/navigation";
 import { createGig } from "../../../../utilities/kozeoApi";
-import { isAuthenticated } from "../../../../utilities/api";
+import { useUser } from "../../../../store/hooks";
 import { FiPlus, FiX } from "react-icons/fi";
 
 export default function CreateGigPage() {
   const router = useRouter();
+  const { user, isAuthenticated } = useUser();
   const [form, setForm] = useState({
     title: "",
     looking_For: "",
@@ -24,11 +25,11 @@ export default function CreateGigPage() {
 
   // Check authentication
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (!isAuthenticated) {
       router.push("/login");
       return;
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -96,14 +97,28 @@ export default function CreateGigPage() {
         amount: parseFloat(form.amount),
       };
 
+      console.log("Creating gig with data:", gigData);
       const newGig = await createGig(gigData);
+      console.log("Gig created successfully:", newGig);
+
       setSuccess("Gig created successfully!");
 
-      // Redirect to the new gig page after a short delay
+      // Reset form
+      setForm({
+        title: "",
+        looking_For: "",
+        description: "",
+        skills: [],
+        currency: "USD",
+        amount: "",
+      });
+
+      // Redirect to the specific gig's lobby page with the gig ID
       setTimeout(() => {
-        router.push(`/Gig/${(newGig as any).id}`);
+        router.push(`/gigs/${(newGig as any).id}/lobby`);
       }, 2000);
     } catch (error: any) {
+      console.error("Error creating gig:", error);
       setError(error?.message || "Failed to create gig. Please try again.");
     } finally {
       setSubmitting(false);

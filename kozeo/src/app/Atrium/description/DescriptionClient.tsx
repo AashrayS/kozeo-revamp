@@ -2,20 +2,30 @@
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import { FiStar, FiUser } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getGigById, getUserBasicProfile } from "../../../../utilities/kozeoApi";
+import {
+  getGigById,
+  getUserBasicProfile,
+} from "../../../../utilities/kozeoApi";
+import { io, Socket } from "socket.io-client";
+import { useUser } from "../../../../store/hooks";
 
 export default function DescriptionClient() {
   const router = useRouter();
+  const { user } = useUser();
   const [requested, setRequested] = useState(false);
   const [gig, setGig] = useState<any>(null);
   const [hostProfile, setHostProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hostLoading, setHostLoading] = useState(false);
   const [error, setError] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [sendingRequest, setSendingRequest] = useState(false);
   const searchParams = useSearchParams();
   const gigIdParam = searchParams.get("gigId");
+  const socketRef = useRef<Socket | null>(null);
 
   const gigId = gigIdParam;
 
@@ -37,13 +47,15 @@ export default function DescriptionClient() {
         if (gigData) {
           setGig(gigData);
           console.log("Gig data fetched:", gigData);
-          
+
           // Fetch host profile data
-          if (gigData.host?.username) {
+          if ((gigData as any).host?.username) {
             setHostLoading(true);
             try {
-              debugger
-              const hostData = await getUserBasicProfile(gigData.host.username);
+              debugger;
+              const hostData = await getUserBasicProfile(
+                (gigData as any).host.username
+              );
               setHostProfile(hostData);
               console.log("Host profile fetched:", hostData);
             } catch (hostError) {
@@ -66,6 +78,131 @@ export default function DescriptionClient() {
 
     fetchGig();
   }, [gigId]);
+
+  // Setup WebSocket connection
+  useEffect(() => {
+    if (gigId) {
+      const socket = io("ws://localhost:3001", {
+        query: { gigID: gigId },
+      });
+
+      socketRef.current = socket;
+
+      socket.on("connect", () => {
+        console.log("Connected to WebSocket server for gig:", gigId);
+        socket.emit("join-room", gigId);
+        console.log("Joined room:", gigId);
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Disconnected from WebSocket server");
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [gigId]);
+
+  const handleSendRequest = async () => {
+    if (!user || !gigId) {
+      alert("Please log in to send a request");
+      return;
+    }
+
+    if (!requestMessage.trim()) {
+      setShowMessageModal(true);
+      return;
+    }
+
+    setSendingRequest(true);
+    try {
+      const request = {
+        gigId: gigId,
+        request: {
+          requesterName: user.username,
+          message: requestMessage.trim(),
+        },
+        hostUsername: hostUsername, // Add host username for notification
+        timestamp: new Date().toISOString(),
+      };
+
+      console.log("Sending request data:", request);
+
+      // Send via WebSocket
+      if (socketRef.current) {
+        if (socketRef.current.connected) {
+          socketRef.current.emit("gig-request", request);
+          console.log("Request sent via WebSocket successfully");
+        } else {
+          console.error("WebSocket not connected");
+          throw new Error("WebSocket not connected");
+        }
+      } else {
+        console.error("WebSocket not initialized");
+        throw new Error("WebSocket not initialized");
+      }
+
+      setRequested(true);
+      setRequestMessage("");
+      setShowMessageModal(false);
+      alert("Request sent successfully!");
+    } catch (error) {
+      console.error("Error sending request:", error);
+      alert("Failed to send request. Please try again.");
+    } finally {
+      setSendingRequest(false);
+    }
+  };
+
+  const handleCancelRequest = async () => {
+    if (!user || !gigId) {
+      alert("Please log in to cancel request");
+      return;
+    }
+
+    setSendingRequest(true);
+    try {
+      const cancelData = {
+        gigId: gigId,
+        requesterName: user.username,
+        hostUsername: hostUsername,
+        timestamp: new Date().toISOString(),
+      };
+
+      console.log("Sending cancel request data:", cancelData);
+
+      // Send cancel request via WebSocket
+      if (socketRef.current) {
+        if (socketRef.current.connected) {
+          socketRef.current.emit("gig-request-cancel", cancelData);
+          console.log("Cancel request sent via WebSocket successfully");
+        } else {
+          console.error("WebSocket not connected");
+          throw new Error("WebSocket not connected");
+        }
+      } else {
+        console.error("WebSocket not initialized");
+        throw new Error("WebSocket not initialized");
+      }
+
+      setRequested(false);
+      alert("Request cancelled successfully!");
+    } catch (error) {
+      console.error("Error cancelling request:", error);
+      alert("Failed to cancel request. Please try again.");
+    } finally {
+      setSendingRequest(false);
+    }
+  };
+
+  const openMessageModal = () => {
+    if (!user) {
+      alert("Please log in to send a request");
+      return;
+    }
+    setShowMessageModal(true);
+  };
 
   if (loading) {
     return (
@@ -201,14 +338,23 @@ export default function DescriptionClient() {
               </div>
 
               <button
-                onClick={() => setRequested(!requested)}
+                onClick={requested ? handleCancelRequest : openMessageModal}
+                disabled={sendingRequest}
                 className={`w-auto px-5 self-center py-2 rounded-md border-0 transition-colors duration-200 ${
                   requested
                     ? "bg-red-500 text-white hover:bg-red-600"
+                    : sendingRequest
+                    ? "bg-gray-500 text-white cursor-not-allowed"
                     : "bg-emerald-400 text-black hover:bg-emerald-500"
                 }`}
               >
-                {requested ? "Cancel?" : "Send Request"}
+                {sendingRequest
+                  ? requested
+                    ? "Cancelling..."
+                    : "Sending..."
+                  : requested
+                  ? "Cancel Request"
+                  : "Send Request"}
               </button>
             </div>
           </div>
@@ -262,27 +408,32 @@ export default function DescriptionClient() {
               <p className="text-sm text-gray-300 w-2/3">
                 {displayHost.bio || "No bio available"}
               </p>
-              
+
               {/* Additional host info */}
               {displayHost.country_Code && (
                 <div className="text-xs text-gray-400 mt-2">
                   📍 {displayHost.country_Code}
                 </div>
               )}
-              
+
               {displayHost.links && displayHost.links.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {displayHost.links.slice(0, 2).map((link: string, idx: number) => (
-                    <a
-                      key={idx}
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-cyan-400 hover:text-cyan-300 underline"
-                    >
-                      {link.replace(/^https?:\/\//, "").replace(/\/$/, "").substring(0, 20)}
-                    </a>
-                  ))}
+                  {displayHost.links
+                    .slice(0, 2)
+                    .map((link: string, idx: number) => (
+                      <a
+                        key={idx}
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-cyan-400 hover:text-cyan-300 underline"
+                      >
+                        {link
+                          .replace(/^https?:\/\//, "")
+                          .replace(/\/$/, "")
+                          .substring(0, 20)}
+                      </a>
+                    ))}
                 </div>
               )}
             </div>
@@ -292,27 +443,40 @@ export default function DescriptionClient() {
               Reviews ({displayHost.reviewsReceived?.length || 0}):
             </h4>
             <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
-              {displayHost.reviewsReceived && displayHost.reviewsReceived.length > 0 ? (
-                displayHost.reviewsReceived.slice(0, 3).map((review: any, idx: number) => (
-                  <div key={idx} className="border border-neutral-700 rounded-md p-3">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="font-semibold text-white">
-                        {review.title || "Great work!"}
+              {displayHost.reviewsReceived &&
+              displayHost.reviewsReceived.length > 0 ? (
+                displayHost.reviewsReceived
+                  .slice(0, 3)
+                  .map((review: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="border border-neutral-700 rounded-md p-3"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="font-semibold text-white">
+                          {review.title || "Great work!"}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <FiStar
+                            className="text-yellow-400 text-sm"
+                            fill="currentColor"
+                          />
+                          <span className="text-yellow-400 text-sm">
+                            {review.rating}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <FiStar className="text-yellow-400 text-sm" fill="currentColor" />
-                        <span className="text-yellow-400 text-sm">{review.rating}</span>
+                      <p className="text-sm text-gray-300 mb-2">
+                        {review.description || "No description provided"}
+                      </p>
+                      <div className="text-xs text-gray-500">
+                        by @{review.author?.username || "Anonymous"} •{" "}
+                        {review.createdAt
+                          ? new Date(review.createdAt).toLocaleDateString()
+                          : "Recent"}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      {review.description || "No description provided"}
-                    </p>
-                    <div className="text-xs text-gray-500">
-                      by @{review.author?.username || "Anonymous"} • {" "}
-                      {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "Recent"}
-                    </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <>
                   {/* Fallback to gig status info if no reviews */}
@@ -378,6 +542,46 @@ export default function DescriptionClient() {
           </div>
         </main>
       </div>
+
+      {/* Message Modal */}
+      {showMessageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-neutral-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-white mb-4">
+              Send Request Message
+            </h3>
+            <p className="text-gray-300 mb-4 text-sm">
+              Tell the host why you're interested in this gig and what you can
+              offer.
+            </p>
+            <textarea
+              value={requestMessage}
+              onChange={(e) => setRequestMessage(e.target.value)}
+              placeholder="Hi! I'm interested in this gig because..."
+              rows={4}
+              className="w-full px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+            />
+            <div className="flex gap-3 justify-end mt-4">
+              <button
+                onClick={() => {
+                  setShowMessageModal(false);
+                  setRequestMessage("");
+                }}
+                className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700 text-white transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSendRequest}
+                disabled={!requestMessage.trim() || sendingRequest}
+                className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white transition"
+              >
+                {sendingRequest ? "Sending..." : "Send Request"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
