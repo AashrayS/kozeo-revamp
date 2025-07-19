@@ -2,7 +2,6 @@
 
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import gigs from "../../../../data/gig.json";
 import { FiStar, FiVideo, FiPhone } from "react-icons/fi";
 import {
   FaMicrophone,
@@ -17,8 +16,8 @@ import { use } from "react";
 import { useRouter } from "next/navigation";
 import TldrawWrapper from "@/components/common/TldrawWrapper";
 import EmojiPicker from "emoji-picker-react";
-import chatData from "../../../../data/chat.json";
-// import { createTLStore, defaultShapeUtils } from "tldraw";/
+import { getGigById } from "../../../../utilities/kozeoApi";
+import { useUser } from "../../../../store/hooks";
 
 import { io } from "socket.io-client";
 import { WEBSOCKET_URL } from "@/config";
@@ -37,11 +36,14 @@ export default function GigPage({
 }) {
   const { gigId } = use(paramsPromise);
   const router = useRouter();
-  const numericGigId = parseInt(gigId);
-  const gig = useMemo(
-    () => gigs.find((g) => g.gigId === numericGigId),
-    [numericGigId]
-  );
+  
+  // Redux state for current user
+  const { user, username, isAuthenticated } = useUser();
+  
+  // Gig state management
+  const [gig, setGig] = useState<any>(null);
+  const [gigLoading, setGigLoading] = useState(true);
+  const [gigError, setGigError] = useState<string | null>(null);
 
   const [input, setInput] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
@@ -76,6 +78,98 @@ export default function GigPage({
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
 
   useEffect(() => {
+    const fetchGig = async () => {
+      if (!gigId) {
+        setGigError("No gig ID provided");
+        setGigLoading(false);
+        return;
+      }
+
+      try {
+        setGigLoading(true);
+        setGigError(null);
+        console.log("Fetching gig details for ID:", gigId);
+
+        const gigData = await getGigById(gigId);
+        
+        if (gigData) {
+          setGig(gigData);
+          console.log("Gig details fetched:", gigData);
+          console.log("Current user:", { username, user });
+          console.log("User role:", getCurrentUserRole());
+        } else {
+          setGigError("Gig not found");
+        }
+      } catch (err: any) {
+        console.error("Error fetching gig details:", err);
+        setGigError(err.message || "Failed to load gig details");
+      } finally {
+        setGigLoading(false);
+      }
+    };
+
+    fetchGig();
+  }, [gigId, username, user]);
+
+  // Helper functions for user roles and messaging
+  const getCurrentUserRole = () => {
+    if (!gig || !username) return null;
+    
+    if (gig.host?.username === username) {
+      return 'host';
+    } else if (gig.guest?.username === username) {
+      return 'guest';
+    }
+    return null;
+  };
+
+  const getOtherPartyUsername = () => {
+    if (!gig || !username) return "Unknown";
+    
+    const currentUserRole = getCurrentUserRole();
+    
+    if (currentUserRole === 'host') {
+      return gig.guest?.username || "No guest assigned";
+    } else if (currentUserRole === 'guest') {
+      return gig.host?.username || "Unknown Host";
+    }
+    
+    // Fallback: if we can't determine the role, show the guest if available, otherwise host
+    if (gig.guest) {
+      return gig.guest.username;
+    }
+    return gig.host?.username || "Unknown";
+  };
+
+  const getCurrentUsername = () => {
+    return username || user?.username || "Unknown User";
+  };
+
+  const handleSendMessage = () => {
+    if (!input.trim() || !socketRef.current) return;
+
+    const messageData = {
+      gigId,
+      sender: getCurrentUsername(),
+      message: input.trim(),
+      time: new Date().toLocaleTimeString(),
+      timestamp: new Date().toISOString(),
+    };
+
+    // Send to other user via WebSocket
+    socketRef.current.emit("chat-message", messageData);
+
+    // Add to local messages
+    setMessages((prev) => [...prev, messageData]);
+
+    // Clear input
+    setInput("");
+  };
+
+  useEffect(() => {
+    // Only connect to WebSocket after gig is loaded
+    if (!gig) return;
+
     const socket = io(WEBSOCKET_URL, {
       query: { gigID: gigId },
     });
@@ -256,7 +350,7 @@ export default function GigPage({
     return () => {
       socket.disconnect();
     };
-  }, [gigId]);
+  }, [gigId, gig]); // Only connect after gig is loaded
 
   const startScreenShare = async () => {
     try {
@@ -327,21 +421,6 @@ export default function GigPage({
     socketRef.current?.emit("screen-share-stopped");
   };
 
-  const handleSendMessage = () => {
-    if (!input.trim()) return;
-    setMessages([
-      ...messages,
-      { sender: "Bob", time: new Date().toLocaleTimeString(), message: input },
-    ]);
-    socketRef.current?.emit("chat-message", {
-      sender: "bob",
-      time: new Date().toLocaleTimeString(),
-      message: input,
-    });
-
-    setInput("");
-    setShowEmoji(false);
-  };
   async function askForPermissionsAgain() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -613,17 +692,22 @@ export default function GigPage({
       return;
     }
 
-    if (gig && parseFloat(paymentAmount) > gig.Amount) {
+    const remainingAmount = gig.amount - (gig.paidAmount || 0);
+    
+    if (gig && parseFloat(paymentAmount) > remainingAmount) {
       alert(
-        `Payment amount cannot exceed the total gig value of ${gig.currency} ${gig.Amount}`
+        `Payment amount cannot exceed the remaining amount of ${gig.currency} ${remainingAmount.toFixed(2)}`
       );
       return;
     }
 
+    const currentUser = getCurrentUsername();
+    const otherUser = getOtherPartyUsername();
+
     const paymentData = {
       gigId,
-      from: "Bob", // In real app, get from user context
-      to: "username", // In real app, get collaborator info
+      from: currentUser,
+      to: otherUser,
       amount: parseFloat(paymentAmount),
       description:
         paymentDescription || `Payment request for $${paymentAmount}`,
@@ -638,7 +722,7 @@ export default function GigPage({
     setMessages((prev) => [
       ...prev,
       {
-        sender: "Bob",
+        sender: currentUser,
         time: new Date().toLocaleTimeString(),
         message: paymentData.description,
         type: "payment-sent",
@@ -689,7 +773,70 @@ export default function GigPage({
     }
   };
 
-  if (!gig) return <div className="text-white p-10">Gig not found</div>;
+  // Loading state
+  if (gigLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header logoText="Kozeo" />
+        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+          <Sidebar />
+          <main className="flex-1 p-10 flex justify-center items-center">
+            <div className="text-center">
+              <div className="text-xl text-gray-400 mb-4">Loading gig workspace...</div>
+              <div className="text-sm text-gray-500">Gig ID: {gigId}</div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (gigError) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header logoText="Kozeo" />
+        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+          <Sidebar />
+          <main className="flex-1 p-10 flex justify-center items-center">
+            <div className="text-center">
+              <div className="text-xl text-red-400 mb-4">Error loading gig</div>
+              <div className="text-gray-400 mb-4">{gigError}</div>
+              <button
+                onClick={() => router.push("/Atrium")}
+                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+              >
+                Go back to Atrium
+              </button>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  // Gig not found
+  if (!gig) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header logoText="Kozeo" />
+        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+          <Sidebar />
+          <main className="flex-1 p-10 flex justify-center items-center">
+            <div className="text-center">
+              <div className="text-xl text-gray-400 mb-4">Gig not found</div>
+              <button
+                onClick={() => router.push("/Atrium")}
+                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+              >
+                Go back to Atrium
+              </button>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -732,13 +879,81 @@ export default function GigPage({
               </button>
             </div>
 
+            {/* Gig Info Bar */}
+            <div className="bg-neutral-900/30 border-b border-neutral-800 px-4 md:px-6 py-4">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+                {/* Left Section - Gig Details */}
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-xl font-medium text-white mb-2 truncate">{gig.title}</h1>
+                  <div className="flex flex-wrap items-center gap-6 text-sm text-neutral-400">
+                    <div className="flex items-center gap-2">
+                      <span className="text-neutral-500">Host:</span>
+                      <span className="text-neutral-200 font-medium">@{gig.host?.username || 'Unknown'}</span>
+                    </div>
+                    {gig.guest && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-neutral-500">Guest:</span>
+                        <span className="text-neutral-200 font-medium">@{gig.guest.username}</span>
+                      </div>
+                    )}
+                  </div>
+                  {gig.description && (
+                    <p className="text-sm text-neutral-400 mt-3 max-w-2xl line-clamp-2">
+                      {gig.description}
+                    </p>
+                  )}
+                </div>
+
+                {/* Right Section - Payment Info */}
+                <div className="lg:min-w-[280px]">
+                  <div className="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700/50">
+                    <div className="grid grid-cols-2 gap-4 mb-3">
+                      <div>
+                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Value</p>
+                        <p className="text-lg font-semibold text-white">
+                          {gig.currency} {gig.amount}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Remaining</p>
+                        <p className="text-lg font-semibold text-neutral-300">
+                          {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Progress Bar */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-neutral-500">Payment progress</span>
+                        <span className="text-xs text-neutral-400 font-medium">
+                          {Math.round(((gig.paidAmount || 0) / gig.amount) * 100)}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-neutral-700 rounded-full h-2">
+                        <div 
+                          className="bg-neutral-400 h-2 rounded-full transition-all duration-300"
+                          style={{ 
+                            width: `${Math.min(((gig.paidAmount || 0) / gig.amount) * 100, 100)}%` 
+                          }}
+                        ></div>
+                      </div>
+                      {/* <div className="text-xs text-neutral-500">
+                        {gig.currency} {gig.paidAmount || 0} of {gig.currency} {gig.amount} paid
+                      </div> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Row containing all three columns */}
             <div className="flex flex-1 flex-col md:flex-row h-full">
               {/* Mobile Chat View */}
               {showMobileChat && (
                 <div className="md:hidden flex flex-col h-full overflow-x-hidden border-neutral-700 w-full">
                   <div className="p-3 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                    <span className="font-bold text-base">@username</span>
+                    <span className="font-bold text-base">@{getOtherPartyUsername()}</span>
                     <div className="flex gap-2 justify-between sm:justify-end">
                       <button
                         onClick={() => setShowEndGigModal(true)}
@@ -764,7 +979,7 @@ export default function GigPage({
                                 ? "bg-green-900/80 border-green-400 shadow-lg shadow-green-900/50"
                                 : msg.status === "declined"
                                 ? "bg-red-900/70 border-red-400"
-                                : msg.type === "payment-sent"
+                                : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
                                 ? "bg-green-900/50 border-green-500 self-end ml-auto"
                                 : "bg-yellow-900/50 border-yellow-500"
                             }`}
@@ -776,7 +991,7 @@ export default function GigPage({
                                   ? "✅ Payment Completed"
                                   : msg.status === "declined"
                                   ? "❌ Payment Declined"
-                                  : msg.type === "payment-sent"
+                                  : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
                                   ? "Payment Sent"
                                   : "Payment Request"}
                               </span>
@@ -788,7 +1003,8 @@ export default function GigPage({
                               {msg.message}
                             </div>
                             {msg.type === "payment-request" &&
-                              msg.status === "pending" && (
+                              msg.status === "pending" &&
+                              msg.sender !== getCurrentUsername() && (
                                 <div className="flex flex-col gap-2 mt-2">
                                   <button
                                     onClick={() =>
@@ -822,12 +1038,20 @@ export default function GigPage({
                           // Regular Message
                           <div
                             className={`p-2 rounded-md max-w-[85%] break-words whitespace-pre-wrap ${
-                              msg.sender === "Bob"
+                              msg.sender === getCurrentUsername()
                                 ? "bg-emerald-600 self-end ml-auto"
                                 : "bg-neutral-800"
                             }`}
                           >
+                            {msg.sender !== getCurrentUsername() && (
+                              <div className="text-xs text-gray-300 mb-1 font-medium">
+                                {msg.sender}
+                              </div>
+                            )}
                             <div className="text-sm">{msg.message}</div>
+                            <div className="text-xs text-gray-400 mt-1 text-right">
+                              {msg.time}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -857,13 +1081,25 @@ export default function GigPage({
                       >
                         <FaRegSmile />
                       </button>
-                      <button
-                        onClick={() => setShowPaymentModal(true)}
-                        className="text-lg text-gray-400 hover:text-green-400 transition-colors p-1"
-                        title="Request Payment"
-                      >
-                        <FaDollarSign />
-                      </button>
+                      <div className="relative group">
+                        <button
+                          onClick={getCurrentUserRole() === 'host' ? undefined : () => setShowPaymentModal(true)}
+                          disabled={getCurrentUserRole() === 'host'}
+                          className={`text-lg p-1 transition-colors ${
+                            getCurrentUserRole() === 'host' 
+                              ? 'text-gray-600 cursor-not-allowed' 
+                              : 'text-gray-400 hover:text-green-400 cursor-pointer'
+                          }`}
+                          title={getCurrentUserRole() === 'host' ? "" : "Request Payment"}
+                        >
+                          <FaDollarSign />
+                        </button>
+                        {getCurrentUserRole() === 'host' && (
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            Hosts cannot request payment
+                          </div>
+                        )}
+                      </div>
                       <input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -887,7 +1123,7 @@ export default function GigPage({
               {!showMobileChat && (
                 <div className="md:hidden flex-1 overflow-hidden flex flex-col">
                   <div className="flex-1 overflow-hidden flex flex-col">
-                    <TldrawWrapper gigId="canvas-memories-001" />
+                    <TldrawWrapper gigId={gigId} />
                   </div>
                 </div>
               )}
@@ -898,7 +1134,7 @@ export default function GigPage({
                 style={{ width }}
               >
                 <div className="p-3 md:p-4 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                  <span className="font-bold text-base md:text-lg">@username</span>
+                  <span className="font-bold text-base md:text-lg">@{getOtherPartyUsername()}</span>
 
                   <div className="flex gap-2 md:gap-4 justify-between sm:justify-end">
                     <button
@@ -929,7 +1165,7 @@ export default function GigPage({
                               ? "bg-green-900/80 border-green-400 shadow-lg shadow-green-900/50"
                               : msg.status === "declined"
                               ? "bg-red-900/70 border-red-400"
-                              : msg.type === "payment-sent"
+                              : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
                               ? "bg-green-900/50 border-green-500 self-end ml-auto"
                               : "bg-yellow-900/50 border-yellow-500"
                           }`}
@@ -949,7 +1185,7 @@ export default function GigPage({
                                 ? "✅ Payment Completed"
                                 : msg.status === "declined"
                                 ? "❌ Payment Declined"
-                                : msg.type === "payment-sent"
+                                : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
                                 ? "Payment Sent"
                                 : "Payment Request"}
                             </span>
@@ -979,7 +1215,8 @@ export default function GigPage({
                             </div>
                           )}
                           {msg.type === "payment-request" &&
-                            msg.status === "pending" && (
+                            msg.status === "pending" &&
+                            msg.sender !== getCurrentUsername() && (
                               <div className="flex flex-col sm:flex-row gap-2 mt-2">
                                 <button
                                   onClick={() =>
@@ -1013,12 +1250,20 @@ export default function GigPage({
                         // Regular Message
                         <div
                           className={`p-2 rounded-md max-w-[85%] sm:max-w-xs break-words whitespace-pre-wrap ${
-                            msg.sender === "Bob"
+                            msg.sender === getCurrentUsername()
                               ? "bg-emerald-600 self-end ml-auto"
                               : "bg-neutral-800"
                           }`}
                         >
+                          {msg.sender !== getCurrentUsername() && (
+                            <div className="text-xs text-gray-300 mb-1 font-medium">
+                              {msg.sender}
+                            </div>
+                          )}
                           <div className="text-sm">{msg.message}</div>
+                          <div className="text-xs text-gray-400 mt-1 text-right">
+                            {msg.time}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1048,13 +1293,25 @@ export default function GigPage({
                     >
                       <FaRegSmile />
                     </button>
-                    <button
-                      onClick={() => setShowPaymentModal(true)}
-                      className="text-lg md:text-xl text-gray-400 hover:text-green-400 transition-colors p-1"
-                      title="Request Payment"
-                    >
-                      <FaDollarSign />
-                    </button>
+                    <div className="relative group">
+                      <button
+                        onClick={getCurrentUserRole() === 'host' ? undefined : () => setShowPaymentModal(true)}
+                        disabled={getCurrentUserRole() === 'host'}
+                        className={`text-lg md:text-xl p-1 transition-colors ${
+                          getCurrentUserRole() === 'host' 
+                            ? 'text-gray-600 cursor-not-allowed' 
+                            : 'text-gray-400 hover:text-green-400 cursor-pointer'
+                        }`}
+                        title={getCurrentUserRole() === 'host' ? "" : "Request Payment"}
+                      >
+                        <FaDollarSign />
+                      </button>
+                      {getCurrentUserRole() === 'host' && (
+                        <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                           Request payment diabled for hosts
+                        </div>
+                      )}
+                    </div>
                     <input
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
@@ -1113,7 +1370,7 @@ export default function GigPage({
 
                 {/* Bottom - Tldraw Area */}
                 <div className="flex-1 overflow-hidden flex flex-col">
-                  <TldrawWrapper gigId="canvas-memories-001" />{" "}
+                  <TldrawWrapper gigId={gigId} />{" "}
                 </div>
               </div>
 
@@ -1197,19 +1454,45 @@ export default function GigPage({
             {gig && (
               <div className="bg-neutral-900/50 border border-neutral-700 rounded-lg p-3 mb-4">
                 <div className="text-sm text-gray-400 mb-1">
-                  Total Gig Value
+                  Gig Payment Summary
                 </div>
-                <div className="text-xl font-bold text-green-400">
-                  {gig.currency} {gig.Amount}
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-300">Total Value:</span>
+                  <span className="text-lg font-bold text-green-400">
+                    {gig.currency} {gig.amount}
+                  </span>
                 </div>
-                <div className="text-xs text-gray-500 mt-1">{gig.Title}</div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-300">Paid So Far:</span>
+                  <span className="text-sm font-semibold text-yellow-400">
+                    {gig.currency} {gig.paidAmount || 0}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-300">Remaining:</span>
+                  <span className="text-sm font-semibold text-red-400">
+                    {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
+                  </span>
+                </div>
+                <div className="w-full bg-neutral-700 rounded-full h-2 mt-2">
+                  <div 
+                    className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                    style={{ 
+                      width: `${Math.min(((gig.paidAmount || 0) / gig.amount) * 100, 100)}%` 
+                    }}
+                  ></div>
+                </div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {Math.round(((gig.paidAmount || 0) / gig.amount) * 100)}% completed
+                </div>
+                <div className="text-xs text-gray-500 mt-1">{gig.title}</div>
               </div>
             )}
 
             <div className="space-y-4">
               <div>
                 <label className="block text-gray-300 text-sm mb-2">
-                  Amount ($)
+                  Amount ({gig?.currency || '$'})
                 </label>
                 <input
                   type="number"
@@ -1217,13 +1500,13 @@ export default function GigPage({
                   onChange={(e) => setPaymentAmount(e.target.value)}
                   placeholder="0.00"
                   min="0"
-                  max={gig?.Amount || undefined}
+                  max={gig ? (gig.amount - (gig.paidAmount || 0)) : undefined}
                   step="0.01"
                   className="w-full px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 {gig && (
                   <div className="text-xs text-gray-500 mt-1">
-                    Maximum: {gig.currency} {gig.Amount}
+                    Maximum remaining: {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
                   </div>
                 )}
               </div>

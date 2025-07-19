@@ -207,8 +207,8 @@ export default function GigLobbyPage({
       console.log("Accepting request:", request);
 
       // Call API to accept the request
-    //   const response = await respondToGigRequest(request.requestId, "accepted");
-    //   console.log("Request accepted successfully:", response);
+      const response = await respondToGigRequest(request.requestId, "accepted");
+      console.log("Request accepted successfully:", response);
 
       // Remove the request from the list
       setRequests((prev) => prev.filter((_, i) => i !== index));
@@ -253,7 +253,7 @@ export default function GigLobbyPage({
       }
 
       alert(`Request from ${request.requesterName || request.name} accepted!`);
-      debugger
+      debugger;
       // Navigate to the gig workspace/chat page
       router.push(`/Gig/${gigId}`);
     } catch (error) {

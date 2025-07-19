@@ -421,23 +421,60 @@ export default function DescriptionClient() {
                       You are the host
                     </span>
                   )}
-                  {user && gig.host?.id !== user.id && requested && (
-                    <span className="text-xs text-yellow-400">
-                      Request sent
-                    </span>
-                  )}
+                  {user &&
+                    gig.guest &&
+                    gig.guest.username === user.username && (
+                      <span className="text-xs text-green-400">
+                        You are in this gig
+                      </span>
+                    )}
+                  {user &&
+                    gig.host?.id !== user.id &&
+                    !gig.guest &&
+                    requested && (
+                      <span className="text-xs text-yellow-400">
+                        Request sent
+                      </span>
+                    )}
+                  {gig.guest &&
+                    user &&
+                    gig.guest.username !== user.username &&
+                    gig.host?.id !== user.id && (
+                      <span className="text-xs text-gray-400">
+                        Gig taken by @{gig.guest.username}
+                      </span>
+                    )}
                 </div>
               </div>
 
               {/* Show different button based on user status */}
               {user && gig.host?.id === user.id ? (
+                // User is the host
                 <button
                   onClick={() => router.push(`/gigs/${gigId}/lobby`)}
                   className="w-auto px-5 self-center py-2 rounded-md border-0 transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600"
                 >
                   Go to Lobby
                 </button>
+              ) : gig.guest ? (
+                // Gig has a guest - check if current user is the guest
+                user && gig.guest.username === user.username ? (
+                  <button
+                    onClick={() => router.push(`/Gig/${gigId}`)}
+                    className="w-auto px-5 self-center py-2 rounded-md border-0 transition-colors duration-200 bg-green-500 text-white hover:bg-green-600"
+                  >
+                    Enter Gig
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="w-auto px-5 self-center py-2 rounded-md border-0 transition-colors duration-200 bg-gray-500 text-white cursor-not-allowed"
+                  >
+                    Gig Closed
+                  </button>
+                )
               ) : (
+                // Gig is open, show send/cancel request button
                 <button
                   onClick={requested ? handleCancelRequest : openMessageModal}
                   disabled={sendingRequest || !user}

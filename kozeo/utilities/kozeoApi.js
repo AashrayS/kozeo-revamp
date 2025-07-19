@@ -966,6 +966,18 @@ export const sendGigRequest = async (requestData) => {
  * @returns {Promise<Object>} Updated request
  */
 export const respondToGigRequest = async (requestId, status) => {
+  // Note: GraphQL enums are case-sensitive. Check if backend expects uppercase or lowercase
+  const validStatuses = {
+    accepted: "accepted",
+    rejected: "rejected",
+    cancelled: "cancelled",
+    ACCEPTED: "accepted",
+    REJECTED: "rejected",
+    CANCELLED: "cancelled",
+  };
+
+  const normalizedStatus = validStatuses[status] || status.toLowerCase();
+
   const respondMutation = `
     mutation RespondToGigRequest($requestId: ID!, $status: RequestStatus!) {
       respondToGigRequest(requestId: $requestId, status: $status) {
@@ -983,7 +995,7 @@ export const respondToGigRequest = async (requestId, status) => {
           id
           username
           first_name
-          lastName
+          last_name
           profile_Picture
           rating
         }
@@ -994,8 +1006,28 @@ export const respondToGigRequest = async (requestId, status) => {
     }
   `;
 
-  const result = await mutate(respondMutation, { requestId, status });
-  return result.respondToGigRequest;
+  try {
+    console.log(
+      `Responding to request ${requestId} with status: ${normalizedStatus}`
+    );
+    console.log("GraphQL variables:", { requestId, status: normalizedStatus });
+
+    const result = await mutate(respondMutation, {
+      requestId,
+      status: normalizedStatus,
+    });
+
+    console.log("Response API result:", result);
+    return result.respondToGigRequest;
+  } catch (error) {
+    console.error("Error in respondToGigRequest:", error);
+    console.error("Request details:", {
+      requestId,
+      originalStatus: status,
+      normalizedStatus,
+    });
+    throw error;
+  }
 };
 
 /**
