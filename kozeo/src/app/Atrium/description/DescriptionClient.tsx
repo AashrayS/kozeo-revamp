@@ -54,9 +54,11 @@ export default function DescriptionClient() {
           // Check if current user has already sent a request to this gig
           if (user && (gigData as any).activeRequest) {
             const userRequest = (gigData as any).activeRequest.find(
-              (req: any) => req.sender?.id === user.id || req.sender?.username === user.username
+              (req: any) =>
+                req.sender?.id === user.id ||
+                req.sender?.username === user.username
             );
-            
+
             if (userRequest) {
               console.log("Found existing request from user:", userRequest);
               setRequested(true);
@@ -114,6 +116,36 @@ export default function DescriptionClient() {
         console.log("Joined room:", gigId);
       });
 
+      socket.on("gig-request-response", (responseData) => {
+        console.log("Received gig request response:", responseData);
+        const { requesterName, response, hostUsername, requestId } =
+          responseData;
+
+        // Check if this response is for the current user
+        if (
+          user &&
+          (requesterName === user.username || requesterName === user.name)
+        ) {
+          if (response === "accepted") {
+            alert(
+              `Great! ${hostUsername} has accepted your request. You can now access the gig workspace.`
+            );
+            // Update UI state
+            setRequested(false);
+            setCurrentRequestId(null);
+            // Optionally navigate to the gig workspace
+            // router.push(`/Gig/${gigId}`);
+          } else if (response === "rejected") {
+            alert(
+              `${hostUsername} has declined your request. You can explore other opportunities in the Atrium.`
+            );
+            // Update UI state
+            setRequested(false);
+            setCurrentRequestId(null);
+          }
+        }
+      });
+
       socket.on("disconnect", () => {
         console.log("Disconnected from WebSocket server");
       });
@@ -122,7 +154,7 @@ export default function DescriptionClient() {
         socket.disconnect();
       };
     }
-  }, [gigId]);
+  }, [gigId, user]);
 
   const handleSendRequest = async () => {
     if (!user || !gigId) {

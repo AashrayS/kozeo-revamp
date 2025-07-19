@@ -207,14 +207,15 @@ export default function GigLobbyPage({
       console.log("Accepting request:", request);
 
       // Call API to accept the request
-      const response = await respondToGigRequest(request.requestId, "accepted");
-      console.log("Request accepted successfully:", response);
+    //   const response = await respondToGigRequest(request.requestId, "accepted");
+    //   console.log("Request accepted successfully:", response);
 
       // Remove the request from the list
       setRequests((prev) => prev.filter((_, i) => i !== index));
 
-      // Send WebSocket notification about acceptance
+      // Send WebSocket notification about acceptance to the requester
       if (socketRef.current && socketRef.current.connected) {
+        // Send general gig-request-response for room updates
         socketRef.current.emit("gig-request-response", {
           gigId: gigId,
           requestId: request.requestId,
@@ -223,11 +224,37 @@ export default function GigLobbyPage({
           hostUsername: user.username,
           timestamp: new Date().toISOString(),
         });
+
+        // Send targeted notification to the requester
+        const notification = {
+          id: `gig-accept-${request.requestId}-${Date.now()}`,
+          type: "success",
+          title: "Gig Request Accepted!",
+          message: `${user.username} has accepted your request to join "${
+            gig?.title || "the gig"
+          }". You can now access the gig workspace.`,
+          timestamp: new Date().toISOString(),
+          read: false,
+          username: request.requesterName || request.name,
+          action: "view_gig",
+          actionLabel: "Go to Gig",
+          gigId: gigId,
+        };
+
+        socketRef.current.emit("send-notification", {
+          targetUsername: request.requesterName || request.name,
+          notification: notification,
+        });
+
+        console.log(
+          "Sent acceptance notification to:",
+          request.requesterName || request.name
+        );
       }
 
       alert(`Request from ${request.requesterName || request.name} accepted!`);
-
-      // Navigate to the gig workspace
+      debugger
+      // Navigate to the gig workspace/chat page
       router.push(`/Gig/${gigId}`);
     } catch (error) {
       console.error("Error accepting request:", error);
@@ -261,6 +288,7 @@ export default function GigLobbyPage({
 
       // Send WebSocket notification about rejection
       if (socketRef.current && socketRef.current.connected) {
+        // Send general gig-request-response for room updates
         socketRef.current.emit("gig-request-response", {
           gigId: gigId,
           requestId: request.requestId,
@@ -269,6 +297,31 @@ export default function GigLobbyPage({
           hostUsername: user.username,
           timestamp: new Date().toISOString(),
         });
+
+        // Send targeted notification to the requester
+        const notification = {
+          id: `gig-reject-${request.requestId}-${Date.now()}`,
+          type: "warning",
+          title: "Gig Request Declined",
+          message: `${user.username} has declined your request to join "${
+            gig?.title || "the gig"
+          }". You can explore other opportunities in the Atrium.`,
+          timestamp: new Date().toISOString(),
+          read: false,
+          username: request.requesterName || request.name,
+          action: "view_atrium",
+          actionLabel: "Browse Gigs",
+        };
+
+        socketRef.current.emit("send-notification", {
+          targetUsername: request.requesterName || request.name,
+          notification: notification,
+        });
+
+        console.log(
+          "Sent rejection notification to:",
+          request.requesterName || request.name
+        );
       }
 
       alert(`Request from ${request.requesterName || request.name} rejected.`);
