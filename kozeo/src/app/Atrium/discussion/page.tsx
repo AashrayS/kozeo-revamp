@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation";
 import { FaUsers, FaComments, FaArrowRight } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import discussionRooms from "../../../../data/discussionRooms.json";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function DiscussionPage() {
   const router = useRouter();
+  const { theme } = useTheme();
 
   const joinRoom = (roomId: number) => {
     router.push(`/discussionroom/${roomId}`);
@@ -17,23 +19,42 @@ export default function DiscussionPage() {
 
   return (
     <>
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      {/* Glows */}
+      {theme === "dark" && (
+        <>
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        </>
+      )}
 
       <div className="flex flex-col h-screen">
         <Header logoText="Kozeo" />
-        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div
+          className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+          }`}
+        >
           <Sidebar />
 
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="max-w-full mx-auto">
               {/* Header */}
               <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                <h1
+                  className={`text-3xl font-bold mb-2 flex items-center gap-3 transition-colors duration-300 ${
+                    theme === "dark" ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   {/* <FaComments className="text-cyan-400" /> */}
                   Discussion Rooms
                 </h1>
-                <p className="text-gray-400">
+                <p
+                  className={`transition-colors duration-300 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
                   Join topic-based discussion rooms and connect with like-minded
                   developers
                 </p>
@@ -45,9 +66,19 @@ export default function DiscussionPage() {
                   <input
                     type="text"
                     placeholder="Search discussion rooms..."
-                    className="w-full py-2 pl-4 pr-10 rounded-md bg-neutral-900 border border-neutral-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-600"
+                    className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                      theme === "dark"
+                        ? "bg-neutral-900 border-neutral-700 placeholder-gray-400 focus:ring-neutral-600 text-white"
+                        : "bg-white border-gray-300 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    }`}
                   />
-                  <button className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                  <button
+                    className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
+                      theme === "dark"
+                        ? "text-gray-400 hover:text-white"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
                     <FiSearch className="text-xl" />
                   </button>
                 </div>
@@ -58,12 +89,20 @@ export default function DiscussionPage() {
                 {discussionRooms.map((room) => (
                   <div
                     key={room.id}
-                    className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6 hover:bg-neutral-800/50 transition-all duration-200 hover:border-cyan-500/30 group cursor-pointer"
+                    className={`border rounded-xl p-6 transition-all duration-200 group cursor-pointer ${
+                      theme === "dark"
+                        ? "bg-neutral-900/50 border-neutral-800 hover:bg-neutral-800/50 hover:border-cyan-500/30"
+                        : "bg-white/80 border-gray-200 hover:bg-white hover:border-blue-300 shadow-lg hover:shadow-xl"
+                    }`}
                     onClick={() => joinRoom(room.id)}
                   >
                     {/* Room Avatar */}
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-800 flex items-center justify-center">
+                      <div
+                        className={`w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
+                          theme === "dark" ? "bg-neutral-800" : "bg-gray-100"
+                        }`}
+                      >
                         <img
                           src={room.dp}
                           alt={room.name}
@@ -75,10 +114,20 @@ export default function DiscussionPage() {
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white group-hover:text-cyan-400 transition-colors">
+                        <h3
+                          className={`text-lg font-semibold transition-colors duration-300 ${
+                            theme === "dark"
+                              ? "text-white group-hover:text-cyan-400"
+                              : "text-gray-900 group-hover:text-blue-600"
+                          }`}
+                        >
                           {room.name}
                         </h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <div
+                          className={`flex items-center gap-2 text-sm transition-colors duration-300 ${
+                            theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          }`}
+                        >
                           <FaUsers className="text-xs" />
                           <span>Public Room</span>
                         </div>
@@ -86,16 +135,30 @@ export default function DiscussionPage() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">
+                    <p
+                      className={`text-sm mb-4 line-clamp-3 transition-colors duration-300 ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       {room.description}
                     </p>
 
                     {/* Join Button */}
                     <div className="flex justify-between items-center">
-                      <div className="text-xs text-gray-500">
+                      <div
+                        className={`text-xs transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
                         Room #{room.id}
                       </div>
-                      <button className="flex items-center gap-2 px-3 py-1.5 bg-cyan-600/20 text-cyan-400 rounded-lg text-sm font-medium group-hover:bg-cyan-600 group-hover:text-white transition-all duration-200">
+                      <button
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          theme === "dark"
+                            ? "bg-cyan-600/20 text-cyan-400 group-hover:bg-cyan-600 group-hover:text-white"
+                            : "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
+                        }`}
+                      >
                         Join Room
                         <FaArrowRight className="text-xs" />
                       </button>

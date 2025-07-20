@@ -5,6 +5,7 @@ import { FiLogOut, FiBell } from "react-icons/fi";
 import { useLogout } from "../../../store/useLogout";
 import NotificationBox from "./NotificationBox";
 import { useNotificationContext } from "./NotificationContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Header({
   logoText = "YourApp",
@@ -14,6 +15,7 @@ export default function Header({
   const { notifications, markAsRead, markAllAsRead, unreadCount } =
     useNotificationContext();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const { theme } = useTheme();
   const logout = useLogout();
 
   const toggleNotifications = () => {
@@ -26,16 +28,22 @@ export default function Header({
 
   return (
     <>
-      <header className="w-full px-6 py-4 Z-40 bg-[#0e0e0] flex justify-between items-center relative">
-        <div className="text-white text-2xl font-bold tracking-wide">
-          {logoText}
-        </div>
+      <header
+        className={`w-full px-6 py-4 Z-40 flex justify-between items-center relative theme-transition ${
+          theme === "light" ? "bg-white text-gray-900" : "bg-black text-white"
+        }`}
+      >
+        <div className="text-2xl font-bold tracking-wide">{logoText}</div>
 
         <div className="flex items-center gap-4">
           {/* Notification Button */}
           <button
             onClick={toggleNotifications}
-            className="relative flex items-center gap-2 px-4 py-2 rounded-md text-white hover:bg-neutral-800 transition-colors"
+            className={`relative flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+              theme === "light"
+                ? "text-gray-900 hover:bg-gray-100"
+                : "text-white hover:bg-neutral-800"
+            }`}
           >
             <FiBell className="text-xl" />
             <span className="hidden sm:inline">Notifications</span>
@@ -48,7 +56,11 @@ export default function Header({
           {/* Logout Button */}
           <button
             onClick={logout}
-            className="flex items-center gap-2 px-4 py-2 rounded-md text-white hover:bg-neutral-800 transition-colors"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+              theme === "light"
+                ? "text-gray-900 hover:bg-gray-100"
+                : "text-white hover:bg-neutral-800"
+            }`}
           >
             <FiLogOut className="text-xl" />
             <span className="hidden sm:inline">Logout</span>

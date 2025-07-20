@@ -12,10 +12,12 @@ import {
 } from "../../../../utilities/kozeoApi";
 import { io, Socket } from "socket.io-client";
 import { useUser } from "../../../../store/hooks";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function DescriptionClient() {
   const router = useRouter();
   const { user } = useUser();
+  const { theme } = useTheme();
   const [requested, setRequested] = useState(false);
   const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
   const [gig, setGig] = useState<any>(null);
@@ -288,10 +290,22 @@ export default function DescriptionClient() {
     return (
       <>
         <Header logoText="Kozeo" />
-        <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div
+          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+          }`}
+        >
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
-            <div className="text-gray-400">Loading gig details...</div>
+            <div
+              className={`transition-colors duration-300 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              Loading gig details...
+            </div>
           </main>
         </div>
       </>
@@ -302,7 +316,13 @@ export default function DescriptionClient() {
     return (
       <>
         <Header logoText="Kozeo" />
-        <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div
+          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+          }`}
+        >
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-red-400">{error}</div>
@@ -316,10 +336,22 @@ export default function DescriptionClient() {
     return (
       <>
         <Header logoText="Kozeo" />
-        <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div
+          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+          }`}
+        >
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
-            <div className="text-gray-400">No gig data available</div>
+            <div
+              className={`transition-colors duration-300 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              No gig data available
+            </div>
           </main>
         </div>
       </>
@@ -333,16 +365,44 @@ export default function DescriptionClient() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      {/* Glows */}
+      {theme === "dark" && (
+        <>
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        </>
+      )}
 
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+        }`}
+      >
         <Sidebar />
         <main className="flex-1 px-10 py-6 grid grid-cols-1 md:grid-cols-2  md:gap-6 items-start ">
           {/* Gig Info */}
-          <div className="relative  flex flex-col justify-between bg-gradient-to-br mb-10 min-h-2/3 from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))] rounded-lg p-6 shadow-md w-full">
-            <div className="absolute top-3 right-3 text-xs text-gray-300 bg-neutral-800 bg-opacity-80 px-2 py-0.5 rounded-sm border border-neutral-600 backdrop-blur-sm flex items-center gap-1">
-              <FiStar className="text-sm text-gray-400" fill="white" />
+          <div
+            className={`relative flex flex-col justify-between mb-10 min-h-2/3 rounded-lg p-6 shadow-md w-full transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
+                : "bg-white/90 hover:bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+            }`}
+          >
+            <div
+              className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-sm border backdrop-blur-sm flex items-center gap-1 transition-colors duration-300 ${
+                theme === "dark"
+                  ? "text-gray-300 bg-neutral-800 bg-opacity-80 border-neutral-600"
+                  : "text-gray-700 bg-white/80 border-gray-300"
+              }`}
+            >
+              <FiStar
+                className={`text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+                fill={theme === "dark" ? "white" : "currentColor"}
+              />
               <span className="font-medium">
                 {gig.host?.rating?.toFixed(1) || "N/A"}
               </span>
@@ -350,7 +410,11 @@ export default function DescriptionClient() {
 
             {/* Top Content */}
             <div className="flex flex-col">
-              <h2 className="text-2xl font-bold text-white mb-6">
+              <h2
+                className={`text-2xl font-bold mb-6 transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Gig Details
               </h2>
 
@@ -358,7 +422,11 @@ export default function DescriptionClient() {
                 {gig.host?.username || "Unknown Host"}
               </div>
 
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3
+                className={`text-lg font-semibold mb-2 transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
                 {gig.title}
               </h3>
 
@@ -368,29 +436,53 @@ export default function DescriptionClient() {
                   WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                 }}
-                className="text-sm text-gray-300 mb-3"
+                className={`text-sm mb-3 transition-colors duration-300 ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-700"
+                }`}
               >
                 {gig.description}
               </p>
 
               <p className="text-sm mb-2">
-                <span className="text-gray-400">Looking For: </span>
-                <span className="text-white">{gig.looking_For}</span>
+                <span
+                  className={`transition-colors duration-300 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  Looking For:{" "}
+                </span>
+                <span
+                  className={`transition-colors duration-300 ${
+                    theme === "dark" ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {gig.looking_For}
+                </span>
               </p>
 
               <div className="flex flex-wrap gap-2 mb-3">
                 {gig.skills?.map((skill: string, idx: number) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 text-xs bg-neutral-800 border border-neutral-600 text-gray-300 rounded-md"
+                    className={`px-2 py-0.5 text-xs border rounded-md transition-colors duration-300 ${
+                      theme === "dark"
+                        ? "bg-neutral-800 border-neutral-600 text-gray-300"
+                        : "bg-gray-100 border-gray-300 text-gray-700"
+                    }`}
                   >
                     {skill}
                   </span>
                 ))}
               </div>
 
-              <div className="text-sm text-gray-400 mb-2">
-                <span className="text-gray-400">Status: </span>
+              <div className="text-sm mb-2">
+                <span
+                  className={`transition-colors duration-300 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  Status:{" "}
+                </span>
                 <span
                   className={`font-medium ${
                     gig.status === "open"
@@ -407,13 +499,21 @@ export default function DescriptionClient() {
             </div>
 
             {/* Bottom Section */}
-            <div className="mt-auto pt-4 border-t border-neutral-800 flex flex-col gap-3">
+            <div
+              className={`mt-auto pt-4 border-t flex flex-col gap-3 transition-colors duration-300 ${
+                theme === "dark" ? "border-neutral-800" : "border-gray-200"
+              }`}
+            >
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-emerald-400">
                   {gig.currency} {gig.amount}
                 </span>
                 <div className="flex flex-col items-end">
-                  <span className="text-xs text-gray-500">
+                  <span
+                    className={`text-xs transition-colors duration-300 ${
+                      theme === "dark" ? "text-gray-500" : "text-gray-400"
+                    }`}
+                  >
                     {gig.activeRequest?.length || 0} active requests
                   </span>
                   {user && gig.host?.id === user.id && (
@@ -503,12 +603,28 @@ export default function DescriptionClient() {
           </div>
 
           {/* User Info */}
-          <div className="flex flex-col  bg-gradient-to-br  md:mb-0 min-h-2/3 from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.1),_rgba(34,211,238,0.1))] rounded-lg p-6 shadow-md w-full">
+          <div
+            className={`flex flex-col md:mb-0 min-h-2/3 rounded-lg p-6 shadow-md w-full transition-all duration-300 ${
+              theme === "dark"
+                ? "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.1),_rgba(34,211,238,0.1))]"
+                : "bg-white/90 hover:bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+            }`}
+          >
             <div className="flex justify-between items-start mb-6">
-              <h2 className="text-2xl font-bold text-white">About the Host</h2>
+              <h2
+                className={`text-2xl font-bold transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
+                About the Host
+              </h2>
 
               <button
-                className="text-xs text-gray-300 bg-neutral-800 bg-opacity-80 px-2 py-1 rounded-sm  backdrop-blur-sm flex items-center gap-1 hover:bg-neutral-700 transition-colors"
+                className={`text-xs px-2 py-1 rounded-sm backdrop-blur-sm flex items-center gap-1 transition-colors duration-300 ${
+                  theme === "dark"
+                    ? "text-gray-300 bg-neutral-800 bg-opacity-80 hover:bg-neutral-700"
+                    : "text-gray-700 bg-white/80 border border-gray-300 hover:bg-gray-50"
+                }`}
                 onClick={() => {
                   router.push(`/profile/${hostUsername}`);
                 }}
@@ -521,7 +637,13 @@ export default function DescriptionClient() {
             {/* Loading state for host profile */}
             {hostLoading && (
               <div className="text-center py-4">
-                <div className="text-gray-400">Loading host profile...</div>
+                <div
+                  className={`transition-colors duration-300 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  Loading host profile...
+                </div>
               </div>
             )}
 
@@ -540,21 +662,37 @@ export default function DescriptionClient() {
                   </span>
                 )}
               </div>
-              <div className="font-semibold text-lg">
+              <div
+                className={`font-semibold text-lg transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
                 {displayHost.first_name} {displayHost.last_name} @
                 {displayHost.username}
               </div>
-              <div className="flex items-center gap-1 text-gray-300 text-sm mt-1 mb-2">
+              <div
+                className={`flex items-center gap-1 text-sm mt-1 mb-2 transition-colors duration-300 ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
                 <FiStar className="text-yellow-400" />
                 {displayHost.rating?.toFixed(1) || "N/A"}
               </div>
-              <p className="text-sm text-gray-300 w-2/3">
+              <p
+                className={`text-sm w-2/3 transition-colors duration-300 ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
                 {displayHost.bio || "No bio available"}
               </p>
 
               {/* Additional host info */}
               {displayHost.country_Code && (
-                <div className="text-xs text-gray-400 mt-2">
+                <div
+                  className={`text-xs mt-2 transition-colors duration-300 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
                   📍 {displayHost.country_Code}
                 </div>
               )}
@@ -582,7 +720,11 @@ export default function DescriptionClient() {
             </div>
 
             {/* Reviews Section */}
-            <h4 className="font-bold text-white mb-2">
+            <h4
+              className={`font-bold mb-2 transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
+            >
               Reviews ({displayHost.reviewsReceived?.length || 0}):
             </h4>
             <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
@@ -593,10 +735,18 @@ export default function DescriptionClient() {
                   .map((review: any, idx: number) => (
                     <div
                       key={idx}
-                      className="border border-neutral-700 rounded-md p-3"
+                      className={`rounded-md p-3 transition-colors duration-300 ${
+                        theme === "dark"
+                          ? "border border-neutral-700 bg-neutral-800/50"
+                          : "border border-gray-200 bg-gray-50"
+                      }`}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <div className="font-semibold text-white">
+                        <div
+                          className={`font-semibold transition-colors duration-300 ${
+                            theme === "dark" ? "text-white" : "text-gray-900"
+                          }`}
+                        >
                           {review.title || "Great work!"}
                         </div>
                         <div className="flex items-center gap-1">
@@ -609,10 +759,18 @@ export default function DescriptionClient() {
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-300 mb-2">
+                      <p
+                        className={`text-sm mb-2 transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}
+                      >
                         {review.description || "No description provided"}
                       </p>
-                      <div className="text-xs text-gray-500">
+                      <div
+                        className={`text-xs transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
                         by @{review.author?.username || "Anonymous"} •{" "}
                         {review.createdAt
                           ? new Date(review.createdAt).toLocaleDateString()
@@ -624,42 +782,84 @@ export default function DescriptionClient() {
                 <>
                   {/* Fallback to gig status info if no reviews */}
                   {gig.status === "open" && (
-                    <div className="border border-neutral-700 rounded-md p-3">
+                    <div
+                      className={`rounded-md p-3 transition-colors duration-300 ${
+                        theme === "dark"
+                          ? "border border-neutral-700 bg-neutral-800/50"
+                          : "border border-gray-200 bg-gray-50"
+                      }`}
+                    >
                       <div className="font-semibold mb-1 text-green-400">
                         Gig Available
                       </div>
-                      <p className="text-sm text-gray-300">
+                      <p
+                        className={`text-sm transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}
+                      >
                         This gig is currently open and accepting requests.
                       </p>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div
+                        className={`text-xs mt-1 transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
                         Created: {new Date(gig.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   )}
 
                   {gig.status === "in_progress" && gig.guest && (
-                    <div className="border border-neutral-700 rounded-md p-3">
+                    <div
+                      className={`rounded-md p-3 transition-colors duration-300 ${
+                        theme === "dark"
+                          ? "border border-neutral-700 bg-neutral-800/50"
+                          : "border border-gray-200 bg-gray-50"
+                      }`}
+                    >
                       <div className="font-semibold mb-1 text-yellow-400">
                         In Progress
                       </div>
-                      <p className="text-sm text-gray-300">
+                      <p
+                        className={`text-sm transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}
+                      >
                         Currently collaborating with @{gig.guest.username}
                       </p>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div
+                        className={`text-xs mt-1 transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
                         Started: {new Date(gig.updatedAt).toLocaleDateString()}
                       </div>
                     </div>
                   )}
 
                   {gig.activeRequest && gig.activeRequest.length > 0 && (
-                    <div className="border border-neutral-700 rounded-md p-3">
+                    <div
+                      className={`rounded-md p-3 transition-colors duration-300 ${
+                        theme === "dark"
+                          ? "border border-neutral-700 bg-neutral-800/50"
+                          : "border border-gray-200 bg-gray-50"
+                      }`}
+                    >
                       <div className="font-semibold mb-1 text-blue-400">
                         Pending Requests
                       </div>
-                      <p className="text-sm text-gray-300">
+                      <p
+                        className={`text-sm transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}
+                      >
                         {gig.activeRequest.length} request(s) pending review
                       </p>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div
+                        className={`text-xs mt-1 transition-colors duration-300 ${
+                          theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        }`}
+                      >
                         Latest:{" "}
                         {new Date(
                           gig.activeRequest[0]?.sentTime || gig.updatedAt
@@ -670,11 +870,25 @@ export default function DescriptionClient() {
 
                   {(!gig.activeRequest || gig.activeRequest.length === 0) &&
                     gig.status === "open" && (
-                      <div className="border border-neutral-700 rounded-md p-3">
-                        <div className="font-semibold mb-1 text-gray-400">
+                      <div
+                        className={`rounded-md p-3 transition-colors duration-300 ${
+                          theme === "dark"
+                            ? "border border-neutral-700 bg-neutral-800/50"
+                            : "border border-gray-200 bg-gray-50"
+                        }`}
+                      >
+                        <div
+                          className={`font-semibold mb-1 transition-colors duration-300 ${
+                            theme === "dark" ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
                           No Reviews Yet
                         </div>
-                        <p className="text-sm text-gray-300">
+                        <p
+                          className={`text-sm transition-colors duration-300 ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
                           This host doesn't have any reviews yet.
                         </p>
                       </div>
@@ -689,11 +903,23 @@ export default function DescriptionClient() {
       {/* Message Modal */}
       {showMessageModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-neutral-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">
+          <div
+            className={`rounded-lg p-6 max-w-md w-full mx-4 transition-colors duration-300 ${
+              theme === "dark" ? "bg-neutral-800" : "bg-white"
+            }`}
+          >
+            <h3
+              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
+            >
               Send Request Message
             </h3>
-            <p className="text-gray-300 mb-4 text-sm">
+            <p
+              className={`mb-4 text-sm transition-colors duration-300 ${
+                theme === "dark" ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               Tell the host why you're interested in this gig and what you can
               offer.
             </p>
@@ -702,7 +928,11 @@ export default function DescriptionClient() {
               onChange={(e) => setRequestMessage(e.target.value)}
               placeholder="Hi! I'm interested in this gig because..."
               rows={4}
-              className="w-full px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+              className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-colors duration-300 ${
+                theme === "dark"
+                  ? "bg-neutral-700 border-neutral-600 text-white placeholder-gray-400"
+                  : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+              }`}
             />
             <div className="flex gap-3 justify-end mt-4">
               <button
@@ -710,14 +940,22 @@ export default function DescriptionClient() {
                   setShowMessageModal(false);
                   setRequestMessage("");
                 }}
-                className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700 text-white transition"
+                className={`px-4 py-2 rounded transition-colors duration-300 ${
+                  theme === "dark"
+                    ? "bg-gray-600 hover:bg-gray-700 text-white"
+                    : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                }`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSendRequest}
                 disabled={!requestMessage.trim() || sendingRequest}
-                className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white transition"
+                className={`px-4 py-2 rounded transition-colors duration-300 text-white ${
+                  !requestMessage.trim() || sendingRequest
+                    ? "bg-gray-600 cursor-not-allowed"
+                    : "bg-emerald-600 hover:bg-emerald-700"
+                }`}
               >
                 {sendingRequest ? "Sending..." : "Send Request"}
               </button>

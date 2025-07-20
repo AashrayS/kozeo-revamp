@@ -7,13 +7,15 @@ import { useNavigationLoader } from "../../components/common/useNavigationLoader
 import { loginUser, registerUser } from "../../../utilities/kozeoApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/userSlice";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function LoginSignupPage() {
   const [showLogin, setShowLogin] = useState(true);
   const { navigateWithLoader } = useNavigationLoader();
   const dispatch = useDispatch();
+  const { theme: currentAppTheme } = useTheme();
 
-  const isDark = true;
+  const isDark = currentAppTheme === "dark";
   const currentTheme = isDark ? theme.dark : theme.light;
 
   // Login state
@@ -66,7 +68,7 @@ export default function LoginSignupPage() {
 
   return (
     <div
-      className="flex w-full h-screen overflow-hidden  md:flex-row"
+      className="flex w-full h-screen overflow-hidden md:flex-row theme-transition"
       style={{
         fontFamily: currentTheme.fonts.base,
         backgroundColor: currentTheme.colors.background,
@@ -75,7 +77,13 @@ export default function LoginSignupPage() {
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
 
-      <div className="md:w-full w-full flex  flex-col items-center justify-items-start md:justify-center p-6 md:p-10 text-center text-white bg-[radial-gradient(circle_at_center,_#111,_#000)] md:bg-[radial-gradient(circle_at_center,_#111,_#000)]">
+      <div
+        className={`md:w-full w-full flex flex-col items-center justify-items-start md:justify-center p-6 md:p-10 text-center theme-transition ${
+          currentAppTheme === "light"
+            ? "text-gray-900 bg-gradient-light"
+            : "text-white bg-gradient-dark"
+        }`}
+      >
         <h1
           className="font-bold mb-2 md:mb-4 text-4xl mt-16 md:mt-0 md:text-8xl"
           style={{}}

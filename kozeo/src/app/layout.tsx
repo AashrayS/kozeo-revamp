@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "../styles/themes.css";
 import Head from "next/head";
 import { NavigationWrapper } from "@/components/common/NavigationWrapper";
 import NotificationProviderClient from "@/components/common/NotificationProviderClient";
 import { ReduxProvider } from "../../store/Provider";
+import { ThemeProvider } from "../contexts/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,12 +37,14 @@ export default function RootLayout({
         />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}
       >
         <ReduxProvider>
-          <NotificationProviderClient>
-            <NavigationWrapper>{children}</NavigationWrapper>
-          </NotificationProviderClient>
+          <ThemeProvider>
+            <NotificationProviderClient>
+              <NavigationWrapper>{children}</NavigationWrapper>
+            </NotificationProviderClient>
+          </ThemeProvider>
         </ReduxProvider>
       </body>
     </html>

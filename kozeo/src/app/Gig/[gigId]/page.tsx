@@ -22,6 +22,7 @@ import {
   sendGigMessage,
 } from "../../../../utilities/kozeoApi";
 import { useUser } from "../../../../store/hooks";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 import { io } from "socket.io-client";
 import { WEBSOCKET_URL } from "@/config";
@@ -40,6 +41,7 @@ export default function GigPage({
 }) {
   const { gigId } = use(paramsPromise);
   const router = useRouter();
+  const { theme } = useTheme();
 
   // Redux state for current user
   const { user, username, email, isAuthenticated } = useUser();
@@ -163,7 +165,11 @@ export default function GigPage({
 
           // Determine message type based on messageType and attachments
           let messageType = "text";
-          if (msg.messageType === "payment" && msg.attachments && msg.attachments.length > 0) {
+          if (
+            msg.messageType === "payment" &&
+            msg.attachments &&
+            msg.attachments.length > 0
+          ) {
             const description = msg.attachments[0].description;
             if (description === "request-made") {
               messageType = "payment-request";
@@ -228,7 +234,11 @@ export default function GigPage({
 
           // Determine message type based on messageType and attachments
           let messageType = "text";
-          if (msg.messageType === "payment" && msg.attachments && msg.attachments.length > 0) {
+          if (
+            msg.messageType === "payment" &&
+            msg.attachments &&
+            msg.attachments.length > 0
+          ) {
             const description = msg.attachments[0].description;
             if (description === "request-made") {
               messageType = "payment-request";
@@ -325,7 +335,6 @@ export default function GigPage({
   const getCurrentUserEmail = () => {
     console.log("Getting current user email:", email, user);
     return email || user?.email || "unknown@example.com";
-    
   };
 
   // Message handling functions
@@ -1164,11 +1173,11 @@ export default function GigPage({
         gig: gigId,
         content: paymentAmount, // Amount as content
         messageType: "payment",
-        attachments: [{description: "request-made"}] // Description in attachments
+        attachments: [{ description: "request-made" }], // Description in attachments
       };
 
       // Send payment message via API
-      const sentMessage = await sendGigMessage(messageData) as any;
+      const sentMessage = (await sendGigMessage(messageData)) as any;
       console.log("Payment message sent via API:", sentMessage);
 
       // Prepare payment data for socket
@@ -1193,8 +1202,8 @@ export default function GigPage({
         {
           sender: currentUserEmail,
           senderEmail: currentUserEmail,
-          time: sentMessage?.timestamp 
-            ? new Date(sentMessage.timestamp).toLocaleTimeString() 
+          time: sentMessage?.timestamp
+            ? new Date(sentMessage.timestamp).toLocaleTimeString()
             : new Date().toLocaleTimeString(),
           message: paymentAmount, // Use amount as message content to match API format
           type: "payment-request", // Use consistent type
@@ -1203,14 +1212,14 @@ export default function GigPage({
           id: sentMessage?.id || paymentId,
           timestamp: sentMessage?.timestamp || new Date().toISOString(),
           messageType: "payment",
-          attachments: [{description: "request-made"}], // Include attachments for consistency
+          attachments: [{ description: "request-made" }], // Include attachments for consistency
         },
       ]);
 
       console.log("Payment request sent successfully");
     } catch (error) {
       console.error("Error sending payment request via API:", error);
-      
+
       // Fallback to socket-only if API fails
       const fallbackPaymentData = {
         gigId,
@@ -1241,11 +1250,13 @@ export default function GigPage({
           id: paymentId,
           timestamp: new Date().toISOString(),
           messageType: "payment",
-          attachments: [{description: "request-made"}], // Include attachments for consistency
+          attachments: [{ description: "request-made" }], // Include attachments for consistency
         },
       ]);
 
-      console.error("Failed to send payment request via API, fell back to socket only");
+      console.error(
+        "Failed to send payment request via API, fell back to socket only"
+      );
     }
 
     // Reset and close modal
@@ -1362,17 +1373,31 @@ export default function GigPage({
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
       <div className="flex flex-col h-screen bg-transparent">
         <Header logoText="Kozeo" />
-        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div
+          className={`relative z-10 flex flex-1 flex-row theme-transition ${
+            theme === "light"
+              ? "bg-gradient-light text-gray-900"
+              : "bg-gradient-dark text-white"
+          }`}
+        >
           <Sidebar />
 
           <main
             className="flex-1 p-0 flex flex-col overflow-hidden overflow-x-hidden"
             ref={containerRef}
           >
-            <div className="block md:hidden bg-neutral-800/40 border border-neutral-700/30 text-neutral-300 p-3 text-center text-xs font-medium m-3 rounded-lg">
+            <div
+              className={`block md:hidden border p-3 text-center text-xs font-medium m-3 rounded-lg ${
+                theme === "light"
+                  ? "bg-gray-100/40 border-gray-300/30 text-gray-700"
+                  : "bg-neutral-800/40 border-neutral-700/30 text-neutral-300"
+              }`}
+            >
               <div className="flex items-center justify-center gap-2">
                 <svg
-                  className="w-4 h-4 text-blue-400/70"
+                  className={`w-4 h-4 ${
+                    theme === "light" ? "text-blue-500/70" : "text-blue-400/70"
+                  }`}
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -1387,12 +1412,22 @@ export default function GigPage({
             </div>
 
             {/* Mobile Navigation Tabs */}
-            <div className="md:hidden flex bg-neutral-900/80 border-b border-neutral-700/50 backdrop-blur-sm">
+            <div
+              className={`md:hidden flex border-b backdrop-blur-sm ${
+                theme === "light"
+                  ? "bg-white/80 border-gray-200/50"
+                  : "bg-neutral-900/80 border-neutral-700/50"
+              }`}
+            >
               <button
                 onClick={() => setShowMobileChat(true)}
                 className={`flex-1 py-4 px-6 text-sm font-medium transition-all duration-200 relative ${
                   showMobileChat
-                    ? "text-white bg-neutral-800/60"
+                    ? theme === "light"
+                      ? "text-gray-900 bg-gray-100/60"
+                      : "text-white bg-neutral-800/60"
+                    : theme === "light"
+                    ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100/30"
                     : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
                 }`}
               >
@@ -1649,11 +1684,13 @@ export default function GigPage({
                               ${msg.amount || msg.message}
                             </div>
                             <div className="text-neutral-300 text-xs mb-2">
-                              {msg.type === "payment-accepted" 
+                              {msg.type === "payment-accepted"
                                 ? "Payment has been accepted and processed"
                                 : msg.type === "payment-rejected"
                                 ? "Payment request was declined"
-                                : `Payment request for $${msg.amount || msg.message}`}
+                                : `Payment request for $${
+                                    msg.amount || msg.message
+                                  }`}
                             </div>
                             {/* Show action buttons only for pending payment requests to other party */}
                             {msg.type === "payment-request" && (
@@ -1934,11 +1971,13 @@ export default function GigPage({
                             ${msg.amount || msg.message}
                           </div>
                           <div className="text-neutral-300 text-xs mb-2">
-                            {msg.type === "payment-accepted" 
+                            {msg.type === "payment-accepted"
                               ? "Payment has been accepted and processed"
                               : msg.type === "payment-rejected"
                               ? "Payment request was declined"
-                              : `Payment request for $${msg.amount || msg.message}`}
+                              : `Payment request for $${
+                                  msg.amount || msg.message
+                                }`}
                           </div>
                           {/* Show action buttons only for pending payment requests to other party */}
                           {msg.type === "payment-request" && (

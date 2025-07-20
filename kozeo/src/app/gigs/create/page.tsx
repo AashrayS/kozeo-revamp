@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { createGig } from "../../../../utilities/kozeoApi";
 import { useUser } from "../../../../store/hooks";
 import { FiPlus, FiX } from "react-icons/fi";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function CreateGigPage() {
   const router = useRouter();
   const { user, isAuthenticated } = useUser();
+  const { theme } = useTheme();
   const [form, setForm] = useState({
     title: "",
     looking_For: "",
@@ -128,15 +130,29 @@ export default function CreateGigPage() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+        }`}
+      >
         <Sidebar />
         <div className="flex-1 flex flex-col">
           <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
             <form
               onSubmit={handleSubmit}
-              className="w-full h-screen sm:h-auto max-w-2xl bg-transparent rounded-none sm:rounded-2xl border-0 sm:border border-neutral-800 shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md justify-start"
+              className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md"
+                  : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg"
+              }`}
             >
-              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 text-center tracking-tight">
+              <h1
+                className={`text-2xl sm:text-3xl font-bold mb-2 text-center tracking-tight transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Create a New Gig
               </h1>
               <input
@@ -144,7 +160,11 @@ export default function CreateGigPage() {
                 value={form.title}
                 onChange={handleChange}
                 placeholder="Gig Title"
-                className="w-full px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-700 text-base sm:text-lg"
+                className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                    : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                }`}
                 required
               />
               <input
@@ -152,7 +172,11 @@ export default function CreateGigPage() {
                 value={form.looking_For}
                 onChange={handleChange}
                 placeholder="Looking For (e.g. React Developer)"
-                className="w-full px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-700 text-base sm:text-lg"
+                className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                    : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                }`}
                 required
               />
               <textarea
@@ -161,7 +185,11 @@ export default function CreateGigPage() {
                 onChange={handleChange}
                 placeholder="Description"
                 rows={4}
-                className="w-full px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-700 text-base sm:text-lg"
+                className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                    : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                }`}
                 required
               />
               {/* Skills Section */}
@@ -175,7 +203,11 @@ export default function CreateGigPage() {
                       e.key === "Enter" && (e.preventDefault(), addSkill())
                     }
                     placeholder="Add a skill"
-                    className="flex-1 px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-700 text-base sm:text-lg"
+                    className={`flex-1 px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                      theme === "dark"
+                        ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                        : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                    }`}
                   />
                   <button
                     type="button"
@@ -190,13 +222,21 @@ export default function CreateGigPage() {
                   {form.skills.map((skill, index) => (
                     <span
                       key={index}
-                      className="flex items-center gap-2 px-3 py-1 bg-neutral-800 border border-neutral-600 text-gray-300 rounded-md"
+                      className={`flex items-center gap-2 px-3 py-1 border rounded-md transition-colors duration-300 ${
+                        theme === "dark"
+                          ? "bg-neutral-800 border-neutral-600 text-gray-300"
+                          : "bg-gray-100 border-gray-300 text-gray-700"
+                      }`}
                     >
                       {skill}
                       <button
                         type="button"
                         onClick={() => removeSkill(skill)}
-                        className="text-gray-400 hover:text-white transition"
+                        className={`transition-colors duration-300 ${
+                          theme === "dark"
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-500 hover:text-gray-700"
+                        }`}
                       >
                         <FiX className="text-sm" />
                       </button>
@@ -209,7 +249,11 @@ export default function CreateGigPage() {
                   name="currency"
                   value={form.currency}
                   onChange={handleSelectChange}
-                  className="px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white focus:outline-none text-base sm:text-lg"
+                  className={`px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none transition-all duration-300 ${
+                    theme === "dark"
+                      ? "bg-neutral-900/70 border-neutral-800 text-white"
+                      : "bg-white/80 border-gray-300 text-gray-900"
+                  }`}
                 >
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -222,7 +266,11 @@ export default function CreateGigPage() {
                   placeholder="Amount"
                   type="number"
                   min="0"
-                  className="flex-1 px-4 sm:px-5 py-3 rounded-xl bg-neutral-900/70 border border-neutral-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-700 text-base sm:text-lg"
+                  className={`flex-1 px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                    theme === "dark"
+                      ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                      : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                   required
                 />
               </div>
@@ -243,7 +291,11 @@ export default function CreateGigPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold transition-colors text-base sm:text-lg"
+                className={`w-full py-3 rounded-xl font-semibold transition-colors text-base sm:text-lg ${
+                  theme === "dark"
+                    ? "bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-600 text-white"
+                    : "bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white"
+                } disabled:cursor-not-allowed`}
               >
                 {submitting ? "Creating..." : "Create Gig"}
               </button>
@@ -251,8 +303,12 @@ export default function CreateGigPage() {
           </main>
         </div>
         {/* Glows */}
-        <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-        <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        {theme === "dark" && (
+          <>
+            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          </>
+        )}
       </div>
     </>
   );

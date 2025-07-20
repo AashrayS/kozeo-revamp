@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { useRouter } from "next/navigation";
 import gigdata from "../../../data/ongoinggiglist.json"; // Adjust the import path as needed
+import { useTheme } from "@/contexts/ThemeContext";
 
 // Remove old Gig interface and use the new structure
 interface OngoingGig {
@@ -25,6 +26,7 @@ export default function GigListPage() {
   const [gigs, setGigs] = useState<OngoingGig[]>([]);
   const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
+  const { theme } = useTheme();
 
   useEffect(() => {
     setGigs(gigdata as OngoingGig[]); // Cast gigdata to OngoingGig[]
@@ -37,21 +39,36 @@ export default function GigListPage() {
 
   if (isNavigating) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+        }`}
+      >
         <div className="text-xl">Loading...</div>
       </div>
     );
-  
   }
 
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+        }`}
+      >
         <Sidebar />
         <div className="flex-1 flex flex-col">
           <main className="flex-1 p-8">
-            <h1 className="text-3xl font-bold text-white mb-6 drop-shadow-glow">
+            <h1
+              className={`text-3xl font-bold mb-6 drop-shadow-glow transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
+            >
               Ongoing Gigs
             </h1>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -59,10 +76,20 @@ export default function GigListPage() {
                 <div
                   key={gig.gigId}
                   onClick={() => handleGigNavigation(gig.gigId)}
-                  className="relative flex flex-col justify-between h-full min-h-[320px] bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out hover:scale-[1.03] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))] cursor-pointer"
+                  className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-lg p-5 shadow-md transition-all duration-200 ease-in-out hover:scale-[1.03] cursor-pointer ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
+                      : "bg-white/90 hover:bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+                  }`}
                 >
                   {/* ⭐ Host Rating Top-Right */}
-                  <div className="absolute top-3 right-3 text-xs text-gray-300 bg-neutral-800 bg-opacity-80 px-2 py-0.5 rounded-sm border border-neutral-600 backdrop-blur-sm flex items-center gap-1">
+                  <div
+                    className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-sm border backdrop-blur-sm flex items-center gap-1 transition-colors duration-300 ${
+                      theme === "dark"
+                        ? "text-gray-300 bg-neutral-800 bg-opacity-80 border-neutral-600"
+                        : "text-gray-700 bg-white/80 border-gray-300"
+                    }`}
+                  >
                     <span className="font-medium">
                       {gig.hostRating.toFixed(1)}★
                     </span>
@@ -77,7 +104,11 @@ export default function GigListPage() {
                     <div className="text-sm text-cyan-400 font-medium mb-1">
                       {gig.host}
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">
+                    <h3
+                      className={`text-lg font-semibold mb-2 transition-colors duration-300 ${
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       {gig.Title}
                     </h3>
                     <p

@@ -11,6 +11,7 @@ import {
 import { use } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../store/hooks";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 interface Request {
   id?: string;
@@ -40,6 +41,7 @@ export default function GigLobbyPage({
   const { gigId } = use(paramsPromise);
   const router = useRouter();
   const { user } = useUser();
+  const { theme } = useTheme();
   const [gig, setGig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -352,29 +354,57 @@ export default function GigLobbyPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen flex flex-col items-center justify-center theme-transition ${
+          theme === "light"
+            ? "bg-gradient-light text-gray-900"
+            : "bg-gradient-dark text-white"
+        }`}
+      >
         <div className="text-xl mb-4">Loading gig...</div>
-        <div className="text-sm text-gray-400">
+        <div
+          className={`text-sm ${
+            theme === "light" ? "text-gray-600" : "text-gray-400"
+          }`}
+        >
           WebSocket:{" "}
           <span
             className={`font-semibold ${
-              wsConnected ? "text-green-400" : "text-red-400"
+              wsConnected ? "text-green-500" : "text-red-500"
             }`}
           >
             {wsConnected ? "Connected" : "Connecting..."}
           </span>
         </div>
-        <div className="text-xs text-gray-500 mt-2">Gig ID: {gigId}</div>
+        <div
+          className={`text-xs mt-2 ${
+            theme === "light" ? "text-gray-500" : "text-gray-500"
+          }`}
+        >
+          Gig ID: {gigId}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen flex items-center justify-center theme-transition ${
+          theme === "light"
+            ? "bg-gradient-light text-gray-900"
+            : "bg-gradient-dark text-white"
+        }`}
+      >
         <div className="text-center">
-          <div className="text-xl text-red-400 mb-4">Error loading gig</div>
-          <div className="text-gray-400 mb-4">{error}</div>
+          <div className="text-xl text-red-500 mb-4">Error loading gig</div>
+          <div
+            className={`mb-4 ${
+              theme === "light" ? "text-gray-600" : "text-gray-400"
+            }`}
+          >
+            {error}
+          </div>
           <button
             onClick={() => router.push("/Atrium")}
             className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
@@ -388,9 +418,21 @@ export default function GigLobbyPage({
 
   if (!gig) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen flex items-center justify-center theme-transition ${
+          theme === "light"
+            ? "bg-gradient-light text-gray-900"
+            : "bg-gradient-dark text-white"
+        }`}
+      >
         <div className="text-center">
-          <div className="text-xl text-gray-400 mb-4">Gig not found</div>
+          <div
+            className={`text-xl mb-4 ${
+              theme === "light" ? "text-gray-600" : "text-gray-400"
+            }`}
+          >
+            Gig not found
+          </div>
           <button
             onClick={() => router.push("/Atrium")}
             className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
@@ -405,27 +447,73 @@ export default function GigLobbyPage({
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen relative z-10 flex flex-row theme-transition ${
+          theme === "light"
+            ? "bg-gradient-light text-gray-900"
+            : "bg-gradient-dark text-white"
+        }`}
+      >
         <Sidebar />
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
             {/* Gig Info Container */}
-            <section className="flex-1 bg-neutral-900/70 border border-neutral-800 rounded-2xl p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] max-w-xl">
+            <section
+              className={`flex-1 rounded-2xl p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] max-w-xl border theme-transition ${
+                theme === "light"
+                  ? "bg-white/90 border-gray-200"
+                  : "bg-neutral-900/70 border-neutral-800"
+              }`}
+            >
               <h2 className="text-2xl font-bold mb-4">Gig Info</h2>
               <div className="space-y-4">
                 <div>
-                  <span className="font-semibold text-cyan-400">Title:</span>{" "}
-                  <span className="text-white">{gig.title}</span>
+                  <span
+                    className={`font-semibold ${
+                      theme === "light" ? "text-cyan-600" : "text-cyan-400"
+                    }`}
+                  >
+                    Title:
+                  </span>{" "}
+                  <span
+                    className={
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }
+                  >
+                    {gig.title}
+                  </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-cyan-400">Host:</span>{" "}
-                  <span className="text-white">
+                  <span
+                    className={`font-semibold ${
+                      theme === "light" ? "text-cyan-600" : "text-cyan-400"
+                    }`}
+                  >
+                    Host:
+                  </span>{" "}
+                  <span
+                    className={
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }
+                  >
                     @{gig.host?.username || "Unknown"}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-cyan-400">Gig ID:</span>{" "}
-                  <span className="text-white">{gigId}</span>
+                  <span
+                    className={`font-semibold ${
+                      theme === "light" ? "text-cyan-600" : "text-cyan-400"
+                    }`}
+                  >
+                    Gig ID:
+                  </span>{" "}
+                  <span
+                    className={
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }
+                  >
+                    {gigId}
+                  </span>
                 </div>
                 <div>
                   <span className="font-semibold text-cyan-400">
@@ -537,13 +625,23 @@ export default function GigLobbyPage({
             </section>
 
             {/* Incoming Requests Container */}
-            <section className="flex-1 bg-neutral-900/70 border border-neutral-800 rounded-2xl p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] max-w-xl">
+            <section
+              className={`flex-1 rounded-2xl p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] max-w-xl border theme-transition ${
+                theme === "light"
+                  ? "bg-white/90 border-gray-200"
+                  : "bg-neutral-900/70 border-neutral-800"
+              }`}
+            >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Incoming Requests</h2>
                 <div className="flex items-center gap-2">
-                  {requests.filter(req => req.status === 'pending').length > 0 && (
+                  {requests.filter((req) => req.status === "pending").length >
+                    0 && (
                     <div className="bg-cyan-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
-                      {requests.filter(req => req.status === 'pending').length}
+                      {
+                        requests.filter((req) => req.status === "pending")
+                          .length
+                      }
                     </div>
                   )}
                   {/* Test button for debugging */}
@@ -555,60 +653,86 @@ export default function GigLobbyPage({
                   </button>
                 </div>
               </div>
-              {requests && requests.filter(req => req.status === 'pending').length > 0 ? (
+              {requests &&
+              requests.filter((req) => req.status === "pending").length > 0 ? (
                 <ul className="space-y-4">
-                  {requests.filter(req => req.status === 'pending').map((req: any, idx: number) => (
-                    <li
-                      key={idx}
-                      className="bg-neutral-800/80 rounded-xl p-4 flex flex-col gap-3 border border-neutral-700 hover:border-neutral-600 transition-colors"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="font-semibold text-white text-lg">
-                          @{req.requesterName || req.name}
+                  {requests
+                    .filter((req) => req.status === "pending")
+                    .map((req: any, idx: number) => (
+                      <li
+                        key={idx}
+                        className={`rounded-xl p-4 flex flex-col gap-3 border transition-colors theme-transition ${
+                          theme === "light"
+                            ? "bg-gray-50/80 border-gray-200 hover:border-gray-300"
+                            : "bg-neutral-800/80 border-neutral-700 hover:border-neutral-600"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div
+                            className={`font-semibold text-lg ${
+                              theme === "light" ? "text-gray-900" : "text-white"
+                            }`}
+                          >
+                            @{req.requesterName || req.name}
+                          </div>
+                          <div
+                            className={`text-xs ${
+                              theme === "light"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {req.timestamp
+                              ? new Date(req.timestamp).toLocaleTimeString()
+                              : "Just now"}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-500">
-                          {req.timestamp
-                            ? new Date(req.timestamp).toLocaleTimeString()
-                            : "Just now"}
+                        <div
+                          className={`text-sm p-3 rounded-lg ${
+                            theme === "light"
+                              ? "text-gray-700 bg-gray-100/50"
+                              : "text-gray-300 bg-neutral-900/50"
+                          }`}
+                        >
+                          {req.message}
                         </div>
-                      </div>
-                      <div className="text-sm text-gray-300 bg-neutral-900/50 p-3 rounded-lg">
-                        {req.message}
-                      </div>
-                      <div className="flex gap-2 mt-2">
-                        <button
-                          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition"
-                          onClick={() => {
-                            const username = req.requesterName || req.name;
-                            if (username) {
-                              const cleanUsername = username.replace(/^@/, "");
-                              router.push(`/profile/${cleanUsername}`);
-                            }
-                          }}
-                        >
-                          View Profile
-                        </button>
-                        <button
-                          className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
-                          onClick={() => handleAcceptRequest(req, idx)}
-                          disabled={processingRequests.has(idx)}
-                        >
-                          {processingRequests.has(idx)
-                            ? "Processing..."
-                            : "Accept"}
-                        </button>
-                        <button
-                          className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
-                          onClick={() => handleRejectRequest(req, idx)}
-                          disabled={processingRequests.has(idx)}
-                        >
-                          {processingRequests.has(idx)
-                            ? "Processing..."
-                            : "Reject"}
-                        </button>
-                      </div>
-                    </li>
-                  ))}
+                        <div className="flex gap-2 mt-2">
+                          <button
+                            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition"
+                            onClick={() => {
+                              const username = req.requesterName || req.name;
+                              if (username) {
+                                const cleanUsername = username.replace(
+                                  /^@/,
+                                  ""
+                                );
+                                router.push(`/profile/${cleanUsername}`);
+                              }
+                            }}
+                          >
+                            View Profile
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
+                            onClick={() => handleAcceptRequest(req, idx)}
+                            disabled={processingRequests.has(idx)}
+                          >
+                            {processingRequests.has(idx)
+                              ? "Processing..."
+                              : "Accept"}
+                          </button>
+                          <button
+                            className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
+                            onClick={() => handleRejectRequest(req, idx)}
+                            disabled={processingRequests.has(idx)}
+                          >
+                            {processingRequests.has(idx)
+                              ? "Processing..."
+                              : "Reject"}
+                          </button>
+                        </div>
+                      </li>
+                    ))}
                 </ul>
               ) : (
                 <div className="text-gray-400 text-center py-8">

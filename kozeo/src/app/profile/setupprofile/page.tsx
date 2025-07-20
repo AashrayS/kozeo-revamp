@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { theme } from "../../../theme";
 import Header from "../../../components/common/Header";
 import { useRouter } from "next/navigation";
 import {
@@ -10,11 +9,11 @@ import {
 } from "../../../../utilities/kozeoApi";
 import { isAuthenticated } from "../../../../utilities/api";
 import { FiPlus, FiX } from "react-icons/fi";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
-  const isDark = true;
-  const currentTheme = isDark ? theme.dark : theme.light;
+  const { theme } = useTheme();
 
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -153,31 +152,55 @@ export default function ProfileSetupPage() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      {/* Glows */}
+      {theme === "dark" && (
+        <>
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        </>
+      )}
 
-      <div className="min-h-screen relative z-10 flex bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white overflow-y-auto">
+      <div
+        className={`min-h-screen relative z-10 flex overflow-y-auto transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+        }`}
+      >
         <div className="flex-1 max-w-2xl mx-auto p-6">
           <div className="mb-8 text-center">
             <h1
-              className="text-3xl font-bold mb-2"
-              style={{ color: currentTheme.colors.text }}
+              className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
             >
               Complete Your Profile
             </h1>
-            <p className="text-gray-400">
+            <p
+              className={`transition-colors duration-300 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               Tell us more about yourself to get started
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-lg p-6 shadow-md">
+            <div
+              className={`rounded-lg p-6 shadow-md transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-gradient-to-br from-[#111] to-[#1a1a1a]"
+                  : "bg-white/90 border border-gray-200 shadow-lg"
+              }`}
+            >
               {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
                   <label
                     htmlFor="first_name"
-                    className="block text-sm font-medium mb-2"
+                    className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}
                   >
                     First Name *
                   </label>

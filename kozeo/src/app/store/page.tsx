@@ -6,6 +6,7 @@ import storeItems from "../../../data/store.json";
 import { FiSearch, FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export interface StoreItem {
   id: number;
@@ -17,6 +18,7 @@ export interface StoreItem {
 }
 
 export default function StorePage() {
+  const { theme } = useTheme();
   //   const [cart, setCart] = useState([]);
   const [cart, setCart] = useState<number[]>([]);
 
@@ -34,11 +36,21 @@ export default function StorePage() {
       <Header logoText="Kozeo" />
 
       {/* Glow Effects */}
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      {theme === "dark" && (
+        <>
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        </>
+      )}
 
       {/* Main Layout */}
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div
+        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+            : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+        }`}
+      >
         <Sidebar />
 
         <main className="flex-1 p-6 overflow-y-auto">
@@ -48,9 +60,19 @@ export default function StorePage() {
               <input
                 type="text"
                 placeholder="Search items..."
-                className="w-full py-2 pl-4 pr-10 rounded-md bg-neutral-900 border border-neutral-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neutral-600"
+                className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-neutral-900 border-neutral-700 placeholder-gray-400 focus:ring-neutral-600 text-white"
+                    : "bg-white border-gray-300 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                }`}
               />
-              <button className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-white">
+              <button
+                className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
+                  theme === "dark"
+                    ? "text-gray-400 hover:text-white"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
                 <FiSearch className="text-xl" />
               </button>
             </div>
@@ -58,7 +80,13 @@ export default function StorePage() {
 
           {/* Store Heading */}
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Kozeo Store</h2>
+            <h2
+              className={`text-2xl font-bold transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Kozeo Store
+            </h2>
             <span className="text-emerald-400 font-semibold text-lg">
               Available : {availableCredits} Credits
             </span>
@@ -69,11 +97,11 @@ export default function StorePage() {
             {storeItems.map((item) => (
               <div
                 key={item.id}
-                className="hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_rgba(168,85,247,0.08))] 
-             relative flex flex-col justify-between 
-             bg-gradient-to-br from-[#111] to-[#1a1a1a] 
-             rounded-lg p-4 shadow-md hover:scale-[1.02] 
-             transition-transform text-sm"
+                className={`relative flex flex-col justify-between rounded-lg p-4 shadow-md hover:scale-[1.02] transition-all duration-300 text-sm ${
+                  theme === "dark"
+                    ? "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_rgba(168,85,247,0.08))]"
+                    : "bg-white/90 hover:bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+                }`}
               >
                 <img
                   src={item.displayPicture}
@@ -82,14 +110,30 @@ export default function StorePage() {
                 />
 
                 <div className="mb-2">
-                  <h3 className="text-base font-semibold text-white">
+                  <h3
+                    className={`text-base font-semibold transition-colors duration-300 ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-300">{item.description}</p>
+                  <p
+                    className={`text-sm transition-colors duration-300 ${
+                      theme === "dark" ? "text-gray-300" : "text-gray-600"
+                    }`}
+                  >
+                    {item.description}
+                  </p>
                 </div>
 
                 {item.type.toLowerCase() === "tshirt" && (
-                  <select className="w-full mb-2 bg-neutral-800 border border-neutral-600 text-xs text-white p-1 rounded-md">
+                  <select
+                    className={`w-full mb-2 border text-xs p-1 rounded-md transition-all duration-300 ${
+                      theme === "dark"
+                        ? "bg-neutral-800 border-neutral-600 text-white"
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                  >
                     <option value="S">Size S</option>
                     <option value="M">Size M</option>
                     <option value="L">Size L</option>
@@ -120,10 +164,11 @@ export default function StorePage() {
           {cart.length > 0 && (
             <div className="mt-10 flex justify-center">
               <button
-                className=" border border-neutral-700
-             hover:from-fuchsia-600 hover:to-cyan-500 
-             text-white font-semibold tracking-wide shadow-lg 
-             py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+                className={`border font-semibold tracking-wide shadow-lg py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
+                  theme === "dark"
+                    ? "border-neutral-700 hover:from-fuchsia-600 hover:to-cyan-500 text-white"
+                    : "border-gray-300 bg-blue-600 hover:bg-blue-700 text-white"
+                }`}
               >
                 <FaShoppingCart className="text-lg" />
                 Proceed to Checkout ({cart.length}{" "}
