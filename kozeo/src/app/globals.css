@@ -94,3 +94,62 @@ body {
   animation: slideDown 0.3s ease-out;
 }
 
+/* Custom Scrollbar Styling - Dark & Minimalist Theme */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(23, 23, 23, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(115, 115, 115, 0.4);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(115, 115, 115, 0.6);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(115, 115, 115, 0.8);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(115, 115, 115, 0.4) rgba(23, 23, 23, 0.1);
+}
+
+/* Chat specific scrollbars for better contrast */
+.chat-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: rgba(64, 64, 64, 0.2);
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(163, 163, 163, 0.3);
+  border-radius: 2px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(163, 163, 163, 0.5);
+}
+
+/* Smooth scrolling for chat containers */
+.chat-scrollbar {
+  scroll-behavior: smooth;
+}
+

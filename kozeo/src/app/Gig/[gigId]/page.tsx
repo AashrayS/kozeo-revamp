@@ -36,10 +36,10 @@ export default function GigPage({
 }) {
   const { gigId } = use(paramsPromise);
   const router = useRouter();
-  
+
   // Redux state for current user
   const { user, username, isAuthenticated } = useUser();
-  
+
   // Gig state management
   const [gig, setGig] = useState<any>(null);
   const [gigLoading, setGigLoading] = useState(true);
@@ -48,9 +48,11 @@ export default function GigPage({
   const [input, setInput] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const [showMobileChat, setShowMobileChat] = useState(true);
-  const [width, setWidth] = useState(400);
+  const [width, setWidth] = useState(700);
   const resizerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mobileMessagesRef = useRef<HTMLDivElement>(null);
+  const desktopMessagesRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [callControls, setCallControls] = useState(false);
   const [screenShareUI, setScreenShareUI] = useState(false);
@@ -61,6 +63,9 @@ export default function GigPage({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentDescription, setPaymentDescription] = useState("");
+  const [expandedMessages, setExpandedMessages] = useState<Set<number>>(
+    new Set()
+  );
   const localStreamRef = useRef<MediaStream | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -91,7 +96,7 @@ export default function GigPage({
         console.log("Fetching gig details for ID:", gigId);
 
         const gigData = await getGigById(gigId);
-        
+
         if (gigData) {
           setGig(gigData);
           console.log("Gig details fetched:", gigData);
@@ -114,26 +119,26 @@ export default function GigPage({
   // Helper functions for user roles and messaging
   const getCurrentUserRole = () => {
     if (!gig || !username) return null;
-    
+
     if (gig.host?.username === username) {
-      return 'host';
+      return "host";
     } else if (gig.guest?.username === username) {
-      return 'guest';
+      return "guest";
     }
     return null;
   };
 
   const getOtherPartyUsername = () => {
     if (!gig || !username) return "Unknown";
-    
+
     const currentUserRole = getCurrentUserRole();
-    
-    if (currentUserRole === 'host') {
+
+    if (currentUserRole === "host") {
       return gig.guest?.username || "No guest assigned";
-    } else if (currentUserRole === 'guest') {
+    } else if (currentUserRole === "guest") {
       return gig.host?.username || "Unknown Host";
     }
-    
+
     // Fallback: if we can't determine the role, show the guest if available, otherwise host
     if (gig.guest) {
       return gig.guest.username;
@@ -145,13 +150,58 @@ export default function GigPage({
     return username || user?.username || "Unknown User";
   };
 
+  // Message handling functions
+  const truncateMessage = (message: string, wordLimit: number = 150) => {
+    const words = message.split(" ");
+    if (words.length <= wordLimit) return message;
+    return words.slice(0, wordLimit).join(" ") + "...";
+  };
+
+  const shouldShowReadMore = (message: string, wordLimit: number = 150) => {
+    return message.split(" ").length > wordLimit;
+  };
+
+  const toggleMessageExpansion = (messageIndex: number) => {
+    const newExpanded = new Set(expandedMessages);
+    if (newExpanded.has(messageIndex)) {
+      newExpanded.delete(messageIndex);
+    } else {
+      newExpanded.add(messageIndex);
+    }
+    setExpandedMessages(newExpanded);
+  };
+
+  // Auto-scroll to bottom function
+  const scrollToBottom = () => {
+    if (mobileMessagesRef.current) {
+      mobileMessagesRef.current.scrollTop =
+        mobileMessagesRef.current.scrollHeight;
+    }
+    if (desktopMessagesRef.current) {
+      desktopMessagesRef.current.scrollTop =
+        desktopMessagesRef.current.scrollHeight;
+    }
+  };
+
+  // Auto-scroll when messages change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100); // Small delay to ensure DOM is updated
+
+    return () => clearTimeout(timer);
+  }, [messages]);
+
   const handleSendMessage = () => {
     if (!input.trim() || !socketRef.current) return;
+
+    // Limit message to 1500 characters
+    const trimmedInput = input.trim().slice(0, 1500);
 
     const messageData = {
       gigId,
       sender: getCurrentUsername(),
-      message: input.trim(),
+      message: trimmedInput,
       time: new Date().toLocaleTimeString(),
       timestamp: new Date().toISOString(),
     };
@@ -693,10 +743,12 @@ export default function GigPage({
     }
 
     const remainingAmount = gig.amount - (gig.paidAmount || 0);
-    
+
     if (gig && parseFloat(paymentAmount) > remainingAmount) {
       alert(
-        `Payment amount cannot exceed the remaining amount of ${gig.currency} ${remainingAmount.toFixed(2)}`
+        `Payment amount cannot exceed the remaining amount of ${
+          gig.currency
+        } ${remainingAmount.toFixed(2)}`
       );
       return;
     }
@@ -709,8 +761,7 @@ export default function GigPage({
       from: currentUser,
       to: otherUser,
       amount: parseFloat(paymentAmount),
-      description:
-        paymentDescription || `Payment request for $${paymentAmount}`,
+      description: `Payment request for ${gig.currency} ${paymentAmount}`,
       paymentId: Date.now().toString(),
       timestamp: new Date().toISOString(),
     };
@@ -782,7 +833,9 @@ export default function GigPage({
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-center">
-              <div className="text-xl text-gray-400 mb-4">Loading gig workspace...</div>
+              <div className="text-xl text-gray-400 mb-4">
+                Loading gig workspace...
+              </div>
               <div className="text-sm text-gray-500">Gig ID: {gigId}</div>
             </div>
           </main>
@@ -842,7 +895,7 @@ export default function GigPage({
     <>
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen bg-transparent">
         <Header logoText="Kozeo" />
         <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
           <Sidebar />
@@ -851,7 +904,7 @@ export default function GigPage({
             className="flex-1 p-0 flex flex-col overflow-hidden overflow-x-hidden"
             ref={containerRef}
           >
-            <div className="block md:hidden bg-neutral-900 text-cyan-200 p-2 text-center text-xs font-medium rounded-md shadow-sm m-2">
+            <div className="block md:hidden bg-transparent text-cyan-200 p-2 text-center text-xs font-medium rounded-md shadow-sm m-2">
               📱 Mobile View: Chat only. Video calling available on desktop.
             </div>
 
@@ -880,67 +933,83 @@ export default function GigPage({
             </div>
 
             {/* Gig Info Bar */}
-            <div className="bg-neutral-900/30 border-b border-neutral-800 px-4 md:px-6 py-4">
-              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+            <div className="bg-transparent border-b border-neutral-800 px-4 md:px-6 py-2.5">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
                 {/* Left Section - Gig Details */}
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-xl font-medium text-white mb-2 truncate">{gig.title}</h1>
-                  <div className="flex flex-wrap items-center gap-6 text-sm text-neutral-400">
-                    <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-medium text-white mb-1 truncate">
+                    {gig.title}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-400">
+                    <div className="flex items-center gap-1.5">
                       <span className="text-neutral-500">Host:</span>
-                      <span className="text-neutral-200 font-medium">@{gig.host?.username || 'Unknown'}</span>
+                      <span className="text-neutral-200 font-medium">
+                        @{gig.host?.username || "Unknown"}
+                      </span>
                     </div>
                     {gig.guest && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
                         <span className="text-neutral-500">Guest:</span>
-                        <span className="text-neutral-200 font-medium">@{gig.guest.username}</span>
+                        <span className="text-neutral-200 font-medium">
+                          @{gig.guest.username}
+                        </span>
                       </div>
                     )}
                   </div>
                   {gig.description && (
-                    <p className="text-sm text-neutral-400 mt-3 max-w-2xl line-clamp-2">
+                    <p className="text-xs text-neutral-400 mt-1.5 max-w-2xl line-clamp-1">
                       {gig.description}
                     </p>
                   )}
                 </div>
 
                 {/* Right Section - Payment Info */}
-                <div className="lg:min-w-[280px]">
-                  <div className="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700/50">
-                    <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="lg:min-w-[240px]">
+                  <div className="bg-transparent rounded-md p-3 border border-neutral-700/50">
+                    <div className="grid grid-cols-2 gap-3 mb-2">
                       <div>
-                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Value</p>
-                        <p className="text-lg font-semibold text-white">
+                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-0.5">
+                          Total
+                        </p>
+                        <p className="text-base font-semibold text-white">
                           {gig.currency} {gig.amount}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Remaining</p>
-                        <p className="text-lg font-semibold text-neutral-300">
-                          {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
+                        <p className="text-xs text-neutral-500 uppercase tracking-wide mb-0.5">
+                          Remaining
+                        </p>
+                        <p className="text-base font-semibold text-neutral-300">
+                          {gig.currency}{" "}
+                          {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
                         </p>
                       </div>
                     </div>
-                    
+
                     {/* Progress Bar */}
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-neutral-500">Payment progress</span>
+                        <span className="text-xs text-neutral-500">
+                          Progress
+                        </span>
                         <span className="text-xs text-neutral-400 font-medium">
-                          {Math.round(((gig.paidAmount || 0) / gig.amount) * 100)}%
+                          {Math.round(
+                            ((gig.paidAmount || 0) / gig.amount) * 100
+                          )}
+                          %
                         </span>
                       </div>
-                      <div className="w-full bg-neutral-700 rounded-full h-2">
-                        <div 
-                          className="bg-neutral-400 h-2 rounded-full transition-all duration-300"
-                          style={{ 
-                            width: `${Math.min(((gig.paidAmount || 0) / gig.amount) * 100, 100)}%` 
+                      <div className="w-full bg-neutral-700 rounded-full h-1.5">
+                        <div
+                          className="bg-neutral-400 h-1.5 rounded-full transition-all duration-300"
+                          style={{
+                            width: `${Math.min(
+                              ((gig.paidAmount || 0) / gig.amount) * 100,
+                              100
+                            )}%`,
                           }}
                         ></div>
                       </div>
-                      {/* <div className="text-xs text-neutral-500">
-                        {gig.currency} {gig.paidAmount || 0} of {gig.currency} {gig.amount} paid
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -948,18 +1017,39 @@ export default function GigPage({
             </div>
 
             {/* Row containing all three columns */}
-            <div className="flex flex-1 flex-col md:flex-row h-full">
+            <div
+              className="flex flex-1 flex-col md:flex-row min-h-0"
+              style={{ height: "calc(100vh - 200px)" }}
+            >
               {/* Mobile Chat View */}
               {showMobileChat && (
-                <div className="md:hidden flex flex-col h-full overflow-x-hidden border-neutral-700 w-full">
-                  <div className="p-3 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                    <span className="font-bold text-base">@{getOtherPartyUsername()}</span>
+                <div
+                  className="md:hidden flex flex-col overflow-x-hidden border-neutral-700 w-full min-h-0"
+                  style={{ height: "100%" }}
+                >
+                  <div className="p-3 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 flex-shrink-0">
+                    <span className="font-bold text-base">
+                      @{getOtherPartyUsername()}
+                    </span>
                     <div className="flex gap-2 justify-between sm:justify-end">
                       <button
                         onClick={() => setShowEndGigModal(true)}
-                        className="px-2 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-semibold"
+                        className="group relative px-3 py-1.5 rounded-lg bg-neutral-800/80 hover:bg-red-600/90 border border-neutral-600 hover:border-red-500 text-neutral-200 hover:text-white text-xs font-medium transition-all duration-200 ease-in-out shadow-sm"
                       >
-                        End Gig
+                        <span className="flex items-center gap-1.5">
+                          <svg
+                            className="w-3 h-3 opacity-70 group-hover:opacity-100 transition-opacity"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          End Gig
+                        </span>
                       </button>
                       <div className="text-xs text-gray-400">
                         Audio calls available on desktop
@@ -967,41 +1057,48 @@ export default function GigPage({
                     </div>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-2 space-y-2 text-sm">
+                  <div
+                    ref={mobileMessagesRef}
+                    className="overflow-y-auto overflow-x-auto p-2 space-y-2 text-sm min-h-0 chat-scrollbar"
+                    style={{ height: "calc(100vh - 400px)" }}
+                  >
                     {messages.map((msg, i) => (
-                      <div key={i}>
+                      <div key={i} className="min-w-0">
                         {msg.type === "payment-request" ||
                         msg.type === "payment-sent" ? (
                           // Payment Message
                           <div
-                            className={`p-2 rounded-lg border-2 max-w-[90%] ${
+                            className={`p-2 rounded-lg border max-w-[90%] min-w-[200px] ${
                               msg.status === "completed"
-                                ? "bg-green-900/80 border-green-400 shadow-lg shadow-green-900/50"
+                                ? "bg-neutral-800/40 border-neutral-600"
                                 : msg.status === "declined"
-                                ? "bg-red-900/70 border-red-400"
-                                : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
-                                ? "bg-green-900/50 border-green-500 self-end ml-auto"
-                                : "bg-yellow-900/50 border-yellow-500"
+                                ? "bg-neutral-800/40 border-neutral-600"
+                                : msg.type === "payment-sent" ||
+                                  msg.sender === getCurrentUsername()
+                                ? "bg-neutral-800/40 border-neutral-600 self-end ml-auto"
+                                : "bg-neutral-800/40 border-neutral-600"
                             }`}
                           >
                             <div className="flex items-center gap-1 mb-2">
-                              <FaDollarSign className="text-sm text-green-400" />
+                              <FaDollarSign className="text-sm text-neutral-400" />
                               <span className="font-semibold text-white text-xs">
                                 {msg.status === "completed"
                                   ? "✅ Payment Completed"
                                   : msg.status === "declined"
                                   ? "❌ Payment Declined"
-                                  : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
-                                  ? "Payment Sent"
+                                  : msg.type === "payment-sent" ||
+                                    msg.sender === getCurrentUsername()
+                                  ? "Payment request sent"
                                   : "Payment Request"}
                               </span>
                             </div>
-                            <div className="text-base font-bold mb-1 text-green-400">
+                            <div className="text-base font-bold mb-1 text-white">
                               ${msg.amount}
                             </div>
-                            <div className="text-gray-300 text-xs mb-2">
+                            <div className="text-neutral-300 text-xs mb-2">
                               {msg.message}
                             </div>
+                            {/* ...existing payment buttons... */}
                             {msg.type === "payment-request" &&
                               msg.status === "pending" &&
                               msg.sender !== getCurrentUsername() && (
@@ -1013,7 +1110,7 @@ export default function GigPage({
                                         "completed"
                                       )
                                     }
-                                    className="px-2 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-xs font-semibold"
+                                    className="px-2 py-1 rounded bg-neutral-200 hover:bg-white text-neutral-900 text-xs font-semibold transition-colors"
                                   >
                                     Pay Now
                                   </button>
@@ -1024,32 +1121,47 @@ export default function GigPage({
                                         "declined"
                                       )
                                     }
-                                    className="px-2 py-1 rounded bg-gray-600 hover:bg-gray-700 text-white text-xs font-semibold"
+                                    className="px-2 py-1 rounded bg-neutral-600 hover:bg-neutral-500 text-white text-xs font-semibold transition-colors"
                                   >
                                     Decline
                                   </button>
                                 </div>
                               )}
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-neutral-500 mt-1">
                               {msg.time}
                             </div>
                           </div>
                         ) : (
                           // Regular Message
                           <div
-                            className={`p-2 rounded-md max-w-[85%] break-words whitespace-pre-wrap ${
+                            className={`p-3 rounded-lg border max-w-[85%] min-w-[120px] break-words ${
                               msg.sender === getCurrentUsername()
-                                ? "bg-emerald-600 self-end ml-auto"
-                                : "bg-neutral-800"
+                                ? "bg-neutral-700/30 border-neutral-600/30 self-end ml-auto"
+                                : "bg-neutral-800/30 border-neutral-700/30"
                             }`}
                           >
                             {msg.sender !== getCurrentUsername() && (
-                              <div className="text-xs text-gray-300 mb-1 font-medium">
+                              <div className="text-xs text-neutral-400 mb-1 font-medium">
                                 {msg.sender}
                               </div>
                             )}
-                            <div className="text-sm">{msg.message}</div>
-                            <div className="text-xs text-gray-400 mt-1 text-right">
+                            <div className="text-sm text-neutral-100">
+                              {expandedMessages.has(i) ||
+                              !shouldShowReadMore(msg.message)
+                                ? msg.message
+                                : truncateMessage(msg.message)}
+                            </div>
+                            {shouldShowReadMore(msg.message) && (
+                              <button
+                                onClick={() => toggleMessageExpansion(i)}
+                                className="text-xs text-blue-400 hover:text-blue-300 mt-1 font-medium"
+                              >
+                                {expandedMessages.has(i)
+                                  ? "Read less"
+                                  : "Read more"}
+                              </button>
+                            )}
+                            <div className="text-xs text-neutral-500 mt-1.5 text-right">
                               {msg.time}
                             </div>
                           </div>
@@ -1058,7 +1170,7 @@ export default function GigPage({
                     ))}
                   </div>
 
-                  <div className="border-t border-neutral-700 p-2 relative">
+                  <div className="border-t border-neutral-700 p-2 relative flex-shrink-0">
                     {showEmoji && (
                       <div
                         ref={emojiRef}
@@ -1083,18 +1195,26 @@ export default function GigPage({
                       </button>
                       <div className="relative group">
                         <button
-                          onClick={getCurrentUserRole() === 'host' ? undefined : () => setShowPaymentModal(true)}
-                          disabled={getCurrentUserRole() === 'host'}
+                          onClick={
+                            getCurrentUserRole() === "host"
+                              ? undefined
+                              : () => setShowPaymentModal(true)
+                          }
+                          disabled={getCurrentUserRole() === "host"}
                           className={`text-lg p-1 transition-colors ${
-                            getCurrentUserRole() === 'host' 
-                              ? 'text-gray-600 cursor-not-allowed' 
-                              : 'text-gray-400 hover:text-green-400 cursor-pointer'
+                            getCurrentUserRole() === "host"
+                              ? "text-gray-600 cursor-not-allowed"
+                              : "text-gray-400 hover:text-green-400 cursor-pointer"
                           }`}
-                          title={getCurrentUserRole() === 'host' ? "" : "Request Payment"}
+                          title={
+                            getCurrentUserRole() === "host"
+                              ? ""
+                              : "Request Payment"
+                          }
                         >
                           <FaDollarSign />
                         </button>
-                        {getCurrentUserRole() === 'host' && (
+                        {getCurrentUserRole() === "host" && (
                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                             Hosts cannot request payment
                           </div>
@@ -1102,11 +1222,18 @@ export default function GigPage({
                       </div>
                       <input
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) =>
+                          setInput(e.target.value.slice(0, 1500))
+                        }
                         onKeyDown={handleKeyDown}
                         className="flex-1 bg-neutral-800 border border-neutral-600 p-2 rounded-md text-white text-sm placeholder-gray-400"
                         placeholder="Type a message..."
                       />
+                      {input.length > 1400 && (
+                        <div className="absolute -top-6 right-0 text-xs text-neutral-400">
+                          {input.length}/1500
+                        </div>
+                      )}
                       <button
                         onClick={handleSendMessage}
                         disabled={!input.trim()}
@@ -1130,18 +1257,33 @@ export default function GigPage({
 
               {/* Desktop Chat Column */}
               <div
-                className="hidden md:flex flex-col h-full overflow-x-hidden border-neutral-700"
-                style={{ width }}
+                className="hidden md:flex flex-col overflow-x-auto border-neutral-700 min-h-0"
+                style={{ width, height: "100%" }}
               >
-                <div className="p-3 md:p-4 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                  <span className="font-bold text-base md:text-lg">@{getOtherPartyUsername()}</span>
+                <div className="p-3 md:p-4 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 min-w-0 flex-shrink-0">
+                  <span className="font-bold text-base md:text-lg truncate">
+                    @{getOtherPartyUsername()}
+                  </span>
 
-                  <div className="flex gap-2 md:gap-4 justify-between sm:justify-end">
+                  <div className="flex gap-2 md:gap-4 justify-between sm:justify-end flex-shrink-0">
                     <button
                       onClick={() => setShowEndGigModal(true)}
-                      className="px-2 md:px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-xs md:text-sm font-semibold"
+                      className="group relative px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent hover:bg-red-600/90 border border-neutral-600 hover:border-red-500 text-neutral-200 hover:text-white text-xs md:text-sm font-medium transition-all duration-200 ease-in-out shadow-sm"
                     >
-                      End Gig
+                      <span className="flex items-center gap-1.5 md:gap-2">
+                        {/* <svg
+                          className="w-3 h-3 md:w-4 md:h-4 opacity-70 group-hover:opacity-100 transition-opacity"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg> */}
+                        End Gig
+                      </span>
                     </button>
                     <FiPhone
                       onClick={() => initiateCall("audio")}
@@ -1153,64 +1295,54 @@ export default function GigPage({
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-2 md:space-y-3 text-sm">
+                <div
+                  ref={desktopMessagesRef}
+                  className=" overflow-y-auto overflow-x-auto p-2 md:p-4 space-y-2 md:space-y-3 text-sm min-h-0 chat-scrollbar"
+                  style={{ height: "calc(100vh - 220px)" }}
+                >
                   {messages.map((msg, i) => (
-                    <div key={i}>
+                    <div key={i} className="min-w-0">
                       {msg.type === "payment-request" ||
                       msg.type === "payment-sent" ? (
                         // Payment Message
                         <div
-                          className={`p-2 md:p-3 rounded-lg border-2 max-w-[90%] sm:max-w-xs ${
+                          className={`p-2 md:p-3 rounded-lg border max-w-[90%] sm:max-w-xs min-w-[200px] ${
                             msg.status === "completed"
-                              ? "bg-green-900/80 border-green-400 shadow-lg shadow-green-900/50"
+                              ? "bg-neutral-800/40 border-neutral-600"
                               : msg.status === "declined"
-                              ? "bg-red-900/70 border-red-400"
-                              : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
-                              ? "bg-green-900/50 border-green-500 self-end ml-auto"
-                              : "bg-yellow-900/50 border-yellow-500"
+                              ? "bg-neutral-800/40 border-neutral-600"
+                              : msg.type === "payment-sent" ||
+                                msg.sender === getCurrentUsername()
+                              ? "bg-neutral-800/40 border-neutral-600 self-end ml-auto"
+                              : "bg-neutral-800/40 border-neutral-600"
                           }`}
                         >
                           <div className="flex items-center gap-1 md:gap-2 mb-2">
-                            <FaDollarSign
-                              className={`text-sm ${
-                                msg.status === "completed"
-                                  ? "text-green-300"
-                                  : msg.status === "declined"
-                                  ? "text-red-300"
-                                  : "text-green-400"
-                              }`}
-                            />
+                            <FaDollarSign className="text-sm text-neutral-400" />
                             <span className="font-semibold text-white text-xs md:text-sm">
                               {msg.status === "completed"
                                 ? "✅ Payment Completed"
                                 : msg.status === "declined"
                                 ? "❌ Payment Declined"
-                                : msg.type === "payment-sent" || msg.sender === getCurrentUsername()
-                                ? "Payment Sent"
+                                : msg.type === "payment-sent" ||
+                                  msg.sender === getCurrentUsername()
+                                ? "Payment request Sent"
                                 : "Payment Request"}
                             </span>
                           </div>
-                          <div
-                            className={`text-base md:text-lg font-bold mb-1 ${
-                              msg.status === "completed"
-                                ? "text-green-300"
-                                : msg.status === "declined"
-                                ? "text-red-300"
-                                : "text-green-400"
-                            }`}
-                          >
+                          <div className="text-base md:text-lg font-bold mb-1 text-white">
                             ${msg.amount}
                           </div>
-                          <div className="text-gray-300 text-xs mb-2">
+                          <div className="text-neutral-300 text-xs mb-2">
                             {msg.message}
                           </div>
                           {msg.status === "completed" && (
-                            <div className="text-xs text-green-300 mb-2 font-medium">
+                            <div className="text-xs text-neutral-300 mb-2 font-medium">
                               ✅ Payment processed successfully
                             </div>
                           )}
                           {msg.status === "declined" && (
-                            <div className="text-xs text-red-300 mb-2 font-medium">
+                            <div className="text-xs text-neutral-300 mb-2 font-medium">
                               ❌ Payment was declined
                             </div>
                           )}
@@ -1225,7 +1357,7 @@ export default function GigPage({
                                       "completed"
                                     )
                                   }
-                                  className="px-2 md:px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-xs font-semibold"
+                                  className="px-2 md:px-3 py-1 rounded bg-neutral-200 hover:bg-white text-neutral-900 text-xs font-semibold transition-colors"
                                 >
                                   Pay Now
                                 </button>
@@ -1236,32 +1368,47 @@ export default function GigPage({
                                       "declined"
                                     )
                                   }
-                                  className="px-2 md:px-3 py-1 rounded bg-gray-600 hover:bg-gray-700 text-white text-xs font-semibold"
+                                  className="px-2 md:px-3 py-1 rounded bg-neutral-600 hover:bg-neutral-500 text-white text-xs font-semibold transition-colors"
                                 >
                                   Decline
                                 </button>
                               </div>
                             )}
-                          <div className="text-xs text-gray-500 mt-1">
+                          <div className="text-xs text-neutral-500 mt-1">
                             {msg.time}
                           </div>
                         </div>
                       ) : (
                         // Regular Message
                         <div
-                          className={`p-2 rounded-md max-w-[85%] sm:max-w-xs break-words whitespace-pre-wrap ${
+                          className={`p-3 rounded-lg border max-w-[85%] sm:max-w-xs min-w-[120px] break-words ${
                             msg.sender === getCurrentUsername()
-                              ? "bg-emerald-600 self-end ml-auto"
-                              : "bg-neutral-800"
+                              ? "bg-neutral-700/30 border-neutral-600/30 self-end ml-auto"
+                              : "bg-neutral-800/30 border-neutral-700/30"
                           }`}
                         >
                           {msg.sender !== getCurrentUsername() && (
-                            <div className="text-xs text-gray-300 mb-1 font-medium">
+                            <div className="text-xs text-neutral-400 mb-1 font-medium">
                               {msg.sender}
                             </div>
                           )}
-                          <div className="text-sm">{msg.message}</div>
-                          <div className="text-xs text-gray-400 mt-1 text-right">
+                          <div className="text-sm text-neutral-100">
+                            {expandedMessages.has(i) ||
+                            !shouldShowReadMore(msg.message)
+                              ? msg.message
+                              : truncateMessage(msg.message)}
+                          </div>
+                          {shouldShowReadMore(msg.message) && (
+                            <button
+                              onClick={() => toggleMessageExpansion(i)}
+                              className="text-xs text-blue-400 hover:text-blue-300 mt-1 font-medium"
+                            >
+                              {expandedMessages.has(i)
+                                ? "Read less"
+                                : "Read more"}
+                            </button>
+                          )}
+                          <div className="text-xs text-neutral-500 mt-1.5 text-right">
                             {msg.time}
                           </div>
                         </div>
@@ -1270,7 +1417,7 @@ export default function GigPage({
                   ))}
                 </div>
 
-                <div className="border-t border-neutral-700 p-2 md:p-3 relative">
+                <div className="border-t border-neutral-700 p-2 md:p-3 relative flex-shrink-0">
                   {showEmoji && (
                     <div
                       ref={emojiRef}
@@ -1295,30 +1442,43 @@ export default function GigPage({
                     </button>
                     <div className="relative group">
                       <button
-                        onClick={getCurrentUserRole() === 'host' ? undefined : () => setShowPaymentModal(true)}
-                        disabled={getCurrentUserRole() === 'host'}
+                        onClick={
+                          getCurrentUserRole() === "host"
+                            ? undefined
+                            : () => setShowPaymentModal(true)
+                        }
+                        disabled={getCurrentUserRole() === "host"}
                         className={`text-lg md:text-xl p-1 transition-colors ${
-                          getCurrentUserRole() === 'host' 
-                            ? 'text-gray-600 cursor-not-allowed' 
-                            : 'text-gray-400 hover:text-green-400 cursor-pointer'
+                          getCurrentUserRole() === "host"
+                            ? "text-gray-600 cursor-not-allowed"
+                            : "text-gray-400 hover:text-green-400 cursor-pointer"
                         }`}
-                        title={getCurrentUserRole() === 'host' ? "" : "Request Payment"}
+                        title={
+                          getCurrentUserRole() === "host"
+                            ? ""
+                            : "Request Payment"
+                        }
                       >
                         <FaDollarSign />
                       </button>
-                      {getCurrentUserRole() === 'host' && (
+                      {getCurrentUserRole() === "host" && (
                         <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                           Request payment diabled for hosts
+                          Request payment diabled for hosts
                         </div>
                       )}
                     </div>
                     <input
                       value={input}
-                      onChange={(e) => setInput(e.target.value)}
+                      onChange={(e) => setInput(e.target.value.slice(0, 1500))}
                       onKeyDown={handleKeyDown}
                       className="flex-1 bg-neutral-800 border border-neutral-600 p-2 rounded-md text-white text-sm md:text-base placeholder-gray-400"
                       placeholder="Type a message..."
                     />
+                    {input.length > 1400 && (
+                      <div className="absolute -top-6 right-0 text-xs text-neutral-400">
+                        {input.length}/1500
+                      </div>
+                    )}
                     <button
                       onClick={handleSendMessage}
                       disabled={!input.trim()}
@@ -1443,101 +1603,119 @@ export default function GigPage({
 
       {/* Payment Request Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0  flex items-center justify-center z-50">
-          <div className="bg-neutral-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <FaDollarSign className="text-green-400" />
-              Request Payment
-            </h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-neutral-800 border border-neutral-700 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-neutral-700 rounded-lg flex items-center justify-center">
+                  <FaDollarSign className="text-neutral-300 text-lg" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Request Payment
+                  </h3>
+                  <p className="text-sm text-neutral-400">
+                    Send a payment request
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            {/* Gig Total Payment Info */}
+            {/* Gig Payment Summary */}
             {gig && (
-              <div className="bg-neutral-900/50 border border-neutral-700 rounded-lg p-3 mb-4">
-                <div className="text-sm text-gray-400 mb-1">
-                  Gig Payment Summary
+              <div className="bg-neutral-900/40 border border-neutral-700/50 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-sm font-medium text-neutral-300 uppercase tracking-wide">
+                    Payment Summary
+                  </h4>
+                  <span className="text-xs text-neutral-500">{gig.title}</span>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-300">Total Value:</span>
-                  <span className="text-lg font-bold text-green-400">
-                    {gig.currency} {gig.amount}
-                  </span>
+
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className="text-xs text-neutral-500 mb-1">Total Value</p>
+                    <p className="text-base font-semibold text-white">
+                      {gig.currency} {gig.amount}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 mb-1">Available</p>
+                    <p className="text-base font-semibold text-neutral-200">
+                      {gig.currency}{" "}
+                      {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-300">Paid So Far:</span>
-                  <span className="text-sm font-semibold text-yellow-400">
-                    {gig.currency} {gig.paidAmount || 0}
-                  </span>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-neutral-500">
+                      Payment Progress
+                    </span>
+                    <span className="text-xs text-neutral-400 font-medium">
+                      {Math.round(((gig.paidAmount || 0) / gig.amount) * 100)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-neutral-700 rounded-full h-1.5">
+                    <div
+                      className="bg-neutral-400 h-1.5 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${Math.min(
+                          ((gig.paidAmount || 0) / gig.amount) * 100,
+                          100
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-300">Remaining:</span>
-                  <span className="text-sm font-semibold text-red-400">
-                    {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
-                  </span>
-                </div>
-                <div className="w-full bg-neutral-700 rounded-full h-2 mt-2">
-                  <div 
-                    className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                    style={{ 
-                      width: `${Math.min(((gig.paidAmount || 0) / gig.amount) * 100, 100)}%` 
-                    }}
-                  ></div>
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {Math.round(((gig.paidAmount || 0) / gig.amount) * 100)}% completed
-                </div>
-                <div className="text-xs text-gray-500 mt-1">{gig.title}</div>
               </div>
             )}
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-300 text-sm mb-2">
-                  Amount ({gig?.currency || '$'})
-                </label>
+            {/* Payment Amount Input */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-neutral-300 mb-3">
+                Payment Amount
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 text-lg">
+                  {gig?.currency || "$"}
+                </span>
                 <input
                   type="number"
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(e.target.value)}
                   placeholder="0.00"
                   min="0"
-                  max={gig ? (gig.amount - (gig.paidAmount || 0)) : undefined}
+                  max={gig ? gig.amount - (gig.paidAmount || 0) : undefined}
                   step="0.01"
-                  className="w-full px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-                {gig && (
-                  <div className="text-xs text-gray-500 mt-1">
-                    Maximum remaining: {gig.currency} {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-gray-300 text-sm mb-2">
-                  Description (Optional)
-                </label>
-                <textarea
-                  value={paymentDescription}
-                  onChange={(e) => setPaymentDescription(e.target.value)}
-                  placeholder="What is this payment for?"
-                  rows={3}
-                  className="w-full px-3 py-2 rounded bg-neutral-700 border border-neutral-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                  className="w-full pl-16 pr-4 py-3 bg-neutral-900/50 border border-neutral-600 rounded-lg text-white text-lg font-medium placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent transition-all"
                 />
               </div>
+              {gig && (
+                <p className="text-xs text-neutral-500 mt-2">
+                  Maximum available: {gig.currency}{" "}
+                  {(gig.amount - (gig.paidAmount || 0)).toFixed(2)}
+                </p>
+              )}
             </div>
-            <div className="flex gap-3 justify-end mt-6">
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
               <button
                 onClick={() => {
                   setShowPaymentModal(false);
                   setPaymentAmount("");
                   setPaymentDescription("");
                 }}
-                className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700 text-white"
+                className="flex-1 px-4 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 font-medium rounded-lg transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePaymentRequest}
                 disabled={!paymentAmount || parseFloat(paymentAmount) <= 0}
-                className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 disabled:bg-green-800 disabled:opacity-50 text-white"
+                className="flex-1 px-4 py-3 bg-neutral-200 hover:bg-white text-neutral-900 font-medium rounded-lg disabled:bg-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors"
               >
                 Send Request
               </button>
