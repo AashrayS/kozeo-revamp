@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { FaUsers, FaComments, FaArrowRight } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
@@ -235,16 +236,15 @@ export default function DiscussionPage() {
                         >
                           Room #{room.id}
                         </div>
-                        <button
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            theme === "dark"
-                              ? "bg-cyan-600/20 text-cyan-400 group-hover:bg-cyan-600 group-hover:text-white"
-                              : "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
-                          }`}
+                        <ProfessionalButton
+                          onClick={() => joinRoom(room.id)}
+                          variant="primary"
+                          size="sm"
+                          className="text-sm"
+                          icon={<FaArrowRight className="w-3 h-3" />}
                         >
                           Join Room
-                          <FaArrowRight className="text-xs" />
-                        </button>
+                        </ProfessionalButton>
                       </div>
                     </div>
                   ))}

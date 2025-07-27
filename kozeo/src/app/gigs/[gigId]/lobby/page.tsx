@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { io, Socket } from "socket.io-client";
 import {
   getGigById,
@@ -12,6 +13,7 @@ import { use } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../../../../store/hooks";
 import { useTheme } from "../../../../contexts/ThemeContext";
+import { FaStar } from "react-icons/fa";
 
 interface Request {
   id?: string;
@@ -72,25 +74,29 @@ export default function GigLobbyPage({
     socket.on("gig-request", (request) => {
       console.log("Incoming request received:", request);
       setRequests((prev) => {
+        debugger;
         console.log("Current requests:", prev);
+        request.status = "pending"; // Ensure new requests have status set
+        request.requestId = request.requestId || request.id; // Use requestId or id
+        request.rating = request.requesterRating || 0;
 
-        // Check for duplicates based on requestId or requesterName
-        const isDuplicate = prev.some(
-          (existingReq) =>
-            (existingReq.requestId &&
-              request.requestId &&
-              existingReq.requestId === request.requestId) ||
-            (existingReq.id &&
-              request.requestId &&
-              existingReq.id === request.requestId) ||
-            existingReq.requesterName === request.requesterName ||
-            existingReq.name === request.requesterName
-        );
+        // // Check for duplicates based on requestId or requesterName
+        // const isDuplicate = prev.some(
+        //   (existingReq) =>
+        //     (existingReq.requestId &&
+        //       request.requestId &&
+        //       existingReq.requestId === request.requestId) ||
+        //     (existingReq.id &&
+        //       request.requestId &&
+        //       existingReq.id === request.requestId) ||
+        //     existingReq.requesterName === request.requesterName ||
+        //     existingReq.name === request.requesterName
+        // );
 
-        if (isDuplicate) {
-          console.log("Duplicate request detected, not adding:", request);
-          return prev;
-        }
+        // if (isDuplicate) {
+        //   console.log("Duplicate request detected, not adding:", request);
+        //   return prev;
+        // }
 
         const newRequests = [...prev, request];
         console.log("Updated requests:", newRequests);
@@ -123,6 +129,48 @@ export default function GigLobbyPage({
       console.log(`${requesterName} cancelled their request`);
     });
 
+    // Handle gig request responses (accept/reject)
+    socket.on("gig-request-response", (responseData) => {
+      console.log("Request response received:", responseData);
+      const { requestId, requesterName, response, hostUsername } = responseData;
+
+      // Update the request status in the list
+      setRequests((prev) => {
+        const updatedRequests = prev.map((req) => {
+          // Match by requestId or requesterName
+          if (
+            (requestId && req.requestId === requestId) ||
+            req.requesterName === requesterName ||
+            req.name === requesterName
+          ) {
+            return {
+              ...req,
+              status: response, // "accepted" or "rejected"
+              responseTime: new Date().toISOString(),
+            };
+          }
+          return req;
+        });
+
+        console.log(
+          `Updated request status for ${requesterName}: ${response}`,
+          updatedRequests
+        );
+        return updatedRequests;
+      });
+
+      // Show a notification about the response
+      if (response === "accepted") {
+        console.log(
+          `${requesterName}'s request was accepted by ${hostUsername}`
+        );
+      } else if (response === "rejected") {
+        console.log(
+          `${requesterName}'s request was rejected by ${hostUsername}`
+        );
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
       setWsConnected(false);
@@ -149,8 +197,12 @@ export default function GigLobbyPage({
     const fetchGig = async () => {
       try {
         setLoading(true);
+        debugger;
         const gigData = await getGigById(gigId);
         setGig(gigData);
+        // destruct active reqiest for {
+        //id : activerequets.id , username : activerequest.sender.usernmae , rating: activerquest.sender.rating , status
+        //}
 
         // Extract and set active requests from gig data if user is the host
         if (
@@ -176,6 +228,8 @@ export default function GigLobbyPage({
               gigId: req.gigId,
               status: req.status,
               sender: req.sender, // Keep full sender info for potential use
+              rating: req.sender.rating, // Add rating from sender
+              requesterRating: req.sender.rating, // Also add as requesterRating for consistency
             })
           );
 
@@ -212,8 +266,18 @@ export default function GigLobbyPage({
       const response = await respondToGigRequest(request.requestId, "accepted");
       console.log("Request accepted successfully:", response);
 
-      // Remove the request from the list
-      setRequests((prev) => prev.filter((_, i) => i !== index));
+      // Update the request status locally instead of removing it
+      setRequests((prev) =>
+        prev.map((req, i) =>
+          i === index
+            ? {
+                ...req,
+                status: "accepted",
+                responseTime: new Date().toISOString(),
+              }
+            : req
+        )
+      );
 
       // Send WebSocket notification about acceptance to the requester
       if (socketRef.current && socketRef.current.connected) {
@@ -285,8 +349,18 @@ export default function GigLobbyPage({
       const response = await respondToGigRequest(request.requestId, "rejected");
       console.log("Request rejected successfully:", response);
 
-      // Remove the request from the list
-      setRequests((prev) => prev.filter((_, i) => i !== index));
+      // Update the request status locally instead of removing it
+      setRequests((prev) =>
+        prev.map((req, i) =>
+          i === index
+            ? {
+                ...req,
+                status: "rejected",
+                responseTime: new Date().toISOString(),
+              }
+            : req
+        )
+      );
 
       // Send WebSocket notification about rejection
       if (socketRef.current && socketRef.current.connected) {
@@ -405,12 +479,13 @@ export default function GigLobbyPage({
           >
             {error}
           </div>
-          <button
+          <ProfessionalButton
             onClick={() => router.push("/Atrium")}
-            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+            variant="primary"
+            className="mx-auto"
           >
             Go back to Atrium
-          </button>
+          </ProfessionalButton>
         </div>
       </div>
     );
@@ -433,12 +508,13 @@ export default function GigLobbyPage({
           >
             Gig not found
           </div>
-          <button
+          <ProfessionalButton
             onClick={() => router.push("/Atrium")}
-            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+            variant="primary"
+            className="mx-auto"
           >
             Go back to Atrium
-          </button>
+          </ProfessionalButton>
         </div>
       </div>
     );
@@ -599,13 +675,14 @@ export default function GigLobbyPage({
                     </div>
                   </div>
 
-                  <button
+                  <ProfessionalButton
                     onClick={() => router.push(`/Gig/${gigId}`)}
-                    className="w-full px-4 py-3 bg-neutral-800/60 hover:bg-neutral-700/80 border border-neutral-600/50 hover:border-cyan-500/50 text-neutral-200 hover:text-white rounded-lg transition-all duration-300 group"
-                  >
-                    <div className="flex items-center justify-center gap-2">
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    icon={
                       <svg
-                        className="w-4 h-4 group-hover:text-cyan-400 transition-colors"
+                        className="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -617,9 +694,10 @@ export default function GigLobbyPage({
                           d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                         />
                       </svg>
-                      <span className="font-medium">Enter Workspace</span>
-                    </div>
-                  </button>
+                    }
+                  >
+                    Enter Workspace
+                  </ProfessionalButton>
                 </div>
               )}
             </section>
@@ -633,111 +711,457 @@ export default function GigLobbyPage({
               }`}
             >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Incoming Requests</h2>
+                <h2 className="text-2xl font-bold">Request History</h2>
                 <div className="flex items-center gap-2">
                   {requests.filter((req) => req.status === "pending").length >
                     0 && (
-                    <div className="bg-cyan-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                    <div className="bg-indigo-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
                       {
                         requests.filter((req) => req.status === "pending")
                           .length
                       }
                     </div>
                   )}
-                  {/* Test button for debugging */}
-                  <button
-                    onClick={addTestRequest}
-                    className="px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white text-xs rounded transition"
-                  >
-                    Test Request
-                  </button>
+                  {requests.filter((req) => req.status === "accepted").length >
+                    0 && (
+                    <div className="bg-green-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                      {
+                        requests.filter((req) => req.status === "accepted")
+                          .length
+                      }{" "}
+                      ✓
+                    </div>
+                  )}
+                  {requests.filter((req) => req.status === "rejected").length >
+                    0 && (
+                    <div className="bg-red-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                      {
+                        requests.filter((req) => req.status === "rejected")
+                          .length
+                      }{" "}
+                      ✗
+                    </div>
+                  )}
                 </div>
               </div>
-              {requests &&
-              requests.filter((req) => req.status === "pending").length > 0 ? (
+              {requests && requests.length > 0 ? (
                 <ul className="space-y-4">
                   {requests
-                    .filter((req) => req.status === "pending")
+                    .sort((a, b) => {
+                      // Sort by status priority: pending first, then accepted, then rejected
+                      const statusOrder: { [key: string]: number } = {
+                        pending: 0,
+                        accepted: 1,
+                        rejected: 2,
+                      };
+                      const aStatus = a.status || "unknown";
+                      const bStatus = b.status || "unknown";
+                      return (
+                        (statusOrder[aStatus] || 3) -
+                        (statusOrder[bStatus] || 3)
+                      );
+                    })
                     .map((req: any, idx: number) => (
                       <li
                         key={idx}
-                        className={`rounded-xl p-4 flex flex-col gap-3 border transition-colors theme-transition ${
-                          theme === "light"
-                            ? "bg-gray-50/80 border-gray-200 hover:border-gray-300"
-                            : "bg-neutral-800/80 border-neutral-700 hover:border-neutral-600"
-                        }`}
+                        className={`
+                          relative rounded-2xl p-6 flex flex-col gap-4 
+                          transition-all duration-300 ease-out
+                          backdrop-blur-sm shadow-lg hover:shadow-xl
+                          border group overflow-hidden
+                          ${
+                            req.status === "pending"
+                              ? theme === "light"
+                                ? "bg-gradient-to-br from-slate-50/90 via-indigo-25/80 to-slate-100/90 border-slate-300/60 hover:border-indigo-300/80 hover:shadow-slate-200/30"
+                                : "bg-gradient-to-br from-slate-900/40 via-indigo-950/30 to-slate-800/40 border-slate-600/60 hover:border-indigo-500/80 hover:shadow-slate-900/20"
+                              : req.status === "accepted"
+                              ? theme === "light"
+                                ? "bg-gradient-to-br from-emerald-50/90 via-green-25/80 to-emerald-50/90 border-emerald-200/60 hover:border-emerald-300/80 hover:shadow-emerald-200/20"
+                                : "bg-gradient-to-br from-emerald-950/40 via-emerald-900/30 to-green-950/40 border-emerald-700/60 hover:border-emerald-600/80 hover:shadow-emerald-900/20"
+                              : req.status === "rejected"
+                              ? theme === "light"
+                                ? "bg-gradient-to-br from-red-50/90 via-rose-25/80 to-red-50/90 border-red-200/60 hover:border-red-300/80 hover:shadow-red-200/20"
+                                : "bg-gradient-to-br from-red-950/40 via-red-900/30 to-rose-950/40 border-red-700/60 hover:border-red-600/80 hover:shadow-red-900/20"
+                              : theme === "light"
+                              ? "bg-gradient-to-br from-gray-50/90 via-slate-25/80 to-gray-50/90 border-gray-200/60 hover:border-gray-300/80 hover:shadow-gray-200/20"
+                              : "bg-gradient-to-br from-neutral-900/60 via-neutral-800/50 to-neutral-900/60 border-neutral-700/60 hover:border-neutral-600/80 hover:shadow-neutral-900/20"
+                          }
+                        `}
                       >
-                        <div className="flex justify-between items-start">
-                          <div
-                            className={`font-semibold text-lg ${
-                              theme === "light" ? "text-gray-900" : "text-white"
-                            }`}
-                          >
-                            @{req.requesterName || req.name}
-                          </div>
-                          <div
-                            className={`text-xs ${
-                              theme === "light"
-                                ? "text-gray-400"
-                                : "text-gray-500"
-                            }`}
-                          >
-                            {req.timestamp
-                              ? new Date(req.timestamp).toLocaleTimeString()
-                              : "Just now"}
-                          </div>
-                        </div>
+                        {/* Subtle shine effect on hover */}
                         <div
-                          className={`text-sm p-3 rounded-lg ${
-                            theme === "light"
-                              ? "text-gray-700 bg-gray-100/50"
-                              : "text-gray-300 bg-neutral-900/50"
-                          }`}
-                        >
-                          {req.message}
-                        </div>
-                        <div className="flex gap-2 mt-2">
-                          <button
-                            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition"
-                            onClick={() => {
-                              const username = req.requesterName || req.name;
-                              if (username) {
-                                const cleanUsername = username.replace(
-                                  /^@/,
-                                  ""
-                                );
-                                router.push(`/profile/${cleanUsername}`);
+                          className={`
+                            absolute inset-0 opacity-0 transition-opacity duration-500
+                            ${
+                              req.status === "pending"
+                                ? "group-hover:opacity-100"
+                                : ""
+                            }
+                            bg-gradient-to-r from-transparent via-white/5 to-transparent
+                            transform -skew-x-12 translate-x-full group-hover:-translate-x-full
+                            transition-transform duration-700 pointer-events-none
+                          `}
+                        />
+
+                        {/* Header section with user info and status */}
+                        <div className="relative z-10 flex justify-between items-start">
+                          <div className="flex items-center gap-3">
+                            {/* Avatar placeholder */}
+                            <div
+                              className={`
+                              w-12 h-12 rounded-full flex items-center justify-center
+                              bg-gradient-to-br font-bold text-white shadow-md
+                              ${
+                                req.status === "pending"
+                                  ? "from-slate-500 to-indigo-600"
+                                  : req.status === "accepted"
+                                  ? "from-emerald-500 to-green-600"
+                                  : req.status === "rejected"
+                                  ? "from-red-500 to-rose-600"
+                                  : "from-gray-500 to-slate-600"
                               }
-                            }}
-                          >
-                            View Profile
-                          </button>
-                          <button
-                            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
-                            onClick={() => handleAcceptRequest(req, idx)}
-                            disabled={processingRequests.has(idx)}
-                          >
-                            {processingRequests.has(idx)
-                              ? "Processing..."
-                              : "Accept"}
-                          </button>
-                          <button
-                            className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold transition"
-                            onClick={() => handleRejectRequest(req, idx)}
-                            disabled={processingRequests.has(idx)}
-                          >
-                            {processingRequests.has(idx)
-                              ? "Processing..."
-                              : "Reject"}
-                          </button>
+                            `}
+                            >
+                              {(req.requesterName || req.name || "U")
+                                .charAt(0)
+                                .toUpperCase()}
+                            </div>
+
+                            <div className="flex flex-col">
+                              <div
+                                className={`font-bold text-lg transition-colors duration-300 ${
+                                  theme === "light"
+                                    ? "text-gray-900"
+                                    : "text-white"
+                                }`}
+                              >
+                                @{req.requesterName || req.name}
+                              </div>
+
+                              {/* Enhanced status indicator */}
+                              <div
+                                className={`
+                                  inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
+                                  backdrop-blur-sm border shadow-sm transition-all duration-300
+                                  ${
+                                    req.status === "pending"
+                                      ? "bg-indigo-500/20 border-indigo-400/30 text-indigo-700 dark:text-indigo-300"
+                                      : req.status === "accepted"
+                                      ? "bg-emerald-500/20 border-emerald-400/30 text-emerald-700 dark:text-emerald-300"
+                                      : req.status === "rejected"
+                                      ? "bg-red-500/20 border-red-400/30 text-red-700 dark:text-red-300"
+                                      : "bg-gray-500/20 border-gray-400/30 text-gray-700 dark:text-gray-300"
+                                  }
+                                `}
+                              >
+                                {req.status === "pending" && (
+                                  <>
+                                    <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+                                    Pending Review
+                                  </>
+                                )}
+                                {req.status === "accepted" && (
+                                  <>
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                    Accepted
+                                  </>
+                                )}
+                                {req.status === "rejected" && (
+                                  <>
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                    Rejected
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Rating and timestamp section */}
+                          <div className="flex flex-col items-end gap-2">
+                            <div
+                              className={`
+                              flex items-center gap-1.5 px-2 py-1 rounded-lg
+                              backdrop-blur-sm border transition-colors duration-300
+                              ${
+                                theme === "light"
+                                  ? "bg-white/50 border-gray-200/50 text-gray-600"
+                                  : "bg-black/20 border-neutral-600/30 text-gray-300"
+                              }
+                            `}
+                            >
+                              <FaStar
+                                className={`${
+                                  theme === "light"
+                                    ? "text-yellow-500"
+                                    : "text-yellow-400"
+                                }`}
+                                size={12}
+                              />
+                              <span className="text-sm font-medium">
+                                {(() => {
+                                  const rating =
+                                    req.requesterRating ||
+                                    req.rating ||
+                                    req.sender?.rating;
+                                  return rating
+                                    ? `${Number(rating).toFixed(1)}`
+                                    : "N/A";
+                                })()}
+                              </span>
+                            </div>
+
+                            <div
+                              className={`text-xs font-medium ${
+                                theme === "light"
+                                  ? "text-gray-500"
+                                  : "text-gray-400"
+                              }`}
+                            >
+                              {req.timestamp
+                                ? new Date(req.timestamp).toLocaleString([], {
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                                : "Just now"}
+                            </div>
+
+                            {req.responseTime && req.status !== "pending" && (
+                              <div
+                                className={`text-xs px-2 py-0.5 rounded backdrop-blur-sm border font-medium ${
+                                  req.status === "accepted"
+                                    ? theme === "light"
+                                      ? "bg-emerald-100/50 border-emerald-200/50 text-emerald-700"
+                                      : "bg-emerald-900/30 border-emerald-700/50 text-emerald-300"
+                                    : theme === "light"
+                                    ? "bg-red-100/50 border-red-200/50 text-red-700"
+                                    : "bg-red-900/30 border-red-700/50 text-red-300"
+                                }`}
+                              >
+                                {new Date(req.responseTime).toLocaleString([], {
+                                  month: "short",
+                                  day: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </div>
+                            )}
+                          </div>
                         </div>
+
+                        {/* Message section */}
+                        <div
+                          className={`
+                            relative p-4 rounded-xl transition-colors duration-300
+                            backdrop-blur-sm border
+                            ${
+                              theme === "light"
+                                ? "bg-white/40 border-gray-200/40 text-gray-800"
+                                : "bg-black/20 border-neutral-600/30 text-gray-200"
+                            }
+                          `}
+                        >
+                          <div className="text-sm leading-relaxed font-medium">
+                            {req.message}
+                          </div>
+                        </div>
+
+                        {/* Action buttons section */}
+                        {req.status === "pending" && (
+                          <div className="relative z-10 flex gap-3 mt-2">
+                            <ProfessionalButton
+                              onClick={() => {
+                                const username = req.requesterName || req.name;
+                                if (username) {
+                                  const cleanUsername = username.replace(
+                                    /^@/,
+                                    ""
+                                  );
+                                  router.push(`/profile/${cleanUsername}`);
+                                }
+                              }}
+                              variant="neutral"
+                              size="sm"
+                              className="flex-1"
+                              icon={
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                  />
+                                </svg>
+                              }
+                            >
+                              View Profile
+                            </ProfessionalButton>
+                            <ProfessionalButton
+                              onClick={() => handleAcceptRequest(req, idx)}
+                              disabled={processingRequests.has(idx)}
+                              variant="primary"
+                              size="sm"
+                              className="flex-1"
+                              loading={processingRequests.has(idx)}
+                              loadingText="Processing..."
+                              icon={
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              }
+                            >
+                              Accept
+                            </ProfessionalButton>
+                            <ProfessionalButton
+                              onClick={() => handleRejectRequest(req, idx)}
+                              disabled={processingRequests.has(idx)}
+                              variant="danger"
+                              size="sm"
+                              className="flex-1"
+                              loading={processingRequests.has(idx)}
+                              loadingText="Processing..."
+                              icon={
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              }
+                            >
+                              Reject
+                            </ProfessionalButton>
+                          </div>
+                        )}
+
+                        {/* Enhanced status messages for processed requests */}
+                        {req.status === "accepted" && (
+                          <div
+                            className={`
+                            relative z-10 mt-3 p-4 rounded-xl backdrop-blur-sm border
+                            transition-all duration-300
+                            ${
+                              theme === "light"
+                                ? "bg-emerald-100/60 border-emerald-200/60 text-emerald-800"
+                                : "bg-emerald-900/30 border-emerald-700/50 text-emerald-200"
+                            }
+                          `}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`
+                                w-8 h-8 rounded-full flex items-center justify-center
+                                ${
+                                  theme === "light"
+                                    ? "bg-emerald-200 text-emerald-700"
+                                    : "bg-emerald-800/50 text-emerald-300"
+                                }
+                              `}
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-semibold text-sm">
+                                  Request Accepted
+                                </div>
+                                <div className="text-xs opacity-90">
+                                  User can now join the gig workspace
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {req.status === "rejected" && (
+                          <div
+                            className={`
+                            relative z-10 mt-2 px-3 py-2 rounded-lg backdrop-blur-sm border
+                            transition-all duration-300 text-center
+                            ${
+                              theme === "light"
+                                ? "bg-red-100/40 border-red-200/40 text-red-700"
+                                : "bg-red-900/20 border-red-700/30 text-red-300"
+                            }
+                          `}
+                          >
+                            <div className="flex items-center justify-center gap-2">
+                              <svg
+                                className="w-3 h-3"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              <span className="font-medium text-xs">
+                                Request Declined
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </li>
                     ))}
                 </ul>
               ) : (
                 <div className="text-gray-400 text-center py-8">
                   <div className="text-4xl mb-4">📥</div>
-                  <div>No incoming requests yet.</div>
+                  <div>No requests yet.</div>
                   <div className="text-sm mt-2">
                     People interested in this gig will appear here.
                   </div>

@@ -5,6 +5,7 @@ import "../styles/themes.css";
 import Head from "next/head";
 import { NavigationWrapper } from "@/components/common/NavigationWrapper";
 import NotificationProviderClient from "@/components/common/NotificationProviderClient";
+import ApolloWrapper from "@/components/common/ApolloWrapper";
 import { ReduxProvider } from "../../store/Provider";
 import { ThemeProvider } from "../contexts/ThemeContext";
 
@@ -40,11 +41,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}
       >
         <ReduxProvider>
-          <ThemeProvider>
-            <NotificationProviderClient>
-              <NavigationWrapper>{children}</NavigationWrapper>
-            </NotificationProviderClient>
-          </ThemeProvider>
+          <ApolloWrapper>
+            <ThemeProvider>
+              <NotificationProviderClient>
+                <NavigationWrapper>{children}</NavigationWrapper>
+              </NotificationProviderClient>
+            </ThemeProvider>
+          </ApolloWrapper>
         </ReduxProvider>
       </body>
     </html>

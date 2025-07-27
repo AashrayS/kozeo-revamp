@@ -1116,9 +1116,26 @@ export default function GigPage({
       socketRef.current?.emit("gig-ended", { gigId });
       setShowEndGigModal(false);
 
-      // Wait 1 second before redirecting to review page
+      // Determine the other user to review
+      let receiverUsername = "";
+      if (gig && user) {
+        // If current user is the host, review the guest; if guest, review the host
+        if (gig.host && gig.host.id === user.id && gig.guest) {
+          receiverUsername = gig.guest.username;
+        } else if (gig.host && gig.host.username) {
+          receiverUsername = gig.host.username;
+        }
+      }
+
+      // Wait 1 second before redirecting to review page with proper parameters
       setTimeout(() => {
-        router.push("/review");
+        if (receiverUsername) {
+          router.push(`/review?gigId=${gigId}&receiver=${receiverUsername}`);
+        } else {
+          // Fallback - redirect to gigs page if we can't determine the other user
+          console.error("Could not determine receiver for review");
+          router.push("/gigs");
+        }
       }, 1000);
 
       console.log("Gig ended successfully");
@@ -1617,25 +1634,28 @@ export default function GigPage({
                       @{getOtherPartyUsername()}
                     </span>
                     <div className="flex gap-2 justify-between sm:justify-end">
-                      <button
-                        onClick={() => setShowEndGigModal(true)}
-                        className="group relative px-3 py-1.5 rounded-lg bg-neutral-800/80 hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs font-medium transition-all duration-200 ease-in-out shadow-sm"
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <svg
-                            className="w-3 h-3 opacity-70 group-hover:opacity-100 transition-opacity"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          End Gig
-                        </span>
-                      </button>
+                      {/* Only show End Gig button if gig is not completed */}
+                      {gig?.status !== "completed" && (
+                        <button
+                          onClick={() => setShowEndGigModal(true)}
+                          className="group relative px-3 py-1.5 rounded-lg bg-neutral-800/80 hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs font-medium transition-all duration-200 ease-in-out shadow-sm"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <svg
+                              className="w-3 h-3 opacity-70 group-hover:opacity-100 transition-opacity"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            End Gig
+                          </span>
+                        </button>
+                      )}
                       <div className="text-xs text-gray-400">
                         Audio calls available on desktop
                       </div>
@@ -1816,19 +1836,26 @@ export default function GigPage({
                       <div className="relative group">
                         <button
                           onClick={
-                            getCurrentUserRole() === "host"
+                            getCurrentUserRole() === "host" ||
+                            gig?.status === "completed"
                               ? undefined
                               : () => setShowPaymentModal(true)
                           }
-                          disabled={getCurrentUserRole() === "host"}
+                          disabled={
+                            getCurrentUserRole() === "host" ||
+                            gig?.status === "completed"
+                          }
                           className={`text-lg p-1 transition-colors ${
-                            getCurrentUserRole() === "host"
+                            getCurrentUserRole() === "host" ||
+                            gig?.status === "completed"
                               ? "text-gray-600 cursor-not-allowed"
                               : "text-gray-400 hover:text-green-400 cursor-pointer"
                           }`}
                           title={
                             getCurrentUserRole() === "host"
                               ? ""
+                              : gig?.status === "completed"
+                              ? "Gig completed - payment requests disabled"
                               : "Request Payment"
                           }
                         >
@@ -1839,13 +1866,28 @@ export default function GigPage({
                             Hosts cannot request payment
                           </div>
                         )}
+                        {gig?.status === "completed" &&
+                          getCurrentUserRole() !== "host" && (
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                              Gig completed - payment requests disabled
+                            </div>
+                          )}
                       </div>
                       <input
                         value={input}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
-                        className="flex-1 bg-neutral-800/80 border border-neutral-600 focus:border-blue-400/50 p-2 rounded-md text-white text-sm placeholder-gray-400 transition-all"
-                        placeholder="Type a message..."
+                        disabled={gig?.status === "completed"}
+                        className={`flex-1 border p-2 rounded-md text-sm transition-all ${
+                          gig?.status === "completed"
+                            ? "bg-neutral-800/40 border-neutral-700 text-gray-500 placeholder-gray-600 cursor-not-allowed"
+                            : "bg-neutral-800/80 border-neutral-600 focus:border-blue-400/50 text-white placeholder-gray-400"
+                        }`}
+                        placeholder={
+                          gig?.status === "completed"
+                            ? "Gig completed - messaging disabled"
+                            : "Type a message..."
+                        }
                       />
                       {input.length > 1400 && (
                         <div className="absolute -top-6 right-0 text-xs text-neutral-400">
@@ -1854,8 +1896,12 @@ export default function GigPage({
                       )}
                       <button
                         onClick={handleSendMessage}
-                        disabled={!input.trim()}
-                        className="group relative px-3 py-2 bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/30 disabled:to-neutral-700/30 disabled:opacity-40 rounded-lg text-white font-medium transition-all duration-200 text-sm shadow-sm hover:shadow-blue-500/15 disabled:cursor-not-allowed"
+                        disabled={!input.trim() || gig?.status === "completed"}
+                        className={`group relative px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm shadow-sm disabled:cursor-not-allowed ${
+                          gig?.status === "completed"
+                            ? "bg-neutral-800/30 text-gray-600 cursor-not-allowed"
+                            : "bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/30 disabled:to-neutral-700/30 disabled:opacity-40 text-white hover:shadow-blue-500/15"
+                        }`}
                       >
                         <span className="flex items-center justify-center">
                           <svg
@@ -1898,28 +1944,36 @@ export default function GigPage({
                   </span>
 
                   <div className="flex gap-2 md:gap-4 justify-between sm:justify-end flex-shrink-0 items-center">
-                    <button
-                      onClick={() => setShowEndGigModal(true)}
-                      className="group relative px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs md:text-sm font-medium transition-all duration-200 ease-in-out shadow-sm"
-                    >
-                      <span className="flex items-center gap-1.5 md:gap-2">
-                        {/* <svg
-                          className="w-3 h-3 md:w-4 md:h-4 opacity-70 group-hover:opacity-100 transition-opacity"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg> */}
-                        End Gig
-                      </span>
-                    </button>
+                    {/* Only show End Gig button if gig is not completed */}
+                    {gig?.status !== "completed" && (
+                      <button
+                        onClick={() => setShowEndGigModal(true)}
+                        className="group relative px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs md:text-sm font-medium transition-all duration-200 ease-in-out shadow-sm"
+                      >
+                        <span className="flex items-center gap-1.5 md:gap-2">
+                          {/* <svg
+                            className="w-3 h-3 md:w-4 md:h-4 opacity-70 group-hover:opacity-100 transition-opacity"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg> */}
+                          End Gig
+                        </span>
+                      </button>
+                    )}
                     <button
                       onClick={() => initiateCall("audio")}
-                      className="hidden md:flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent hover:bg-blue-500/20 border border-neutral-600 hover:border-blue-400/50 text-gray-400 hover:text-blue-300 transition-all duration-200 ease-in-out"
+                      disabled={gig?.status === "completed"}
+                      className={`hidden md:flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent border transition-all duration-200 ease-in-out ${
+                        gig?.status === "completed"
+                          ? "border-neutral-700 text-gray-600 cursor-not-allowed"
+                          : "hover:bg-blue-500/20 border-neutral-600 hover:border-blue-400/50 text-gray-400 hover:text-blue-300"
+                      }`}
                     >
                       <FiPhone className="text-lg md:text-xl" />
                     </button>
@@ -2103,19 +2157,26 @@ export default function GigPage({
                     <div className="relative group">
                       <button
                         onClick={
-                          getCurrentUserRole() === "host"
+                          getCurrentUserRole() === "host" ||
+                          gig?.status === "completed"
                             ? undefined
                             : () => setShowPaymentModal(true)
                         }
-                        disabled={getCurrentUserRole() === "host"}
+                        disabled={
+                          getCurrentUserRole() === "host" ||
+                          gig?.status === "completed"
+                        }
                         className={`text-lg md:text-xl p-1 transition-colors ${
-                          getCurrentUserRole() === "host"
+                          getCurrentUserRole() === "host" ||
+                          gig?.status === "completed"
                             ? "text-gray-600 cursor-not-allowed"
                             : "text-gray-400 hover:text-green-400 cursor-pointer"
                         }`}
                         title={
                           getCurrentUserRole() === "host"
                             ? ""
+                            : gig?.status === "completed"
+                            ? "Gig completed - payment requests disabled"
                             : "Request Payment"
                         }
                       >
@@ -2126,13 +2187,28 @@ export default function GigPage({
                           Request payment diabled for hosts
                         </div>
                       )}
+                      {gig?.status === "completed" &&
+                        getCurrentUserRole() !== "host" && (
+                          <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            Gig completed - payment requests disabled
+                          </div>
+                        )}
                     </div>
                     <input
                       value={input}
                       onChange={handleInputChange}
                       onKeyDown={handleKeyDown}
-                      className="flex-1 bg-neutral-800/80 border border-neutral-600 focus:border-blue-400/50 p-2 rounded-md text-white text-sm md:text-base placeholder-gray-400 transition-all"
-                      placeholder="Type a message..."
+                      disabled={gig?.status === "completed"}
+                      className={`flex-1 border p-2 rounded-md text-sm md:text-base transition-all ${
+                        gig?.status === "completed"
+                          ? "bg-neutral-800/40 border-neutral-700 text-gray-500 placeholder-gray-600 cursor-not-allowed"
+                          : "bg-neutral-800/80 border-neutral-600 focus:border-blue-400/50 text-white placeholder-gray-400"
+                      }`}
+                      placeholder={
+                        gig?.status === "completed"
+                          ? "Gig completed - messaging disabled"
+                          : "Type a message..."
+                      }
                     />
                     {input.length > 1400 && (
                       <div className="absolute -top-6 right-0 text-xs text-neutral-400">
@@ -2141,8 +2217,12 @@ export default function GigPage({
                     )}
                     <button
                       onClick={handleSendMessage}
-                      disabled={!input.trim()}
-                      className="group relative px-3 py-2 bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/40 disabled:to-neutral-700/40 disabled:opacity-50 rounded-lg text-white font-medium transition-all duration-200 shadow-sm hover:shadow-blue-500/15 disabled:shadow-none"
+                      disabled={!input.trim() || gig?.status === "completed"}
+                      className={`group relative px-3 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm disabled:cursor-not-allowed ${
+                        gig?.status === "completed"
+                          ? "bg-neutral-800/30 text-gray-600 cursor-not-allowed"
+                          : "bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/40 disabled:to-neutral-700/40 disabled:opacity-50 text-white hover:shadow-blue-500/15 disabled:shadow-none"
+                      }`}
                     >
                       <svg
                         className="w-4 h-4 rotate-90 transition-transform duration-200 group-hover:scale-110"
@@ -2433,7 +2513,28 @@ export default function GigPage({
             </p>
             <div className="flex justify-end">
               <button
-                onClick={() => router.push("/review")}
+                onClick={() => {
+                  // Determine the other user to review
+                  let receiverUsername = "";
+                  if (gig && user) {
+                    // If current user is the host, review the guest; if guest, review the host
+                    if (gig.host && gig.host.id === user.id && gig.guest) {
+                      receiverUsername = gig.guest.username;
+                    } else if (gig.host && gig.host.username) {
+                      receiverUsername = gig.host.username;
+                    }
+                  }
+
+                  if (receiverUsername) {
+                    router.push(
+                      `/review?gigId=${gigId}&receiver=${receiverUsername}`
+                    );
+                  } else {
+                    // Fallback - redirect to gigs page if we can't determine the other user
+                    console.error("Could not determine receiver for review");
+                    router.push("/gigs");
+                  }
+                }}
                 className="px-4 py-2 rounded bg-blue-600/80 hover:bg-blue-500 text-white transition-colors border border-blue-500/50"
               >
                 Go to Review

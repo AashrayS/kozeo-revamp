@@ -30,7 +30,7 @@ export default function Header({
     <>
       <header
         className={`w-full px-6 py-4 Z-40 flex justify-between items-center relative theme-transition ${
-          theme === "light" ? "bg-white text-gray-900" : "bg-black text-white"
+          theme === "light" ? "bg-white text-gray-900" : "bg-gradient-to-r from-black to-neutral-900 text-white"
         }`}
       >
         <div className="text-2xl font-bold tracking-wide">{logoText}</div>

@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { FiStar, FiUser } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -8,7 +9,7 @@ import {
   getGigById,
   getUserBasicProfile,
   sendGigRequest,
-  respondToGigRequest,
+  cancelGigRequest,
 } from "../../../../utilities/kozeoApi";
 import { io, Socket } from "socket.io-client";
 import { useUser } from "../../../../store/hooks";
@@ -19,6 +20,7 @@ export default function DescriptionClient() {
   const { user } = useUser();
   const { theme } = useTheme();
   const [requested, setRequested] = useState(false);
+  const [rejected, setRejected] = useState(false);
   const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
   const [gig, setGig] = useState<any>(null);
   const [hostProfile, setHostProfile] = useState<any>(null);
@@ -65,6 +67,9 @@ export default function DescriptionClient() {
               console.log("Found existing request from user:", userRequest);
               setRequested(true);
               setCurrentRequestId(userRequest.id);
+              if (userRequest.status === "rejected") {
+                setRejected(true);
+              }
             } else {
               console.log("No existing request found for user");
               setRequested(false);
@@ -143,6 +148,7 @@ export default function DescriptionClient() {
             );
             // Update UI state
             setRequested(false);
+            setRejected(true);
             setCurrentRequestId(null);
           }
         }
@@ -190,6 +196,8 @@ export default function DescriptionClient() {
         request: {
           requesterName: user.username,
           message: requestMessage.trim(),
+          status: "pending",
+          requesterRating: user.rating || 0,
         },
         requestId: savedRequest?.id || Date.now().toString(), // Include the database ID
         hostUsername: hostUsername,
@@ -214,7 +222,7 @@ export default function DescriptionClient() {
       setRequested(true);
       setRequestMessage("");
       setShowMessageModal(false);
-      alert("Request sent successfully!");
+      // alert("Request sent successfully!");
     } catch (error) {
       console.error("Error sending request:", error);
       alert("Failed to send request. Please try again.");
@@ -235,7 +243,8 @@ export default function DescriptionClient() {
       if (currentRequestId) {
         try {
           console.log("Cancelling request in database:", currentRequestId);
-          await respondToGigRequest(currentRequestId, "cancelled");
+          await cancelGigRequest(currentRequestId);
+
           console.log("Request cancelled in database successfully");
         } catch (dbError) {
           console.error("Error cancelling request in database:", dbError);
@@ -269,7 +278,7 @@ export default function DescriptionClient() {
 
       setRequested(false);
       setCurrentRequestId(null); // Clear the stored request ID
-      alert("Request cancelled successfully!");
+      // alert("Request cancelled successfully!");
     } catch (error) {
       console.error("Error cancelling request:", error);
       alert("Failed to cancel request. Please try again.");
@@ -575,29 +584,89 @@ export default function DescriptionClient() {
                 )
               ) : (
                 // Gig is open, show send/cancel request button
-                <button
+                <ProfessionalButton
                   onClick={requested ? handleCancelRequest : openMessageModal}
-                  disabled={sendingRequest || !user}
-                  className={`w-auto px-5 self-center py-2 rounded-md border-0 transition-colors duration-200 ${
+                  disabled={!user || rejected}
+                  variant={
                     !user
-                      ? "bg-gray-500 text-white cursor-not-allowed"
+                      ? "neutral"
+                      : rejected
+                      ? "warning"
                       : requested
-                      ? "bg-red-500 text-white hover:bg-red-600"
-                      : sendingRequest
-                      ? "bg-gray-500 text-white cursor-not-allowed"
-                      : "bg-emerald-400 text-black hover:bg-emerald-500"
-                  }`}
+                      ? "danger"
+                      : "primary"
+                  }
+                  loading={sendingRequest}
+                  loadingText={requested ? "Cancelling..." : "Sending..."}
+                  className="self-center"
+                  icon={
+                    !user ? (
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    ) : rejected ? (
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    ) : requested ? (
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        />
+                      </svg>
+                    )
+                  }
                 >
                   {!user
                     ? "Login to Send Request"
-                    : sendingRequest
-                    ? requested
-                      ? "Cancelling..."
-                      : "Sending..."
+                    : rejected
+                    ? "Request Rejected"
                     : requested
                     ? "Cancel Request"
                     : "Send Request"}
-                </button>
+                </ProfessionalButton>
               )}
             </div>
           </div>

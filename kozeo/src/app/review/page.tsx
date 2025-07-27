@@ -3,37 +3,95 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FaStar } from "react-icons/fa";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useUser } from "../../../store/hooks";
+import {
+  createReview,
+  completeGig,
+  getGigById,
+} from "../../../utilities/kozeoApi";
 
 interface GigInfo {
-  Title: string;
-  host: string;
-  gigId: string;
-  collaborator: string;
+  id: string;
+  title: string;
+  host: {
+    id: string;
+    username: string;
+  };
+  guest?: {
+    id: string;
+    username: string;
+  };
+  status: string;
 }
 
 export default function ReviewPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { theme } = useTheme();
+  const { user } = useUser();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [title, setTitle] = useState("");
   const [review, setReview] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [gigInfo, setGigInfo] = useState<GigInfo | null>(null);
+  const [revieweeUsername, setRevieweeUsername] = useState("");
+  const [error, setError] = useState("");
+  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
-    // In a real app, you'd get this from URL params or context
-    // For now, we'll use mock data
-    setGigInfo({
-      Title: "Real-time Collaboration Platform",
-      host: "@uxwizard",
-      gigId: "3",
-      collaborator: "@developer123",
-    });
-  }, []);
+    const fetchGigInfo = async () => {
+      try {
+        const gigId = searchParams.get("gigId");
+        const receiverUsername = searchParams.get("receiver");
+
+        if (!gigId || !receiverUsername) {
+          setError(
+            "Missing gig ID or receiver information. Please access this page from a completed gig."
+          );
+          // Don't return immediately - let user see the error and potentially navigate away
+          return;
+        }
+
+        // Fetch gig details
+        const gig = await getGigById(gigId);
+        if (!gig) {
+          setError("Gig not found");
+          return;
+        }
+
+        // Check if user is authorized to leave a review (must be host or guest)
+        if (user && (gig as any).host && (gig as any).guest) {
+          const userIsHost = user.id === (gig as any).host.id;
+          const userIsGuest = user.id === (gig as any).guest.id;
+
+          if (!userIsHost && !userIsGuest) {
+            setError("You are not authorized to review this gig");
+            setTimeout(() => router.push("/gigs"), 3000);
+            return;
+          }
+
+          setIsHost(userIsHost);
+        }
+
+        setGigInfo(gig as GigInfo);
+        setRevieweeUsername(receiverUsername);
+      } catch (err) {
+        console.error("Error fetching gig info:", err);
+        setError("Failed to load gig information");
+      }
+    };
+
+    if (user) {
+      fetchGigInfo();
+    } else {
+      setError("Please log in to leave a review");
+    }
+  }, [searchParams, user, router]);
 
   const handleStarClick = (starValue: number) => {
     setRating(starValue);
@@ -47,25 +105,56 @@ export default function ReviewPage() {
     setHoverRating(0);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rating || !review.trim()) {
-      alert("Please provide both a rating and review");
+    if (!rating || !title.trim() || !review.trim()) {
+      setError("Please provide a title, rating, and review");
+      return;
+    }
+
+    if (!user || !gigInfo) {
+      setError("Missing user or gig information");
       return;
     }
 
     setSubmitting(true);
+    setError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitting(false);
+    try {
+      // Create the review
+      const reviewData = {
+        receiver: revieweeUsername,
+        title: title.trim(),
+        description: review.trim(),
+        rating: rating,
+        gig: gigInfo.id,
+      };
+
+      await createReview(reviewData);
+
+      // If user is the host, complete the gig after successful review
+      if (isHost) {
+        try {
+          await completeGig(gigInfo.id);
+          console.log("Gig completed successfully");
+        } catch (completeError) {
+          console.error("Failed to complete gig:", completeError);
+          // Don't fail the whole process if completing gig fails
+        }
+      }
+
       setSubmitted(true);
 
       // Redirect after 3 seconds
       setTimeout(() => {
         router.push("/gigs");
       }, 3000);
-    }, 1500);
+    } catch (err: any) {
+      console.error("Error submitting review:", err);
+      setError(err.message || "Failed to submit review. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -102,8 +191,9 @@ export default function ReviewPage() {
                     theme === "dark" ? "text-gray-300" : "text-gray-600"
                   }`}
                 >
-                  Thank you for your feedback. You'll be redirected to the gigs
-                  page shortly.
+                  Thank you for your feedback.{" "}
+                  {isHost && "The gig has been marked as completed. "}You'll be
+                  redirected to the gigs page shortly.
                 </p>
                 <div className="flex gap-2">
                   <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
@@ -190,7 +280,7 @@ export default function ReviewPage() {
                           theme === "dark" ? "text-white" : "text-gray-900"
                         }`}
                       >
-                        {gigInfo.Title}
+                        {gigInfo.title}
                       </span>
                     </div>
                     <div>
@@ -202,7 +292,7 @@ export default function ReviewPage() {
                         Working with:{" "}
                       </span>
                       <span className="text-cyan-400">
-                        {gigInfo.collaborator}
+                        {gigInfo.guest?.username || revieweeUsername}
                       </span>
                     </div>
                     <div>
@@ -213,9 +303,35 @@ export default function ReviewPage() {
                       >
                         Host:{" "}
                       </span>
-                      <span className="text-cyan-400">{gigInfo.host}</span>
+                      <span className="text-cyan-400">
+                        {gigInfo.host.username}
+                      </span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                  <p className="text-red-500 text-sm mb-2">{error}</p>
+                  {error.includes("Missing gig ID or receiver information") && (
+                    <div className="text-xs text-gray-500">
+                      <p>To leave a review, you need to:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Complete a gig collaboration</li>
+                        <li>
+                          Access the review page from the gig completion flow
+                        </li>
+                      </ul>
+                      <button
+                        onClick={() => router.push("/gigs")}
+                        className="mt-2 text-blue-500 hover:text-blue-600 underline"
+                      >
+                        Go to Gigs Page
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -265,6 +381,29 @@ export default function ReviewPage() {
                 )}
               </div>
 
+              {/* Title Section */}
+              <div className="space-y-3">
+                <label
+                  className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
+                    theme === "dark" ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  Review Title
+                </label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Brief summary of your experience..."
+                  className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                    theme === "dark"
+                      ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
+                      : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
+                  required
+                />
+              </div>
+
               {/* Review Text Area */}
               <div className="space-y-3">
                 <label
@@ -298,7 +437,9 @@ export default function ReviewPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={submitting || !rating || !review.trim()}
+                disabled={
+                  submitting || !rating || !title.trim() || !review.trim()
+                }
                 className={`w-full py-3 rounded-xl font-semibold transition-colors text-base sm:text-lg shadow-none border mt-2 ${
                   theme === "dark"
                     ? "bg-neutral-900/80 text-white hover:bg-neutral-800 border-neutral-800 disabled:opacity-60"

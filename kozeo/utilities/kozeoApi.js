@@ -441,19 +441,6 @@ export async function fetchUserProfile({ id, username, email }) {
             status
             createdAt
           }
-          notifications {
-            id
-            type
-            content
-            action
-            read
-            createdAt
-            sender {
-              username
-              first_name
-              last_name
-            }
-          }
           unreadNotificationCount
           createdAt
           updatedAt
@@ -491,6 +478,28 @@ export async function fetchUserProfile({ id, username, email }) {
   });
   return data.user || data.userByUsername || data.userByEmail;
 }
+
+// fetch sentrequets of a user by username
+export async function fetchSentRequestsByUsername(username) {
+  const query = `
+    query GetSentRequestsByUsername($username: String!) {
+      GetUserByEmail(username: $username) {
+        id
+        gigId
+        status
+        createdAt
+      }
+    }
+  `;
+  const variables = { username };
+  const data = await callApi({
+    query,
+    variables,
+    token: localStorage.getItem("kozeo_auth_token"),
+  });
+  return data.sentRequestsByUsername;
+}
+
 
 /**
  * Get user by username (convenience function)
@@ -666,7 +675,7 @@ export const getGigById = async (gigId) => {
         }
         activeRequest {
           id
-        
+          status
           sender {
             id
             username
@@ -814,6 +823,10 @@ export const searchGigs = async (searchTerm) => {
           id
           username
           profile_Picture
+          rating
+        }
+        activeRequest {
+          id
         }
         createdAt
       }
@@ -869,6 +882,9 @@ export const getUserGigs = async (userId) => {
       remainingPayment
       createdAt
       updatedAt
+      activeRequest {
+        id
+      }
       host {
         id
         first_name

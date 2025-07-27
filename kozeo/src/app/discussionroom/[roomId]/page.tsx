@@ -2,6 +2,7 @@
 
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { FaRegSmile, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { use } from "react";
@@ -439,14 +440,16 @@ export default function DiscussionRoomPage({
                     </span>
                     <span className="xs:hidden">{connectedUsers.length}</span>
                   </div>
-                  <button
+                  <ProfessionalButton
                     onClick={leaveRoom}
-                    className="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-xs md:text-sm font-semibold transition-colors"
+                    variant="danger"
+                    size="sm"
+                    className="text-xs md:text-sm"
+                    icon={<FaSignOutAlt className="w-3 h-3" />}
                   >
-                    <FaSignOutAlt />
                     <span className="hidden sm:inline">Leave Room</span>
                     <span className="sm:hidden">Leave</span>
-                  </button>
+                  </ProfessionalButton>
                 </div>
               </div>
             </div>
@@ -555,16 +558,14 @@ export default function DiscussionRoomPage({
                           )}
 
                           <div
-                            className={`max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-lg break-words whitespace-pre-wrap transition-all duration-200 ${
+                            className={`max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-lg break-words whitespace-pre-wrap transition-all duration-200 border ${
                               msg.type !== "system"
                                 ? "cursor-grab active:cursor-grabbing hover:shadow-md"
                                 : ""
                             } ${
                               msg.sender === currentUser
-                                ? "bg-cyan-600 text-white"
-                                : theme === "dark"
-                                ? "bg-neutral-800 text-white"
-                                : "bg-gray-200 text-gray-900"
+                                ? "bg-neutral-700/30 border-neutral-600/30 text-neutral-100"
+                                : "bg-neutral-800/30 border-neutral-700/30 text-neutral-100"
                             } ${
                               draggedMessage?.id === msg.id
                                 ? isDragOver
@@ -587,7 +588,7 @@ export default function DiscussionRoomPage({
                                 }`}
                               >
                                 <div className="font-semibold text-cyan-400 text-[10px] mb-1 truncate">
-                                   Replying to{" "}
+                                  Replying to{" "}
                                   {findReplyMessage(msg.replyTo)?.sender ||
                                     "Unknown"}
                                   :
@@ -610,7 +611,9 @@ export default function DiscussionRoomPage({
                                 {msg.sender}
                               </div>
                             )}
-                            <div className="text-sm whitespace-pre-wrap break-words">{msg.message}</div>
+                            <div className="text-sm whitespace-pre-wrap break-words">
+                              {msg.message}
+                            </div>
                             <div className="text-xs opacity-70 mt-1 flex items-center justify-between">
                               <span>{msg.time}</span>
                               <div className="flex items-center gap-2">
@@ -622,7 +625,7 @@ export default function DiscussionRoomPage({
                                   )}
                                 <button
                                   onClick={() => setReplyTo(msg.id)}
-                                  className={`text-[10px] opacity-50 hover:opacity-100 transition-opacity ${
+                                  className={`text-[10px] opacity-50 hover:opacity-100 mx-2 transition-opacity ${
                                     theme === "dark"
                                       ? "hover:text-cyan-400"
                                       : "hover:text-cyan-600"
@@ -747,7 +750,7 @@ export default function DiscussionRoomPage({
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       disabled={!user}
-                      rows={Math.min(Math.max(input.split('\n').length, 1), 5)}
+                      rows={Math.min(Math.max(input.split("\n").length, 1), 5)}
                       className={`flex-1 border p-2 md:p-3 rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300 resize-none ${
                         !user ? "opacity-50 cursor-not-allowed" : ""
                       } ${

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/contexts/ThemeContext";
 import { getUserGigs } from "../../../utilities/kozeoApi";
@@ -136,12 +137,14 @@ export default function GigListPage() {
                 >
                   {error}
                 </div>
-                <button
+                <ProfessionalButton
                   onClick={() => window.location.reload()}
-                  className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors"
+                  variant="primary"
+                  size="md"
+                  className="mt-4"
                 >
                   Try Again
-                </button>
+                </ProfessionalButton>
               </div>
             </main>
           </div>
@@ -182,49 +185,31 @@ export default function GigListPage() {
               {/* Filter buttons */}
               {user && gigs.length > 0 && (
                 <div className="flex gap-1 mt-4 sm:mt-0">
-                  <button
+                  <ProfessionalButton
                     onClick={() => setFilter("all")}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                      filter === "all"
-                        ? theme === "dark"
-                          ? "bg-slate-700 text-white border border-slate-600"
-                          : "bg-slate-900 text-white border border-slate-700"
-                        : theme === "dark"
-                        ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 border border-transparent"
-                    }`}
+                    variant={filter === "all" ? "primary" : "neutral"}
+                    size="sm"
+                    className="text-xs"
                   >
                     All ({gigs.length})
-                  </button>
-                  <button
+                  </ProfessionalButton>
+                  <ProfessionalButton
                     onClick={() => setFilter("hosted")}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                      filter === "hosted"
-                        ? theme === "dark"
-                          ? "bg-slate-700 text-white border border-slate-600"
-                          : "bg-slate-900 text-white border border-slate-700"
-                        : theme === "dark"
-                        ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 border border-transparent"
-                    }`}
+                    variant={filter === "hosted" ? "primary" : "neutral"}
+                    size="sm"
+                    className="text-xs"
                   >
                     Hosting ({gigs.filter((g) => g.host.id === user.id).length})
-                  </button>
-                  <button
+                  </ProfessionalButton>
+                  <ProfessionalButton
                     onClick={() => setFilter("collaborating")}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                      filter === "collaborating"
-                        ? theme === "dark"
-                          ? "bg-slate-700 text-white border border-slate-600"
-                          : "bg-slate-900 text-white border border-slate-700"
-                        : theme === "dark"
-                        ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 border border-transparent"
-                    }`}
+                    variant={filter === "collaborating" ? "primary" : "neutral"}
+                    size="sm"
+                    className="text-xs"
                   >
                     Collaborating (
                     {gigs.filter((g) => g.host.id !== user.id).length})
-                  </button>
+                  </ProfessionalButton>
                 </div>
               )}
             </div>
@@ -238,12 +223,14 @@ export default function GigListPage() {
                 <div className="text-sm">
                   You need to be logged in to view your gigs.
                 </div>
-                <button
+                <ProfessionalButton
                   onClick={() => router.push("/login")}
-                  className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors"
+                  variant="primary"
+                  size="md"
+                  className="mt-4"
                 >
                   Go to Login
-                </button>
+                </ProfessionalButton>
               </div>
             ) : filteredGigs.length === 0 ? (
               <div
@@ -267,18 +254,20 @@ export default function GigListPage() {
                 </div>
                 {filter === "all" && (
                   <div className="mt-4 space-x-4">
-                    <button
+                    <ProfessionalButton
                       onClick={() => router.push("/gigs/create")}
-                      className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors"
+                      variant="primary"
+                      size="md"
                     >
                       Create a Gig
-                    </button>
-                    <button
+                    </ProfessionalButton>
+                    <ProfessionalButton
                       onClick={() => router.push("/Atrium")}
-                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors"
+                      variant="neutral"
+                      size="md"
                     >
                       Browse Available Gigs
-                    </button>
+                    </ProfessionalButton>
                   </div>
                 )}
               </div>
@@ -319,19 +308,23 @@ export default function GigListPage() {
                           @{gig.host.username}
                         </div>
                         {user && gig.host.id === user.id ? (
-                          <span className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
-                            theme === "dark" 
-                              ? "bg-slate-800/60 text-slate-400 border border-slate-700/50" 
-                              : "bg-slate-100/80 text-slate-600 border border-slate-200/60"
-                          }`}>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
+                              theme === "dark"
+                                ? "bg-slate-800/60 text-slate-400 border border-slate-700/50"
+                                : "bg-slate-100/80 text-slate-600 border border-slate-200/60"
+                            }`}
+                          >
                             Host
                           </span>
                         ) : (
-                          <span className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
-                            theme === "dark" 
-                              ? "bg-slate-800/60 text-slate-400 border border-slate-700/50" 
-                              : "bg-slate-100/80 text-slate-600 border border-slate-200/60"
-                          }`}>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
+                              theme === "dark"
+                                ? "bg-slate-800/60 text-slate-400 border border-slate-700/50"
+                                : "bg-slate-100/80 text-slate-600 border border-slate-200/60"
+                            }`}
+                          >
                             Member
                           </span>
                         )}
@@ -344,24 +337,24 @@ export default function GigListPage() {
                         >
                           {gig.title}
                         </h3>
-                        <span className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
-                          (() => {
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${(() => {
                             const status = gig.status.toLowerCase();
                             if (status === "open") {
-                              return theme === "dark" 
-                                ? "bg-emerald-900/40 text-emerald-400 border border-emerald-800/50" 
+                              return theme === "dark"
+                                ? "bg-emerald-900/40 text-emerald-400 border border-emerald-800/50"
                                 : "bg-emerald-50/80 text-emerald-700 border border-emerald-200/60";
                             } else if (status === "in_progress") {
-                              return theme === "dark" 
-                                ? "bg-amber-900/40 text-amber-400 border border-amber-800/50" 
+                              return theme === "dark"
+                                ? "bg-amber-900/40 text-amber-400 border border-amber-800/50"
                                 : "bg-amber-50/80 text-amber-700 border border-amber-200/60";
                             } else {
-                              return theme === "dark" 
-                                ? "bg-slate-800/60 text-slate-400 border border-slate-700/50" 
+                              return theme === "dark"
+                                ? "bg-slate-800/60 text-slate-400 border border-slate-700/50"
                                 : "bg-slate-100/80 text-slate-600 border border-slate-200/60";
                             }
-                          })()
-                        }`}>
+                          })()}`}
+                        >
                           {gig.status.replace("_", " ")}
                         </span>
                       </div>
@@ -439,21 +432,14 @@ export default function GigListPage() {
                         >
                           {gig.activeRequest?.length || 0} request(s)
                         </span>
-                        <button
-                          className={`px-3 py-1 rounded text-[10px] font-medium transition-all duration-200 ${
-                            theme === "dark"
-                              ? "border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-700 hover:text-white border"
-                              : "border-slate-300 bg-slate-100/60 text-slate-700 hover:bg-slate-200 hover:text-slate-900 border"
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleGigNavigation(gig);
-                          }}
+                        <ProfessionalButton
+                          onClick={() => handleGigNavigation(gig)}
+                          variant="neutral"
+                          size="sm"
+                          className="text-[10px]"
                         >
-                          {user && gig.host.id === user.id
-                            ? "Manage"
-                            : "Enter"}
-                        </button>
+                          {user && gig.host.id === user.id ? "Manage" : "Enter"}
+                        </ProfessionalButton>
                       </div>
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { getAllGigs, searchGigs } from "../../../utilities/kozeoApi";
 import { isAuthenticated } from "../../../utilities/api";
 import { useTheme } from "../../contexts/ThemeContext";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 export default function Home() {
   const router = useRouter();
   const { theme } = useTheme();
@@ -31,7 +32,11 @@ export default function Home() {
       try {
         setLoading(true);
         const gigsData = await getAllGigs();
-        setGigs(gigsData || []);
+        // Filter out completed gigs
+        const activeGigs = (gigsData || []).filter(
+          (gig) => gig.status !== "completed"
+        );
+        setGigs(activeGigs);
       } catch (error: any) {
         console.error("Error fetching gigs:", error);
         setError("Failed to load gigs");
@@ -49,7 +54,11 @@ export default function Home() {
       // Reset to all gigs
       try {
         const gigsData = await getAllGigs();
-        setGigs(gigsData || []);
+        // Filter out completed gigs
+        const activeGigs = (gigsData || []).filter(
+          (gig) => gig.status !== "completed"
+        );
+        setGigs(activeGigs);
       } catch (error: any) {
         console.error("Error fetching gigs:", error);
       }
@@ -58,7 +67,11 @@ export default function Home() {
 
     try {
       const searchResults = await searchGigs(searchTerm);
-      setGigs(searchResults || []);
+      // Filter out completed gigs from search results
+      const activeSearchResults = (searchResults || []).filter(
+        (gig) => gig.status !== "completed"
+      );
+      setGigs(activeSearchResults);
     } catch (error: any) {
       console.error("Error searching gigs:", error);
       setError("Failed to search gigs");
@@ -108,16 +121,14 @@ export default function Home() {
                 </button>
               </div>
 
-              <button
-                className={`px-5 py-2 rounded-md font-semibold transition-colors ${
-                  theme === "light"
-                    ? "text-white bg-cyan-600 hover:bg-cyan-700"
-                    : "text-black bg-white hover:bg-neutral-200"
-                }`}
+              <ProfessionalButton
                 onClick={() => router.push("/gigs/create")}
+                variant="neutral"
+                size="md"
+                className="!bg-white !text-gray-900 !border-gray-300 hover:!bg-gray-50 hover:!border-gray-400 !shadow-md"
               >
                 Create Gig
-              </button>
+              </ProfessionalButton>
             </div>
 
             {/* Heading */}
