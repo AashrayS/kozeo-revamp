@@ -73,12 +73,40 @@ export default function GigLobbyPage({
 
     socket.on("gig-request", (request) => {
       console.log("Incoming request received:", request);
+      console.log("Request sender data:", request.sender);
+      console.log("Request bio data:", request.sender?.bio);
       setRequests((prev) => {
-        debugger;
+        // debugger;
         console.log("Current requests:", prev);
         request.status = "pending"; // Ensure new requests have status set
         request.requestId = request.requestId || request.id; // Use requestId or id
         request.rating = request.requesterRating || 0;
+
+        // Ensure bio and other data are properly set for WebSocket requests
+        if (!request.requesterBio && request.sender?.bio) {
+          request.requesterBio = request.sender.bio;
+        }
+        if (
+          !request.requesterProfilePicture &&
+          request.sender?.profile_Picture
+        ) {
+          request.requesterProfilePicture = request.sender.profile_Picture;
+        }
+        if (
+          !request.requesterGigHostedCount &&
+          request.sender?.gigHostedCount
+        ) {
+          request.requesterGigHostedCount = request.sender.gigHostedCount;
+        }
+        if (
+          !request.requesterGigCollaboratedCount &&
+          request.sender?.gigCollaboratedCount
+        ) {
+          request.requesterGigCollaboratedCount =
+            request.sender.gigCollaboratedCount;
+        }
+
+        console.log("Processed request with bio:", request.requesterBio);
 
         // // Check for duplicates based on requestId or requesterName
         // const isDuplicate = prev.some(
@@ -197,7 +225,7 @@ export default function GigLobbyPage({
     const fetchGig = async () => {
       try {
         setLoading(true);
-        debugger;
+        // debugger;
         const gigData = await getGigById(gigId);
         setGig(gigData);
         // destruct active reqiest for {
@@ -218,19 +246,29 @@ export default function GigLobbyPage({
 
           // Transform database requests to match the expected format
           const transformedRequests = (gigData as any).activeRequest.map(
-            (req: any) => ({
-              id: req.id,
-              requestId: req.id, // Use the database ID as requestId
-              requesterName: req.sender.username,
-              name: req.sender.username,
-              message: req.message || "Request to join this gig",
-              timestamp: req.createdAt,
-              gigId: req.gigId,
-              status: req.status,
-              sender: req.sender, // Keep full sender info for potential use
-              rating: req.sender.rating, // Add rating from sender
-              requesterRating: req.sender.rating, // Also add as requesterRating for consistency
-            })
+            (req: any) => {
+              console.log("Transforming request with sender:", req.sender);
+              console.log("Sender bio:", req.sender?.bio);
+
+              return {
+                id: req.id,
+                requestId: req.id, // Use the database ID as requestId
+                requesterName: req.sender.username,
+                name: req.sender.username,
+                message: req.message || "Request to join this gig",
+                timestamp: req.createdAt,
+                gigId: req.gigId,
+                status: req.status,
+                sender: req.sender, // Keep full sender info for potential use
+                rating: req.sender.rating, // Add rating from sender
+                requesterRating: req.sender.rating, // Also add as requesterRating for consistency
+                requesterGigHostedCount: req.sender.gigHostedCount || 0, // Add gigHostedCount from sender
+                requesterGigCollaboratedCount:
+                  req.sender.gigCollaboratedCount || 0, // Add gigCollaboratedCount from sender
+                requesterProfilePicture: req.sender.profile_Picture || "", // Add profile picture if available
+                requesterBio: req.sender.bio || "", // Add bio if available
+              };
+            }
           );
 
           // Set initial requests from database
@@ -319,7 +357,7 @@ export default function GigLobbyPage({
       }
 
       alert(`Request from ${request.requesterName || request.name} accepted!`);
-      debugger;
+      // debugger;
       // Navigate to the gig workspace/chat page
       router.push(`/Gig/${gigId}`);
     } catch (error) {
@@ -806,25 +844,48 @@ export default function GigLobbyPage({
                         {/* Header section with user info and status */}
                         <div className="relative z-10 flex justify-between items-start">
                           <div className="flex items-center gap-3">
-                            {/* Avatar placeholder */}
-                            <div
-                              className={`
-                              w-12 h-12 rounded-full flex items-center justify-center
-                              bg-gradient-to-br font-bold text-white shadow-md
-                              ${
-                                req.status === "pending"
-                                  ? "from-slate-500 to-indigo-600"
-                                  : req.status === "accepted"
-                                  ? "from-emerald-500 to-green-600"
-                                  : req.status === "rejected"
-                                  ? "from-red-500 to-rose-600"
-                                  : "from-gray-500 to-slate-600"
-                              }
-                            `}
-                            >
-                              {(req.requesterName || req.name || "U")
-                                .charAt(0)
-                                .toUpperCase()}
+                            {/* Profile Picture or Avatar */}
+                            <div className="relative">
+                              {req.requesterProfilePicture ? (
+                                <img
+                                  src={req.requesterProfilePicture}
+                                  alt={`${
+                                    req.requesterName || req.name
+                                  } profile`}
+                                  className={`
+                                    w-14 h-14 rounded-full object-cover shadow-lg border-2 transition-all duration-300
+                                    ${
+                                      req.status === "pending"
+                                        ? "border-indigo-400/50"
+                                        : req.status === "accepted"
+                                        ? "border-emerald-400/50"
+                                        : req.status === "rejected"
+                                        ? "border-red-400/50"
+                                        : "border-gray-400/50"
+                                    }
+                                  `}
+                                />
+                              ) : (
+                                <div
+                                  className={`
+                                    w-14 h-14 rounded-full flex items-center justify-center
+                                    bg-gradient-to-br font-bold text-white shadow-lg border-2 transition-all duration-300
+                                    ${
+                                      req.status === "pending"
+                                        ? "from-slate-500 to-indigo-600 border-indigo-400/50"
+                                        : req.status === "accepted"
+                                        ? "from-emerald-500 to-green-600 border-emerald-400/50"
+                                        : req.status === "rejected"
+                                        ? "from-red-500 to-rose-600 border-red-400/50"
+                                        : "from-gray-500 to-slate-600 border-gray-400/50"
+                                    }
+                                  `}
+                                >
+                                  {(req.requesterName || req.name || "U")
+                                    .charAt(0)
+                                    .toUpperCase()}
+                                </div>
+                              )}
                             </div>
 
                             <div className="flex flex-col">
@@ -838,11 +899,64 @@ export default function GigLobbyPage({
                                 @{req.requesterName || req.name}
                               </div>
 
+                              {/* Gig stats - Hosted and Collaborated counts */}
+                              <div className="flex items-center gap-3 mt-1">
+                                <div
+                                  className={`
+                                    flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium
+                                    backdrop-blur-sm border transition-colors duration-300
+                                    ${
+                                      theme === "light"
+                                        ? "bg-blue-100/50 border-blue-200/50 text-blue-700"
+                                        : "bg-blue-900/30 border-blue-700/50 text-blue-300"
+                                    }
+                                  `}
+                                >
+                                  <svg
+                                    className="w-3 h-3"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a2 2 0 11-4 0 2 2 0 014 0zm8 0a2 2 0 11-4 0 2 2 0 014 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                  <span>
+                                    {req.requesterGigHostedCount || 0} hosted
+                                  </span>
+                                </div>
+                                <div
+                                  className={`
+                                    flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium
+                                    backdrop-blur-sm border transition-colors duration-300
+                                    ${
+                                      theme === "light"
+                                        ? "bg-purple-100/50 border-purple-200/50 text-purple-700"
+                                        : "bg-purple-900/30 border-purple-700/50 text-purple-300"
+                                    }
+                                  `}
+                                >
+                                  <svg
+                                    className="w-3 h-3"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  <span>
+                                    {req.requesterGigCollaboratedCount || 0}{" "}
+                                    collaborated
+                                  </span>
+                                </div>
+                              </div>
+
                               {/* Enhanced status indicator */}
                               <div
                                 className={`
-                                  inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
-                                  backdrop-blur-sm border shadow-sm transition-all duration-300
+                                  inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold mt-2
+                                  backdrop-blur-sm border shadow-sm transition-all duration-300 w-fit
                                   ${
                                     req.status === "pending"
                                       ? "bg-indigo-500/20 border-indigo-400/30 text-indigo-700 dark:text-indigo-300"
@@ -969,7 +1083,52 @@ export default function GigLobbyPage({
                             )}
                           </div>
                         </div>
-
+                        {/* Bio section */}
+                        {(req.requesterBio || req.sender?.bio) && (
+                          <div
+                            className={`
+                              relative p-4 rounded-xl transition-colors duration-300
+                              backdrop-blur-sm border
+                              ${
+                                theme === "light"
+                                  ? "bg-slate-50/40 border-slate-200/40 text-slate-700"
+                                  : "bg-slate-900/20 border-slate-700/30 text-slate-300"
+                              }
+                            `}
+                          >
+                            <div className="flex items-center gap-2 mb-2">
+                              <svg
+                                className={`w-4 h-4 ${
+                                  theme === "light"
+                                    ? "text-slate-500"
+                                    : "text-slate-400"
+                                }`}
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              <span
+                                className={`text-xs font-semibold uppercase tracking-wide ${
+                                  theme === "light"
+                                    ? "text-slate-500"
+                                    : "text-slate-400"
+                                }`}
+                              >
+                                About
+                              </span>
+                            </div>
+                            <div className="text-sm leading-relaxed">
+                              {req.requesterBio ||
+                                req.sender?.bio ||
+                                "No bio available"}
+                            </div>
+                          </div>
+                        )}
                         {/* Message section */}
                         <div
                           className={`

@@ -81,7 +81,7 @@ export default function DescriptionClient() {
           if ((gigData as any).host?.username) {
             setHostLoading(true);
             try {
-              debugger;
+
               const hostData = await getUserBasicProfile(
                 (gigData as any).host.username
               );
@@ -180,6 +180,7 @@ export default function DescriptionClient() {
       // First, save the request to the database
       const requestData = {
         gig: gigId,
+        message: requestMessage.trim(),
         status: "pending",
       };
 
@@ -198,6 +199,10 @@ export default function DescriptionClient() {
           message: requestMessage.trim(),
           status: "pending",
           requesterRating: user.rating || 0,
+          requesterBio: savedRequest?.sender?.bio || "No bio available",
+          requesterProfilePicture: savedRequest?.sender?.profile_Picture || "",
+          requesterGigHostedCount: savedRequest?.sender?.gigHostedCount || 0,
+          requesterGigCollaboratedCount: savedRequest?.sender?.gigCollaboratedCount || 0,
         },
         requestId: savedRequest?.id || Date.now().toString(), // Include the database ID
         hostUsername: hostUsername,

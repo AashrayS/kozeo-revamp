@@ -43,7 +43,7 @@ export default function Sidebar() {
 
   const handleNavigation = (path: string) => {
     // Always trigger loader immediately for any navigation
-    debugger;
+    // debugger;
     navigateWithLoader(path);
   };
 

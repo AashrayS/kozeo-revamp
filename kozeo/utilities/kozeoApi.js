@@ -267,7 +267,7 @@ export async function updateUserProfile(id, input) {
  */
 
 export async function fetchUserProfile({ id, username, email }) {
-  debugger;
+  // debugger;
   let query, variables;
   if (id) {
     query = `
@@ -507,7 +507,7 @@ export async function fetchSentRequestsByUsername(username) {
  * @returns {Promise<Object>} User profile data
  */
 export const getUserByUsername = async (username) => {
-  debugger;
+  // debugger;
   return await fetchUserProfile({ username });
 };
 
@@ -683,8 +683,11 @@ export const getGigById = async (gigId) => {
             last_name
             profile_Picture
             rating
+            gigHostedCount
+            gigCollaboratedCount
             bio
           }
+            message
         }
         createdAt
         updatedAt
@@ -994,12 +997,11 @@ export const getUserReviews = async (userId) => {
  * @param {Object} gigData - Gig data for notification context
  * @returns {Promise<Object>} Sent request
  */
-export const sendGigRequest = async (requestData, gigData = null) => {
+export const sendGigRequest = async (requestData, gigData = null ) => {
   const sendRequestMutation = `
     mutation SendGigRequest($input: SendGigRequestInput!) {
       sendGigRequest(input: $input) {
         id
-        gigId
         sender {
           id
           username
@@ -1007,20 +1009,12 @@ export const sendGigRequest = async (requestData, gigData = null) => {
           last_name
           profile_Picture
           rating
+          gigHostedCount
+          gigCollaboratedCount
+          bio
         }
-        receiver {
-          id
-          username
-          first_name
-          last_name
-          profile_Picture
-          rating
-        }
-        status
-        createdAt
-        updatedAt
       }
-    }
+  }
   `;
 
   console.log("Sending request with data:", requestData);
@@ -1075,7 +1069,7 @@ export const respondToGigRequest = async (
         id
         gigId
         sender {
-          id
+          
           username
           first_name
           last_name
@@ -1083,7 +1077,7 @@ export const respondToGigRequest = async (
           rating
         }
         receiver {
-          id
+          
           username
           first_name
           last_name

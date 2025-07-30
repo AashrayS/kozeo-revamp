@@ -40,9 +40,12 @@ export default function EditProfilePage() {
   });
 
   const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
     password: "",
     confirmPassword: "",
   });
+
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -185,31 +188,95 @@ export default function EditProfilePage() {
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!passwordForm.password || !passwordForm.confirmPassword) {
-      alert("Please fill in both password fields!");
+    if (
+      !passwordForm.currentPassword ||
+      !passwordForm.password ||
+      !passwordForm.confirmPassword
+    ) {
+      setPasswordError("Please fill in all password fields!");
       return;
     }
 
     if (passwordForm.password !== passwordForm.confirmPassword) {
-      alert("Passwords don't match!");
+      setPasswordError("New passwords don't match!");
       return;
     }
 
     setIsSubmittingPassword(true);
+    setPasswordError(null); // Clear any previous errors
 
     try {
-      // Use dedicated changePassword function
-      if (currentUser?.id) {
-        await changePassword(currentUser.id, passwordForm.password);
-        alert("Password updated successfully!");
-        // Clear password fields
-        setPasswordForm({ password: "", confirmPassword: "" });
-        // Hide password section
-        setShowPasswordSection(false);
-      }
-    } catch (error) {
+      // Use dedicated changePassword function with current and new password
+      await changePassword(passwordForm.currentPassword, passwordForm.password);
+      alert("Password updated successfully!");
+      // Clear password fields
+      setPasswordForm({
+        currentPassword: "",
+        password: "",
+        confirmPassword: "",
+      });
+      // Hide password section
+      setShowPasswordSection(false);
+      setPasswordError(null);
+    } catch (error: any) {
       console.error("Error updating password:", error);
-      alert("Failed to update password. Please try again.");
+
+      // Extract error message from API response
+      let errorMessage = "Failed to update password. Please try again.";
+
+      // Debug: Log the full error structure
+      console.log("Full error object:", JSON.stringify(error, null, 2));
+
+      if (
+        error?.errors &&
+        Array.isArray(error.errors) &&
+        error.errors.length > 0
+      ) {
+        // Extract the message from the first error
+        const originalMessage = error.errors[0].message;
+        console.log("Original error message:", originalMessage);
+
+        // Start with the original message from API
+        errorMessage = originalMessage;
+
+        // Handle specific error cases - check for exact match first
+        if (originalMessage === "Current password is incorrect") {
+          errorMessage =
+            "Current password is incorrect. Please verify and try again.";
+          console.log("Matched exact current password error");
+        } else if (originalMessage.includes("Current password is incorrect")) {
+          errorMessage =
+            "Current password is incorrect. Please verify and try again.";
+        } else if (originalMessage.includes("Invalid current password")) {
+          errorMessage =
+            "Current password is incorrect. Please verify and try again.";
+        } else if (originalMessage.includes("Failed to change password:")) {
+          errorMessage = originalMessage.replace(
+            "Failed to change password: ",
+            ""
+          );
+
+          // Handle specific validation errors
+          if (errorMessage.includes("User validation failed: password:")) {
+            errorMessage = errorMessage.replace(
+              "User validation failed: password: ",
+              ""
+            );
+            if (
+              errorMessage.includes(
+                "is shorter than the minimum allowed length"
+              )
+            ) {
+              errorMessage = "Password must be at least 8 characters long.";
+            }
+          }
+        }
+        // If no specific handling, use the original message as-is
+
+        console.log("Final error message:", errorMessage);
+      }
+
+      setPasswordError(errorMessage);
     } finally {
       setIsSubmittingPassword(false);
     }
@@ -408,9 +475,10 @@ export default function EditProfilePage() {
                         Security
                       </h2>
                       <ProfessionalButton
-                        onClick={() =>
-                          setShowPasswordSection(!showPasswordSection)
-                        }
+                        onClick={() => {
+                          setShowPasswordSection(!showPasswordSection);
+                          setPasswordError(null); // Clear error when toggling
+                        }}
                         variant="neutral"
                         size="sm"
                         icon={showPasswordSection ? <FaLock /> : <FaUnlock />}
@@ -427,42 +495,127 @@ export default function EditProfilePage() {
                           onSubmit={handlePasswordSubmit}
                           className="space-y-4"
                         >
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-4">
                             <InputField
                               type="password"
-                              placeholder="New Password"
-                              value={passwordForm.password}
-                              onChange={(e) =>
+                              placeholder="Current Password"
+                              value={passwordForm.currentPassword}
+                              onChange={(e) => {
                                 setPasswordForm({
                                   ...passwordForm,
-                                  password: e.target.value,
-                                })
-                              }
+                                  currentPassword: e.target.value,
+                                });
+                                setPasswordError(null); // Clear error when user types
+                              }}
                               style={baseInputStyle(currentTheme)}
                             />
-                            <InputField
-                              type="password"
-                              placeholder="Confirm New Password"
-                              value={passwordForm.confirmPassword}
-                              onChange={(e) =>
-                                setPasswordForm({
-                                  ...passwordForm,
-                                  confirmPassword: e.target.value,
-                                })
-                              }
-                              style={baseInputStyle(currentTheme)}
-                            />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <InputField
+                                type="password"
+                                placeholder="New Password"
+                                value={passwordForm.password}
+                                onChange={(e) => {
+                                  setPasswordForm({
+                                    ...passwordForm,
+                                    password: e.target.value,
+                                  });
+                                  setPasswordError(null); // Clear error when user types
+                                }}
+                                style={baseInputStyle(currentTheme)}
+                              />
+                              <InputField
+                                type="password"
+                                placeholder="Confirm New Password"
+                                value={passwordForm.confirmPassword}
+                                onChange={(e) => {
+                                  setPasswordForm({
+                                    ...passwordForm,
+                                    confirmPassword: e.target.value,
+                                  });
+                                  setPasswordError(null); // Clear error when user types
+                                }}
+                                style={baseInputStyle(currentTheme)}
+                              />
+                            </div>
                           </div>
+
+                          {/* Error Message Display */}
+                          {passwordError && (
+                            <div
+                              className={`border rounded-lg p-4 ${
+                                passwordError.includes(
+                                  "Current password is incorrect"
+                                )
+                                  ? "bg-red-600/20 border-red-500/50 shadow-red-500/10 shadow-lg"
+                                  : "bg-red-500/10 border-red-500/30"
+                              }`}
+                            >
+                              <div className="flex items-start gap-3">
+                                <svg
+                                  className={`w-6 h-6 mt-0.5 flex-shrink-0 ${
+                                    passwordError.includes(
+                                      "Current password is incorrect"
+                                    )
+                                      ? "text-red-300"
+                                      : "text-red-400"
+                                  }`}
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                <div className="flex-1">
+                                  <p
+                                    className={`text-sm font-semibold mb-1 ${
+                                      passwordError.includes(
+                                        "Current password is incorrect"
+                                      )
+                                        ? "text-red-100"
+                                        : "text-red-300"
+                                    }`}
+                                  >
+                                    {passwordError}
+                                  </p>
+                                  {passwordError.includes(
+                                    "Current password is incorrect"
+                                  ) && (
+                                    <div className="space-y-1">
+                                      <p className="text-red-200/90 text-xs">
+                                        Make sure you're entering your current
+                                        password correctly.
+                                      </p>
+                                      <p className="text-red-200/80 text-xs">
+                                        • Double-check for typos or incorrect
+                                        capitalization
+                                      </p>
+                                      <p className="text-red-200/80 text-xs">
+                                        • Ensure Caps Lock is not accidentally
+                                        enabled
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           <p className="text-sm text-gray-400">
-                            Enter your new password in both fields above.
+                            Enter your current password and new password in the
+                            fields above.
                           </p>
                           <div className="flex gap-3 justify-end">
                             <ProfessionalButton
                               onClick={() => {
                                 setPasswordForm({
+                                  currentPassword: "",
                                   password: "",
                                   confirmPassword: "",
                                 });
+                                setPasswordError(null);
                                 setShowPasswordSection(false);
                               }}
                               variant="neutral"
@@ -471,17 +624,22 @@ export default function EditProfilePage() {
                               Cancel
                             </ProfessionalButton>
                             <ProfessionalButton
-                              onClick={() => {}} // Form submission is handled by onSubmit
+                              onClick={() => {
+                                const fakeEvent = {
+                                  preventDefault: () => {},
+                                } as React.FormEvent;
+                                handlePasswordSubmit(fakeEvent);
+                              }}
                               variant="primary"
                               size="sm"
                               loading={isSubmittingPassword}
                               loadingText="Updating..."
                               disabled={
                                 isSubmittingPassword ||
+                                !passwordForm.currentPassword ||
                                 !passwordForm.password ||
                                 !passwordForm.confirmPassword
                               }
-                              type="submit"
                             >
                               Update Password
                             </ProfessionalButton>
