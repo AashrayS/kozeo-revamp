@@ -4,10 +4,26 @@ import { useState } from "react";
 import { theme } from "../../theme";
 import { useRef, useEffect } from "react";
 import { useNavigationLoader } from "../../components/common/useNavigationLoader";
-import { loginUser, registerUser } from "../../../utilities/kozeoApi";
+import {
+  loginUser,
+  registerUser,
+  verifyEmail,
+  verifyOtp,
+} from "../../../utilities/kozeoApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/userSlice";
 import { useTheme } from "../../contexts/ThemeContext";
+
+type SignupData = {
+  email: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  country_Code: string;
+  role: string;
+};
 
 export default function LoginSignupPage() {
   const [showLogin, setShowLogin] = useState(true);
@@ -229,6 +245,11 @@ export default function LoginSignupPage() {
               <form
                 className="w-full space-y-4 px-2 md:px-4"
                 onSubmit={(e) => e.preventDefault()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                  }
+                }}
               >
                 {signupStep === 1 && (
                   <>
@@ -265,7 +286,7 @@ export default function LoginSignupPage() {
                       disabled={isSendingOtp}
                       className="w-full py-3 rounded-md text-white flex items-center justify-center"
                       style={{ background: currentTheme.colors.primary }}
-                      onClick={() => {
+                      onClick={async () => {
                         const valid = /\S+@\S+\.\S+/.test(signupData.email);
                         if (!valid) {
                           setEmailError("Please enter a valid email.");
@@ -273,14 +294,29 @@ export default function LoginSignupPage() {
                         }
                         setEmailError("");
                         setIsSendingOtp(true);
-
-                        // Simulate sending OTP and move to step 2
-                        setTimeout(() => {
-                          console.log("Moving to OTP verification step");
+                        try {
+                          const res = await verifyEmail(signupData.email);
+                          // If verifyEmail returns an array, get the first element
+                          const result = Array.isArray(res) ? res[0] : res;
+                          if (result && result.success) {
+                            setSignupStep(2); // Go to OTP verification step
+                            setResendCooldown(30); // Start resend cooldown
+                          } else {
+                            setEmailError(
+                              result?.message || "Failed to send OTP."
+                            );
+                          }
+                        } catch (err) {
+                          const errorMessage =
+                            typeof err === "object" &&
+                            err !== null &&
+                            "message" in err
+                              ? (err as any).message
+                              : "Failed to send OTP.";
+                          setEmailError(errorMessage);
+                        } finally {
                           setIsSendingOtp(false);
-                          setSignupStep(2); // Go to OTP verification step
-                          setResendCooldown(30); // Start resend cooldown
-                        }, 1500);
+                        }
                       }}
                     >
                       {isSendingOtp ? "Processing..." : "Continue"}
@@ -320,50 +356,78 @@ export default function LoginSignupPage() {
                     {otpError && (
                       <p className="text-red-500 text-sm">{otpError}</p>
                     )}
-
                     <button
                       type="button"
                       className="w-full py-3 rounded-md text-white"
                       style={{ background: currentTheme.colors.primary }}
-                      onClick={() => {
-                        console.log("OTP verification attempt:", otp);
-                        if (otp === "123123") {
-                          console.log(
-                            "OTP verified successfully, moving to step 3"
+                      onClick={async () => {
+                        setOtpError("");
+                        if (!otp) {
+                          setOtpError(
+                            "Please enter the OTP sent to your email."
                           );
-                          setSignupStep(3);
-                          setOtpError("");
-                        } else {
-                          console.log("Invalid OTP entered");
-                          setOtpError("Invalid OTP. Please use: 123123");
+                          return;
+                        }
+                        try {
+                          const res = await verifyOtp(signupData.email, otp);
+                          if (res.success) {
+                            setSignupStep(3);
+                            setOtpError("");
+                          } else {
+                            setOtpError(res.message || "Invalid OTP.");
+                          }
+                        } catch (err) {
+                          setOtpError(
+                            typeof err === "object" &&
+                              err !== null &&
+                              "message" in err
+                              ? (err as any).message
+                              : "OTP verification failed."
+                          );
                         }
                       }}
                     >
                       Verify OTP
                     </button>
 
-                    <p
-                      className="text-sm mt-2 text-center"
-                      style={{ color: currentTheme.colors.text }}
-                    >
-                      Didn’t receive it?{" "}
-                      {resendCooldown === 0 ? (
-                        <button
-                          className="underline text-blue-400"
-                          onClick={() => {
-                            setIsSendingOtp(true);
-                            setTimeout(() => {
-                              setIsSendingOtp(false);
+                    <div className="mt-2 text-center">
+                      <button
+                        type="button"
+                        className="underline text-blue-400"
+                        disabled={isSendingOtp || resendCooldown > 0}
+                        onClick={async () => {
+                          setIsSendingOtp(true);
+                          try {
+                            const res = await verifyEmail(signupData.email);
+                            const result = Array.isArray(res) ? res[0] : res;
+                            if (result && result.success) {
                               setResendCooldown(30);
-                            }, 1500);
-                          }}
-                        >
-                          Resend OTP
-                        </button>
-                      ) : (
-                        `Wait ${resendCooldown}s`
+                            } else {
+                              setOtpError(
+                                result?.message || "Failed to resend OTP."
+                              );
+                            }
+                          } catch (err) {
+                            setOtpError(
+                              typeof err === "object" &&
+                                err !== null &&
+                                "message" in err
+                                ? (err as any).message
+                                : "Failed to resend OTP."
+                            );
+                          } finally {
+                            setIsSendingOtp(false);
+                          }
+                        }}
+                      >
+                        Resend OTP
+                      </button>
+                      {resendCooldown > 0 && (
+                        <span className="ml-2 text-gray-400">
+                          Wait {resendCooldown}s
+                        </span>
                       )}
-                    </p>
+                    </div>
                   </>
                 )}
 

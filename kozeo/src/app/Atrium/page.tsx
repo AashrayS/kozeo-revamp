@@ -58,6 +58,10 @@ export default function Home() {
     fetchGigs();
   }, []);
 
+  const handleUserClick = (user: any) => {
+    router.push(`/profile/${user.username || user.username}`);
+  };
+
   // Search functionality
   const handleSearch = async () => {
     if (viewMode === "gigs") {
@@ -408,6 +412,7 @@ export default function Home() {
                     users.map((user: any) => (
                       <div
                         key={user.id || user._id || user.username}
+                        onClick={() => handleUserClick(user)}
                         className={`relative flex flex-col justify-between h-full min-h-[220px] rounded-xl p-5 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.02] theme-transition ${
                           theme === "light"
                             ? "bg-white border border-gray-200 hover:shadow-md hover:bg-gradient-to-br hover:from-cyan-50/30 hover:to-purple-50/30"

@@ -500,7 +500,6 @@ export async function fetchSentRequestsByUsername(username) {
   return data.sentRequestsByUsername;
 }
 
-
 /**
  * Get user by username (convenience function)
  * @param {string} username - Username to fetch
@@ -840,7 +839,6 @@ export const searchGigs = async (searchTerm) => {
   return result.searchGigs;
 };
 
-
 /** Search Users */
 export const searchUsers = async (searchTerm) => {
   const searchQuery = `
@@ -1017,7 +1015,7 @@ export const getUserReviews = async (userId) => {
  * @param {Object} gigData - Gig data for notification context
  * @returns {Promise<Object>} Sent request
  */
-export const sendGigRequest = async (requestData, gigData = null ) => {
+export const sendGigRequest = async (requestData, gigData = null) => {
   const sendRequestMutation = `
     mutation SendGigRequest($input: SendGigRequestInput!) {
       sendGigRequest(input: $input) {
@@ -1253,7 +1251,6 @@ export const sendGigMessage = async (messageData) => {
   const result = await mutate(sendMessageMutation, { input: messageData });
   return result.sendGigMessage;
 };
-
 
 export const getUserNotifications = async (userId) => {
   const queryString = `
@@ -1590,3 +1587,38 @@ export const sendDiscussionMessage = async (messageData) => {
  * @param {string} userId - User ID to get notifications for
  * @returns {Promise<Array>} Array of notifications
  */
+
+export const verifyEmail = async (email) => {
+  const query = `
+    mutation VerifyEmail($email: String!) {
+      verifyEmail(email: $email) {
+        success
+        message
+      }
+    }
+  `;
+  const variables = { email };
+  const data = await callApi({
+    query,
+    variables,
+  });
+  return data.verifyEmail;
+};
+
+export const verifyOtp = async (email, otp) => {
+  const query = `
+    mutation VerifyOtp($email: String!, $otp: String!) {
+      verifyOtp(email: $email, otp: $otp)
+      {
+        success
+        message
+      }
+    }
+  `;
+  const variables = { email, otp };
+  const data = await callApi({
+    query,
+    variables,
+  });
+  return data.verifyOtp;
+};
