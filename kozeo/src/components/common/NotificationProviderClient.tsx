@@ -222,7 +222,7 @@ export default function NotificationProviderClient({
     }
   }, [user?.id]); // Only depend on user.id
 
-  // Add a manual trigger for debugging
+  // Add a manual trigger for debugging - only run once when user.id becomes available
   useEffect(() => {
     // Add a small delay to ensure user context is fully loaded
     const timer = setTimeout(() => {
@@ -233,7 +233,7 @@ export default function NotificationProviderClient({
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [user?.id, notifications.length, notificationsLoading]);
+  }, [user?.id]); // Removed notifications.length and notificationsLoading to prevent infinite loop
 
   useEffect(() => {
     // Don't connect if no username is available

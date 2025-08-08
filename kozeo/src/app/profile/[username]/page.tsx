@@ -692,9 +692,9 @@ export default function UserProfilePage() {
       >
         {/* Main Layout */}
         <Sidebar />
-        <div className="flex-1 flex flex-col lg:flex-row p-0 sm:p-8 gap-0 lg:gap-8   justify-center items-start">
+        <div className="flex-1 flex flex-col lg:flex-row p-4 sm:p-8 gap-0 lg:gap-8 justify-center items-start">
           {/* Main Content */}
-          <main className="flex-1 flex flex-col  gap-8 items-stretch justify-center w-full max-w-8xl pr-10 mx-auto py-8">
+          <main className="flex-1 flex flex-col gap-8 items-stretch justify-center w-full max-w-8xl px-4 sm:px-6 lg:pr-10 mx-auto py-8">
             {/* Profile Header */}
             <section
               className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
@@ -883,23 +883,23 @@ export default function UserProfilePage() {
 
             {/* Profile Stats Grid */}
             <section
-              className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+              className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
                 theme === "light"
                   ? "bg-white/95 border-gray-200"
                   : "bg-neutral-900/80 border-neutral-800"
               }`}
             >
               {/* Section Header */}
-              <div className="mb-8">
+              <div className="mb-6 sm:mb-8">
                 <h3
-                  className={`text-2xl font-light tracking-tight mb-2 ${
+                  className={`text-xl sm:text-2xl font-light tracking-tight mb-2 ${
                     theme === "light" ? "text-gray-900" : "text-white"
                   }`}
                 >
                   Performance Overview
                 </h3>
                 <p
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm ${
                     theme === "light" ? "text-gray-500" : "text-gray-400"
                   }`}
                 >
@@ -907,8 +907,8 @@ export default function UserProfilePage() {
                 </p>
               </div>
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {/* Stats Grid - Mobile-first responsive design */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                 {[
                   {
                     count: profile.gigsHosted.length,
@@ -1012,8 +1012,8 @@ export default function UserProfilePage() {
                       item.bgGradient
                     } border-0 bg-clip-padding theme-transition cursor-pointer ${
                       theme === "light"
-                        ? "shadow-sm hover:shadow-md backdrop-blur-sm"
-                        : "shadow-sm hover:shadow-lg backdrop-blur-sm"
+                        ? "sm:shadow-sm hover:shadow-md backdrop-blur-sm"
+                        : "sm:shadow-sm hover:shadow-lg backdrop-blur-sm"
                     }`}
                     style={{
                       backgroundImage:
@@ -1087,23 +1087,17 @@ export default function UserProfilePage() {
                       <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(255,255,255,0.1)_60deg,transparent_120deg)]"></div>
                     </div>
 
-                    {/* Content with Enhanced Typography */}
-                    <div className="relative p-5 group-hover:translate-y-[-2px] transition-transform duration-400">
-                      <div className="flex items-start justify-between mb-4">
+                    {/* Content with Enhanced Typography - Mobile Optimized */}
+                    <div className="relative p-4 sm:p-5 group-hover:translate-y-[-2px] transition-transform duration-400">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
                         <div className="flex-1">
                           <div
-                            className={`text-2xl md:text-3xl font-bold tracking-tight ${item.color} mb-1 flex items-baseline gap-1 group-hover:scale-105 transition-transform duration-300`}
-                            style={{
-                              textShadow:
-                                theme === "dark"
-                                  ? "0 0 20px currentColor"
-                                  : "none",
-                            }}
+                            className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${item.color} mb-1 flex items-baseline gap-1 group-hover:scale-105 transition-transform duration-300`}
                           >
                             {item.count}
                             {item.suffix && (
                               <span
-                                className={`text-sm font-normal transition-colors duration-300 ${
+                                className={`text-xs sm:text-sm font-normal transition-colors duration-300 ${
                                   theme === "light"
                                     ? "text-gray-400 group-hover:text-gray-500"
                                     : "text-gray-500 group-hover:text-gray-400"
@@ -1124,26 +1118,20 @@ export default function UserProfilePage() {
                           </h4>
                         </div>
                         <div
-                          className={`p-3 rounded-xl ${item.iconBg} backdrop-blur-sm shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
-                          style={{
-                            boxShadow:
-                              theme === "light"
-                                ? "0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4)"
-                                : "0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
-                          }}
+                          className={`p-2 sm:p-3 rounded-xl ${item.iconBg} backdrop-blur-sm sm:shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
                         >
-                          <div className="group-hover:drop-shadow-lg transition-all duration-300">
+                          <div className="sm:group-hover:drop-shadow-lg transition-all duration-300">
                             {item.icon}
                           </div>
                         </div>
                       </div>
 
-                      {/* Enhanced Wallet Actions */}
+                      {/* Enhanced Wallet Actions - Mobile Optimized */}
                       {item.isWallet && (
-                        <div className="space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
+                        <div className="space-y-2 sm:space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
                           <button
                             onClick={handleWithdraw}
-                            className="group/btn w-full relative overflow-hidden px-4 py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                            className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
                             style={{
                               background:
                                 theme === "light"
@@ -1157,9 +1145,9 @@ export default function UserProfilePage() {
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
 
                             {/* Button Content */}
-                            <div className="relative flex items-center justify-center gap-2">
+                            <div className="relative flex items-center justify-center gap-1 sm:gap-2">
                               <svg
-                                className="w-4 h-4 transition-transform duration-300 group-hover/btn:scale-110"
+                                className="w-3 sm:w-4 h-3 sm:h-4 transition-transform duration-300 group-hover/btn:scale-110"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -1171,9 +1159,7 @@ export default function UserProfilePage() {
                                   d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
                                 />
                               </svg>
-                              <span className="tracking-wide">
-                                Withdraw Funds
-                              </span>
+                              <span className="tracking-wide">Withdraw</span>
                             </div>
 
                             {/* Professional Border Highlight */}
@@ -1182,7 +1168,7 @@ export default function UserProfilePage() {
 
                           <button
                             onClick={() => setShowTransactionModal(true)}
-                            className="group/btn w-full relative overflow-hidden px-4 py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                            className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
                             style={{
                               background:
                                 theme === "light"
@@ -1196,10 +1182,10 @@ export default function UserProfilePage() {
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
 
                             {/* Button Content */}
-                            <div className="relative flex items-center justify-center gap-2">
-                              <FiEye className="text-sm transition-transform duration-300 group-hover/btn:scale-110" />
+                            <div className="relative flex items-center justify-center gap-1 sm:gap-2">
+                              <FiEye className="text-xs sm:text-sm transition-transform duration-300 group-hover/btn:scale-110" />
                               <span className="tracking-wide">
-                                View Transactions
+                                Transactions
                               </span>
                             </div>
 

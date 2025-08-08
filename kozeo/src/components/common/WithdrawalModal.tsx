@@ -210,10 +210,10 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div
-        className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border theme-transition ${
+        className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl shadow-xl theme-transition ${
           theme === "light"
-            ? "bg-white border-gray-200"
-            : "bg-neutral-900 border-neutral-700"
+            ? "bg-white border border-gray-200"
+            : "bg-neutral-900 border border-neutral-700"
         }`}
       >
         {/* Header */}
@@ -226,7 +226,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
         >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-              <FiDollarSign className="text-lg text-emerald-600" />
+              <FiDollarSign className="text-lg text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <h2
@@ -238,11 +238,14 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               </h2>
               <p
                 className={`text-sm theme-transition ${
-                  theme === "light" ? "text-gray-500" : "text-gray-400"
+                  theme === "light" ? "text-gray-600" : "text-gray-400"
                 }`}
               >
-                Available Balance: {getCurrencySymbol(currency)}
-                {walletAmount}
+                Available:{" "}
+                <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                  {getCurrencySymbol(currency)}
+                  {walletAmount}
+                </span>
               </p>
             </div>
           </div>
@@ -261,142 +264,133 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
 
         {/* Content */}
         <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Amount */}
-            <div>
-              <label
-                className={`block text-sm font-medium mb-2 theme-transition ${
-                  theme === "light" ? "text-gray-700" : "text-gray-300"
-                }`}
-              >
-                Withdrawal Amount
-              </label>
-              <div className="relative">
-                <span
-                  className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm theme-transition ${
-                    theme === "light" ? "text-gray-500" : "text-gray-400"
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Amount and Method Selection Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Amount */}
+              <div className="space-y-3">
+                <label
+                  className={`block text-sm font-medium theme-transition ${
+                    theme === "light" ? "text-gray-700" : "text-gray-300"
                   }`}
                 >
-                  {getCurrencySymbol(currency)}
-                </span>
-                <input
-                  type="number"
-                  value={formData.amount}
-                  onChange={(e) => handleInputChange("amount", e.target.value)}
-                  placeholder="0.00"
-                  className={`w-full pl-8 pr-4 py-3 rounded-lg border transition-colors ${
-                    errors.amount
-                      ? "border-red-300 focus:border-red-500"
-                      : theme === "light"
-                      ? "border-gray-300 focus:border-cyan-500"
-                      : "border-neutral-600 focus:border-cyan-400"
-                  } ${
-                    theme === "light"
-                      ? "bg-white text-gray-900"
-                      : "bg-neutral-800 text-white"
-                  } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
-                  max={walletAmount}
-                  min="6"
-                  step="0.01"
-                  disabled={isProcessing}
-                />
-              </div>
-              {errors.amount && (
-                <p className="text-red-500 text-sm mt-1">{errors.amount}</p>
-              )}
-
-              {/* Transaction Fees Notice */}
-              <div
-                className={`p-3 rounded-lg border-l-4 border-orange-500 mt-3 theme-transition ${
-                  theme === "light"
-                    ? "bg-orange-50 text-orange-700"
-                    : "bg-orange-950/30 text-orange-300"
-                }`}
-              >
-                <p className="text-sm flex items-center gap-2">
-                  <span className="font-medium">💰 Transaction Fee:</span>
-                  <span>
-                    ₹5 will be deducted as handling charges per withdrawal
+                  Withdrawal Amount
+                </label>
+                <div className="relative">
+                  <span
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm theme-transition ${
+                      theme === "light" ? "text-gray-500" : "text-gray-400"
+                    }`}
+                  >
+                    {getCurrencySymbol(currency)}
                   </span>
-                </p>
-                {formData.amount && parseFloat(formData.amount) > 0 && (
-                  <p className="text-xs mt-1 opacity-75">
-                    You will receive: ₹
-                    {(parseFloat(formData.amount) - 5).toFixed(2)}
-                    {parseFloat(formData.amount) <= 5 && (
-                      <span className="text-red-500 font-medium">
-                        {" "}
-                        (Insufficient amount after fees)
-                      </span>
-                    )}
-                  </p>
+                  <input
+                    type="number"
+                    value={formData.amount}
+                    onChange={(e) =>
+                      handleInputChange("amount", e.target.value)
+                    }
+                    placeholder="0.00"
+                    className={`w-full pl-8 pr-4 py-3 rounded-lg border transition-all duration-200 ${
+                      errors.amount
+                        ? "border-red-300 focus:border-red-500"
+                        : theme === "light"
+                        ? "border-gray-300 focus:border-emerald-500"
+                        : "border-neutral-600 focus:border-emerald-400"
+                    } ${
+                      theme === "light"
+                        ? "bg-white text-gray-900"
+                        : "bg-neutral-800 text-white"
+                    } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
+                    max={walletAmount}
+                    min="6"
+                    step="0.01"
+                    disabled={isProcessing}
+                  />
+                </div>
+                {errors.amount && (
+                  <p className="text-red-500 text-sm">{errors.amount}</p>
                 )}
+              </div>
+
+              {/* Withdrawal Method Selection */}
+              <div className="space-y-3">
+                <label
+                  className={`block text-sm font-medium theme-transition ${
+                    theme === "light" ? "text-gray-700" : "text-gray-300"
+                  }`}
+                >
+                  Withdrawal Method
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWithdrawalMethod("bank");
+                      setUpiVerificationStatus("none");
+                      setErrors((prev) => ({ ...prev, upiId: "" }));
+                    }}
+                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                      withdrawalMethod === "bank"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300"
+                        : theme === "light"
+                        ? "border-gray-200 hover:border-gray-300 text-gray-700"
+                        : "border-neutral-600 hover:border-neutral-500 text-gray-300"
+                    }`}
+                    disabled={isProcessing}
+                  >
+                    <FiCreditCard className="text-lg mx-auto mb-1" />
+                    <div className="text-xs font-medium">Bank</div>
+                    <div className="text-xs opacity-75">1-2 days</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWithdrawalMethod("upi");
+                      setUpiVerificationStatus("none");
+                    }}
+                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                      withdrawalMethod === "upi"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300"
+                        : theme === "light"
+                        ? "border-gray-200 hover:border-gray-300 text-gray-700"
+                        : "border-neutral-600 hover:border-neutral-500 text-gray-300"
+                    }`}
+                    disabled={isProcessing}
+                  >
+                    <FiUser className="text-lg mx-auto mb-1" />
+                    <div className="text-xs font-medium">UPI</div>
+                    <div className="text-xs opacity-75">24 hours</div>
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Withdrawal Method Selection */}
-            <div>
-              <label
-                className={`block text-sm font-medium mb-3 theme-transition ${
-                  theme === "light" ? "text-gray-700" : "text-gray-300"
-                }`}
-              >
-                Choose Withdrawal Method
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setWithdrawalMethod("bank");
-                    setUpiVerificationStatus("none");
-                    setErrors((prev) => ({ ...prev, upiId: "" }));
-                  }}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                    withdrawalMethod === "bank"
-                      ? "border-cyan-500 bg-cyan-50 text-cyan-700"
-                      : theme === "light"
-                      ? "border-gray-200 hover:border-gray-300 text-gray-700"
-                      : "border-neutral-600 hover:border-neutral-500 text-gray-300"
-                  } ${
-                    theme === "dark" && withdrawalMethod === "bank"
-                      ? "bg-cyan-950/30 text-cyan-300"
-                      : ""
-                  }`}
-                  disabled={isProcessing}
-                >
-                  <FiCreditCard className="text-2xl mx-auto mb-2" />
-                  <div className="text-sm font-medium">Bank Account</div>
-                  <div className="text-xs opacity-75 mt-1">
-                    Traditional bank transfer
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setWithdrawalMethod("upi");
-                    setUpiVerificationStatus("none");
-                  }}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                    withdrawalMethod === "upi"
-                      ? "border-cyan-500 bg-cyan-50 text-cyan-700"
-                      : theme === "light"
-                      ? "border-gray-200 hover:border-gray-300 text-gray-700"
-                      : "border-neutral-600 hover:border-neutral-500 text-gray-300"
-                  } ${
-                    theme === "dark" && withdrawalMethod === "upi"
-                      ? "bg-cyan-950/30 text-cyan-300"
-                      : ""
-                  }`}
-                  disabled={isProcessing}
-                >
-                  <FiUser className="text-2xl mx-auto mb-2" />
-                  <div className="text-sm font-medium">UPI</div>
-                  <div className="text-xs opacity-75 mt-1">
-                    Instant UPI transfer
-                  </div>
-                </button>
-              </div>
+            {/* Transaction Fees Notice */}
+            <div
+              className={`p-3 rounded-lg border-l-4 border-orange-500 theme-transition ${
+                theme === "light"
+                  ? "bg-orange-50 text-orange-700"
+                  : "bg-orange-950/30 text-orange-300"
+              }`}
+            >
+              <p className="text-xs font-medium">
+                💰 Transaction Fee: ₹5 handling charge per withdrawal
+              </p>
+              {formData.amount && parseFloat(formData.amount) > 0 && (
+                <p className="text-xs mt-1 opacity-75">
+                  You'll receive:{" "}
+                  <span className="font-semibold">
+                    ₹{(parseFloat(formData.amount) - 5).toFixed(2)}
+                  </span>
+                  {parseFloat(formData.amount) <= 5 && (
+                    <span className="text-red-500 font-medium ml-1">
+                      (Insufficient)
+                    </span>
+                  )}
+                </p>
+              )}
             </div>
 
             {/* UPI Details Section */}
@@ -413,13 +407,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     theme === "light" ? "text-gray-900" : "text-white"
                   }`}
                 >
-                  <FiUser className="text-cyan-500" />
+                  <FiUser className="text-emerald-500" />
                   UPI Details
                 </h3>
 
-                <div>
+                <div className="space-y-3">
                   <label
-                    className={`block text-sm font-medium mb-2 theme-transition ${
+                    className={`block text-sm font-medium theme-transition ${
                       theme === "light" ? "text-gray-700" : "text-gray-300"
                     }`}
                   >
@@ -432,20 +426,20 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       onChange={(e) =>
                         handleInputChange("upiId", e.target.value.toLowerCase())
                       }
-                      placeholder="e.g., yourname@paytm, 9876543210@ybl"
-                      className={`flex-1 px-4 py-3 rounded-lg border transition-colors ${
+                      placeholder="yourname@paytm, 9876543210@ybl"
+                      className={`flex-1 px-3 py-3 rounded-lg border transition-colors ${
                         errors.upiId
                           ? "border-red-300 focus:border-red-500"
                           : upiVerificationStatus === "verified"
                           ? "border-green-300 focus:border-green-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       disabled={isProcessing || isVerifyingUpi}
                     />
                     <button
@@ -454,37 +448,37 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       disabled={
                         isProcessing || isVerifyingUpi || !formData.upiId.trim()
                       }
-                      className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+                      className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 text-sm ${
                         upiVerificationStatus === "verified"
                           ? "bg-green-600 hover:bg-green-700 text-white"
                           : upiVerificationStatus === "failed"
                           ? "bg-red-600 hover:bg-red-700 text-white"
-                          : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                          : "bg-emerald-600 hover:bg-emerald-700 text-white"
                       } ${
                         isProcessing || isVerifyingUpi || !formData.upiId.trim()
                           ? "opacity-50 cursor-not-allowed"
-                          : "hover:scale-[1.02]"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/50 min-w-[100px]`}
+                          : ""
+                      } focus:outline-none min-w-[80px]`}
                     >
                       {isVerifyingUpi ? (
-                        <div className="flex items-center justify-center gap-2">
+                        <div className="flex items-center justify-center">
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         </div>
                       ) : upiVerificationStatus === "verified" ? (
-                        "✓ Verified"
+                        "✓"
                       ) : upiVerificationStatus === "failed" ? (
-                        "✗ Failed"
+                        "✗"
                       ) : (
                         "Verify"
                       )}
                     </button>
                   </div>
                   {errors.upiId && (
-                    <p className="text-red-500 text-sm mt-1">{errors.upiId}</p>
+                    <p className="text-red-500 text-sm">{errors.upiId}</p>
                   )}
                   {upiVerificationStatus === "verified" && !errors.upiId && (
-                    <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
-                      <span>✓</span> UPI ID verified successfully
+                    <p className="text-green-600 dark:text-green-400 text-sm flex items-center gap-1">
+                      <span>✓</span> Verified
                     </p>
                   )}
                 </div>
@@ -505,8 +499,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     theme === "light" ? "text-gray-900" : "text-white"
                   }`}
                 >
-                  <FiCreditCard className="text-cyan-500" />
-                  Bank Account Details
+                  <FiCreditCard className="text-emerald-500" />
+                  Bank Details
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -525,18 +519,18 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       onChange={(e) =>
                         handleInputChange("accountHolderName", e.target.value)
                       }
-                      placeholder="Full name as per bank records"
-                      className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                      placeholder="Full name as per bank"
+                      className={`w-full px-3 py-3 rounded-lg border transition-colors ${
                         errors.accountHolderName
                           ? "border-red-300 focus:border-red-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       disabled={isProcessing}
                     />
                     {errors.accountHolderName && (
@@ -562,17 +556,17 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         handleInputChange("bankName", e.target.value)
                       }
                       placeholder="e.g., State Bank of India"
-                      className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                      className={`w-full px-3 py-3 rounded-lg border transition-colors ${
                         errors.bankName
                           ? "border-red-300 focus:border-red-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       disabled={isProcessing}
                     />
                     {errors.bankName && (
@@ -600,18 +594,18 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                           e.target.value.replace(/\D/g, "")
                         )
                       }
-                      placeholder="Enter account number"
-                      className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                      placeholder="Account number"
+                      className={`w-full px-3 py-3 rounded-lg border transition-colors ${
                         errors.accountNumber
                           ? "border-red-300 focus:border-red-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       disabled={isProcessing}
                     />
                     {errors.accountNumber && (
@@ -640,17 +634,17 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         )
                       }
                       placeholder="Re-enter account number"
-                      className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                      className={`w-full px-3 py-3 rounded-lg border transition-colors ${
                         errors.confirmAccountNumber
                           ? "border-red-300 focus:border-red-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       disabled={isProcessing}
                     />
                     {errors.confirmAccountNumber && (
@@ -679,17 +673,17 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         )
                       }
                       placeholder="e.g., SBIN0000001"
-                      className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                      className={`w-full px-3 py-3 rounded-lg border transition-colors ${
                         errors.ifscCode
                           ? "border-red-300 focus:border-red-500"
                           : theme === "light"
-                          ? "border-gray-300 focus:border-cyan-500"
-                          : "border-neutral-600 focus:border-cyan-400"
+                          ? "border-gray-300 focus:border-emerald-500"
+                          : "border-neutral-600 focus:border-emerald-400"
                       } ${
                         theme === "light"
                           ? "bg-white text-gray-900"
                           : "bg-neutral-800 text-white"
-                      } focus:outline-none focus:ring-2 focus:ring-cyan-500/20`}
+                      } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
                       maxLength={11}
                       disabled={isProcessing}
                     />
@@ -705,22 +699,17 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
 
             {/* Security Notice */}
             <div
-              className={`p-4 rounded-lg border-l-4 border-cyan-500 theme-transition ${
+              className={`p-4 rounded-lg border-l-4 border-emerald-500 theme-transition ${
                 theme === "light"
-                  ? "bg-cyan-50 text-cyan-700"
-                  : "bg-cyan-950/30 text-cyan-300"
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-emerald-950/30 text-emerald-300"
               }`}
             >
               <p className="text-sm">
-                <strong>Security Note:</strong> Your{" "}
-                {withdrawalMethod === "upi" ? "UPI ID" : "bank details"}{" "}
-                {withdrawalMethod === "upi" ? "is" : "are"} encrypted and
-                securely processed through our in-house system. Withdrawals
-                typically take{" "}
-                {withdrawalMethod === "upi"
-                  ? "a few minutes"
-                  : "1-2 business days"}{" "}
-                to reflect in your account.
+                <strong>🔒 Secure Processing:</strong> Your{" "}
+                {withdrawalMethod === "upi" ? "UPI ID" : "bank details"} will be
+                encrypted and processed securely. Funds typically arrive in{" "}
+                {withdrawalMethod === "upi" ? "minutes" : "1-2 business days"}.
               </p>
             </div>
 
@@ -744,7 +733,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                 className={`flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-medium transition-all duration-200 ${
                   isProcessing
                     ? "opacity-50 cursor-not-allowed"
-                    : "hover:scale-[1.02] hover:shadow-lg"
+                    : "hover:shadow-lg"
                 } focus:outline-none focus:ring-2 focus:ring-emerald-500/50`}
               >
                 {isProcessing ? (
@@ -753,7 +742,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     Processing...
                   </div>
                 ) : (
-                  "Submit Withdrawal Request"
+                  "Submit Request"
                 )}
               </button>
             </div>
