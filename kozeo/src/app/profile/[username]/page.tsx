@@ -7,6 +7,7 @@ import type { KeyboardEvent } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import TransactionModal from "@/components/common/TransactionModal";
+import WithdrawalModal from "@/components/common/WithdrawalModal";
 import {
   FiStar,
   FiCalendar,
@@ -205,6 +206,7 @@ export default function UserProfilePage() {
   const [walletData, setWalletData] = useState<any>(null);
   const [walletLoading, setWalletLoading] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
   const [walletCurrency, setWalletCurrency] = useState<string>("INR"); // Default to INR
 
   // Get current user data for authentication checks
@@ -280,6 +282,17 @@ export default function UserProfilePage() {
   useEffect(() => {
     setTempSelectedSkills(selectedSkills);
   }, [selectedSkills]);
+
+  // Handle withdrawal function
+  const handleWithdraw = async () => {
+    if (!profile?.id || !walletData?.amount) {
+      alert("No funds available for withdrawal");
+      return;
+    }
+
+    // Open the withdrawal modal
+    setShowWithdrawalModal(true);
+  };
 
   // Extract all unique skills from user's gigs
   const allSkills = useMemo(() => {
@@ -970,7 +983,7 @@ export default function UserProfilePage() {
                             : `${getCurrencySymbol(
                                 walletCurrency
                               )}${totalEarnings}`,
-                          label: "Wallet",
+                          label: "Earning",
                           color: "text-emerald-400",
                           bgGradient:
                             theme === "light"
@@ -1129,6 +1142,7 @@ export default function UserProfilePage() {
                       {item.isWallet && (
                         <div className="space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
                           <button
+                            onClick={handleWithdraw}
                             className="group/btn w-full relative overflow-hidden px-4 py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
                             style={{
                               background:
@@ -2051,6 +2065,15 @@ export default function UserProfilePage() {
         onClose={() => setShowTransactionModal(false)}
         walletData={walletData}
         currency={walletCurrency}
+      />
+
+      {/* Withdrawal Modal */}
+      <WithdrawalModal
+        isOpen={showWithdrawalModal}
+        onClose={() => setShowWithdrawalModal(false)}
+        walletAmount={totalEarnings}
+        currency={walletCurrency}
+        getCurrencySymbol={getCurrencySymbol}
       />
     </>
   );
