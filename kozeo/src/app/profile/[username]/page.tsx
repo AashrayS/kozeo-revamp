@@ -240,7 +240,16 @@ export default function UserProfilePage() {
         }
       } catch (err: any) {
         console.error("Error fetching profile:", err);
-        setError(err.message || "Failed to load profile");
+        // Check if it's specifically a "user not found" error
+        if (
+          err.message &&
+          (err.message.includes("User not found") ||
+            err.message.includes("not found"))
+        ) {
+          setError("User not found");
+        } else {
+          setError(err.message || "Failed to load profile");
+        }
       } finally {
         setLoading(false);
       }
@@ -485,8 +494,60 @@ export default function UserProfilePage() {
           <Sidebar />
           <div className="flex flex-1">
             <main className="flex-1 p-6 overflow-y-auto">
-              <div className="flex justify-center items-center py-20">
-                <div className="text-red-400">{error}</div>
+              <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center max-w-md mx-auto">
+                  <div className="text-8xl mb-6 animate-bounce">🤖</div>
+                  <h2
+                    className={`text-4xl font-bold mb-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent ${
+                      theme === "dark" ? "drop-shadow-lg" : ""
+                    }`}
+                  >
+                    Oops! Profile not found
+                  </h2>
+                  <p
+                    className={`text-xl mb-6 font-medium ${
+                      theme === "dark" ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    Even our best developers can't find this page! 🕵️‍♂️
+                  </p>
+                  <p
+                    className={`text-lg mb-8 leading-relaxed ${
+                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    It seems this profile has mastered the ancient art of
+                    digital hide-and-seek. Maybe try refreshing, or check if
+                    you've got the right username? 🎭
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                    >
+                      Try Again 🔄
+                    </button>
+                    <button
+                      onClick={() => router.push("/gigs")}
+                      className={`px-8 py-3 rounded-xl font-semibold border-2 transition-all duration-200 hover:scale-105 ${
+                        theme === "dark"
+                          ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
+                          : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                      }`}
+                    >
+                      Browse Gigs 🎯
+                    </button>
+                  </div>
+                  {/* <div className="mt-8">
+                    <p
+                      className={`text-sm ${
+                        theme === "dark" ? "text-gray-500" : "text-gray-500"
+                      }`}
+                    >
+                      Error Code: {error} 📋
+                    </p>
+                  </div> */}
+                </div>
               </div>
             </main>
           </div>
@@ -695,848 +756,991 @@ export default function UserProfilePage() {
         <div className="flex-1 flex flex-col lg:flex-row p-4 sm:p-8 gap-0 lg:gap-8 justify-center items-start">
           {/* Main Content */}
           <main className="flex-1 flex flex-col gap-8 items-stretch justify-center w-full max-w-8xl px-4 sm:px-6 lg:pr-10 mx-auto py-8">
-            {/* Profile Header */}
-            <section
-              className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
-              }`}
-            >
-              <h2
-                className={`text-3xl md:text-4xl font-light tracking-tight mb-8 ${
-                  theme === "light" ? "text-gray-900" : "text-white"
+            {/* Loading State */}
+            {loading && (
+              <section
+                className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  theme === "light"
+                    ? "bg-white/90 border-gray-200"
+                    : "bg-neutral-900/70 border-neutral-800"
                 }`}
               >
-                User Profile
-              </h2>
-
-              {/* Profile Card */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
-                {/* Avatar */}
-                <ProfileImage
-                  profilePic={profile.profile_Picture || ""}
-                  username={profile.username}
-                  size="lg"
-                />
-
-                {/* User Info */}
-                <div className="text-center sm:text-left flex-1">
-                  <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      <h3
-                        className={`text-2xl lg:text-3xl font-light tracking-tight theme-transition ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        {profile.first_name} {profile.last_name}
-                      </h3>
-                      {canViewSensitiveInfo && (
-                        <button
-                          onClick={() =>
-                            router.push(`/profile/${username}/edit`)
-                          }
-                          className="px-3 py-1.5 text-sm bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200"
-                          type="button"
-                        >
-                          Edit Profile
-                        </button>
-                      )}
-                    </div>
-                    {/* Achievements beside username for lg+ screens */}
-                    {profile.achievements &&
-                      profile.achievements.length > 0 && (
-                        <div className="hidden lg:flex flex-wrap gap-2 ml-6">
-                          {profile.achievements.map((achievement, idx) => (
-                            <div
-                              key={achievement.id}
-                              className="inline-block"
-                              title={achievement.title}
-                            >
-                              <img
-                                src={achievement.icon}
-                                alt={achievement.title}
-                                className="w-8 h-8 rounded-lg hover:scale-110 transition-transform object-cover"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                  </div>
-
-                  <div
-                    className={`text-lg font-medium mb-3 theme-transition ${
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="w-8 h-8 border-4 border-cyan-200 border-t-cyan-600 rounded-full animate-spin mb-4"></div>
+                  <p
+                    className={`text-lg ${
                       theme === "light" ? "text-gray-600" : "text-gray-400"
                     }`}
                   >
-                    @{profile.username}
-                  </div>
+                    Loading profile...
+                  </p>
+                </div>
+              </section>
+            )}
 
-                  <p
-                    className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${
-                      theme === "light" ? "text-gray-600" : "text-gray-300"
+            {/* Error State */}
+            {error && !loading && (
+              <section
+                className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  theme === "light"
+                    ? "bg-white/90 border-gray-200"
+                    : "bg-neutral-900/70 border-neutral-800"
+                }`}
+              >
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  {error &&
+                  (error.toLowerCase().includes("user not found") ||
+                    error.toLowerCase().includes("not found")) ? (
+                    <>
+                      <div className="text-6xl mb-4">🕵️‍♂️</div>
+                      <h2
+                        className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
+                          theme === "light" ? "text-gray-900" : "text-white"
+                        }`}
+                      >
+                        User Not Foundd
+                      </h2>
+                      <p
+                        className={`text-lg mb-6 font-medium ${
+                          theme === "light" ? "text-gray-700" : "text-gray-300"
+                        }`}
+                      >
+                        Looks like this user has mastered the art of digital
+                        invisibility! 🥷
+                      </p>
+                      <p
+                        className={`text-base mb-8 max-w-md leading-relaxed ${
+                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      >
+                        Either they're playing the ultimate hide-and-seek game,
+                        or this profile decided to take a vacation to the
+                        digital Bermuda Triangle. 🌴
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-6xl mb-4">⚠️</div>
+                      <h2
+                        className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
+                          theme === "light" ? "text-gray-900" : "text-white"
+                        }`}
+                      >
+                        Oops! Something Went Wrong
+                      </h2>
+                      <p
+                        className={`text-lg mb-6 ${
+                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      >
+                        Our servers are having a bit of a coffee break! ☕
+                      </p>
+                      <p
+                        className={`text-sm mb-8 max-w-md ${
+                          theme === "light" ? "text-gray-500" : "text-gray-500"
+                        }`}
+                      >
+                        Error: {error}
+                      </p>
+                    </>
+                  )}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <button
+                      onClick={() => router.back()}
+                      className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200 font-medium"
+                    >
+                      Go Back
+                    </button>
+                    <button
+                      onClick={() => router.push("/gigs")}
+                      className={`px-6 py-3 rounded-lg border transition-all duration-200 font-medium ${
+                        theme === "light"
+                          ? "border-gray-300 text-gray-700 hover:bg-gray-50"
+                          : "border-neutral-600 text-gray-300 hover:bg-neutral-800"
+                      }`}
+                    >
+                      Browse Gigs
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Profile Content - Only show when profile is loaded and no error */}
+            {!loading && !error && profile && (
+              <>
+                {/* Profile Header */}
+                <section
+                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    theme === "light"
+                      ? "bg-white/90 border-gray-200"
+                      : "bg-neutral-900/70 border-neutral-800"
+                  }`}
+                >
+                  <h2
+                    className={`text-3xl md:text-4xl font-light tracking-tight mb-8 ${
+                      theme === "light" ? "text-gray-900" : "text-white"
                     }`}
                   >
-                    {profile.bio}
-                  </p>
+                    User Profile
+                  </h2>
 
-                  <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
-                    <span
-                      className={`px-3 py-1 text-sm rounded-full font-medium border theme-transition ${
-                        theme === "light"
-                          ? "bg-green-50 border-green-200 text-green-700"
-                          : "bg-green-950/50 border-green-800/50 text-green-300"
-                      }`}
-                    >
-                      Active
-                    </span>
-                    <span
-                      className={`text-sm theme-transition ${
-                        theme === "light" ? "text-gray-500" : "text-gray-500"
-                      }`}
-                    >
-                      Member since 2024
-                    </span>
-                  </div>
+                  {/* Profile Card */}
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
+                    {/* Avatar */}
+                    <ProfileImage
+                      profilePic={profile.profile_Picture || ""}
+                      username={profile.username}
+                      size="lg"
+                    />
 
-                  {/* Links */}
-                  {profile.links && profile.links.length > 0 && (
-                    <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-                      {profile.links.map((link, idx) => (
-                        <a
-                          key={idx}
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`text-sm hover:scale-105 transition-all duration-200 theme-transition ${
+                    {/* User Info */}
+                    <div className="text-center sm:text-left flex-1">
+                      <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-3 mb-4">
+                        <div className="flex items-center gap-3">
+                          <h3
+                            className={`text-2xl lg:text-3xl font-light tracking-tight theme-transition ${
+                              theme === "light" ? "text-gray-900" : "text-white"
+                            }`}
+                          >
+                            {profile.first_name} {profile.last_name}
+                          </h3>
+                          {canViewSensitiveInfo && (
+                            <button
+                              onClick={() =>
+                                router.push(`/profile/${username}/edit`)
+                              }
+                              className="px-3 py-1.5 text-sm bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200"
+                              type="button"
+                            >
+                              Edit Profile
+                            </button>
+                          )}
+                        </div>
+                        {/* Achievements beside username for lg+ screens */}
+                        {profile.achievements &&
+                          profile.achievements.length > 0 && (
+                            <div className="hidden lg:flex flex-wrap gap-2 ml-6">
+                              {profile.achievements.map((achievement, idx) => (
+                                <div
+                                  key={achievement.id}
+                                  className="inline-block"
+                                  title={achievement.title}
+                                >
+                                  <img
+                                    src={achievement.icon}
+                                    alt={achievement.title}
+                                    className="w-8 h-8 rounded-lg hover:scale-110 transition-transform object-cover"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                      </div>
+
+                      <div
+                        className={`text-lg font-medium mb-3 theme-transition ${
+                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      >
+                        @{profile.username}
+                      </div>
+
+                      <p
+                        className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${
+                          theme === "light" ? "text-gray-600" : "text-gray-300"
+                        }`}
+                      >
+                        {profile.bio}
+                      </p>
+
+                      <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
+                        <span
+                          className={`px-3 py-1 text-sm rounded-full font-medium border theme-transition ${
                             theme === "light"
-                              ? "text-cyan-600 hover:text-cyan-700"
-                              : "text-cyan-400 hover:text-cyan-300"
+                              ? "bg-green-50 border-green-200 text-green-700"
+                              : "bg-green-950/50 border-green-800/50 text-green-300"
                           }`}
                         >
-                          {link.replace(/^https?:\/\//, "").replace(/\/$/, "")}
-                        </a>
+                          Active
+                        </span>
+                        <span
+                          className={`text-sm theme-transition ${
+                            theme === "light"
+                              ? "text-gray-500"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          Member since 2024
+                        </span>
+                      </div>
+
+                      {/* Links */}
+                      {profile.links && profile.links.length > 0 && (
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                          {profile.links.map((link, idx) => (
+                            <a
+                              key={idx}
+                              href={link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`text-sm hover:scale-105 transition-all duration-200 theme-transition ${
+                                theme === "light"
+                                  ? "text-cyan-600 hover:text-cyan-700"
+                                  : "text-cyan-400 hover:text-cyan-300"
+                              }`}
+                            >
+                              {link
+                                .replace(/^https?:\/\//, "")
+                                .replace(/\/$/, "")}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Achievements Board for small screens */}
+                  {profile.achievements && profile.achievements.length > 0 && (
+                    <div className="flex flex-wrap gap-3 justify-center sm:justify-start mt-8 lg:hidden">
+                      {profile.achievements.map((achievement, idx) => (
+                        <div
+                          key={achievement.id}
+                          className="inline-block"
+                          title={achievement.title}
+                        >
+                          <img
+                            src={achievement.icon}
+                            alt={achievement.title}
+                            className="w-12 h-12 rounded-lg hover:scale-110 transition-transform object-cover"
+                          />
+                        </div>
                       ))}
                     </div>
                   )}
-                </div>
-              </div>
+                </section>
 
-              {/* Achievements Board for small screens */}
-              {profile.achievements && profile.achievements.length > 0 && (
-                <div className="flex flex-wrap gap-3 justify-center sm:justify-start mt-8 lg:hidden">
-                  {profile.achievements.map((achievement, idx) => (
-                    <div
-                      key={achievement.id}
-                      className="inline-block"
-                      title={achievement.title}
-                    >
-                      <img
-                        src={achievement.icon}
-                        alt={achievement.title}
-                        className="w-12 h-12 rounded-lg hover:scale-110 transition-transform object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {/* Privacy Notice for non-owners */}
-            {!canViewSensitiveInfo && userLoggedIn && (
-              <section
-                className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
-                  theme === "light"
-                    ? "bg-blue-50/80 border-blue-200/50 text-blue-700"
-                    : "bg-blue-950/30 border-blue-800/50 text-blue-300"
-                }`}
-              >
-                <p className="text-sm flex items-center gap-2">
-                  <FiUsers className="text-base" />
-                  You are viewing {profile.first_name}'s public profile. Some
-                  information like wallet details are private.
-                </p>
-              </section>
-            )}
-
-            {/* Login prompt for non-authenticated users */}
-            {!userLoggedIn && (
-              <section
-                className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
-                  theme === "light"
-                    ? "bg-amber-50/80 border-amber-200/50 text-amber-700"
-                    : "bg-amber-950/30 border-amber-800/50 text-amber-300"
-                }`}
-              >
-                <p className="text-sm flex items-center gap-2">
-                  <FiUsers className="text-base" />
-                  <button
-                    onClick={() => router.push("/login")}
-                    className="underline hover:opacity-80 transition"
-                  >
-                    Login
-                  </button>{" "}
-                  to view more details and interact with this profile.
-                </p>
-              </section>
-            )}
-
-            {/* Profile Stats Grid */}
-            <section
-              className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                theme === "light"
-                  ? "bg-white/95 border-gray-200"
-                  : "bg-neutral-900/80 border-neutral-800"
-              }`}
-            >
-              {/* Section Header */}
-              <div className="mb-6 sm:mb-8">
-                <h3
-                  className={`text-xl sm:text-2xl font-light tracking-tight mb-2 ${
-                    theme === "light" ? "text-gray-900" : "text-white"
-                  }`}
-                >
-                  Performance Overview
-                </h3>
-                <p
-                  className={`text-xs sm:text-sm ${
-                    theme === "light" ? "text-gray-500" : "text-gray-400"
-                  }`}
-                >
-                  Key metrics and achievements
-                </p>
-              </div>
-
-              {/* Stats Grid - Mobile-first responsive design */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                {[
-                  {
-                    count: profile.gigsHosted.length,
-                    label: "Gigs Hosted",
-                    color: "text-cyan-400",
-                    bgGradient:
+                {/* Privacy Notice for non-owners */}
+                {!canViewSensitiveInfo && userLoggedIn && (
+                  <section
+                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
                       theme === "light"
-                        ? "from-cyan-50 via-blue-50 to-indigo-50"
-                        : "from-cyan-950/50 via-blue-950/50 to-indigo-950/50",
-                    borderGradient:
-                      theme === "light"
-                        ? "from-cyan-200 to-blue-200"
-                        : "from-cyan-800/50 to-blue-800/50",
-                    iconBg:
-                      theme === "light"
-                        ? "bg-gradient-to-br from-cyan-100 to-blue-100"
-                        : "bg-gradient-to-br from-cyan-900/50 to-blue-900/50",
-                    icon: <FiUsers className="text-lg text-cyan-400" />,
-                    shadowColor: "hover:shadow-cyan-200/50",
-                  },
-                  {
-                    count: avgRating.toFixed(1),
-                    label: "Average Rating",
-                    color: "text-yellow-400",
-                    bgGradient:
-                      theme === "light"
-                        ? "from-yellow-50 via-orange-50 to-amber-50"
-                        : "from-yellow-950/50 via-orange-950/50 to-amber-950/50",
-                    borderGradient:
-                      theme === "light"
-                        ? "from-yellow-200 to-orange-200"
-                        : "from-yellow-800/50 to-orange-800/50",
-                    iconBg:
-                      theme === "light"
-                        ? "bg-gradient-to-br from-yellow-100 to-orange-100"
-                        : "bg-gradient-to-br from-yellow-900/50 to-orange-900/50",
-                    icon: (
-                      <FiStar
-                        className="text-lg text-yellow-400"
-                        fill="currentColor"
-                      />
-                    ),
-                    suffix: avgRating > 0 ? "/5.0" : "",
-                    shadowColor: "hover:shadow-yellow-200/50",
-                  },
-                  {
-                    count: profile.gigsCollaborated?.length || 0,
-                    label: "Collaborations",
-                    color: "text-purple-400",
-                    bgGradient:
-                      theme === "light"
-                        ? "from-purple-50 via-violet-50 to-indigo-50"
-                        : "from-purple-950/50 via-violet-950/50 to-indigo-950/50",
-                    borderGradient:
-                      theme === "light"
-                        ? "from-purple-200 to-violet-200"
-                        : "from-purple-800/50 to-violet-800/50",
-                    iconBg:
-                      theme === "light"
-                        ? "bg-gradient-to-br from-purple-100 to-violet-100"
-                        : "bg-gradient-to-br from-purple-900/50 to-violet-900/50 ",
-                    icon: <FiUsers className="text-lg text-purple-400" />,
-                    shadowColor: "hover:shadow-purple-200/50",
-                  },
-
-                  // Only show wallet info if user can view sensitive information
-                  ...(canViewSensitiveInfo
-                    ? [
-                        {
-                          count: walletLoading
-                            ? "..."
-                            : `${getCurrencySymbol(
-                                walletCurrency
-                              )}${totalEarnings}`,
-                          label: "Earning",
-                          color: "text-emerald-400",
-                          bgGradient:
-                            theme === "light"
-                              ? "from-emerald-50 via-green-50 to-teal-50"
-                              : "from-emerald-950/50 via-green-950/50 to-teal-950/50",
-                          borderGradient:
-                            theme === "light"
-                              ? "from-emerald-200 to-green-200"
-                              : "from-emerald-800/50 to-green-800/50",
-                          iconBg:
-                            theme === "light"
-                              ? "bg-gradient-to-br from-emerald-100 to-green-100"
-                              : "bg-gradient-to-br from-emerald-900/50 to-green-900/50",
-                          icon: (
-                            <FiDollarSign className="text-lg text-emerald-400" />
-                          ),
-                          isWallet: true,
-                          shadowColor: "hover:shadow-emerald-200/50",
-                        },
-                      ]
-                    : []),
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${
-                      item.bgGradient
-                    } border-0 bg-clip-padding theme-transition cursor-pointer ${
-                      theme === "light"
-                        ? "sm:shadow-sm hover:shadow-md backdrop-blur-sm"
-                        : "sm:shadow-sm hover:shadow-lg backdrop-blur-sm"
+                        ? "bg-blue-50/80 border-blue-200/50 text-blue-700"
+                        : "bg-blue-950/30 border-blue-800/50 text-blue-300"
                     }`}
-                    style={{
-                      backgroundImage:
-                        theme === "light"
-                          ? `linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`
-                          : `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`,
-                      transform: "perspective(1000px)",
-                      transition:
-                        "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                      border:
-                        theme === "light"
-                          ? "1px solid rgba(229, 231, 235, 0.6)"
-                          : "1px solid rgba(55, 65, 81, 0.4)",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform =
-                        "perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-8px) scale(1.02)";
-                      e.currentTarget.style.boxShadow =
-                        theme === "light"
-                          ? `0 12px 25px -8px ${
-                              item.shadowColor
-                                ?.replace("hover:", "")
-                                .replace("/50", "/20") || "rgba(0,0,0,0.08)"
-                            }, 0 0 0 1px rgba(255,255,255,0.05)`
-                          : "0 12px 25px -8px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform =
-                        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)";
-                      e.currentTarget.style.boxShadow =
-                        theme === "light"
-                          ? "0 4px 12px -3px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)"
-                          : "0 4px 12px -3px rgba(0, 0, 0, 0.15), 0 2px 4px -2px rgba(0, 0, 0, 0.1)";
-                    }}
                   >
-                    {/* Professional Gradient Border with Glow */}
-                    <div
-                      className={`absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-r ${item.borderGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
-                      style={{
-                        background: `linear-gradient(135deg, ${
-                          item.borderGradient.includes("cyan")
-                            ? "rgba(6, 182, 212, 0.3)"
-                            : item.borderGradient.includes("yellow")
-                            ? "rgba(245, 158, 11, 0.3)"
-                            : item.borderGradient.includes("purple")
-                            ? "rgba(147, 51, 234, 0.3)"
-                            : "rgba(16, 185, 129, 0.3)"
-                        } 0%, transparent 100%)`,
-                        filter: "blur(0.5px)",
-                      }}
+                    <p className="text-sm flex items-center gap-2">
+                      <FiUsers className="text-base" />
+                      You are viewing {profile.first_name}'s public profile.
+                      Some information like wallet details are private.
+                    </p>
+                  </section>
+                )}
+
+                {/* Login prompt for non-authenticated users */}
+                {!userLoggedIn && (
+                  <section
+                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
+                      theme === "light"
+                        ? "bg-amber-50/80 border-amber-200/50 text-amber-700"
+                        : "bg-amber-950/30 border-amber-800/50 text-amber-300"
+                    }`}
+                  >
+                    <p className="text-sm flex items-center gap-2">
+                      <FiUsers className="text-base" />
+                      <button
+                        onClick={() => router.push("/login")}
+                        className="underline hover:opacity-80 transition"
+                      >
+                        Login
+                      </button>{" "}
+                      to view more details and interact with this profile.
+                    </p>
+                  </section>
+                )}
+
+                {/* Profile Stats Grid */}
+                <section
+                  className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    theme === "light"
+                      ? "bg-white/95 border-gray-200"
+                      : "bg-neutral-900/80 border-neutral-800"
+                  }`}
+                >
+                  {/* Section Header */}
+                  <div className="mb-6 sm:mb-8">
+                    <h3
+                      className={`text-xl sm:text-2xl font-light tracking-tight mb-2 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}
                     >
-                      <div
-                        className={`w-full h-full rounded-2xl bg-gradient-to-br ${item.bgGradient}`}
-                      ></div>
-                    </div>
+                      Performance Overview
+                    </h3>
+                    <p
+                      className={`text-xs sm:text-sm ${
+                        theme === "light" ? "text-gray-500" : "text-gray-400"
+                      }`}
+                    >
+                      Key metrics and achievements
+                    </p>
+                  </div>
 
-                    {/* Subtle Shimmer Effect on Hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                  {/* Stats Grid - Mobile-first responsive design */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                    {[
+                      {
+                        count: profile.gigsHosted.length,
+                        label: "Gigs Hosted",
+                        color: "text-cyan-400",
+                        bgGradient:
+                          theme === "light"
+                            ? "from-cyan-50 via-blue-50 to-indigo-50"
+                            : "from-cyan-950/50 via-blue-950/50 to-indigo-950/50",
+                        borderGradient:
+                          theme === "light"
+                            ? "from-cyan-200 to-blue-200"
+                            : "from-cyan-800/50 to-blue-800/50",
+                        iconBg:
+                          theme === "light"
+                            ? "bg-gradient-to-br from-cyan-100 to-blue-100"
+                            : "bg-gradient-to-br from-cyan-900/50 to-blue-900/50",
+                        icon: <FiUsers className="text-lg text-cyan-400" />,
+                        shadowColor: "hover:shadow-cyan-200/50",
+                      },
+                      {
+                        count: avgRating.toFixed(1),
+                        label: "Average Rating",
+                        color: "text-yellow-400",
+                        bgGradient:
+                          theme === "light"
+                            ? "from-yellow-50 via-orange-50 to-amber-50"
+                            : "from-yellow-950/50 via-orange-950/50 to-amber-950/50",
+                        borderGradient:
+                          theme === "light"
+                            ? "from-yellow-200 to-orange-200"
+                            : "from-yellow-800/50 to-orange-800/50",
+                        iconBg:
+                          theme === "light"
+                            ? "bg-gradient-to-br from-yellow-100 to-orange-100"
+                            : "bg-gradient-to-br from-yellow-900/50 to-orange-900/50",
+                        icon: (
+                          <FiStar
+                            className="text-lg text-yellow-400"
+                            fill="currentColor"
+                          />
+                        ),
+                        suffix: avgRating > 0 ? "/5.0" : "",
+                        shadowColor: "hover:shadow-yellow-200/50",
+                      },
+                      {
+                        count: profile.gigsCollaborated?.length || 0,
+                        label: "Collaborations",
+                        color: "text-purple-400",
+                        bgGradient:
+                          theme === "light"
+                            ? "from-purple-50 via-violet-50 to-indigo-50"
+                            : "from-purple-950/50 via-violet-950/50 to-indigo-950/50",
+                        borderGradient:
+                          theme === "light"
+                            ? "from-purple-200 to-violet-200"
+                            : "from-purple-800/50 to-violet-800/50",
+                        iconBg:
+                          theme === "light"
+                            ? "bg-gradient-to-br from-purple-100 to-violet-100"
+                            : "bg-gradient-to-br from-purple-900/50 to-violet-900/50 ",
+                        icon: <FiUsers className="text-lg text-purple-400" />,
+                        shadowColor: "hover:shadow-purple-200/50",
+                      },
+
+                      // Only show wallet info if user can view sensitive information
+                      ...(canViewSensitiveInfo
+                        ? [
+                            {
+                              count: walletLoading
+                                ? "..."
+                                : `${getCurrencySymbol(
+                                    walletCurrency
+                                  )}${totalEarnings}`,
+                              label: "Earning",
+                              color: "text-emerald-400",
+                              bgGradient:
+                                theme === "light"
+                                  ? "from-emerald-50 via-green-50 to-teal-50"
+                                  : "from-emerald-950/50 via-green-950/50 to-teal-950/50",
+                              borderGradient:
+                                theme === "light"
+                                  ? "from-emerald-200 to-green-200"
+                                  : "from-emerald-800/50 to-green-800/50",
+                              iconBg:
+                                theme === "light"
+                                  ? "bg-gradient-to-br from-emerald-100 to-green-100"
+                                  : "bg-gradient-to-br from-emerald-900/50 to-green-900/50",
+                              icon: (
+                                <FiDollarSign className="text-lg text-emerald-400" />
+                              ),
+                              isWallet: true,
+                              shadowColor: "hover:shadow-emerald-200/50",
+                            },
+                          ]
+                        : []),
+                    ].map((item, idx) => (
                       <div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                        key={idx}
+                        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${
+                          item.bgGradient
+                        } border-0 bg-clip-padding theme-transition cursor-pointer ${
+                          theme === "light"
+                            ? "sm:shadow-sm hover:shadow-md backdrop-blur-sm"
+                            : "sm:shadow-sm hover:shadow-lg backdrop-blur-sm"
+                        }`}
                         style={{
-                          transform: "translateX(-100%)",
-                          animation: "shimmer 2s ease-in-out infinite",
+                          backgroundImage:
+                            theme === "light"
+                              ? `linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`
+                              : `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`,
+                          transform: "perspective(1000px)",
+                          transition:
+                            "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                          border:
+                            theme === "light"
+                              ? "1px solid rgba(229, 231, 235, 0.6)"
+                              : "1px solid rgba(55, 65, 81, 0.4)",
                         }}
-                      ></div>
-                    </div>
-
-                    {/* Enhanced Pattern Overlay */}
-                    <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_70%)]"></div>
-                      <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(255,255,255,0.1)_60deg,transparent_120deg)]"></div>
-                    </div>
-
-                    {/* Content with Enhanced Typography - Mobile Optimized */}
-                    <div className="relative p-4 sm:p-5 group-hover:translate-y-[-2px] transition-transform duration-400">
-                      <div className="flex items-start justify-between mb-3 sm:mb-4">
-                        <div className="flex-1">
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform =
+                            "perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-8px) scale(1.02)";
+                          e.currentTarget.style.boxShadow =
+                            theme === "light"
+                              ? `0 12px 25px -8px ${
+                                  item.shadowColor
+                                    ?.replace("hover:", "")
+                                    .replace("/50", "/20") || "rgba(0,0,0,0.08)"
+                                }, 0 0 0 1px rgba(255,255,255,0.05)`
+                              : "0 12px 25px -8px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform =
+                            "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)";
+                          e.currentTarget.style.boxShadow =
+                            theme === "light"
+                              ? "0 4px 12px -3px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)"
+                              : "0 4px 12px -3px rgba(0, 0, 0, 0.15), 0 2px 4px -2px rgba(0, 0, 0, 0.1)";
+                        }}
+                      >
+                        {/* Professional Gradient Border with Glow */}
+                        <div
+                          className={`absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-r ${item.borderGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
+                          style={{
+                            background: `linear-gradient(135deg, ${
+                              item.borderGradient.includes("cyan")
+                                ? "rgba(6, 182, 212, 0.3)"
+                                : item.borderGradient.includes("yellow")
+                                ? "rgba(245, 158, 11, 0.3)"
+                                : item.borderGradient.includes("purple")
+                                ? "rgba(147, 51, 234, 0.3)"
+                                : "rgba(16, 185, 129, 0.3)"
+                            } 0%, transparent 100%)`,
+                            filter: "blur(0.5px)",
+                          }}
+                        >
                           <div
-                            className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${item.color} mb-1 flex items-baseline gap-1 group-hover:scale-105 transition-transform duration-300`}
-                          >
-                            {item.count}
-                            {item.suffix && (
-                              <span
-                                className={`text-xs sm:text-sm font-normal transition-colors duration-300 ${
+                            className={`w-full h-full rounded-2xl bg-gradient-to-br ${item.bgGradient}`}
+                          ></div>
+                        </div>
+
+                        {/* Subtle Shimmer Effect on Hover */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                          <div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                            style={{
+                              transform: "translateX(-100%)",
+                              animation: "shimmer 2s ease-in-out infinite",
+                            }}
+                          ></div>
+                        </div>
+
+                        {/* Enhanced Pattern Overlay */}
+                        <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500">
+                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_70%)]"></div>
+                          <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(255,255,255,0.1)_60deg,transparent_120deg)]"></div>
+                        </div>
+
+                        {/* Content with Enhanced Typography - Mobile Optimized */}
+                        <div className="relative p-4 sm:p-5 group-hover:translate-y-[-2px] transition-transform duration-400">
+                          <div className="flex items-start justify-between mb-3 sm:mb-4">
+                            <div className="flex-1">
+                              <div
+                                className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${item.color} mb-1 flex items-baseline gap-1 group-hover:scale-105 transition-transform duration-300`}
+                              >
+                                {item.count}
+                                {item.suffix && (
+                                  <span
+                                    className={`text-xs sm:text-sm font-normal transition-colors duration-300 ${
+                                      theme === "light"
+                                        ? "text-gray-400 group-hover:text-gray-500"
+                                        : "text-gray-500 group-hover:text-gray-400"
+                                    }`}
+                                  >
+                                    {item.suffix}
+                                  </span>
+                                )}
+                              </div>
+                              <h4
+                                className={`text-xs font-semibold tracking-wide uppercase theme-transition group-hover:opacity-80 ${
                                   theme === "light"
-                                    ? "text-gray-400 group-hover:text-gray-500"
-                                    : "text-gray-500 group-hover:text-gray-400"
+                                    ? "text-gray-600"
+                                    : "text-gray-400"
                                 }`}
                               >
-                                {item.suffix}
-                              </span>
-                            )}
+                                {item.label}
+                              </h4>
+                            </div>
+                            <div
+                              className={`p-2 sm:p-3 rounded-xl ${item.iconBg} backdrop-blur-sm sm:shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
+                            >
+                              <div className="sm:group-hover:drop-shadow-lg transition-all duration-300">
+                                {item.icon}
+                              </div>
+                            </div>
                           </div>
+
+                          {/* Enhanced Wallet Actions - Mobile Optimized */}
+                          {item.isWallet && (
+                            <div className="space-y-2 sm:space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
+                              <button
+                                onClick={handleWithdraw}
+                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                                style={{
+                                  background:
+                                    theme === "light"
+                                      ? "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)"
+                                      : "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)",
+                                  boxShadow:
+                                    "0 4px 15px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+                                }}
+                              >
+                                {/* Button Shimmer Effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
+
+                                {/* Button Content */}
+                                <div className="relative flex items-center justify-center gap-1 sm:gap-2">
+                                  <svg
+                                    className="w-3 sm:w-4 h-3 sm:h-4 transition-transform duration-300 group-hover/btn:scale-110"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                                    />
+                                  </svg>
+                                  <span className="tracking-wide">
+                                    Withdraw
+                                  </span>
+                                </div>
+
+                                {/* Professional Border Highlight */}
+                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
+                              </button>
+
+                              <button
+                                onClick={() => setShowTransactionModal(true)}
+                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                                style={{
+                                  background:
+                                    theme === "light"
+                                      ? "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)"
+                                      : "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)",
+                                  boxShadow:
+                                    "0 4px 15px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+                                }}
+                              >
+                                {/* Button Shimmer Effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
+
+                                {/* Button Content */}
+                                <div className="relative flex items-center justify-center gap-1 sm:gap-2">
+                                  <FiEye className="text-xs sm:text-sm transition-transform duration-300 group-hover/btn:scale-110" />
+                                  <span className="tracking-wide">
+                                    Transactions
+                                  </span>
+                                </div>
+
+                                {/* Professional Border Highlight */}
+                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Professional Glow Effect */}
+                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                          <div
+                            className={`absolute inset-[-2px] rounded-2xl blur-md`}
+                            style={{
+                              background: `linear-gradient(135deg, ${
+                                item.borderGradient.includes("cyan")
+                                  ? "rgba(6, 182, 212, 0.15)"
+                                  : item.borderGradient.includes("yellow")
+                                  ? "rgba(245, 158, 11, 0.15)"
+                                  : item.borderGradient.includes("purple")
+                                  ? "rgba(147, 51, 234, 0.15)"
+                                  : "rgba(16, 185, 129, 0.15)"
+                              }, transparent)`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Gigs Hosted Section */}
+                <section
+                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    theme === "light"
+                      ? "bg-white/90 border-gray-200"
+                      : "bg-neutral-900/70 border-neutral-800"
+                  }`}
+                >
+                  <h3
+                    className={`text-2xl font-light tracking-tight mb-6 flex items-center gap-3 ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }`}
+                  >
+                    <FiUsers className="text-cyan-400" />
+                    Gigs Hosted ({filteredHostedGigs.length}
+                    {selectedSkills.length > 0
+                      ? ` of ${profile.gigsHosted.length}`
+                      : ""}
+                    )
+                    {selectedSkills.length > 0 && (
+                      <span
+                        className={`text-sm font-normal ${
+                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      >
+                        - Filtered by skills
+                      </span>
+                    )}
+                  </h3>
+                  <div className="space-y-6">
+                    {displayedHostedGigs.map((gig, index) => (
+                      <div
+                        key={index}
+                        className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                          theme === "light"
+                            ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
+                            : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                        }`}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                           <h4
-                            className={`text-xs font-semibold tracking-wide uppercase theme-transition group-hover:opacity-80 ${
+                            className={`text-lg font-medium theme-transition ${
+                              theme === "light" ? "text-gray-900" : "text-white"
+                            }`}
+                          >
+                            {gig.title}
+                          </h4>
+                          <div className="flex items-center gap-1">
+                            <FiStar
+                              className="text-yellow-400 text-sm"
+                              fill="currentColor"
+                            />
+                            <span className="text-sm text-yellow-400 font-medium">
+                              {gig.reviews && gig.reviews.length > 0
+                                ? (
+                                    gig.reviews.reduce(
+                                      (sum: number, review: any) =>
+                                        sum + review.rating,
+                                      0
+                                    ) / gig.reviews.length
+                                  ).toFixed(1)
+                                : "No rating"}
+                            </span>
+                          </div>
+                        </div>
+                        <p
+                          className={`text-sm mb-3 leading-relaxed theme-transition ${
+                            theme === "light"
+                              ? "text-gray-600"
+                              : "text-gray-300"
+                          }`}
+                        >
+                          {gig.description}
+                        </p>
+                        <div
+                          className={`text-sm mb-4 theme-transition ${
+                            theme === "light"
+                              ? "text-gray-500"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          Looking for:{" "}
+                          <span className="text-cyan-400 font-medium">
+                            {gig.looking_For}
+                          </span>
+                        </div>
+                        {/* Skills Tags */}
+                        {gig.skills && gig.skills.length > 0 && (
+                          <div className="mb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {gig.skills.map(
+                                (skill: string, skillIdx: number) => (
+                                  <span
+                                    key={skillIdx}
+                                    className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
+                                      selectedSkills.includes(skill)
+                                        ? theme === "light"
+                                          ? "bg-yellow-100 border-yellow-300 text-yellow-800"
+                                          : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
+                                        : theme === "light"
+                                        ? "bg-cyan-50 border-cyan-200 text-cyan-700"
+                                        : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300"
+                                    }`}
+                                  >
+                                    {skill}
+                                  </span>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        {gig.reviews && gig.reviews.length > 0 && (
+                          <div
+                            className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
+                              theme === "light"
+                                ? "bg-gray-50/80 border-gray-200/50"
+                                : "bg-neutral-900/50 border-neutral-700/50"
+                            }`}
+                          >
+                            <div
+                              className={`text-sm font-medium mb-2 theme-transition ${
+                                theme === "light"
+                                  ? "text-gray-900"
+                                  : "text-white"
+                              }`}
+                            >
+                              "{gig.reviews[0].title}"
+                            </div>
+                            <div
+                              className={`text-sm mb-2 theme-transition ${
+                                theme === "light"
+                                  ? "text-gray-600"
+                                  : "text-gray-300"
+                              }`}
+                            >
+                              {gig.reviews[0].description}
+                            </div>
+                            <div className="text-sm text-cyan-400 font-medium">
+                              - @{gig.reviews[0].author?.username}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Load More / Show Less button for Hosted Gigs */}
+                  {filteredHostedGigs.length > 5 && (
+                    <div className="mt-6 flex justify-center">
+                      <button
+                        onClick={toggleHostedGigs}
+                        className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                          theme === "light"
+                            ? "bg-white/60 border-gray-200/50 text-cyan-600 hover:bg-cyan-50 hover:border-cyan-300"
+                            : "bg-neutral-800/50 border-neutral-700/50 text-cyan-400 hover:bg-cyan-950/30 hover:border-cyan-600/50"
+                        }`}
+                      >
+                        {showAllHostedGigs
+                          ? `Show Less (${
+                              filteredHostedGigs.length - 5
+                            } hidden)`
+                          : `Load More Gigs (${
+                              filteredHostedGigs.length - 5
+                            } more)`}
+                      </button>
+                    </div>
+                  )}
+                </section>
+
+                {/* Collaborations Section */}
+                <section
+                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    theme === "light"
+                      ? "bg-white/90 border-gray-200"
+                      : "bg-neutral-900/70 border-neutral-800"
+                  }`}
+                >
+                  <h3
+                    className={`text-2xl font-light tracking-tight mb-6 flex items-center gap-3 ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }`}
+                  >
+                    <FiUsers className="text-purple-400" />
+                    Collaborations ({filteredCollaboratedGigs.length}
+                    {selectedSkills.length > 0
+                      ? ` of ${profile.gigsCollaborated?.length || 0}`
+                      : ""}
+                    )
+                    {selectedSkills.length > 0 && (
+                      <span
+                        className={`text-sm font-normal ${
+                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      >
+                        - Filtered by skills
+                      </span>
+                    )}
+                  </h3>
+                  <div className="space-y-6">
+                    {displayedCollaboratedGigs.map(
+                      (gig: any, index: number) => (
+                        <div
+                          key={index}
+                          className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                            theme === "light"
+                              ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
+                              : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                          }`}
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                            <h4
+                              className={`text-lg font-medium theme-transition ${
+                                theme === "light"
+                                  ? "text-gray-900"
+                                  : "text-white"
+                              }`}
+                            >
+                              {gig.title}
+                            </h4>
+                            <div className="flex items-center gap-1">
+                              <FiStar
+                                className="text-yellow-400 text-sm"
+                                fill="currentColor"
+                              />
+                              <span className="text-sm text-yellow-400 font-medium">
+                                {gig.reviews && gig.reviews.length > 0
+                                  ? (
+                                      gig.reviews.reduce(
+                                        (sum: number, review: any) =>
+                                          sum + review.rating,
+                                        0
+                                      ) / gig.reviews.length
+                                    ).toFixed(1)
+                                  : "No rating"}
+                              </span>
+                            </div>
+                          </div>
+                          <p
+                            className={`text-sm mb-3 leading-relaxed theme-transition ${
                               theme === "light"
                                 ? "text-gray-600"
+                                : "text-gray-300"
+                            }`}
+                          >
+                            {gig.description}
+                          </p>
+                          <div
+                            className={`text-sm mb-4 theme-transition ${
+                              theme === "light"
+                                ? "text-gray-500"
                                 : "text-gray-400"
                             }`}
                           >
-                            {item.label}
-                          </h4>
-                        </div>
-                        <div
-                          className={`p-2 sm:p-3 rounded-xl ${item.iconBg} backdrop-blur-sm sm:shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
-                        >
-                          <div className="sm:group-hover:drop-shadow-lg transition-all duration-300">
-                            {item.icon}
+                            Looking for:{" "}
+                            <span className="text-purple-400 font-medium">
+                              {gig.looking_For}
+                            </span>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* Enhanced Wallet Actions - Mobile Optimized */}
-                      {item.isWallet && (
-                        <div className="space-y-2 sm:space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
-                          <button
-                            onClick={handleWithdraw}
-                            className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                            style={{
-                              background:
+                          {/* Skills Tags */}
+                          {gig.skills && gig.skills.length > 0 && (
+                            <div className="mb-4">
+                              <div className="flex flex-wrap gap-2">
+                                {gig.skills.map(
+                                  (skill: string, skillIdx: number) => (
+                                    <span
+                                      key={skillIdx}
+                                      className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
+                                        selectedSkills.includes(skill)
+                                          ? theme === "light"
+                                            ? "bg-yellow-100 border-yellow-300 text-yellow-800"
+                                            : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
+                                          : theme === "light"
+                                          ? "bg-purple-50 border-purple-200 text-purple-700"
+                                          : "bg-purple-950/50 border-purple-800/50 text-purple-300"
+                                      }`}
+                                    >
+                                      {skill}
+                                    </span>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          {gig.reviews && gig.reviews.length > 0 && (
+                            <div
+                              className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
                                 theme === "light"
-                                  ? "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)"
-                                  : "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)",
-                              boxShadow:
-                                "0 4px 15px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                            }}
-                          >
-                            {/* Button Shimmer Effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
-
-                            {/* Button Content */}
-                            <div className="relative flex items-center justify-center gap-1 sm:gap-2">
-                              <svg
-                                className="w-3 sm:w-4 h-3 sm:h-4 transition-transform duration-300 group-hover/btn:scale-110"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                  ? "bg-gray-50/80 border-gray-200/50"
+                                  : "bg-neutral-900/50 border-neutral-700/50"
+                              }`}
+                            >
+                              <div
+                                className={`text-sm font-medium mb-2 theme-transition ${
+                                  theme === "light"
+                                    ? "text-gray-900"
+                                    : "text-white"
+                                }`}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                                />
-                              </svg>
-                              <span className="tracking-wide">Withdraw</span>
+                                "{gig.reviews[0].title}"
+                              </div>
+                              <div
+                                className={`text-sm mb-2 theme-transition ${
+                                  theme === "light"
+                                    ? "text-gray-600"
+                                    : "text-gray-300"
+                                }`}
+                              >
+                                {gig.reviews[0].description}
+                              </div>
+                              <div className="text-sm text-purple-400 font-medium">
+                                - @{gig.reviews[0].author?.username}
+                              </div>
                             </div>
-
-                            {/* Professional Border Highlight */}
-                            <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
-                          </button>
-
-                          <button
-                            onClick={() => setShowTransactionModal(true)}
-                            className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                            style={{
-                              background:
-                                theme === "light"
-                                  ? "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)"
-                                  : "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)",
-                              boxShadow:
-                                "0 4px 15px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                            }}
-                          >
-                            {/* Button Shimmer Effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
-
-                            {/* Button Content */}
-                            <div className="relative flex items-center justify-center gap-1 sm:gap-2">
-                              <FiEye className="text-xs sm:text-sm transition-transform duration-300 group-hover/btn:scale-110" />
-                              <span className="tracking-wide">
-                                Transactions
-                              </span>
-                            </div>
-
-                            {/* Professional Border Highlight */}
-                            <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
-                          </button>
+                          )}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Professional Glow Effect */}
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-                      <div
-                        className={`absolute inset-[-2px] rounded-2xl blur-md`}
-                        style={{
-                          background: `linear-gradient(135deg, ${
-                            item.borderGradient.includes("cyan")
-                              ? "rgba(6, 182, 212, 0.15)"
-                              : item.borderGradient.includes("yellow")
-                              ? "rgba(245, 158, 11, 0.15)"
-                              : item.borderGradient.includes("purple")
-                              ? "rgba(147, 51, 234, 0.15)"
-                              : "rgba(16, 185, 129, 0.15)"
-                          }, transparent)`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Gigs Hosted Section */}
-            <section
-              className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
-              }`}
-            >
-              <h3
-                className={`text-2xl font-light tracking-tight mb-6 flex items-center gap-3 ${
-                  theme === "light" ? "text-gray-900" : "text-white"
-                }`}
-              >
-                <FiUsers className="text-cyan-400" />
-                Gigs Hosted ({filteredHostedGigs.length}
-                {selectedSkills.length > 0
-                  ? ` of ${profile.gigsHosted.length}`
-                  : ""}
-                )
-                {selectedSkills.length > 0 && (
-                  <span
-                    className={`text-sm font-normal ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}
-                  >
-                    - Filtered by skills
-                  </span>
-                )}
-              </h3>
-              <div className="space-y-6">
-                {displayedHostedGigs.map((gig, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
-                      theme === "light"
-                        ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                        : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
-                    }`}
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                      <h4
-                        className={`text-lg font-medium theme-transition ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        {gig.title}
-                      </h4>
-                      <div className="flex items-center gap-1">
-                        <FiStar
-                          className="text-yellow-400 text-sm"
-                          fill="currentColor"
-                        />
-                        <span className="text-sm text-yellow-400 font-medium">
-                          {gig.reviews && gig.reviews.length > 0
-                            ? (
-                                gig.reviews.reduce(
-                                  (sum: number, review: any) =>
-                                    sum + review.rating,
-                                  0
-                                ) / gig.reviews.length
-                              ).toFixed(1)
-                            : "No rating"}
-                        </span>
-                      </div>
-                    </div>
-                    <p
-                      className={`text-sm mb-3 leading-relaxed theme-transition ${
-                        theme === "light" ? "text-gray-600" : "text-gray-300"
-                      }`}
-                    >
-                      {gig.description}
-                    </p>
-                    <div
-                      className={`text-sm mb-4 theme-transition ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      Looking for:{" "}
-                      <span className="text-cyan-400 font-medium">
-                        {gig.looking_For}
-                      </span>
-                    </div>
-                    {/* Skills Tags */}
-                    {gig.skills && gig.skills.length > 0 && (
-                      <div className="mb-4">
-                        <div className="flex flex-wrap gap-2">
-                          {gig.skills.map((skill: string, skillIdx: number) => (
-                            <span
-                              key={skillIdx}
-                              className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
-                                selectedSkills.includes(skill)
-                                  ? theme === "light"
-                                    ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                    : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
-                                  : theme === "light"
-                                  ? "bg-cyan-50 border-cyan-200 text-cyan-700"
-                                  : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300"
-                              }`}
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+                      )
                     )}
-                    {gig.reviews && gig.reviews.length > 0 && (
-                      <div
-                        className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
+                  </div>
+
+                  {/* Load More / Show Less button for Collaborated Gigs */}
+                  {filteredCollaboratedGigs.length > 5 && (
+                    <div className="mt-6 flex justify-center">
+                      <button
+                        onClick={toggleCollaboratedGigs}
+                        className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
                           theme === "light"
-                            ? "bg-gray-50/80 border-gray-200/50"
-                            : "bg-neutral-900/50 border-neutral-700/50"
+                            ? "bg-white/60 border-gray-200/50 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
+                            : "bg-neutral-800/50 border-neutral-700/50 text-purple-400 hover:bg-purple-950/30 hover:border-purple-600/50"
                         }`}
                       >
-                        <div
-                          className={`text-sm font-medium mb-2 theme-transition ${
-                            theme === "light" ? "text-gray-900" : "text-white"
-                          }`}
-                        >
-                          "{gig.reviews[0].title}"
-                        </div>
-                        <div
-                          className={`text-sm mb-2 theme-transition ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-300"
-                          }`}
-                        >
-                          {gig.reviews[0].description}
-                        </div>
-                        <div className="text-sm text-cyan-400 font-medium">
-                          - @{gig.reviews[0].author?.username}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Load More / Show Less button for Hosted Gigs */}
-              {filteredHostedGigs.length > 5 && (
-                <div className="mt-6 flex justify-center">
-                  <button
-                    onClick={toggleHostedGigs}
-                    className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                      theme === "light"
-                        ? "bg-white/60 border-gray-200/50 text-cyan-600 hover:bg-cyan-50 hover:border-cyan-300"
-                        : "bg-neutral-800/50 border-neutral-700/50 text-cyan-400 hover:bg-cyan-950/30 hover:border-cyan-600/50"
-                    }`}
-                  >
-                    {showAllHostedGigs
-                      ? `Show Less (${filteredHostedGigs.length - 5} hidden)`
-                      : `Load More Gigs (${
-                          filteredHostedGigs.length - 5
-                        } more)`}
-                  </button>
-                </div>
-              )}
-            </section>
-
-            {/* Collaborations Section */}
-            <section
-              className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
-              }`}
-            >
-              <h3
-                className={`text-2xl font-light tracking-tight mb-6 flex items-center gap-3 ${
-                  theme === "light" ? "text-gray-900" : "text-white"
-                }`}
-              >
-                <FiUsers className="text-purple-400" />
-                Collaborations ({filteredCollaboratedGigs.length}
-                {selectedSkills.length > 0
-                  ? ` of ${profile.gigsCollaborated?.length || 0}`
-                  : ""}
-                )
-                {selectedSkills.length > 0 && (
-                  <span
-                    className={`text-sm font-normal ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}
-                  >
-                    - Filtered by skills
-                  </span>
-                )}
-              </h3>
-              <div className="space-y-6">
-                {displayedCollaboratedGigs.map((gig: any, index: number) => (
-                  <div
-                    key={index}
-                    className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
-                      theme === "light"
-                        ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                        : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
-                    }`}
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                      <h4
-                        className={`text-lg font-medium theme-transition ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        {gig.title}
-                      </h4>
-                      <div className="flex items-center gap-1">
-                        <FiStar
-                          className="text-yellow-400 text-sm"
-                          fill="currentColor"
-                        />
-                        <span className="text-sm text-yellow-400 font-medium">
-                          {gig.reviews && gig.reviews.length > 0
-                            ? (
-                                gig.reviews.reduce(
-                                  (sum: number, review: any) =>
-                                    sum + review.rating,
-                                  0
-                                ) / gig.reviews.length
-                              ).toFixed(1)
-                            : "No rating"}
-                        </span>
-                      </div>
+                        {showAllCollaboratedGigs
+                          ? `Show Less (${
+                              filteredCollaboratedGigs.length - 5
+                            } hidden)`
+                          : `Load More Gigs (${
+                              filteredCollaboratedGigs.length - 5
+                            } more)`}
+                      </button>
                     </div>
-                    <p
-                      className={`text-sm mb-3 leading-relaxed theme-transition ${
-                        theme === "light" ? "text-gray-600" : "text-gray-300"
-                      }`}
-                    >
-                      {gig.description}
-                    </p>
-                    <div
-                      className={`text-sm mb-4 theme-transition ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      Looking for:{" "}
-                      <span className="text-purple-400 font-medium">
-                        {gig.looking_For}
-                      </span>
-                    </div>
-                    {/* Skills Tags */}
-                    {gig.skills && gig.skills.length > 0 && (
-                      <div className="mb-4">
-                        <div className="flex flex-wrap gap-2">
-                          {gig.skills.map((skill: string, skillIdx: number) => (
-                            <span
-                              key={skillIdx}
-                              className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
-                                selectedSkills.includes(skill)
-                                  ? theme === "light"
-                                    ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                    : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
-                                  : theme === "light"
-                                  ? "bg-purple-50 border-purple-200 text-purple-700"
-                                  : "bg-purple-950/50 border-purple-800/50 text-purple-300"
-                              }`}
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {gig.reviews && gig.reviews.length > 0 && (
-                      <div
-                        className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
-                          theme === "light"
-                            ? "bg-gray-50/80 border-gray-200/50"
-                            : "bg-neutral-900/50 border-neutral-700/50"
-                        }`}
-                      >
-                        <div
-                          className={`text-sm font-medium mb-2 theme-transition ${
-                            theme === "light" ? "text-gray-900" : "text-white"
-                          }`}
-                        >
-                          "{gig.reviews[0].title}"
-                        </div>
-                        <div
-                          className={`text-sm mb-2 theme-transition ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-300"
-                          }`}
-                        >
-                          {gig.reviews[0].description}
-                        </div>
-                        <div className="text-sm text-purple-400 font-medium">
-                          - @{gig.reviews[0].author?.username}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Load More / Show Less button for Collaborated Gigs */}
-              {filteredCollaboratedGigs.length > 5 && (
-                <div className="mt-6 flex justify-center">
-                  <button
-                    onClick={toggleCollaboratedGigs}
-                    className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                      theme === "light"
-                        ? "bg-white/60 border-gray-200/50 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
-                        : "bg-neutral-800/50 border-neutral-700/50 text-purple-400 hover:bg-purple-950/30 hover:border-purple-600/50"
-                    }`}
-                  >
-                    {showAllCollaboratedGigs
-                      ? `Show Less (${
-                          filteredCollaboratedGigs.length - 5
-                        } hidden)`
-                      : `Load More Gigs (${
-                          filteredCollaboratedGigs.length - 5
-                        } more)`}
-                  </button>
-                </div>
-              )}
-            </section>
+                  )}
+                </section>
+              </>
+            )}
           </main>
 
           {/* Mobile Filter Toggle Button */}
@@ -2060,6 +2264,17 @@ export default function UserProfilePage() {
         walletAmount={totalEarnings}
         currency={walletCurrency}
         getCurrencySymbol={getCurrencySymbol}
+        onWithdrawSuccess={async () => {
+          // Refresh wallet data after successful withdrawal
+          if (profile?.id) {
+            try {
+              const wallet = await getUserWallet(profile.id, walletCurrency);
+              setWalletData(wallet);
+            } catch (err) {
+              console.error("Error refreshing wallet data:", err);
+            }
+          }
+        }}
       />
     </>
   );

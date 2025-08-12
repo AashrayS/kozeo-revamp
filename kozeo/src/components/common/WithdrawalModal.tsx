@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiX,
   FiCreditCard,
@@ -9,6 +9,8 @@ import {
   FiDollarSign,
 } from "react-icons/fi";
 import { useTheme } from "@/contexts/ThemeContext";
+import { createWithdrawRequest } from "../../../utilities/kozeoApi.js";
+import { useSelector } from "react-redux";
 
 interface WithdrawalModalProps {
   isOpen: boolean;
@@ -16,6 +18,7 @@ interface WithdrawalModalProps {
   walletAmount: number;
   currency: string;
   getCurrencySymbol: (currency: string) => string;
+  onWithdrawSuccess?: () => void; // Callback to refresh wallet data
 }
 
 const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
@@ -24,8 +27,11 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
   walletAmount,
   currency,
   getCurrencySymbol,
+  onWithdrawSuccess,
 }) => {
   const { theme } = useTheme();
+  const { user } = useSelector((state: any) => state.user);
+
   const [formData, setFormData] = useState({
     amount: "",
     accountNumber: "",
@@ -34,6 +40,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
     accountHolderName: "",
     bankName: "",
     upiId: "",
+    email: "",
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [isVerifyingUpi, setIsVerifyingUpi] = useState(false);
@@ -45,10 +52,24 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
   );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // Set user email when component mounts or user changes
+  useEffect(() => {
+    if (user?.email) {
+      setFormData((prev) => ({ ...prev, email: user.email }));
+    }
+  }, [user]);
+
   if (!isOpen) return null;
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address";
+    }
 
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       newErrors.amount = "Please enter a valid amount";
@@ -113,39 +134,73 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
     setIsProcessing(true);
 
     try {
-      // Simulate API call to Razorpay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Prepare withdrawal request data
+      const withdrawalData = {
+        email: formData.email,
+        amount: parseFloat(formData.amount),
+        accountHolderName: formData.accountHolderName,
+        bankName: formData.bankName,
+        accountNumber: formData.accountNumber,
+        ifscCode: formData.ifscCode.toUpperCase(),
+        upi: withdrawalMethod === "upi" ? formData.upiId : "",
+      };
 
-      // In a real implementation, this would call your backend API
-      // which would then call Razorpay's payout API
+      // Call the API to create withdraw request
+      const result = (await createWithdrawRequest(withdrawalData)) as any;
 
-      alert(
-        `Withdrawal request submitted successfully! ${getCurrencySymbol(
-          currency
-        )}${(parseFloat(formData.amount) - 5).toFixed(
-          2
-        )} will be transferred to your ${
-          withdrawalMethod === "upi" ? "UPI account" : "bank account"
-        } within ${
-          withdrawalMethod === "upi" ? "a few minutes" : "1-2 business days"
-        }. (₹5 handling fee deducted)`
-      );
-      onClose();
+      if (result && result.id) {
+        // Success
+        alert(
+          `Withdrawal request submitted successfully! Your request ID is ${
+            result.id
+          }. 
+          ${getCurrencySymbol(currency)}${
+            formData.amount
+          } will be transferred to your ${
+            withdrawalMethod === "upi" ? "UPI account" : "bank account"
+          } after admin approval. You'll be notified once the request is processed.`
+        );
 
-      // Reset form
-      setFormData({
-        amount: "",
-        accountNumber: "",
-        confirmAccountNumber: "",
-        ifscCode: "",
-        accountHolderName: "",
-        bankName: "",
-        upiId: "",
-      });
-      setWithdrawalMethod("bank");
-      setUpiVerificationStatus("none");
-    } catch (error) {
-      alert("Failed to process withdrawal. Please try again.");
+        // Call success callback to refresh wallet data
+        if (onWithdrawSuccess) {
+          onWithdrawSuccess();
+        }
+
+        onClose();
+
+        // Reset form
+        setFormData({
+          amount: "",
+          accountNumber: "",
+          confirmAccountNumber: "",
+          ifscCode: "",
+          accountHolderName: "",
+          bankName: "",
+          upiId: "",
+          email: user?.email || "",
+        });
+        setWithdrawalMethod("bank");
+        setUpiVerificationStatus("none");
+      } else {
+        throw new Error("Failed to create withdrawal request");
+      }
+    } catch (error: any) {
+      console.error("Withdrawal request error:", error);
+
+      // Handle specific error messages
+      let errorMessage = "Failed to process withdrawal. Please try again.";
+
+      if (error.message && error.message.includes("insufficient")) {
+        errorMessage =
+          "Insufficient wallet balance for this withdrawal amount.";
+      } else if (error.message && error.message.includes("pending")) {
+        errorMessage =
+          "You already have a pending withdrawal request. Please wait for it to be processed.";
+      } else if (error.message && error.message.includes("validation")) {
+        errorMessage = "Please check your details and try again.";
+      }
+
+      alert(errorMessage);
     } finally {
       setIsProcessing(false);
     }
@@ -390,6 +445,38 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     </span>
                   )}
                 </p>
+              )}
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-3">
+              <label
+                className={`block text-sm font-medium theme-transition ${
+                  theme === "light" ? "text-gray-700" : "text-gray-300"
+                }`}
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                placeholder="your.email@example.com"
+                className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 ${
+                  errors.email
+                    ? "border-red-300 focus:border-red-500"
+                    : theme === "light"
+                    ? "border-gray-300 focus:border-emerald-500"
+                    : "border-neutral-600 focus:border-emerald-400"
+                } ${
+                  theme === "light"
+                    ? "bg-white text-gray-900 placeholder-gray-500"
+                    : "bg-neutral-800 text-white placeholder-gray-400"
+                } focus:outline-none focus:ring-2 focus:ring-emerald-500/20`}
+                disabled={isProcessing}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
               )}
             </div>
 

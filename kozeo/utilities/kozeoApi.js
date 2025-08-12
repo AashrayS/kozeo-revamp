@@ -2018,3 +2018,196 @@ export const getUserWallets = async (userId) => {
     throw error;
   }
 };
+
+// ============================================================================
+// WITHDRAW REQUEST API FUNCTIONS
+// ============================================================================
+
+/**
+ * Create a new withdraw request
+ * @param {Object} withdrawData - Withdrawal request data
+ * @param {string} withdrawData.email - User's email for withdrawal
+ * @param {string} withdrawData.accountHolderName - Bank account holder name
+ * @param {string} withdrawData.bankName - Bank name
+ * @param {string} withdrawData.accountNumber - Bank account number
+ * @param {string} withdrawData.ifscCode - IFSC code
+ * @param {string} withdrawData.upi - Optional UPI ID
+ * @param {number} withdrawData.amount - Amount to withdraw
+ * @returns {Promise<Object>} Created withdraw request
+ */
+export const createWithdrawRequest = async (withdrawData) => {
+  const mutation = `
+    mutation CreateWithdrawRequest($input: CreateWithdrawRequestInput!) {
+      createWithdrawRequest(input: $input) {
+        id
+        userId 
+        email
+        accountHolderName
+        bankName
+        accountNumber
+        ifscCode
+        upi
+        amount
+        status
+        remarks
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      email: withdrawData.email,
+      accountHolderName: withdrawData.accountHolderName,
+      bankName: withdrawData.bankName,
+      accountNumber: withdrawData.accountNumber,
+      ifscCode: withdrawData.ifscCode,
+      upi: withdrawData.upi || null,
+      amount: parseFloat(withdrawData.amount),
+    },
+  };
+
+  // Get JWT token from localStorage for authentication
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("kozeo_auth_token")
+      : null;
+
+  try {
+    const data = await callApi({
+      query: mutation,
+      variables,
+      token,
+    });
+
+    return data.createWithdrawRequest;
+  } catch (error) {
+    console.error("Error creating withdraw request:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get all withdraw requests for a user
+ * @param {string} userId - User ID to get withdraw requests for
+ * @returns {Promise<Array>} Array of withdraw requests
+ */
+export const getUserWithdrawRequests = async (userId) => {
+  const query = `
+    query GetUserWithdrawRequests($userId: ID!) {
+      userWithdrawRequests(userId: $userId) {
+        id
+        userId {
+          id
+          username
+          first_name
+          last_name
+          email
+        }
+        email
+        accountHolderName
+        bankName
+        accountNumber
+        ifscCode
+        upi
+        amount
+        status
+        remarks
+        processedBy {
+          id
+          username
+          first_name
+          last_name
+        }
+        processedAt
+        transactionId
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables = { userId };
+
+  // Get JWT token from localStorage for authentication
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("kozeo_auth_token")
+      : null;
+
+  try {
+    const data = await callApi({
+      query,
+      variables,
+      token,
+    });
+
+    return data.userWithdrawRequests;
+  } catch (error) {
+    console.error("Error fetching user withdraw requests:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get a single withdraw request by ID
+ * @param {string} requestId - Withdraw request ID
+ * @returns {Promise<Object>} Withdraw request details
+ */
+export const getWithdrawRequest = async (requestId) => {
+  const query = `
+    query GetWithdrawRequest($id: ID!) {
+      withdrawRequest(id: $id) {
+        id
+        userId {
+          id
+          username
+          first_name
+          last_name
+          email
+        }
+        email
+        accountHolderName
+        bankName
+        accountNumber
+        ifscCode
+        upi
+        amount
+        status
+        remarks
+        processedBy {
+          id
+          username
+          first_name
+          last_name
+        }
+        processedAt
+        transactionId
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables = { id: requestId };
+
+  // Get JWT token from localStorage for authentication
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("kozeo_auth_token")
+      : null;
+
+  try {
+    const data = await callApi({
+      query,
+      variables,
+      token,
+    });
+
+    return data.withdrawRequest;
+  } catch (error) {
+    console.error("Error fetching withdraw request:", error);
+    throw error;
+  }
+};
