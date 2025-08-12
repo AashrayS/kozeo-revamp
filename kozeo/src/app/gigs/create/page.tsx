@@ -154,22 +154,22 @@ export default function CreateGigPage() {
       >
         <Sidebar />
         <div className="flex-1 flex flex-col">
-          <main className="flex-1 p-4 sm:p-8 flex flex-col items-center justify-center min-h-screen">
-            <div className="w-full max-w-4xl">
+          <main className="flex-1 p-2 sm:p-4 lg:p-8 flex flex-col items-center justify-center min-h-screen">
+            <div className="w-full max-w-4xl px-2 sm:px-4">
               {/* Header Section */}
-              <div className="text-center mb-8 sm:mb-12">
+              <div className="text-center mb-6 sm:mb-8 lg:mb-12">
                 <h1
-                  className={`text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-4 transition-colors duration-300 ${
+                  className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light tracking-tight mb-3 sm:mb-4 transition-colors duration-300 ${
                     theme === "dark" ? "text-white" : "text-gray-900"
                   }`}
                 >
                   Create Your Next
-                  <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent font-medium ml-3">
+                  <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent font-medium ml-2 sm:ml-3 block sm:inline">
                     Collaboration
                   </span>
                 </h1>
                 <p
-                  className={`text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed transition-colors duration-300 ${
+                  className={`text-base sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed transition-colors duration-300 px-4 sm:px-0 ${
                     theme === "dark" ? "text-gray-400" : "text-gray-600"
                   }`}
                 >
@@ -180,7 +180,7 @@ export default function CreateGigPage() {
 
               <form
                 onSubmit={handleSubmit}
-                className={`w-full rounded-3xl border-0 shadow-2xl p-8 sm:p-12 lg:p-16 flex flex-col gap-8 transition-all duration-300 relative overflow-hidden ${
+                className={`w-full rounded-2xl sm:rounded-3xl border-0 shadow-xl sm:shadow-2xl p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8 transition-all duration-300 relative overflow-hidden ${
                   theme === "dark"
                     ? "bg-neutral-900/80 backdrop-blur-xl border border-neutral-800/50"
                     : "bg-white/95 backdrop-blur-xl border border-gray-200/50"
@@ -198,11 +198,11 @@ export default function CreateGigPage() {
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(59,130,246,0.3),transparent_50%)]"></div>
                 </div>
 
-                <div className="relative z-10 space-y-8">
+                <div className="relative z-10 space-y-6 sm:space-y-8">
                   {/* Title Input */}
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     <label
-                      className={`block text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                     >
@@ -213,7 +213,7 @@ export default function CreateGigPage() {
                       value={form.title}
                       onChange={handleChange}
                       placeholder="Enter an engaging project title..."
-                      className={`w-full px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                         theme === "dark"
                           ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
                           : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
@@ -223,9 +223,9 @@ export default function CreateGigPage() {
                   </div>
 
                   {/* Looking For Input */}
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     <label
-                      className={`block text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                     >
@@ -235,8 +235,8 @@ export default function CreateGigPage() {
                       name="looking_For"
                       value={form.looking_For}
                       onChange={handleChange}
-                      placeholder="e.g., React Developer, UI/UX Designer, Marketing Specialist..."
-                      className={`w-full px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                      placeholder="e.g., React Developer, UI/UX Designer..."
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                         theme === "dark"
                           ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
                           : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
@@ -246,9 +246,9 @@ export default function CreateGigPage() {
                   </div>
 
                   {/* Description Input */}
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     <label
-                      className={`block text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                     >
@@ -259,8 +259,8 @@ export default function CreateGigPage() {
                       value={form.description}
                       onChange={handleChange}
                       placeholder="Describe your project vision, goals, and what makes it exciting..."
-                      rows={5}
-                      className={`w-full px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 resize-none ${
+                      rows={4}
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 resize-none ${
                         theme === "dark"
                           ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
                           : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
@@ -270,16 +270,16 @@ export default function CreateGigPage() {
                   </div>
 
                   {/* Skills Section */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <label
-                      className={`block text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                     >
                       Required Skills
                     </label>
 
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                       <input
                         type="text"
                         value={newSkill}
@@ -287,8 +287,8 @@ export default function CreateGigPage() {
                         onKeyPress={(e) =>
                           e.key === "Enter" && (e.preventDefault(), addSkill())
                         }
-                        placeholder="Add a skill (e.g., React, Figma, SEO...)"
-                        className={`flex-1 px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                        placeholder="Add a skill (e.g., React, Figma...)"
+                        className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                           theme === "dark"
                             ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
                             : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
@@ -297,18 +297,18 @@ export default function CreateGigPage() {
                       <button
                         type="button"
                         onClick={addSkill}
-                        className="px-6 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-2xl transition-all duration-300 flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                        className="w-full sm:w-auto px-3 sm:px-6 py-2.5 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg sm:rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-medium sm:font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:scale-105"
                       >
-                        <FiPlus className="text-lg" />
+                        <FiPlus className="text-base sm:text-lg" />
                         Add
                       </button>
                     </div>
 
-                    <div className="flex flex-wrap gap-3 mt-4">
+                    <div className="flex flex-wrap gap-2 sm:gap-3 mt-4">
                       {form.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className={`flex items-center gap-3 px-4 py-2 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
+                          className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base ${
                             theme === "dark"
                               ? "bg-neutral-800/70 border-neutral-600 text-gray-200"
                               : "bg-gray-50 border-gray-200 text-gray-800"
@@ -333,7 +333,7 @@ export default function CreateGigPage() {
 
                   {/* Skill Forge Toggle Section */}
                   <div
-                    className={`relative p-8 rounded-2xl border transition-all duration-300 ${
+                    className={`relative p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
                       form.isSkillForge
                         ? theme === "dark"
                           ? "bg-neutral-800/60 border-blue-500/30 shadow-lg"
@@ -344,9 +344,9 @@ export default function CreateGigPage() {
                     }`}
                   >
                     <div className="relative z-10">
-                      <div className="flex items-start gap-6 mb-6">
+                      <div className="flex items-start gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
                         <div
-                          className={`p-4 rounded-xl transition-all duration-300 ${
+                          className={`p-3 sm:p-4 rounded-lg sm:rounded-xl transition-all duration-300 flex-shrink-0 ${
                             form.isSkillForge
                               ? theme === "dark"
                                 ? "bg-blue-900/50 shadow-md"
@@ -357,7 +357,7 @@ export default function CreateGigPage() {
                           }`}
                         >
                           <FiUsers
-                            className={`text-2xl transition-all duration-300 ${
+                            className={`text-xl sm:text-2xl transition-all duration-300 ${
                               form.isSkillForge
                                 ? theme === "dark"
                                   ? "text-blue-400"
@@ -368,16 +368,16 @@ export default function CreateGigPage() {
                             }`}
                           />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <h3
-                            className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
+                            className={`text-lg sm:text-xl font-semibold mb-2 transition-colors duration-300 ${
                               theme === "dark" ? "text-white" : "text-gray-900"
                             }`}
                           >
                             Skill Development Collaboration
                           </h3>
                           <p
-                            className={`text-base leading-relaxed transition-colors duration-300 ${
+                            className={`text-sm sm:text-base leading-relaxed transition-colors duration-300 ${
                               theme === "dark"
                                 ? "text-gray-300"
                                 : "text-gray-600"
@@ -390,7 +390,7 @@ export default function CreateGigPage() {
                       </div>
 
                       {/* Professional Toggle Switch */}
-                      <div className="flex items-center gap-4 mb-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                         <button
                           type="button"
                           onClick={() =>
@@ -399,7 +399,7 @@ export default function CreateGigPage() {
                               isSkillForge: !prev.isSkillForge,
                             }))
                           }
-                          className={`relative w-16 h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 ${
+                          className={`relative w-14 sm:w-16 h-7 sm:h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 flex-shrink-0 ${
                             form.isSkillForge
                               ? theme === "dark"
                                 ? "bg-blue-600 focus:ring-blue-500/30"
@@ -410,9 +410,9 @@ export default function CreateGigPage() {
                           }`}
                         >
                           <div
-                            className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center ${
+                            className={`absolute top-0.5 left-0.5 sm:top-1 sm:left-1 w-6 h-6 sm:w-6 sm:h-6 bg-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center ${
                               form.isSkillForge
-                                ? "translate-x-8"
+                                ? "translate-x-7 sm:translate-x-8"
                                 : "translate-x-0"
                             }`}
                           >
@@ -422,7 +422,7 @@ export default function CreateGigPage() {
                           </div>
                         </button>
                         <span
-                          className={`text-base font-medium transition-colors duration-300 ${
+                          className={`text-sm sm:text-base font-medium transition-colors duration-300 ${
                             form.isSkillForge
                               ? theme === "dark"
                                 ? "text-blue-400"
@@ -439,15 +439,15 @@ export default function CreateGigPage() {
                       {/* Professional Skill Forge Info Card */}
                       {form.isSkillForge && (
                         <div
-                          className={`p-6 rounded-xl border transition-all duration-300 ${
+                          className={`p-4 sm:p-6 rounded-lg sm:rounded-xl border transition-all duration-300 ${
                             theme === "dark"
                               ? "bg-neutral-800/50 border-neutral-600/50"
                               : "bg-white/80 border-gray-200/50"
                           }`}
                         >
-                          <div className="flex items-start gap-4 mb-4">
+                          <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div
-                              className={`p-3 rounded-lg ${
+                              className={`p-2 sm:p-3 rounded-lg flex-shrink-0 ${
                                 theme === "dark"
                                   ? "bg-blue-900/30"
                                   : "bg-blue-100"
@@ -461,9 +461,9 @@ export default function CreateGigPage() {
                                 }`}
                               />
                             </div>
-                            <div>
+                            <div className="flex-1 min-w-0">
                               <h4
-                                className={`text-lg font-semibold mb-3 transition-colors duration-300 ${
+                                className={`text-base sm:text-lg font-semibold mb-3 transition-colors duration-300 ${
                                   theme === "dark"
                                     ? "text-white"
                                     : "text-gray-900"
@@ -472,46 +472,46 @@ export default function CreateGigPage() {
                                 Benefits of Skill Development Collaboration
                               </h4>
                               <div
-                                className={`grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm transition-colors duration-300 ${
+                                className={`grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm transition-colors duration-300 ${
                                   theme === "dark"
                                     ? "text-gray-300"
                                     : "text-gray-700"
                                 }`}
                               >
-                                <div className="flex items-center gap-3">
-                                  <FiTrendingUp className="text-green-500 text-sm" />
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <FiTrendingUp className="text-green-500 text-sm flex-shrink-0" />
                                   <span>Gain practical experience</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <FiBriefcase className="text-blue-500 text-sm" />
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <FiBriefcase className="text-blue-500 text-sm flex-shrink-0" />
                                   <span>Build professional portfolio</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <FiAward className="text-purple-500 text-sm" />
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <FiAward className="text-purple-500 text-sm flex-shrink-0" />
                                   <span>Earn platform recognition</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <FiUsers className="text-orange-500 text-sm" />
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <FiUsers className="text-orange-500 text-sm flex-shrink-0" />
                                   <span>Expand professional network</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div
-                            className={`mt-4 p-4 rounded-lg transition-colors duration-300 ${
+                            className={`mt-3 sm:mt-4 p-3 sm:p-4 rounded-lg transition-colors duration-300 ${
                               theme === "dark"
                                 ? "bg-blue-950/20 border border-blue-800/20"
                                 : "bg-blue-50/70 border border-blue-200/30"
                             }`}
                           >
                             <p
-                              className={`text-sm leading-relaxed transition-colors duration-300 ${
+                              className={`text-xs sm:text-sm leading-relaxed transition-colors duration-300 ${
                                 theme === "dark"
                                   ? "text-gray-400"
                                   : "text-gray-600"
                               }`}
                             >
-                              <FiTarget className="inline mr-2 text-blue-500" />
+                              <FiTarget className="inline mr-2 text-blue-500 flex-shrink-0" />
                               <strong>Ideal for:</strong> Students,
                               professionals changing careers, developers
                               building portfolios, and anyone looking to
@@ -526,20 +526,20 @@ export default function CreateGigPage() {
 
                   {/* Payment Section - Enhanced Design */}
                   {!form.isSkillForge && (
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <label
-                        className={`block text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                        className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
                           theme === "dark" ? "text-gray-300" : "text-gray-700"
                         }`}
                       >
                         Project Budget
                       </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                         <select
                           name="currency"
                           value={form.currency}
                           onChange={handleSelectChange}
-                          className={`px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                          className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                             theme === "dark"
                               ? "bg-neutral-800/50 border-neutral-700 text-white focus:ring-cyan-500/30 focus:border-cyan-500"
                               : "bg-white/80 border-gray-200 text-gray-900 focus:ring-blue-500/30 focus:border-blue-500"
@@ -556,7 +556,7 @@ export default function CreateGigPage() {
                           placeholder="Enter amount"
                           type="number"
                           min="0"
-                          className={`sm:col-span-2 px-6 py-4 rounded-2xl border-2 text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                          className={`sm:col-span-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                             theme === "dark"
                               ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
                               : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
@@ -570,20 +570,20 @@ export default function CreateGigPage() {
                   {/* Skill Forge Payment Display */}
                   {form.isSkillForge && (
                     <div
-                      className={`p-6 rounded-xl border transition-all duration-300 ${
+                      className={`p-4 sm:p-6 rounded-lg sm:rounded-xl border transition-all duration-300 ${
                         theme === "dark"
                           ? "bg-neutral-800/60 border-blue-500/20"
                           : "bg-blue-50/50 border-blue-200/50"
                       }`}
                     >
-                      <div className="flex items-center justify-center gap-4">
+                      <div className="flex items-center justify-center gap-3 sm:gap-4">
                         <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          className={`w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
                             theme === "dark" ? "bg-blue-900/50" : "bg-blue-100"
                           }`}
                         >
                           <FiGift
-                            className={`text-xl ${
+                            className={`text-lg sm:text-xl ${
                               theme === "dark"
                                 ? "text-blue-400"
                                 : "text-blue-600"
@@ -592,14 +592,14 @@ export default function CreateGigPage() {
                         </div>
                         <div className="text-center">
                           <p
-                            className={`text-lg font-semibold mb-1 transition-colors duration-300 ${
+                            className={`text-base sm:text-lg font-semibold mb-1 transition-colors duration-300 ${
                               theme === "dark" ? "text-white" : "text-gray-900"
                             }`}
                           >
                             Experience-Based Collaboration
                           </p>
                           <p
-                            className={`text-sm transition-colors duration-300 ${
+                            className={`text-xs sm:text-sm transition-colors duration-300 ${
                               theme === "dark"
                                 ? "text-gray-300"
                                 : "text-gray-600"
@@ -615,14 +615,18 @@ export default function CreateGigPage() {
 
                   {/* Error/Success Messages */}
                   {error && (
-                    <div className="p-4 bg-red-500/10 border-2 border-red-500/30 rounded-2xl backdrop-blur-sm">
-                      <p className="text-red-400 font-medium">{error}</p>
+                    <div className="p-3 sm:p-4 bg-red-500/10 border-2 border-red-500/30 rounded-xl sm:rounded-2xl backdrop-blur-sm">
+                      <p className="text-red-400 font-medium text-sm sm:text-base">
+                        {error}
+                      </p>
                     </div>
                   )}
 
                   {success && (
-                    <div className="p-4 bg-green-500/10 border-2 border-green-500/30 rounded-2xl backdrop-blur-sm">
-                      <p className="text-green-400 font-medium">{success}</p>
+                    <div className="p-3 sm:p-4 bg-green-500/10 border-2 border-green-500/30 rounded-xl sm:rounded-2xl backdrop-blur-sm">
+                      <p className="text-green-400 font-medium text-sm sm:text-base">
+                        {success}
+                      </p>
                     </div>
                   )}
 
@@ -630,7 +634,7 @@ export default function CreateGigPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className={`w-full py-5 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
+                    className={`w-full py-3 sm:py-5 rounded-lg sm:rounded-2xl font-medium sm:font-semibold text-sm sm:text-lg transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 ${
                       form.isSkillForge
                         ? theme === "dark"
                           ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg shadow-blue-900/30"
@@ -646,18 +650,24 @@ export default function CreateGigPage() {
                   >
                     {submitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Creating Collaboration...
+                        <div className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-xs sm:text-base">
+                          Creating Collaboration...
+                        </span>
                       </>
                     ) : form.isSkillForge ? (
                       <>
-                        <FiBriefcase className="text-xl" />
-                        Launch Skill Forge Project
+                        <FiBriefcase className="text-base sm:text-xl" />
+                        <span className="text-xs sm:text-base">
+                          Launch Skill Forge Project
+                        </span>
                       </>
                     ) : (
                       <>
-                        <FiTarget className="text-xl" />
-                        Create Professional Gig
+                        <FiTarget className="text-base sm:text-xl" />
+                        <span className="text-xs sm:text-base">
+                          Create Professional Gig
+                        </span>
                       </>
                     )}
                   </button>
@@ -666,11 +676,11 @@ export default function CreateGigPage() {
             </div>
           </main>
         </div>
-        {/* Glows */}
+        {/* Glows - Hidden on mobile for better performance */}
         {theme === "dark" && (
           <>
-            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+            <div className="hidden sm:block fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+            <div className="hidden sm:block fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
           </>
         )}
       </div>
