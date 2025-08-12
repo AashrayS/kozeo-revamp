@@ -709,8 +709,7 @@ export const createGig = async (gigData) => {
     !gigData.title ||
     !gigData.looking_For ||
     !gigData.description ||
-    !gigData.skills ||
-    !gigData.amount
+    !gigData.skills 
   ) {
     throw new Error("All required fields must be provided");
   }
