@@ -22,11 +22,33 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const gigsPerPage = 12;
+
   // Users state for Users view
   const [users, setUsers] = useState<any[]>([]);
 
   // Toggle state: 'gigs' or 'users'
   const [viewMode, setViewMode] = useState<"gigs" | "users">("gigs");
+
+  // Pagination logic
+  const totalGigs = gigs.length;
+  const totalPages = Math.ceil(totalGigs / gigsPerPage);
+  const startIndex = (currentPage - 1) * gigsPerPage;
+  const endIndex = startIndex + gigsPerPage;
+  const currentGigs = gigs.slice(startIndex, endIndex);
+
+  // Reset to first page when gigs change (search, etc.)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [gigs.length]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   // Check authentication
   useEffect(() => {
@@ -253,7 +275,7 @@ export default function Home() {
               !error &&
               (viewMode === "gigs" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
-                  {gigs.length === 0 ? (
+                  {currentGigs.length === 0 ? (
                     <div
                       className={`col-span-full text-center py-20 ${
                         theme === "light" ? "text-gray-600" : "text-gray-400"
@@ -263,7 +285,7 @@ export default function Home() {
                       {searchTerm && "Try a different search term."}
                     </div>
                   ) : (
-                    gigs.map((gig: any) => (
+                    currentGigs.map((gig: any) => (
                       <div
                         key={gig.id}
                         onClick={() => {
@@ -519,6 +541,113 @@ export default function Home() {
                   )}
                 </div>
               ))}
+
+            {/* Pagination for Gigs */}
+            {!loading && !error && viewMode === "gigs" && totalPages > 1 && (
+              <div className="flex justify-center items-center mt-8 gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    currentPage === 1
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:scale-105"
+                  } ${
+                    theme === "light"
+                      ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
+                      : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex gap-1">
+                  {[...Array(totalPages)].map((_, index) => {
+                    const page = index + 1;
+                    const isCurrentPage = page === currentPage;
+
+                    // Show first page, last page, current page, and pages around current
+                    const showPage =
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1);
+
+                    if (!showPage) {
+                      // Show ellipsis
+                      if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
+                        return (
+                          <span
+                            key={page}
+                            className={`px-3 py-2 text-sm ${
+                              theme === "light"
+                                ? "text-gray-400"
+                                : "text-gray-600"
+                            }`}
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                          isCurrentPage
+                            ? theme === "light"
+                              ? "bg-blue-500 text-white border border-blue-500"
+                              : "bg-blue-600 text-white border border-blue-600"
+                            : theme === "light"
+                            ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                            : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    currentPage === totalPages
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:scale-105"
+                  } ${
+                    theme === "light"
+                      ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
+                      : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
+            {/* Pagination Info */}
+            {!loading && !error && viewMode === "gigs" && totalGigs > 0 && (
+              <div className="text-center mt-4">
+                <span
+                  className={`text-sm ${
+                    theme === "light" ? "text-gray-600" : "text-gray-400"
+                  }`}
+                >
+                  Showing {startIndex + 1}-{Math.min(endIndex, totalGigs)} of{" "}
+                  {totalGigs} gigs
+                </span>
+              </div>
+            )}
           </main>
         </div>
       </div>
