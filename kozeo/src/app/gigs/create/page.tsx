@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
+import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { createGig } from "../../../../utilities/kozeoApi";
 import { useUser } from "../../../../store/hooks";
@@ -17,6 +18,9 @@ import {
   FiCheck,
   FiBriefcase,
   FiGift,
+  FiRefreshCw,
+  FiChevronDown,
+  FiDollarSign,
 } from "react-icons/fi";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -37,6 +41,22 @@ export default function CreateGigPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // Currency conversion state
+  const [exchangeRates, setExchangeRates] = useState({
+    USD: 83.12, // USD to INR
+    EUR: 91.45, // EUR to INR
+    INR: 1, // INR to INR
+  });
+  const [convertedAmount, setConvertedAmount] = useState("");
+  const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
+
+  // Currency options
+  const currencyOptions = [
+    { code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸" },
+    { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
+    { code: "INR", symbol: "₹", name: "Indian Rupee", flag: "🇮🇳" },
+  ];
 
   // Check authentication
   useEffect(() => {
@@ -72,6 +92,56 @@ export default function CreateGigPage() {
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
   };
+
+  // Currency selection handler
+  const handleCurrencySelect = (currencyCode: string) => {
+    setForm({ ...form, currency: currencyCode });
+    setIsCurrencyDropdownOpen(false);
+  };
+
+  // Currency conversion functions
+  const convertToINR = (amount: string, fromCurrency: string) => {
+    if (!amount || isNaN(parseFloat(amount))) return "";
+    const numAmount = parseFloat(amount);
+    const rate = exchangeRates[fromCurrency as keyof typeof exchangeRates];
+    return (numAmount * rate).toFixed(2);
+  };
+
+  const updateExchangeRates = async () => {
+    try {
+      // In a real application, you would fetch from a currency API
+      // For now, using static rates that could be updated
+      setExchangeRates({
+        USD: 83.12,
+        EUR: 91.45,
+        INR: 1,
+      });
+    } catch (error) {
+      console.error("Failed to update exchange rates:", error);
+    }
+  };
+
+  // Update converted amount when amount or currency changes
+  useEffect(() => {
+    if (form.amount && form.currency !== "INR") {
+      const converted = convertToINR(form.amount, form.currency);
+      setConvertedAmount(converted);
+    } else {
+      setConvertedAmount("");
+    }
+  }, [form.amount, form.currency]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setIsCurrencyDropdownOpen(false);
+    };
+
+    if (isCurrencyDropdownOpen) {
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
+    }
+  }, [isCurrencyDropdownOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +180,6 @@ export default function CreateGigPage() {
         skills: form.skills,
         currency: form.currency,
         amount: form.isSkillForge ? 0 : parseFloat(form.amount),
-        isSkillForge: form.isSkillForge,
       };
 
       console.log("Creating gig with data:", gigData);
@@ -180,7 +249,7 @@ export default function CreateGigPage() {
 
               <form
                 onSubmit={handleSubmit}
-                className={`w-full rounded-2xl sm:rounded-3xl border-0 shadow-xl sm:shadow-2xl p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8 transition-all duration-300 relative overflow-hidden ${
+                className={`w-full rounded-2xl sm:rounded-3xl border-0 shadow-xl sm:shadow-2xl p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8 transition-all duration-300 relative ${
                   theme === "dark"
                     ? "bg-neutral-900/80 backdrop-blur-xl border border-neutral-800/50"
                     : "bg-white/95 backdrop-blur-xl border border-gray-200/50"
@@ -294,14 +363,15 @@ export default function CreateGigPage() {
                             : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
                         }`}
                       />
-                      <button
-                        type="button"
+                      <ProfessionalButton
                         onClick={addSkill}
-                        className="w-full sm:w-auto px-3 sm:px-6 py-2.5 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg sm:rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 font-medium sm:font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:scale-105"
+                        variant="primary"
+                        size="md"
+                        icon={<FiPlus className="text-base sm:text-lg" />}
+                        className="w-full sm:w-auto"
                       >
-                        <FiPlus className="text-base sm:text-lg" />
                         Add
-                      </button>
+                      </ProfessionalButton>
                     </div>
 
                     <div className="flex flex-wrap gap-2 sm:gap-3 mt-4">
@@ -527,28 +597,173 @@ export default function CreateGigPage() {
                   {/* Payment Section - Enhanced Design */}
                   {!form.isSkillForge && (
                     <div className="space-y-3 sm:space-y-4">
-                      <label
-                        className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-700"
-                        }`}
-                      >
-                        Project Budget
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                        <select
-                          name="currency"
-                          value={form.currency}
-                          onChange={handleSelectChange}
-                          className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
-                            theme === "dark"
-                              ? "bg-neutral-800/50 border-neutral-700 text-white focus:ring-cyan-500/30 focus:border-cyan-500"
-                              : "bg-white/80 border-gray-200 text-gray-900 focus:ring-blue-500/30 focus:border-blue-500"
+                      <div className="flex items-center justify-between">
+                        <label
+                          className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-700"
                           }`}
                         >
-                          <option value="USD">USD ($)</option>
-                          <option value="EUR">EUR (€)</option>
-                          <option value="INR">INR (₹)</option>
-                        </select>
+                          Project Budget
+                        </label>
+                        {form.currency !== "INR" && (
+                          <button
+                            type="button"
+                            onClick={updateExchangeRates}
+                            className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors duration-300 ${
+                              theme === "dark"
+                                ? "text-blue-400 hover:bg-blue-900/30"
+                                : "text-blue-600 hover:bg-blue-100"
+                            }`}
+                          >
+                            <FiRefreshCw className="text-xs" />
+                            Update Rates
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        {/* Professional Currency Dropdown */}
+                        <div className="relative z-50">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsCurrencyDropdownOpen(
+                                !isCurrencyDropdownOpen
+                              );
+                            }}
+                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 flex items-center justify-between ${
+                              theme === "dark"
+                                ? "bg-neutral-800/50 border-neutral-700 text-white focus:ring-cyan-500/30 focus:border-cyan-500 hover:bg-neutral-800/70"
+                                : "bg-white/80 border-gray-200 text-gray-900 focus:ring-blue-500/30 focus:border-blue-500 hover:bg-white"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <span className="text-lg sm:text-xl">
+                                {
+                                  currencyOptions.find(
+                                    (opt) => opt.code === form.currency
+                                  )?.flag
+                                }
+                              </span>
+                              <div className="flex items-center gap-1 sm:gap-2">
+                                <span className="font-medium">
+                                  {
+                                    currencyOptions.find(
+                                      (opt) => opt.code === form.currency
+                                    )?.code
+                                  }
+                                </span>
+                                <span
+                                  className={`text-sm ${
+                                    theme === "dark"
+                                      ? "text-gray-400"
+                                      : "text-gray-500"
+                                  }`}
+                                >
+                                  (
+                                  {
+                                    currencyOptions.find(
+                                      (opt) => opt.code === form.currency
+                                    )?.symbol
+                                  }
+                                  )
+                                </span>
+                              </div>
+                            </div>
+                            <FiChevronDown
+                              className={`text-lg transition-transform duration-200 ${
+                                isCurrencyDropdownOpen
+                                  ? "rotate-180"
+                                  : "rotate-0"
+                              } ${
+                                theme === "dark"
+                                  ? "text-gray-400"
+                                  : "text-gray-500"
+                              }`}
+                            />
+                          </button>
+
+                          {/* Professional Dropdown Menu */}
+                          {isCurrencyDropdownOpen && (
+                            <div
+                              className={`absolute top-full left-0 right-0 mt-2 rounded-xl sm:rounded-2xl border-2 shadow-2xl overflow-hidden backdrop-blur-xl ${
+                                theme === "dark"
+                                  ? "bg-neutral-800/95 border-neutral-700"
+                                  : "bg-white/95 border-gray-200"
+                              }`}
+                              style={{
+                                zIndex: 9999,
+                                boxShadow:
+                                  theme === "dark"
+                                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)"
+                                    : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8)",
+                              }}
+                            >
+                              {currencyOptions.map((option) => (
+                                <button
+                                  key={option.code}
+                                  type="button"
+                                  onClick={() =>
+                                    handleCurrencySelect(option.code)
+                                  }
+                                  className={`w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center gap-2 sm:gap-3 transition-all duration-200 ${
+                                    form.currency === option.code
+                                      ? theme === "dark"
+                                        ? "bg-blue-900/50 text-blue-400"
+                                        : "bg-blue-50 text-blue-600"
+                                      : theme === "dark"
+                                      ? "text-white hover:bg-neutral-700/50"
+                                      : "text-gray-900 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  <span className="text-lg sm:text-xl">
+                                    {option.flag}
+                                  </span>
+                                  <div className="flex items-center gap-1 sm:gap-2 flex-1">
+                                    <span className="font-medium text-sm sm:text-base">
+                                      {option.code}
+                                    </span>
+                                    <span
+                                      className={`text-xs sm:text-sm ${
+                                        form.currency === option.code
+                                          ? theme === "dark"
+                                            ? "text-blue-300"
+                                            : "text-blue-500"
+                                          : theme === "dark"
+                                          ? "text-gray-400"
+                                          : "text-gray-500"
+                                      }`}
+                                    >
+                                      ({option.symbol})
+                                    </span>
+                                  </div>
+                                  <span
+                                    className={`text-xs sm:text-sm ${
+                                      form.currency === option.code
+                                        ? theme === "dark"
+                                          ? "text-blue-300"
+                                          : "text-blue-500"
+                                        : theme === "dark"
+                                        ? "text-gray-500"
+                                        : "text-gray-400"
+                                    }`}
+                                  >
+                                    {option.name}
+                                  </span>
+                                  {form.currency === option.code && (
+                                    <FiCheck
+                                      className={`text-sm ${
+                                        theme === "dark"
+                                          ? "text-blue-400"
+                                          : "text-blue-600"
+                                      }`}
+                                    />
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                         <input
                           name="amount"
                           value={form.amount}
@@ -564,6 +779,63 @@ export default function CreateGigPage() {
                           required
                         />
                       </div>
+
+                      {/* Currency Conversion Display */}
+                      {form.currency !== "INR" && convertedAmount && (
+                        <div
+                          className={`p-3 sm:p-4 rounded-lg border transition-all duration-300 ${
+                            theme === "dark"
+                              ? "bg-neutral-800/40 border-neutral-600/50"
+                              : "bg-gray-50/80 border-gray-200/50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-2 h-2 rounded-full ${
+                                  theme === "dark"
+                                    ? "bg-green-400"
+                                    : "bg-green-500"
+                                }`}
+                              ></div>
+                              <span
+                                className={`text-xs sm:text-sm font-medium ${
+                                  theme === "dark"
+                                    ? "text-gray-300"
+                                    : "text-gray-700"
+                                }`}
+                              >
+                                Converted to INR:
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`text-sm sm:text-base font-semibold ${
+                                  theme === "dark"
+                                    ? "text-white"
+                                    : "text-gray-900"
+                                }`}
+                              >
+                                ₹{convertedAmount}
+                              </span>
+                              <span
+                                className={`text-xs ${
+                                  theme === "dark"
+                                    ? "text-gray-500"
+                                    : "text-gray-400"
+                                }`}
+                              >
+                                @
+                                {
+                                  exchangeRates[
+                                    form.currency as keyof typeof exchangeRates
+                                  ]
+                                }
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -631,46 +903,28 @@ export default function CreateGigPage() {
                   )}
 
                   {/* Enhanced Submit Button */}
-                  <button
+                  <ProfessionalButton
+                    onClick={() => {}} // Form submission handled by type="submit"
                     type="submit"
                     disabled={submitting}
-                    className={`w-full py-3 sm:py-5 rounded-lg sm:rounded-2xl font-medium sm:font-semibold text-sm sm:text-lg transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 ${
-                      form.isSkillForge
-                        ? theme === "dark"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg shadow-blue-900/30"
-                          : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg shadow-blue-500/30"
-                        : theme === "dark"
-                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-900/30"
-                        : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white shadow-lg shadow-purple-500/30"
-                    } disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 ${
-                      form.isSkillForge
-                        ? "focus:ring-blue-500/30"
-                        : "focus:ring-purple-500/30"
-                    }`}
-                  >
-                    {submitting ? (
-                      <>
-                        <div className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-xs sm:text-base">
-                          Creating Collaboration...
-                        </span>
-                      </>
-                    ) : form.isSkillForge ? (
-                      <>
+                    loading={submitting}
+                    loadingText="Creating Collaboration..."
+                    variant="primary"
+                    size="lg"
+                    icon={
+                      !submitting &&
+                      (form.isSkillForge ? (
                         <FiBriefcase className="text-base sm:text-xl" />
-                        <span className="text-xs sm:text-base">
-                          Launch Skill Forge Project
-                        </span>
-                      </>
-                    ) : (
-                      <>
+                      ) : (
                         <FiTarget className="text-base sm:text-xl" />
-                        <span className="text-xs sm:text-base">
-                          Create Professional Gig
-                        </span>
-                      </>
-                    )}
-                  </button>
+                      ))
+                    }
+                    className="w-full"
+                  >
+                    {form.isSkillForge
+                      ? "Launch Skill Forge Project"
+                      : "Create Professional Gig"}
+                  </ProfessionalButton>
                 </div>
               </form>
             </div>
