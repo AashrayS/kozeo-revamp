@@ -290,18 +290,18 @@ export default function LoginSignupPage() {
           </p> */}
 
           {/* Kozeo Logo positioned right above the container */}
-          <div className="mb-8 md:mb-12">
-            <Image
-              src="/logofial.svg"
-              alt="Kozeo Full Logo"
-              width={625}
-              height={147}
-              className="w-72 sm:w-80 md:w-96 lg:w-[400px] xl:w-[450px] 2xl:w-[500px] h-auto brightness-0 invert max-w-[90vw] -ml-14"
-              priority
-            />
-          </div>
 
-          <div className="w-full sm:w-[90%] md:w-1/4 h-full relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden bg-transparent  rounded-2xl ">
+          <div className="w-full sm:w-[90%] md:w-4/10 h-full relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden bg-transparent  rounded-2xl ">
+            <div className="mb-8 md:mb-12">
+              <Image
+                src="/logofial.svg"
+                alt="Kozeo Full Logo"
+                width={625}
+                height={147}
+                className="w-72 sm:w-80 md:w-96 lg:w-[400px] xl:w-[450px] 2xl:w-[500px] h-auto brightness-0 invert max-w-[90vw] -ml-16"
+                priority
+              />
+            </div>
             <div className="flex mb-6">
               <button
                 onClick={() => setShowLogin(true)}
@@ -773,6 +773,19 @@ export default function LoginSignupPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer from landing page */}
+      <footer className="border-t bg-black -mb-24">
+        <div className="container mx-auto py-8 px-4 text-sm text-gray-400 flex items-center -mb-46 justify-between">
+          <span>© {new Date().getFullYear()} Kozeo</span>
+          <a
+            href="#"
+            className="hover:underline text-gray-400 hover:text-white transition-colors"
+          >
+            Contact Us
+          </a>
+        </div>
+      </footer>
     </>
   );
 }
