@@ -17,6 +17,10 @@ import {
 } from "../../../../../utilities/kozeoApi";
 import { useUser } from "../../../../../store/hooks";
 import { selectUser } from "../../../../../store/userSlice";
+import {
+  uploadImageToS3,
+  validateImageFile,
+} from "../../../../../utilities/helper.js";
 
 export default function EditProfilePage() {
   const params = useParams();
@@ -49,8 +53,11 @@ export default function EditProfilePage() {
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [isProfileImageUpdated, setIsProfileImageUpdated] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>("");
   const [showPasswordSection, setShowPasswordSection] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
@@ -96,6 +103,7 @@ export default function EditProfilePage() {
 
           if (profileData.profile_Picture) {
             setProfileImage(profileData.profile_Picture);
+            setIsProfileImageUpdated(false); // Reset update flag when loading existing image
           }
         }
       } catch (error) {
@@ -111,20 +119,38 @@ export default function EditProfilePage() {
   }, [username, isAuthenticated, currentUser, router]);
 
   const handleImageUpload = (file: File) => {
-    if (file && file.type.startsWith("image/")) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert("Please select a valid image file");
+    if (!file) {
+      alert("Please select a valid file");
+      return;
     }
+
+    // Validate the image file using our helper function
+    const validation = validateImageFile(file, {
+      maxSize: 5 * 1024 * 1024, // 5MB
+      allowedTypes: [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ],
+    }) as { isValid: boolean; errors: string[] };
+
+    if (!validation.isValid) {
+      alert(`Upload failed: ${validation.errors.join(", ")}`);
+      return;
+    }
+
+    // Store the file object for later S3 upload
+    setProfileImageFile(file);
+    setIsProfileImageUpdated(true);
+
+    // Create preview for UI
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProfileImage(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,8 +184,40 @@ export default function EditProfilePage() {
     e.preventDefault();
 
     setIsSubmitting(true);
+    setUploadProgress("");
 
     try {
+      let profilePictureUrl = profileImage;
+
+      // If profile picture has been updated, upload to S3 first
+      if (isProfileImageUpdated && profileImageFile) {
+        try {
+          setUploadProgress("Uploading profile picture...");
+          console.log("Uploading profile picture to S3...");
+          profilePictureUrl = await uploadImageToS3(
+            profileImageFile,
+            "profile-pictures"
+          );
+          console.log(
+            "Profile picture uploaded successfully:",
+            profilePictureUrl
+          );
+          setUploadProgress("Profile picture uploaded successfully!");
+        } catch (uploadError) {
+          console.error("S3 upload failed:", uploadError);
+          alert(
+            `Failed to upload profile picture: ${
+              (uploadError as Error).message
+            }`
+          );
+          setIsSubmitting(false);
+          setUploadProgress("");
+          return;
+        }
+      }
+
+      setUploadProgress("Updating profile...");
+
       // Prepare update data (excluding password)
       const updateData = {
         first_name: form.first_name,
@@ -169,18 +227,25 @@ export default function EditProfilePage() {
         bio: form.bio,
         resume: form.resume,
         links: form.links.filter((link) => link.url).map((link) => link.url),
-        ...(profileImage && { profile_Picture: profileImage }),
+        ...(profilePictureUrl && { profile_Picture: profilePictureUrl }),
       };
 
       // Update profile via API
       if (currentUser?.id) {
         await updateUserProfile(currentUser.id, updateData);
         alert("Profile updated successfully!");
+
+        // Reset the update flags
+        setIsProfileImageUpdated(false);
+        setProfileImageFile(null);
+        setUploadProgress("");
+
         router.push(`/profile/${username}`);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile. Please try again.");
+      setUploadProgress("");
     } finally {
       setIsSubmitting(false);
     }
@@ -737,7 +802,7 @@ export default function EditProfilePage() {
                       {isSubmitting ? (
                         <>
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Saving...
+                          {uploadProgress || "Saving..."}
                         </>
                       ) : (
                         "Save Changes"

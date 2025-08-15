@@ -420,20 +420,32 @@ export default function UserProfilePage() {
     setShowAllCollaboratedGigs((prev) => !prev);
   };
 
-  // Filter hosted gigs based on selected skills
+  // Filter hosted gigs based on selected skills and exclude gigs with no reviews
   const filteredHostedGigs = useMemo(() => {
-    if (selectedSkills.length === 0) return profile?.gigsHosted || [];
+    let gigs = profile?.gigsHosted || [];
 
-    return (profile?.gigsHosted || []).filter((gig) =>
+    // Filter out gigs with no reviews
+    gigs = gigs.filter((gig) => gig.reviews && gig.reviews.length > 0);
+
+    // Apply skills filter if any skills are selected
+    if (selectedSkills.length === 0) return gigs;
+
+    return gigs.filter((gig) =>
       selectedSkills.some((skill) => gig.skills && gig.skills.includes(skill))
     );
   }, [profile?.gigsHosted, selectedSkills]);
 
-  // Filter collaborated gigs based on selected skills
+  // Filter collaborated gigs based on selected skills and exclude gigs with no reviews
   const filteredCollaboratedGigs = useMemo(() => {
-    if (selectedSkills.length === 0) return profile?.gigsCollaborated || [];
+    let gigs = profile?.gigsCollaborated || [];
 
-    return (profile?.gigsCollaborated || []).filter((gig) =>
+    // Filter out gigs with no reviews
+    gigs = gigs.filter((gig) => gig.reviews && gig.reviews.length > 0);
+
+    // Apply skills filter if any skills are selected
+    if (selectedSkills.length === 0) return gigs;
+
+    return gigs.filter((gig) =>
       selectedSkills.some((skill) => gig.skills && gig.skills.includes(skill))
     );
   }, [profile?.gigsCollaborated, selectedSkills]);
