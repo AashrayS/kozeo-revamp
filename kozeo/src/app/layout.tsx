@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "../styles/themes.css";
-import Head from "next/head";
 import { NavigationWrapper } from "@/components/common/NavigationWrapper";
 import NotificationProviderClient from "@/components/common/NotificationProviderClient";
 import ApolloWrapper from "@/components/common/ApolloWrapper";
@@ -21,7 +20,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Kozeo",
-  description: "Get your hands dirty with real life projects",
+  description: "Ignore The Noise, Hire With Purpose",
 };
 
 export default function RootLayout({
@@ -31,12 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap"
           rel="stylesheet"
         />
-      </Head>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}
       >
