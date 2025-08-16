@@ -217,22 +217,18 @@ body {
 
 .star:nth-child(2n) {
   animation-duration: 25s, 2s;
-  animation-delay: 0s, 0.5s;
 }
 
 .star:nth-child(3n) {
   animation-duration: 30s, 4s;
-  animation-delay: 0s, 1s;
 }
 
 .star:nth-child(4n) {
   animation-duration: 35s, 2.5s;
-  animation-delay: 0s, 1.5s;
 }
 
 .star:nth-child(5n) {
   animation-duration: 40s, 3.5s;
-  animation-delay: 0s, 2s;
 }
 
 /* Custom Scrollbar Styles */

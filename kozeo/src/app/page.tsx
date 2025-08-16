@@ -237,7 +237,6 @@ const Hero = () => {
                 animation: `moveStars ${
                   15 + Math.random() * 25
                 }s linear infinite`,
-                animationDelay: `${Math.random() * 20}s`,
               }}
             />
           ))}

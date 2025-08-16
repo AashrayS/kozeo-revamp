@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { theme } from "../../theme";
 import { useRef, useEffect } from "react";
 import { useNavigationLoader } from "../../components/common/useNavigationLoader";
@@ -120,6 +120,18 @@ export default function LoginSignupPage() {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
 
+  // Memoize star positions to prevent glitching during re-renders
+  const starPositions = useMemo(() => {
+    return Array.from({ length: 50 }, (_, i) => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: Math.random() * 2 + 1,
+      height: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.5 + 0.3,
+      animationDuration: 15 + Math.random() * 25,
+    }));
+  }, []); // Empty dependency array means this only runs once
+
   // Refs for autofocus
   const otpRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -138,7 +150,6 @@ export default function LoginSignupPage() {
   useEffect(() => {
     if (signupStep === 2 && otpRef.current) otpRef.current.focus();
     if (signupStep === 3 && nameRef.current) nameRef.current.focus();
-    console.log("Signup step changed to:", signupStep);
   }, [signupStep]);
 
   return (
@@ -177,88 +188,40 @@ export default function LoginSignupPage() {
           <div className="absolute inset-0">
             {/* Large Stars */}
             <div className="absolute top-20 left-20 w-1 h-1 bg-white rounded-full animate-pulse opacity-80"></div>
-            <div
-              className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-pulse opacity-60"
-              style={{ animationDelay: "0.5s" }}
-            ></div>
-            <div
-              className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-pulse opacity-70"
-              style={{ animationDelay: "1s" }}
-            ></div>
-            <div
-              className="absolute bottom-40 right-20 w-1 h-1 bg-white rounded-full animate-pulse opacity-90"
-              style={{ animationDelay: "1.5s" }}
-            ></div>
-            <div
-              className="absolute bottom-60 left-1/4 w-1 h-1 bg-white rounded-full animate-pulse opacity-75"
-              style={{ animationDelay: "2s" }}
-            ></div>
-            <div
-              className="absolute top-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-pulse opacity-85"
-              style={{ animationDelay: "2.5s" }}
-            ></div>
+            <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-pulse opacity-60"></div>
+            <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-pulse opacity-70"></div>
+            <div className="absolute bottom-40 right-20 w-1 h-1 bg-white rounded-full animate-pulse opacity-90"></div>
+            <div className="absolute bottom-60 left-1/4 w-1 h-1 bg-white rounded-full animate-pulse opacity-75"></div>
+            <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-pulse opacity-85"></div>
 
             {/* Medium Stars */}
-            <div
-              className="absolute top-32 right-40 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-60"
-              style={{ animationDelay: "0.3s" }}
-            ></div>
-            <div
-              className="absolute top-52 left-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-50"
-              style={{ animationDelay: "0.8s" }}
-            ></div>
-            <div
-              className="absolute bottom-32 left-1/2 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-70"
-              style={{ animationDelay: "1.3s" }}
-            ></div>
-            <div
-              className="absolute bottom-20 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-55"
-              style={{ animationDelay: "1.8s" }}
-            ></div>
-            <div
-              className="absolute top-1/2 left-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-65"
-              style={{ animationDelay: "2.3s" }}
-            ></div>
+            <div className="absolute top-32 right-40 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-60"></div>
+            <div className="absolute top-52 left-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-50"></div>
+            <div className="absolute bottom-32 left-1/2 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-70"></div>
+            <div className="absolute bottom-20 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-55"></div>
+            <div className="absolute top-1/2 left-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse opacity-65"></div>
 
             {/* Small Stars */}
-            <div
-              className="absolute top-24 left-1/2 w-px h-px bg-white opacity-40 animate-pulse"
-              style={{ animationDelay: "0.2s" }}
-            ></div>
-            <div
-              className="absolute top-48 right-16 w-px h-px bg-white opacity-30 animate-pulse"
-              style={{ animationDelay: "0.7s" }}
-            ></div>
-            <div
-              className="absolute bottom-48 left-40 w-px h-px bg-white opacity-45 animate-pulse"
-              style={{ animationDelay: "1.2s" }}
-            ></div>
-            <div
-              className="absolute bottom-24 right-1/2 w-px h-px bg-white opacity-35 animate-pulse"
-              style={{ animationDelay: "1.7s" }}
-            ></div>
-            <div
-              className="absolute top-2/3 right-8 w-px h-px bg-white opacity-40 animate-pulse"
-              style={{ animationDelay: "2.2s" }}
-            ></div>
+            <div className="absolute top-24 left-1/2 w-px h-px bg-white opacity-40 animate-pulse"></div>
+            <div className="absolute top-48 right-16 w-px h-px bg-white opacity-30 animate-pulse"></div>
+            <div className="absolute bottom-48 left-40 w-px h-px bg-white opacity-45 animate-pulse"></div>
+            <div className="absolute bottom-24 right-1/2 w-px h-px bg-white opacity-35 animate-pulse"></div>
+            <div className="absolute top-2/3 right-8 w-px h-px bg-white opacity-40 animate-pulse"></div>
           </div>
 
           {/* Moving Stars */}
           <div className="absolute inset-0 overflow-hidden">
-            {Array.from({ length: 50 }, (_, i) => (
+            {starPositions.map((star, i) => (
               <div
                 key={i}
                 className="absolute bg-white rounded-full"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  width: `${Math.random() * 2 + 1}px`,
-                  height: `${Math.random() * 2 + 1}px`,
-                  opacity: Math.random() * 0.5 + 0.3,
-                  animation: `moveStars ${
-                    15 + Math.random() * 25
-                  }s linear infinite`,
-                  animationDelay: `${Math.random() * 20}s`,
+                  left: `${star.left}%`,
+                  top: `${star.top}%`,
+                  width: `${star.width}px`,
+                  height: `${star.height}px`,
+                  opacity: star.opacity,
+                  animation: `moveStars ${star.animationDuration}s linear infinite`,
                 }}
               />
             ))}
@@ -284,7 +247,7 @@ export default function LoginSignupPage() {
           </div>
         </div>
 
-        <div className="md:w-full w-full flex flex-col items-center justify-center p-6 md:p-10 text-center relative z-10 text-white">
+        <div className="md:w-full w-full flex flex-col  items-center justify-center p-6 md:p-10 text-center relative z-10 text-white">
           {/* <p className="mb-4 md:mb-6 text-sm md:text-base" style={{}}>
             Get your hands dirty with real life projects
           </p> */}
@@ -501,13 +464,10 @@ export default function LoginSignupPage() {
                         >
                           Enter OTP
                         </label>
-                        <p className="text-xs text-gray-500 mb-2">
-                          For testing, use OTP: 123123
-                        </p>
                         <input
                           ref={otpRef}
                           type="text"
-                          placeholder="Enter OTP (Test: 123123)"
+                          placeholder="Enter OTP"
                           value={otp}
                           onChange={(e) => {
                             setOtp(e.target.value);
@@ -603,7 +563,7 @@ export default function LoginSignupPage() {
                         <input
                           ref={nameRef}
                           type="text"
-                          placeholder="John"
+                          placeholder="First Name"
                           value={signupData.first_name}
                           onChange={(e) =>
                             setSignupData({
@@ -621,7 +581,7 @@ export default function LoginSignupPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="Doe"
+                          placeholder="Last Name"
                           value={signupData.last_name}
                           onChange={(e) =>
                             setSignupData({
@@ -639,7 +599,7 @@ export default function LoginSignupPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="johndoe"
+                          placeholder="Username"
                           value={signupData.username}
                           onChange={(e) =>
                             setSignupData({
