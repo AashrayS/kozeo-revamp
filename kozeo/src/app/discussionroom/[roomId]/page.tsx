@@ -530,7 +530,7 @@ export default function DiscussionRoomPage({
                     <div key={i}>
                       {msg.type === "system" ? (
                         <div
-                          className={`text-center text-xs italic py-1 transition-colors duration-300 ${
+                          className={`text-center text-xs italic py-1 transition-colors duration-300 cursor-text select-text ${
                             theme === "dark" ? "text-gray-500" : "text-gray-400"
                           }`}
                         >
@@ -558,10 +558,8 @@ export default function DiscussionRoomPage({
                           )}
 
                           <div
-                            className={`max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-lg break-words whitespace-pre-wrap transition-all duration-200 border ${
-                              msg.type !== "system"
-                                ? "cursor-grab active:cursor-grabbing hover:shadow-md"
-                                : ""
+                            className={`relative max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-lg break-words whitespace-pre-wrap transition-all duration-200 border select-text ${
+                              msg.type !== "system" ? "hover:shadow-md" : ""
                             } ${
                               msg.sender === currentUser
                                 ? "bg-neutral-700/30 border-neutral-600/30 text-neutral-100"
@@ -573,36 +571,43 @@ export default function DiscussionRoomPage({
                                   : "opacity-50 transform translate-x-1"
                                 : ""
                             }`}
-                            draggable={msg.type !== "system"}
-                            onDragStart={(e) => handleDragStart(e, msg)}
-                            onDrag={handleDrag}
-                            onDragEnd={handleDragEnd}
+                            draggable={false}
                           >
                             {/* ...existing code... */}
                             {msg.replyTo && (
                               <div
-                                className={`text-xs mb-2 p-2 rounded border-l-2 max-w-full overflow-hidden ${
+                                className={`text-xs mb-2 p-2 rounded border-l-2 max-w-full overflow-hidden cursor-text select-text ${
                                   theme === "dark"
                                     ? "bg-neutral-700/50 border-cyan-400 text-gray-300"
                                     : "bg-gray-100/80 border-cyan-600 text-gray-600"
                                 }`}
                               >
-                                <div className="font-semibold text-cyan-400 text-[10px] mb-1 truncate">
+                                <div className="font-semibold text-cyan-400 text-[10px] mb-1 truncate cursor-text select-text">
                                   Replying to{" "}
                                   {findReplyMessage(msg.replyTo)?.sender ||
                                     "Unknown"}
                                   :
                                 </div>
-                                <div className="text-[10px] line-clamp-2 break-words">
+                                <div className="text-[10px] line-clamp-2 break-words cursor-text select-text">
                                   {findReplyMessage(msg.replyTo)?.message ||
                                     "Message not found"}
                                 </div>
                               </div>
                             )}
 
+                            {/* Drag handle area */}
+                            <div
+                              className="absolute left-0 top-0 w-2 h-full cursor-grab active:cursor-grabbing opacity-0 hover:opacity-30 bg-gray-500 transition-opacity"
+                              draggable={true}
+                              onDragStart={(e) => handleDragStart(e, msg)}
+                              onDrag={handleDrag}
+                              onDragEnd={handleDragEnd}
+                              title="Drag to reply"
+                            />
+
                             {msg.sender !== currentUser && (
                               <div
-                                className={`text-xs mb-1 font-semibold truncate ${
+                                className={`text-xs mb-1 font-semibold truncate cursor-text select-text ${
                                   theme === "dark"
                                     ? "text-gray-400"
                                     : "text-gray-600"
@@ -611,11 +616,13 @@ export default function DiscussionRoomPage({
                                 {msg.sender}
                               </div>
                             )}
-                            <div className="text-sm whitespace-pre-wrap break-words">
+                            <div className="text-sm whitespace-pre-wrap break-words cursor-text select-text">
                               {msg.message}
                             </div>
                             <div className="text-xs opacity-70 mt-1 flex items-center justify-between">
-                              <span>{msg.time}</span>
+                              <span className="cursor-text select-text">
+                                {msg.time}
+                              </span>
                               <div className="flex items-center gap-2">
                                 {draggedMessage?.id === msg.id &&
                                   isDragOver && (

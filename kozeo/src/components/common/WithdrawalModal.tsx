@@ -155,8 +155,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
             result.id
           }. 
           ${getCurrencySymbol(currency)}${
-            formData.amount
-          } will be transferred to your ${
+          (parseFloat(formData.amount) - 5)
+          }  will be transferred to your ${
             withdrawalMethod === "upi" ? "UPI account" : "bank account"
           } after admin approval. You'll be notified once the request is processed.`
         );

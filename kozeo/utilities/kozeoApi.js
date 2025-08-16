@@ -709,7 +709,7 @@ export const createGig = async (gigData) => {
     !gigData.title ||
     !gigData.looking_For ||
     !gigData.description ||
-    !gigData.skills 
+    !gigData.skills
   ) {
     throw new Error("All required fields must be provided");
   }
@@ -1577,6 +1577,90 @@ export const sendDiscussionMessage = async (messageData) => {
   return result.sendDiscussionMessage;
 };
 
+/**
+ * Create a new discussion room (Admin only)
+ * @param {Object} roomData - Room data including title, description, and displayPicture
+ * @returns {Promise<Object>} Created discussion room data
+ */
+export const createDiscussionRoom = async (roomData) => {
+  const mutationString = `
+    mutation CreateDiscussionRoom($input: CreateDiscussionRoomInput!) {
+      createDiscussionRoom(input: $input) {
+        id
+        title
+        description
+        displayPicture
+        isActive
+        moderators {
+          id
+          first_name
+          last_name
+          username
+          profile_Picture
+          rating
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const result = await mutate(mutationString, { input: roomData });
+  return result.createDiscussionRoom;
+};
+
+/**
+ * Update a discussion room (Admin only)
+ * @param {string} roomId - Room ID to update
+ * @param {Object} updateData - Data to update
+ * @returns {Promise<Object>} Updated discussion room data
+ */
+export const updateDiscussionRoom = async (roomId, updateData) => {
+  const mutationString = `
+    mutation UpdateDiscussionRoom($id: ID!, $input: UpdateDiscussionRoomInput!) {
+      updateDiscussionRoom(id: $id, input: $input) {
+        id
+        title
+        description
+        displayPicture
+        isActive
+        moderators {
+          id
+          first_name
+          last_name
+          username
+          profile_Picture
+          rating
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const result = await mutate(mutationString, { id: roomId, input: updateData });
+  return result.updateDiscussionRoom;
+};
+
+/**
+ * Delete a discussion room (Admin only)
+ * @param {string} roomId - Room ID to delete
+ * @returns {Promise<Object>} Deletion result
+ */
+export const deleteDiscussionRoom = async (roomId) => {
+  const mutationString = `
+    mutation DeleteDiscussionRoom($id: ID!) {
+      deleteDiscussionRoom(id: $id) {
+        success
+        message
+      }
+    }
+  `;
+
+  const result = await mutate(mutationString, { id: roomId });
+  return result.deleteDiscussionRoom;
+};
+
 // ============================================================================
 // NOTIFICATION FUNCTIONS
 // ============================================================================
@@ -2097,13 +2181,7 @@ export const getUserWithdrawRequests = async (userId) => {
     query GetUserWithdrawRequests($userId: ID!) {
       userWithdrawRequests(userId: $userId) {
         id
-        userId {
-          id
-          username
-          first_name
-          last_name
-          email
-        }
+        userId
         email
         accountHolderName
         bankName
@@ -2113,12 +2191,7 @@ export const getUserWithdrawRequests = async (userId) => {
         amount
         status
         remarks
-        processedBy {
-          id
-          username
-          first_name
-          last_name
-        }
+        processedBy
         processedAt
         transactionId
         createdAt
@@ -2159,13 +2232,7 @@ export const getWithdrawRequest = async (requestId) => {
     query GetWithdrawRequest($id: ID!) {
       withdrawRequest(id: $id) {
         id
-        userId {
-          id
-          username
-          first_name
-          last_name
-          email
-        }
+        userId
         email
         accountHolderName
         bankName
@@ -2175,12 +2242,7 @@ export const getWithdrawRequest = async (requestId) => {
         amount
         status
         remarks
-        processedBy {
-          id
-          username
-          first_name
-          last_name
-        }
+        processedBy
         processedAt
         transactionId
         createdAt
@@ -2207,6 +2269,109 @@ export const getWithdrawRequest = async (requestId) => {
     return data.withdrawRequest;
   } catch (error) {
     console.error("Error fetching withdraw request:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get all withdraw requests (Admin only)
+ * @returns {Promise<Array>} Array of all withdraw requests
+ */
+export const getAllWithdrawRequests = async () => {
+  const query = `
+    query GetAllWithdrawRequests {
+      withdrawRequests {
+        id
+        userId
+        email
+        accountHolderName
+        bankName
+        accountNumber
+        ifscCode
+        upi
+        amount
+        status
+        remarks
+        processedBy
+        processedAt
+        transactionId
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  // Get JWT token from localStorage for authentication
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("kozeo_auth_token")
+      : null;
+
+  try {
+    const data = await callApi({
+      query,
+      variables: {},
+      token,
+    });
+
+    return data.withdrawRequests;
+  } catch (error) {
+    console.error("Error fetching all withdraw requests:", error);
+    throw error;
+  }
+};
+
+/**
+ * Update withdraw request status (Admin only)
+ * @param {string} requestId - Withdraw request ID
+ * @param {string} status - New status (pending, approved, rejected, processed, completed)
+ * @param {string} remarks - Optional remarks
+ * @returns {Promise<Object>} Updated withdraw request
+ */
+export const updateWithdrawRequestStatus = async (
+  requestId,
+  status,
+  remarks = null
+) => {
+  const mutation = `
+    mutation UpdateWithdrawRequestStatus(
+      $id: ID!
+      $status: WithdrawRequestStatus!
+      $remarks: String
+    ) {
+      updateWithdrawRequestStatus(id: $id, status: $status, remarks: $remarks) {
+        id
+        status
+        remarks
+        processedBy
+        processedAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables = {
+    id: requestId,
+    status: status,
+    remarks: remarks,
+  };
+
+  // Get JWT token from localStorage for authentication
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("kozeo_auth_token")
+      : null;
+
+  try {
+    const data = await callApi({
+      query: mutation,
+      variables,
+      token,
+    });
+
+    return data.updateWithdrawRequestStatus;
+  } catch (error) {
+    console.error("Error updating withdraw request status:", error);
     throw error;
   }
 };

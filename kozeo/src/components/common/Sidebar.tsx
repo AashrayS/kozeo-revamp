@@ -10,6 +10,8 @@ import {
   FiHome,
   FiSun,
   FiMoon,
+  FiDollarSign,
+  FiSettings,
 } from "react-icons/fi";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -43,6 +45,18 @@ export default function Sidebar() {
     },
   ];
 
+  // Admin-specific tabs
+  const adminTabs: { name: string; icon: IconType; path: string }[] = [
+    {
+      name: "Admin Settings",
+      icon: FiSettings,
+      path: "/admin/settings",
+    },
+  ];
+
+  // Combine tabs based on user role
+  const allTabs = user?.role === "admin" ? [...tabs, ...adminTabs] : tabs;
+
   const handleNavigation = (path: string) => {
     // Check if user is already on the target page
     if (pathname === path) {
@@ -72,7 +86,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-col p-4 space-y-6">
           <nav className="space-y-8">
-            {tabs.map(({ name, icon: Icon, path }) => {
+            {allTabs.map(({ name, icon: Icon, path }) => {
               const isActive = isActivePath(path);
 
               return (
@@ -146,7 +160,7 @@ export default function Sidebar() {
           </nav>
 
           {/* Theme Toggle */}
-          <div className="relative group">
+          {/* <div className="relative group">
             <button
               onClick={toggleTheme}
               className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
@@ -167,7 +181,7 @@ export default function Sidebar() {
               )}
             </button>
             {/* Tooltip for collapsed view */}
-            {collapsed && (
+            {/* {collapsed && (
               <div
                 className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-lg border ${
                   theme === "light"
@@ -184,8 +198,8 @@ export default function Sidebar() {
                   }`}
                 ></div>
               </div>
-            )}
-          </div>
+            )} */}
+          {/* </div> */} 
 
           {/* Collapse Button - hidden on mobile devices */}
           <div className="relative group hidden sm:block">
