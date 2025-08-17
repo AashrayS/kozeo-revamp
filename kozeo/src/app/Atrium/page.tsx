@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import { FiSearch } from "react-icons/fi";
-import { FiStar } from "react-icons/fi";
+import { FiSearch, FiStar, FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import {
   getAllGigs,
@@ -455,12 +454,29 @@ export default function Home() {
                         <div>
                           {/* Profile Picture */}
                           <div className="flex justify-center mb-4">
-                            <img
-                              src={user.profile_Picture}
-                              alt={user.username}
-                              className="w-16 h-16 rounded-full object-cover border-2 border-cyan-400 shadow-sm"
-                              onError={(e) => {}}
-                            />
+                            <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-700 shadow-sm bg-gray-800 flex items-center justify-center">
+                              {user.profile_Picture ? (
+                                <img
+                                  src={user.profile_Picture}
+                                  alt={user.username}
+                                  className="w-full h-full object-cover object-center"
+                                  style={{
+                                    minWidth: "100%",
+                                    minHeight: "100%",
+                                  }}
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.display = "none";
+                                    const parent = target.parentElement;
+                                    if (parent) {
+                                      parent.innerHTML = `<svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                <FiUser className="w-8 h-8 text-gray-400" />
+                              )}
+                            </div>
                           </div>
 
                           {/* Username & Rating */}

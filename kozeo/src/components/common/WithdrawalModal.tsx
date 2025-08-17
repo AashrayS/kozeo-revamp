@@ -155,7 +155,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
             result.id
           }. 
           ${getCurrencySymbol(currency)}${
-          (parseFloat(formData.amount) - 5)
+            parseFloat(formData.amount) - 5
           }  will be transferred to your ${
             withdrawalMethod === "upi" ? "UPI account" : "bank account"
           } after admin approval. You'll be notified once the request is processed.`
@@ -402,21 +402,18 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      setWithdrawalMethod("upi");
-                      setUpiVerificationStatus("none");
+                      // UPI option is disabled
                     }}
-                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                      withdrawalMethod === "upi"
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300"
-                        : theme === "light"
-                        ? "border-gray-200 hover:border-gray-300 text-gray-700"
-                        : "border-neutral-600 hover:border-neutral-500 text-gray-300"
+                    className={`p-3 rounded-lg border-2 transition-all duration-200 opacity-50 cursor-not-allowed ${
+                      theme === "light"
+                        ? "border-gray-200 text-gray-400 bg-gray-100"
+                        : "border-neutral-700 text-gray-500 bg-neutral-800"
                     }`}
-                    disabled={isProcessing}
+                    disabled={true}
                   >
                     <FiUser className="text-lg mx-auto mb-1" />
                     <div className="text-xs font-medium">UPI</div>
-                    <div className="text-xs opacity-75">24 hours</div>
+                    <div className="text-xs opacity-75">Coming Soon</div>
                   </button>
                 </div>
               </div>

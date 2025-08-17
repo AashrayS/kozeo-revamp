@@ -4,9 +4,11 @@ import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import storeItems from "../../../data/store.json";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useTheme } from "../../contexts/ThemeContext";
+import { getUserWallet } from "../../../utilities/kozeoApi";
+import { useSelector } from "react-redux";
 
 export interface StoreItem {
   id: number;
@@ -14,22 +16,45 @@ export interface StoreItem {
   description: string;
   displayPicture: string;
   type: string; // e.g., "tshirt", "mug", etc.
-  creditsAmount: number;
+  amount: number;
 }
 
 export default function StorePage() {
   const { theme } = useTheme();
-  //   const [cart, setCart] = useState([]);
+  const { user } = useSelector((state: any) => state.user);
   const [cart, setCart] = useState<number[]>([]);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [isLoadingWallet, setIsLoadingWallet] = useState<boolean>(true);
 
-  const toggleCartItem = (item: StoreItem) => {
+  // Fetch wallet balance on component mount
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (user?.id) {
+        try {
+          setIsLoadingWallet(true);
+          const walletData = await getUserWallet(user.id, "INR");
+          setWalletBalance((walletData as any)?.amount || 0);
+        } catch (error) {
+          console.error("Error fetching wallet balance:", error);
+          setWalletBalance(0);
+        } finally {
+          setIsLoadingWallet(false);
+        }
+      } else {
+        setIsLoadingWallet(false);
+      }
+    };
+
+    fetchWalletBalance();
+  }, [user?.id]);
+
+  const toggleCartItem = (item: any) => {
     setCart((prev) =>
       prev.includes(item.id)
         ? prev.filter((id) => id !== item.id)
         : [...prev, item.id]
     );
   };
-  let availableCredits = 100;
 
   return (
     <>
@@ -78,6 +103,45 @@ export default function StorePage() {
             </div>
           </div>
 
+          {/* Store Closed Banner */}
+          <div
+            className={`w-full mb-8 p-6 rounded-xl border transition-all duration-300 ${
+              theme === "dark"
+                ? "border-neutral-700 bg-gradient-to-r from-neutral-900/50 to-neutral-800/50 text-gray-300"
+                : "border-gray-200 bg-gradient-to-r from-gray-50 to-white text-gray-700 shadow-sm"
+            }`}
+          >
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <div
+                className={`w-2 h-2 rounded-full animate-pulse ${
+                  theme === "dark" ? "bg-cyan-400" : "bg-blue-500"
+                }`}
+              ></div>
+              <h3
+                className={`text-xl font-semibold ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Store Coming Soon
+              </h3>
+              <div
+                className={`w-2 h-2 rounded-full animate-pulse ${
+                  theme === "dark" ? "bg-cyan-400" : "bg-blue-500"
+                }`}
+              ></div>
+            </div>
+            <p
+              className={`text-center leading-relaxed ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              We're curating an exclusive collection of premium developer
+              merchandise and tools. Stay tuned for the official launch of the
+              Kozeo Store. You can still checkout our existing products in the
+              meantime and add them to cart!
+            </p>
+          </div>
+
           {/* Store Heading */}
           <div className="flex justify-between items-center mb-4">
             <h2
@@ -88,7 +152,7 @@ export default function StorePage() {
               Kozeo Store
             </h2>
             <span className="text-emerald-400 font-semibold text-lg">
-              Available : {availableCredits} Credits
+              Available: ₹{isLoadingWallet ? "..." : walletBalance.toFixed(2)}
             </span>
           </div>
 
@@ -143,7 +207,7 @@ export default function StorePage() {
 
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-emerald-400 font-semibold text-sm">
-                    {item.creditsAmount} Credits
+                    ₹{item.creditsAmount}
                   </span>
                   <button
                     onClick={() => toggleCartItem(item)}
@@ -171,7 +235,7 @@ export default function StorePage() {
                 }`}
               >
                 <FaShoppingCart className="text-lg" />
-                Proceed to Checkout ({cart.length}{" "}
+                Items added to cart ({cart.length}{" "}
                 {cart.length === 1 ? "item" : "items"})
               </button>
             </div>

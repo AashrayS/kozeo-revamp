@@ -10,6 +10,7 @@ import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import { FaCamera, FaUpload, FaTimes, FaLock, FaUnlock } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
 import {
   getUserByUsername,
   updateUserProfile,
@@ -380,19 +381,19 @@ export default function EditProfilePage() {
                     <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                       {/* Avatar Display */}
                       <div className="relative">
-                        <div className="w-32 h-32 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full flex items-center justify-center overflow-hidden">
+                        <div className="w-32 h-32 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
                           {profileImage ? (
                             <img
                               src={profileImage}
                               alt="Profile"
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover object-center"
+                              style={{
+                                minWidth: "100%",
+                                minHeight: "100%",
+                              }}
                             />
                           ) : (
-                            <span className="text-white text-4xl font-bold">
-                              {username
-                                ? username.charAt(0).toUpperCase()
-                                : "U"}
-                            </span>
+                            <FiUser className="w-16 h-16 text-gray-400" />
                           )}
                         </div>
 

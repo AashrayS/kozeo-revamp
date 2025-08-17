@@ -284,6 +284,98 @@ export const generateS3Filename = (originalName, prefix = "") => {
     : `${baseName}_${timestamp}_${randomString}.${extension}`;
 };
 
+/**
+ * Identify website domain from various link formats
+ * @param {string} link - The URL or link to parse
+ * @returns {string|null} - Returns the clean domain name or null if invalid
+ */
+export const identifyWebsite = (link) => {
+  try {
+    // Handle empty or null input
+    if (!link || typeof link !== 'string') {
+      return null;
+    }
+    
+    // Remove leading/trailing whitespace
+    link = link.trim();
+    
+    // If the link doesn't start with http/https, add https://
+    if (!link.match(/^https?:\/\//i)) {
+      // Handle cases like "www.example.com" or just "example.com"
+      link = 'https://' + link;
+    }
+    
+    // Create URL object to parse the link
+    const url = new URL(link);
+    
+    // Extract hostname and remove 'www.' if present
+    let hostname = url.hostname.toLowerCase();
+    
+    // Remove 'www.' prefix if it exists
+    if (hostname.startsWith('www.')) {
+      hostname = hostname.substring(4);
+    }
+    
+    return hostname;
+    
+  } catch (error) {
+    // If URL parsing fails, try manual extraction
+    try {
+      // Remove protocol if present
+      let cleanLink = link.replace(/^https?:\/\//i, '');
+      
+      // Remove path, query parameters, and fragments
+      cleanLink = cleanLink.split('/')[0];
+      cleanLink = cleanLink.split('?')[0];
+      cleanLink = cleanLink.split('#')[0];
+      
+      // Remove port if present
+      cleanLink = cleanLink.split(':')[0];
+      
+      // Remove 'www.' if present
+      if (cleanLink.toLowerCase().startsWith('www.')) {
+        cleanLink = cleanLink.substring(4);
+      }
+      
+      return cleanLink.toLowerCase();
+      
+    } catch (fallbackError) {
+      console.error('Error parsing link:', fallbackError);
+      return null;
+    }
+  }
+};
+
+/**
+ * Test function for identifyWebsite with various link formats
+ */
+// export const testIdentifyWebsite = () => {
+//   const testLinks = [
+//     'https://www.google.com',
+//     'http://facebook.com/user/profile',
+//     'www.youtube.com/watch?v=123',
+//     'github.com/user/repo',
+//     'https://subdomain.example.com/path',
+//     'ftp://files.example.org',
+//     'https://www.amazon.co.uk/product?id=123',
+//     'localhost:3000/app',
+//     'https://drive.google.com/file/d/abc123',
+//     'twitter.com/username',
+//     '  https://www.reddit.com/r/programming  ', // with whitespace
+//     'invalid-url',
+//     '',
+//     null
+//   ];
+  
+//   console.log('Testing website identification:');
+//   console.log('================================');
+  
+//   testLinks.forEach(link => {
+//     const result = identifyWebsite(link);
+//     console.log(`Input: "${link}" -> Website: "${result}"`);
+//   });
+// };
+
 // Export all functions as default for easy import
 export default {
   uploadImageToS3,
@@ -291,4 +383,6 @@ export default {
   getPresignedUploadUrl,
   validateImageFile,
   generateS3Filename,
+  identifyWebsite,
+  // testIdentifyWebsite,
 };

@@ -78,10 +78,9 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ease-in-out ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all h-24 duration-300 ease-in-out ${
         isOnDarkBackground ? "bg-transparent" : "bg-transparent border-gray-200"
       }`}
-      style={{ height: "clamp(60px, 8vh, 100px)" }}
     >
       <nav
         className="flex items-center justify-center h-full relative"
@@ -263,10 +262,12 @@ const Hero = () => {
         >
           {/* Kozeo Combined Logo */}
           <div
-            className="flex items-center justify-start w-full hero-logo"
-            style={{ 
-              marginBottom: "clamp(1rem, 4vh, 4rem)"
-            }}
+            className="flex items-center justify-center sm:justify-start w-full hero-logo"
+            style={
+              {
+                // marginBottom: "clamp(1rem, 4vh, 4rem)",
+              }
+            }
           >
             <Image
               src="/logoFial.svg"
@@ -284,7 +285,7 @@ const Hero = () => {
           </div>
 
           <h1
-            className="font-normal leading-tight text-white text-center sm:text-left hero-title"
+            className="font-normal leading-tight text-white text-center sm:text-left sm:ml-0 md:ml-10 hero-title"
             style={{
               fontSize: "clamp(1.5rem, 5vw, 4rem)",
               marginBottom: "clamp(1rem, 3vh, 2.5rem)",
@@ -296,7 +297,7 @@ const Hero = () => {
             Hire With Purpose
           </h1>
           <p
-            className="text-gray-300 leading-relaxed text-center sm:text-left hero-subtitle"
+            className="text-gray-300 leading-relaxed text-center sm:text-left sm:ml-0 md:ml-10  hero-subtitle"
             style={{
               fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
               marginBottom: "clamp(2rem, 5vh, 3rem)",
@@ -307,7 +308,7 @@ const Hero = () => {
             Every project on Kozeo contributes to your professional growth.
           </p>
           <div
-            className="flex flex-row items-center justify-center sm:justify-start hero-buttons"
+            className="flex flex-row items-center justify-center sm:justify-start sm:ml-0 md:ml-10  hero-buttons"
             style={{ gap: "clamp(0.75rem, 3vw, 1.5rem)" }}
           >
             <Link
@@ -549,6 +550,133 @@ export default function Home() {
                     Work on meaningful projects that create real value while
                     building proof of your domain expertise.
                   </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Resume Enhancement Section */}
+          <section
+            id="resume-section"
+            data-scroll-animation
+            className={`bg-gradient-to-br from-gray-900 to-black transition-all duration-1000 ease-out ${
+              isVisible("resume-section")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+            style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
+          >
+            <div
+              className="max-w-6xl mx-auto"
+              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                {/* Image Side - Shows first on mobile */}
+                <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+                  <div className="relative">
+                    <div
+                      className="bg-white  shadow-2xl p-6 lg:transform lg:rotate-3 lg:hover:rotate-0 transition-transform duration-300"
+                      style={{
+                        maxWidth: "clamp(280px, 50vw, 400px)",
+                        width: "100%",
+                      }}
+                    >
+                      <Image
+                        src="/Resume.jpg"
+                        alt="Resume with Kozeo profile integration"
+                        className="w-full h-auto "
+                        width={400}
+                        height={600}
+                        style={{
+                          aspectRatio: "3/4",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+
+                    {/* Floating badge */}
+                    {/* <div className="absolute -top-4 -right-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300">
+                       Stand Out
+                    </div> */}
+                  </div>
+                </div>
+
+                {/* Content Side - Shows second on mobile */}
+                <div className="order-2 lg:order-1">
+                  <h2
+                    className="font-normal leading-tight text-white text-center lg:text-left"
+                    style={{
+                      fontSize: "clamp(2.5rem, 6vw, 4rem)",
+                      marginBottom: "clamp(1.5rem, 4vh, 2rem)",
+                    }}
+                  >
+                    Showcase Your
+                    <br />
+                    <span className="text-cyan-400">Kozeo Journey</span>
+                  </h2>
+
+                  <p
+                    className="text-gray-300 mb-8"
+                    style={{
+                      fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                      lineHeight: "1.6",
+                      marginBottom: "clamp(2rem, 4vh, 2.5rem)",
+                    }}
+                  >
+                    Stand out to recruiters by showcasing your real-world
+                    project experience. Add your Kozeo profile URL and project
+                    details directly to your resume.
+                  </p>
+
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-white text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-white mb-2">
+                          Include Your Kozeo Profile URL
+                        </h3>
+                        <p className="text-gray-400">
+                          Add your personalized Kozeo profile link to let
+                          recruiters explore your complete project portfolio and
+                          professional achievements.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-white text-sm font-bold">2</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-white mb-2">
+                          Highlight Your Projects
+                        </h3>
+                        <p className="text-gray-400">
+                          List specific projects you've completed through Kozeo,
+                          showcasing the real-world impact of your technical
+                          skills and problem-solving abilities.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-white text-sm font-bold">3</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-white mb-2">
+                          Demonstrate Proven Experience
+                        </h3>
+                        <p className="text-gray-400">
+                          Show recruiters that you've worked on real projects
+                          with actual organizations, not just theoretical
+                          exercises or personal hobby projects.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -867,7 +995,7 @@ export default function Home() {
           <div className="container mx-auto py-8 px-4 text-sm text-gray-600 flex items-center justify-between">
             <span>© {new Date().getFullYear()} Kozeo</span>
             <a href="/" className="hover:underline">
-              Back to top
+              Contact Us
             </a>
           </div>
         </footer>

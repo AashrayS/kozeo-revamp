@@ -10,6 +10,7 @@ import {
 import { isAuthenticated } from "../../../../utilities/api";
 import { FiPlus, FiX } from "react-icons/fi";
 import { FaCamera, FaUpload, FaTimes } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
 import { useTheme } from "@/contexts/ThemeContext";
 import { PageLoader } from "../../../components/common/PageLoader";
 import {
@@ -411,19 +412,19 @@ export default function ProfileSetupPage() {
                   <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                     {/* Avatar Display */}
                     <div className="relative">
-                      <div className="w-24 h-24 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full flex items-center justify-center overflow-hidden">
+                      <div className="w-24 h-24 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
                         {profileImage ? (
                           <img
                             src={profileImage}
                             alt="Profile"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-center"
+                            style={{
+                              minWidth: "100%",
+                              minHeight: "100%",
+                            }}
                           />
                         ) : (
-                          <span className="text-white text-2xl font-bold">
-                            {currentUser?.username
-                              ? currentUser.username.charAt(0).toUpperCase()
-                              : "U"}
-                          </span>
+                          <FiUser className="w-12 h-12 text-gray-400" />
                         )}
                       </div>
 

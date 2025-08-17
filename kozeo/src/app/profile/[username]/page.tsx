@@ -20,6 +20,8 @@ import {
   FiEye,
   FiChevronDown,
   FiChevronUp,
+  FiFileText,
+  FiUser,
 } from "react-icons/fi";
 import {
   getUserByUsername,
@@ -28,6 +30,7 @@ import {
 import { useUser } from "../../../../store/hooks";
 import { isAuthenticated } from "../../../../utilities/api";
 import { useTheme } from "@/contexts/ThemeContext";
+import { identifyWebsite } from "../../../../utilities/helper";
 
 interface ProfileData {
   id: string;
@@ -148,6 +151,12 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
     lg: "text-lg lg:text-2xl",
   };
 
+  const iconSizeClasses = {
+    sm: "w-6 h-6",
+    md: "w-8 h-8", 
+    lg: "w-12 h-12",
+  };
+
   const handleImageError = () => {
     setImageError(true);
   };
@@ -165,26 +174,26 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
 
   return (
     <div
-      className={`${sizeClasses[size]} bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative`}
+      className={`${sizeClasses[size]} bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm`}
     >
       {shouldShowImage && (
         <img
           src={profilePic}
           alt={`${username}'s profile`}
-          className={`w-full h-full object-cover transition-opacity duration-200 ${
+          className={`w-full h-full object-cover object-center transition-opacity duration-200 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
+          style={{
+            minWidth: "100%",
+            minHeight: "100%",
+          }}
           onError={handleImageError}
           onLoad={handleImageLoad}
         />
       )}
-      <span
-        className={`text-white ${textSizeClasses[size]} font-bold ${
-          shouldShowImage && imageLoaded ? "absolute opacity-0" : "flex"
-        } items-center justify-center w-full h-full transition-opacity duration-200`}
-      >
-        {getInitials(username)}
-      </span>
+      {!shouldShowImage && (
+        <FiUser className={`${iconSizeClasses[size]} text-gray-400`} />
+      )}
     </div>
   );
 }
@@ -1016,28 +1025,70 @@ export default function UserProfilePage() {
                         </span> */}
                       </div>
 
-                      {/* Links */}
-                      {profile.links && profile.links.length > 0 && (
-                        <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-                          {profile.links.map((link, idx) => (
-                            <a
-                              key={idx}
-                              href={link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`text-sm hover:scale-105 transition-all duration-200 theme-transition ${
-                                theme === "light"
-                                  ? "text-cyan-600 hover:text-cyan-700"
-                                  : "text-cyan-400 hover:text-cyan-300"
-                              }`}
-                            >
-                              {link
-                                .replace(/^https?:\/\//, "")
-                                .replace(/\/$/, "")}
-                            </a>
-                          ))}
-                        </div>
-                      )}
+                      {/* Links and Resume */}
+                      <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                        {/* Website Links */}
+                        {profile.links && profile.links.length > 0 && (
+                          <>
+                            {profile.links.map((link, idx) => {
+                              const websiteName = identifyWebsite(link);
+                              return (
+                                <a
+                                  key={idx}
+                                  href={link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`px-3 py-1 text-sm rounded-full border transition-all duration-200 hover:scale-105 theme-transition ${
+                                    theme === "light"
+                                      ? "bg-cyan-50 border-cyan-200 text-cyan-700 hover:bg-cyan-100"
+                                      : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/50"
+                                  }`}
+                                >
+                                  {websiteName ||
+                                    link
+                                      .replace(/^https?:\/\//, "")
+                                      .replace(/\/$/, "")}
+                                </a>
+                              );
+                            })}
+                          </>
+                        )}
+
+                        {/* Resume Button */}
+                        <button
+                          onClick={() => {
+                            if (profile.resume) {
+                              window.open(
+                                profile.resume,
+                                "_blank",
+                                "noopener,noreferrer"
+                              );
+                            }
+                          }}
+                          disabled={!profile.resume}
+                          className={`px-3 py-1 text-sm rounded-full border transition-all duration-200 flex items-center gap-2 ${
+                            profile.resume
+                              ? `hover:scale-105 cursor-pointer ${
+                                  theme === "light"
+                                    ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                                    : "bg-green-950/50 border-green-800/50 text-green-300 hover:bg-green-900/50"
+                                }`
+                              : `cursor-not-allowed opacity-50 ${
+                                  theme === "light"
+                                    ? "bg-gray-50 border-gray-200 text-gray-400"
+                                    : "bg-gray-950/50 border-gray-800/50 text-gray-500"
+                                }`
+                          } theme-transition`}
+                          title={
+                            profile.resume
+                              ? "View Resume"
+                              : "Resume not available"
+                          }
+                        >
+                          <FiFileText className="text-xs" />
+                          Resume
+                        </button>
+                      </div>
                     </div>
                   </div>
 
