@@ -836,7 +836,16 @@ export default function DescriptionClient() {
                         <img
                           src={displayHost.profile_Picture}
                           alt={displayHost.username}
-                          className="w-20 h-20 rounded-full object-cover shadow-lg border-2 border-gray-300"
+                          className="w-20 h-20 rounded-full object-cover shadow-lg"
+                          style={{
+                            backgroundColor: "#1f2937",
+                            border: "2px solid #374151",
+                            aspectRatio: "1/1",
+                            minWidth: "80px",
+                            minHeight: "80px",
+                            maxWidth: "80px",
+                            maxHeight: "80px",
+                          }}
                           onError={() => {
                             setHostProfile((prev: any) =>
                               prev
@@ -846,8 +855,17 @@ export default function DescriptionClient() {
                           }}
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-gray-300">
-                          {displayHost.username?.charAt(0).toUpperCase() || "H"}
+                        <div
+                          className="w-20 h-20 rounded-full bg-gray-800 border-2 border-gray-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                          style={{
+                            aspectRatio: "1/1",
+                            minWidth: "80px",
+                            minHeight: "80px",
+                            maxWidth: "80px",
+                            maxHeight: "80px",
+                          }}
+                        >
+                          <FiUser className="w-10 h-10 text-gray-400" />
                         </div>
                       )}
                     </div>
@@ -885,7 +903,7 @@ export default function DescriptionClient() {
                           </span>
                         </div>
 
-                        {displayHost.country_Code && (
+                        {/* {displayHost.country_Code && (
                           <div
                             className={`px-3 py-1.5 rounded-lg border text-sm font-medium ${
                               theme === "light"
@@ -895,7 +913,7 @@ export default function DescriptionClient() {
                           >
                             📍 {displayHost.country_Code}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
