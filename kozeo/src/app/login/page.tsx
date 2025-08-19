@@ -20,7 +20,7 @@ import Link from "next/link";
 // Navbar Component - Same as landing page but simplified for login
 const Navbar = () => {
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-transparent">
+    <header className="fixed top-0 inset-x-0 z-50 bg-black">
       <nav
         className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-6 relative"
         aria-label="Global"

@@ -56,19 +56,35 @@ const Navbar = () => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
 
-      const ctaSection = document.querySelector('[data-section="cta"]');
+      // Get all dark sections
+      const heroSection = document.querySelector("#hero-section");
+      const resumeSection = document.querySelector("#resume-section");
+      const skillForgeSection = document.querySelector("#skill-forge-section");
+      const ctaSection = document.querySelector("#cta-section");
 
-      if (ctaSection) {
-        const heroEnd = viewportHeight;
-        const ctaRect = ctaSection.getBoundingClientRect();
-        const isInCta = ctaRect.top <= 100 && ctaRect.bottom >= 0;
-        const isInHero = scrollY < heroEnd - 100;
+      let isOnDark = false;
 
-        setIsOnDarkBackground(isInHero || isInCta);
-      } else {
-        const isInHero = scrollY < viewportHeight - 100;
-        setIsOnDarkBackground(isInHero);
+      // Check if we're in any dark section
+      const darkSections = [
+        heroSection,
+        resumeSection,
+        skillForgeSection,
+        ctaSection,
+      ];
+
+      for (const section of darkSections) {
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // Check if navbar overlaps with this dark section
+          if (rect.top <= 64 && rect.bottom >= 0) {
+            // 64px is navbar height
+            isOnDark = true;
+            break;
+          }
+        }
       }
+
+      setIsOnDarkBackground(isOnDark);
     };
 
     handleScroll();
@@ -78,8 +94,8 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all h-24 duration-300 ease-in-out ${
-        isOnDarkBackground ? "bg-transparent" : "bg-transparent border-gray-200"
+      className={`fixed top-0 inset-x-0 z-50 transition-all h-16 duration-300 ease-in-out ${
+        isOnDarkBackground ? "bg-black" : "bg-white border-gray-200"
       }`}
     >
       <nav
