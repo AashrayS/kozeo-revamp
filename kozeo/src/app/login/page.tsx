@@ -256,13 +256,13 @@ export default function LoginSignupPage() {
           {/* Kozeo Logo positioned right above the container */}
 
           <div className="w-full sm:w-[90%] md:w-4/10 h-full relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden bg-transparent  rounded-2xl ">
-            <div className="mb-8 md:mb-12">
+             <div className="mb-8 md:mb-12 flex justify-center items-center w-full">
               <Image
                 src="/logoFial.svg"
                 alt="Kozeo Full Logo"
                 width={625}
                 height={147}
-                className="w-72 sm:w-80 md:w-96 lg:w-[400px] xl:w-[450px] 2xl:w-[500px] h-auto brightness-0 invert max-w-[90vw] -ml-16"
+                className="w-72 sm:w-80 md:w-96 lg:w-[400px] xl:w-[450px] 2xl:w-[500px] h-auto brightness-0 invert max-w-[90vw] -ml-4"
                 priority
               />
             </div>
@@ -290,10 +290,11 @@ export default function LoginSignupPage() {
             {/* Sliding Form Container */}
             <div className="relative w-full overflow-x-hidden sm:h-auto">
               <div
-                className="w-full h-full flex transition-transform duration-500 ease-in-out"
+                className="w-full h-auto flex  transition-transform duration-500 ease-in-out"
                 style={{
                   transform: `translateX(${showLogin ? "0%" : "-50%"})`,
                   width: "200%",
+                  // minHeight: "300px",
                 }}
               >
                 {/* Login Form */}
