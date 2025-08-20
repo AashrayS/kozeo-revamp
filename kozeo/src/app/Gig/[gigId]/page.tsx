@@ -32,7 +32,7 @@ import { useUser } from "../../../../store/hooks";
 import { useTheme } from "../../../contexts/ThemeContext";
 
 // Manual Payment API handler
-export async function HandleManualPayment({
+async function HandleManualPayment({
   messageId,
   gigID,
   sender,
