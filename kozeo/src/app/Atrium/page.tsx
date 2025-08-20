@@ -411,7 +411,8 @@ export default function Home() {
                             </div>
                           ) : (
                             <span className="text-sm font-semibold text-emerald-500">
-                              {gig.currency} {gig.amount}
+                              {gig.currency}{" "}
+                              {Number(gig.amount).toLocaleString("en-IN")}
                             </span>
                           )}
                           <span

@@ -792,10 +792,7 @@ export const updateGig = async (gigId, updateData) => {
 export const deleteGig = async (gigId) => {
   const deleteGigMutation = `
     mutation DeleteGig($id: ID!) {
-      deleteGig(id: $id) {
-        success
-        message
-      }
+      deleteGig(id: $id)
     }
   `;
 

@@ -46,10 +46,11 @@ export default function DescriptionClient() {
     title: "",
     description: "",
     looking_For: "",
-    skills: "",
+    skills: [] as string[],
     amount: 0,
     currency: "INR",
   });
+  const [editNewSkill, setEditNewSkill] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const searchParams = useSearchParams();
@@ -322,6 +323,27 @@ export default function DescriptionClient() {
     setShowMessageModal(true);
   };
 
+  // Add skill to edit modal
+  const addEditSkill = () => {
+    if (
+      editNewSkill.trim() &&
+      !editFormData.skills.includes(editNewSkill.trim())
+    ) {
+      setEditFormData((prev) => ({
+        ...prev,
+        skills: [...prev.skills, editNewSkill.trim()],
+      }));
+      setEditNewSkill("");
+    }
+  };
+
+  const removeEditSkill = (skillToRemove: string) => {
+    setEditFormData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((skill) => skill !== skillToRemove),
+    }));
+  };
+
   const handleEditGig = () => {
     setEditFormData({
       title: gig.title || "",
@@ -347,9 +369,9 @@ export default function DescriptionClient() {
       };
 
       const updatedGig = await updateGig(gigId ?? "", updateData);
-      setGig(updatedGig);
       setIsEditMode(false);
-      alert("Gig updated successfully!");
+      // refresh the page
+      window.location.reload();
     } catch (error) {
       console.error("Error updating gig:", error);
       alert("Failed to update gig. Please try again.");
@@ -361,12 +383,11 @@ export default function DescriptionClient() {
   const handleDeleteGig = async () => {
     try {
       const result = await deleteGig(gigId ?? "");
-      const { success, message } = result as { success?: boolean; message?: string };
-      if (success) {
+      if (result) {
         alert("Gig deleted successfully!");
         router.push("/gigs");
       } else {
-        alert(message || "Failed to delete gig");
+        alert("Failed to delete gig");
       }
     } catch (error) {
       console.error("Error deleting gig:", error);
@@ -380,7 +401,7 @@ export default function DescriptionClient() {
       title: "",
       description: "",
       looking_For: "",
-      skills: "",
+      skills: [],
       amount: 0,
       currency: "INR",
     });
@@ -528,7 +549,7 @@ export default function DescriptionClient() {
                         theme === "light" ? "text-gray-900" : "text-white"
                       }`}
                     >
-                      {gig.currency} {gig.amount}
+                      {gig.currency} {Number(gig.amount).toLocaleString("en-IN")}
                     </div>
                     <div
                       className={`text-sm sm:text-base ${
@@ -1225,7 +1246,9 @@ export default function DescriptionClient() {
                               : "text-gray-400"
                           }`}
                         >
-                          <div className="text-2xl mb-2">⭐</div>
+                          <div className="text-2xl mb-2">
+                            <FiStar></FiStar>
+                          </div>
                           <div className="text-sm">No reviews yet</div>
                           <div className="text-xs mt-1">
                             This host is new or hasn't received reviews yet
@@ -1434,22 +1457,55 @@ export default function DescriptionClient() {
                     >
                       Skills Required *
                     </label>
-                    <input
-                      type="text"
-                      value={editFormData.skills}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          skills: e.target.value,
-                        })
-                      }
-                      className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
-                        theme === "dark"
-                          ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                          : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
-                      }`}
-                      placeholder="e.g., React, Node.js, Python, UI/UX Design"
-                    />
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="text"
+                        value={editNewSkill}
+                        onChange={(e) => setEditNewSkill(e.target.value)}
+                        onKeyPress={(e) =>
+                          e.key === "Enter" &&
+                          (e.preventDefault(), addEditSkill())
+                        }
+                        placeholder="Add a skill (e.g., React, Figma...)"
+                        className={`flex-1 px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
+                          theme === "dark"
+                            ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
+                            : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={addEditSkill}
+                        className="px-4 py-2 rounded-lg bg-cyan-600 text-white font-medium hover:bg-cyan-700 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {editFormData.skills.map((skill, index) => (
+                        <span
+                          key={index}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300 hover:scale-105 text-sm ${
+                            theme === "dark"
+                              ? "bg-neutral-800 border-neutral-600 text-gray-200"
+                              : "bg-gray-50 border-gray-200 text-gray-800"
+                          }`}
+                        >
+                          <span className="font-medium">{skill}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeEditSkill(skill)}
+                            className={`transition-colors duration-300 hover:scale-110 ${
+                              theme === "dark"
+                                ? "text-gray-400 hover:text-red-400"
+                                : "text-gray-500 hover:text-red-500"
+                            }`}
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Amount and Currency */}

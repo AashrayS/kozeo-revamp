@@ -31,6 +31,41 @@ import {
 import { useUser } from "../../../../store/hooks";
 import { useTheme } from "../../../contexts/ThemeContext";
 
+// Manual Payment API handler
+export async function HandleManualPayment({
+  messageId,
+  gigID,
+  sender,
+  receiver,
+  amount,
+  contactDetails,
+}: {
+  messageId: string;
+  gigID: string;
+  sender: string;
+  receiver: string;
+  amount: number;
+  contactDetails: string;
+}) {
+  debugger;
+  const response = await fetch("http://localhost:4001/manual-payment-request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messageId,
+      gigID,
+      sender,
+      receiver,
+      amount,
+      contactDetails,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error("Manual payment request failed");
+  }
+  return await response.json();
+}
+
 import { io } from "socket.io-client";
 import { WEBSOCKET_URL } from "@/config";
 // import {sendPaymentMail} from "../../../../utilities/helper"
@@ -59,32 +94,7 @@ export default function GigPage({
 }) {
   // ...existing code...
   // Manual payment submit handler
-  const handleManualPaymentSubmit = async () => {
-    setIsManualSubmitting(true);
-    try {
-      // Prepare email content
-      const mailData = {
-        gigId,
-        amount: paymentAmount,
-        currency : "INR",
-        to: getOtherPartyUsername(),
-        from: getCurrentUsername(),
-        contact: manualContact,
-      };
 
-      // Call backend API to send mail (replace with your API endpoint)
-      // await sendPaymentMail(mailData);
-
-      setShowManualPaymentModal(false);
-      setPaymentAmount("");
-      setManualContact("");
-      alert("You will be contacted soon regarding this payment.");
-    } catch (err) {
-      alert("Failed to submit manual payment. Please try again.");
-    } finally {
-      setIsManualSubmitting(false);
-    }
-  };
   const { gigId } = use(paramsPromise);
   const router = useRouter();
   const { theme } = useTheme();
@@ -98,6 +108,7 @@ export default function GigPage({
   const [gigError, setGigError] = useState<string | null>(null);
 
   const [input, setInput] = useState("");
+  const [paymentMessageId, setPaymentMessageId] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const [showMobileChat, setShowMobileChat] = useState(true);
   const [isGigInfoMinimized, setIsGigInfoMinimized] = useState(false);
@@ -154,6 +165,28 @@ export default function GigPage({
 
   // Get payment gateway from environment variable
   const paymentGateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "Razorpay";
+
+  const handleManualPaymentSubmit = async () => {
+    setIsManualSubmitting(true);
+    try {
+      await HandleManualPayment({
+        messageId: paymentMessageId,
+        gigID: gigId,
+        sender: user?._id || username,
+        receiver: gig?.guest?.id || gig?.clientUsername,
+        amount: Number(paymentAmount),
+        contactDetails: manualContact,
+      });
+      setShowManualPaymentModal(false);
+      setPaymentAmount("");
+      setManualContact("");
+      alert("Manual payment request registered. You will be contacted soon.");
+    } catch (err) {
+      alert("Failed to submit manual payment. Please try again.");
+    } finally {
+      setIsManualSubmitting(false);
+    }
+  };
 
   // Helper function to get payment gateway configuration
   const getPaymentGatewayConfig = () => {
@@ -227,8 +260,6 @@ export default function GigPage({
         setGigLoading(false);
       }
     };
-
-    
 
     const fetchChatMessages = async () => {
       try {
@@ -1295,20 +1326,6 @@ export default function GigPage({
       setIsManualSubmitting(true);
       try {
         // Prepare email content
-        const mailData = {
-          gigId,
-          amount: paymentAmount,
-          to: getOtherPartyUsername(),
-          from: getCurrentUsername(),
-          contact: manualContact,
-        };
-
-        // Call backend API to send mail (replace with your API endpoint)
-        await fetch("/api/sendManualPaymentMail", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mailData),
-        });
 
         setShowManualPaymentModal(false);
         setPaymentAmount("");
@@ -1644,6 +1661,7 @@ export default function GigPage({
   };
 
   // Handle Cashfree payment
+
   const handleCashfreePayment = async (
     amountInSmallestUnit: number,
     messageId: string
@@ -1655,9 +1673,6 @@ export default function GigPage({
         gig?.currency === "INR" ? "INR" : "USD",
         {
           gigId: gigId,
-          // originalRequestId: messageId,
-          // paymentType: "acceptance",
-          // description: `Payment acceptance for gig: ${gig?.title}`,
           customer_id: user?.id || "guest_" + Date.now(),
           customer_name: user?.name || "Guest User",
           customer_email: user?.email || "guest@example.com",
@@ -1685,25 +1700,53 @@ export default function GigPage({
 
         const checkoutOptions = {
           paymentSessionId: (orderResponse as any).paymentSessionId,
-          returnUrl: `${
-            window.location.origin
-          }/gig/${gigId}?payment_status=success&order_id=${
-            (orderResponse as any).orderId
-          }&message_id=${messageId}`,
+          // No returnUrl here!
+          theme: {
+            backgroundColor: "#ffffff",
+            color: "#000000",
+            primaryColor: "#3b82f6",
+          },
         };
 
-        // Open Cashfree payment modal
-        cashfree.checkout(checkoutOptions).then((result: any) => {
-          if (result.error) {
-            console.error("Cashfree payment error:", result.error);
-            alert("Payment failed: " + result.error.message);
-            setTldrawInputDisabled(false);
-          } else {
-            // User was redirected to payment page
-            console.log("User redirected to Cashfree payment page");
-            // Payment verification will happen when user returns via URL parameters
+        console.log("Opening Cashfree payment modal...");
+
+        try {
+          // Open Cashfree payment modal (this returns a promise)
+          const paymentResult = await cashfree.checkout(checkoutOptions);
+
+          // Handle payment completion without page redirect
+          if (paymentResult.error) {
+            console.error("Cashfree payment error:", paymentResult.error);
+            alert("Payment failed: " + paymentResult.error.message);
+          } else if (paymentResult.paymentDetails) {
+            // Payment was successful - handle success on same page
+            console.log("Payment successful:", paymentResult.paymentDetails);
+
+            // Verify payment with your backend
+            await handleCashFreePaymentSuccess(
+              paymentResult.paymentDetails.orderId,
+              messageId,
+              paymentResult.paymentDetails
+            );
           }
-        });
+        } catch (modalError) {
+          console.error("Payment modal error:", modalError);
+
+          if (
+            typeof modalError === "object" &&
+            modalError !== null &&
+            "type" in modalError &&
+            (modalError as any).type === "user_cancelled"
+          ) {
+            console.log("User cancelled payment");
+            // Handle user cancellation gracefully
+          } else {
+            alert("Payment process failed. Please try again.");
+          }
+        } finally {
+          // Re-enable Tldraw input after payment process completes
+          setTldrawInputDisabled(false);
+        }
       } else {
         alert(
           (orderResponse as any).message ||
@@ -1717,16 +1760,109 @@ export default function GigPage({
     }
   };
 
-  const handleManualPayment = (
-      amount: number | string,
-      to?: string,
-      from?: string
-    ) => {
-      setPaymentAmount(amount?.toString() || "");
-      setShowManualPaymentModal(true);
-      // Optionally set other fields if needed
-      // You can also set 'to' and 'from' in state if you want to show/edit them in the modal
-    };
+  // New function to handle payment success verification
+  const handleCashFreePaymentSuccess = async (
+    orderId: string,
+    messageId: string,
+    paymentDetails: any
+  ) => {
+    try {
+      console.log("Verifying payment...", { orderId, messageId });
+
+      // Call your payment verification endpoint
+      const verificationResponse = await fetch("/api/verify-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId: orderId,
+          messageId: messageId,
+          paymentDetails: paymentDetails,
+        }),
+      });
+
+      const verificationData = await verificationResponse.json();
+
+      if (verificationData.success) {
+        console.log("Payment verified successfully!");
+
+        // Show success message/notification on the same page
+        showSuccessNotification("Payment completed successfully!");
+
+        // Update UI to reflect successful payment
+        // For example: update message status, show confirmation, etc.
+        updateMessagePaymentStatus(messageId, "paid");
+
+        // Optionally refresh relevant data
+        // await refreshGigData();
+      } else {
+        console.error("Payment verification failed:", verificationData.message);
+        alert("Payment verification failed. Please contact support.");
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      alert("Failed to verify payment. Please contact support.");
+    }
+  };
+
+  // Helper function to show success notification (implement based on your UI library)
+  const showSuccessNotification = (message: string) => {
+    // Using a simple alert for now - replace with your notification system
+    // Examples: toast notification, in-app notification, etc.
+
+    // For toast notifications (if you're using react-hot-toast):
+    // toast.success(message);
+
+    // For now, using alert:
+    alert(message);
+
+    // Or show an in-page success banner:
+    // setShowSuccessBanner(true);
+    // setTimeout(() => setShowSuccessBanner(false), 5000);
+  };
+
+  // Helper function to update message payment status
+  const updateMessagePaymentStatus = (messageId: string, status: string) => {
+    // Update your local state to reflect the payment
+    // This depends on your state management structure
+
+    console.log(`Updated message ${messageId} payment status to: ${status}`);
+
+    // Example: if you're managing messages in state
+    // setMessages(prevMessages =>
+    //   prevMessages.map(msg =>
+    //     msg.id === messageId
+    //       ? { ...msg, paymentStatus: status }
+    //       : msg
+    //   )
+    // );
+  };
+
+  // Optional: Add a loading state during payment processing
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+
+  // Modified version with loading state:
+  const handleCashfreePaymentWithLoading = async (
+    amountInSmallestUnit: number,
+    messageId: string
+  ) => {
+    setIsPaymentProcessing(true);
+
+    try {
+      await handleCashfreePayment(amountInSmallestUnit, messageId);
+    } finally {
+      setIsPaymentProcessing(false);
+    }
+  };
+
+  const handleManualPayment = (amount: number | string, messageId: string) => {
+    setPaymentAmount(amount?.toString() || "");
+    setPaymentMessageId(messageId);
+    setShowManualPaymentModal(true);
+    // Optionally set other fields if needed
+    // You can also set 'to' and 'from' in state if you want to show/edit them in the modal
+  };
 
   // Handle Razorpay payment (existing implementation)
   const handleRazorpayPayment = async (
@@ -3370,52 +3506,127 @@ export default function GigPage({
         </div>
       )}
       {/* Manual Payment Modal */}
-       {showManualPaymentModal && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm">
-                    <div className={`bg-gradient-to-br from-neutral-800 to-neutral-900 border border-blue-500/20 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 ${theme === "light" ? "text-gray-900" : "text-white"}`}>
-                      <h2 className="text-2xl font-bold mb-4 text-blue-300">Manual Payment Request</h2>
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-blue-200 mb-1">Gig ID</label>
-                        <input type="text" value={gigId} readOnly className="w-full border border-blue-500/30 rounded-lg px-3 py-2 bg-neutral-900/60 text-blue-200" />
-                      </div>
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-blue-200 mb-1">Amount</label>
-                        <input type="text" value={paymentAmount} readOnly className="w-full border border-blue-500/30 rounded-lg px-3 py-2 bg-neutral-900/60 text-blue-200" />
-                      </div>
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-blue-200 mb-1">To</label>
-                        <input type="text" value={getOtherPartyUsername()} readOnly className="w-full border border-blue-500/30 rounded-lg px-3 py-2 bg-neutral-900/60 text-blue-200" />
-                      </div>
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-blue-200 mb-1">From</label>
-                        <input type="text" value={getCurrentUsername()} readOnly className="w-full border border-blue-500/30 rounded-lg px-3 py-2 bg-neutral-900/60 text-blue-200" />
-                      </div>
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-blue-200 mb-1">Your Contact Details</label>
-                        <input
-                          type="text"
-                          value={manualContact}
-                          onChange={e => setManualContact(e.target.value)}
-                          placeholder="Email or phone number"
-                          className="w-full border border-blue-500/30 rounded-lg px-3 py-2 bg-neutral-900/80 text-blue-100 placeholder-blue-400"
-                          required
-                        />
-                      </div>
-                      <div className="flex justify-end mt-6 gap-2">
-                        <button
-                          className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-blue-200 font-medium rounded-lg border border-blue-500/30 transition-colors"
-                          onClick={() => setShowManualPaymentModal(false)}
-                          disabled={isManualSubmitting}
-                        >Cancel</button>
-                        <button
-                          className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-md border border-green-500/30 hover:from-green-600 hover:to-blue-600 transition-colors"
-                          onClick={handleManualPaymentSubmit}
-                          disabled={isManualSubmitting || !manualContact}
-                        >Submit</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+      {showManualPaymentModal && (
+       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
+  <div
+    className={`bg-gradient-to-br from-neutral-900  to-black border border-neutral-600 rounded-2xl shadow-2xl p-8 max-w-lg w-full mx-4 ${
+      theme === "light" ? "text-gray-900" : "text-white"
+    } relative overflow-hidden`}
+  >
+    {/* Subtle glow effect */}
+    <div className="absolute inset-0 bg-gradient-to-br from-gray-600/5 via-transparent to-gray-700/5 rounded-2xl"></div>
+    
+    <div className="relative z-10">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-600 to-gray-700 flex items-center justify-center">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-semibold text-slate-100">
+          Payment Request
+        </h2>
+      </div>
+
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Gig ID
+            </label>
+            <input
+              type="text"
+              value={gigId}
+              readOnly
+              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 font-mono text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Amount
+            </label>
+            <input
+              type="text"
+              value={paymentAmount}
+              readOnly
+              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              To
+            </label>
+            <input
+              type="text"
+              value={getOtherPartyUsername()}
+              readOnly
+              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              From
+            </label>
+            <input
+              type="text"
+              value={getCurrentUsername()}
+              readOnly
+              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">
+            Your Contact Details
+          </label>
+          <input
+            type="text"
+            value={manualContact}
+            onChange={(e) => setManualContact(e.target.value)}
+            placeholder=" Phone number"
+            className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/80 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 transition-all duration-200"
+            required
+          />
+          <p className="text-xs text-slate-400 mt-1">Required for payment verification</p>
+        </div>
+      </div>
+
+      <div className="flex justify-end mt-8 gap-3">
+        <button
+          className="px-6 py-3 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-medium rounded-xl border border-slate-600/40 transition-all duration-200 hover:shadow-lg backdrop-blur-sm"
+          onClick={() => setShowManualPaymentModal(false)}
+          disabled={isManualSubmitting}
+        >
+          Cancel
+        </button>
+        <button
+          className="px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-gray-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          onClick={handleManualPaymentSubmit}
+          disabled={isManualSubmitting || !manualContact}
+        >
+          {isManualSubmitting ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              Submitting...
+            </>
+          ) : (
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              Submit Request
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+      )}
     </>
   );
 }
