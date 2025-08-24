@@ -34,9 +34,9 @@ export default function GigLobbyScreen({
         <Sidebar />
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
-            {/* Gig Info Container */}
+            {/* Project Info Container */}
             <section className="flex-1 bg-neutral-900/70 border border-neutral-800 rounded-2xl p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] max-w-xl">
-              <h2 className="text-2xl font-bold mb-4">Gig Info</h2>
+              <h2 className="text-2xl font-bold mb-4">Project Info</h2>
               {gigInfo ? (
                 <div className="space-y-2">
                   <div>
@@ -64,7 +64,7 @@ export default function GigLobbyScreen({
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-400">No gig info available.</div>
+                <div className="text-gray-400">No project info available.</div>
               )}
             </section>
             {/* Incoming Requests Container */}

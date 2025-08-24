@@ -68,6 +68,14 @@ const IMAGE_WORKER = getEnv(() => process.env.TLDRAW_IMAGE_URL) ?? 'https://imag
  * The store can be passed directly into the `<Tldraw />` component to enable multiplayer features.
  * It will handle loading states, and enable multiplayer UX like user cursors and following.
  *
+ * **Image Sharing Features:**
+ * - Users can drag and drop images directly onto the canvas
+ * - Images are automatically uploaded to the server and shared with all participants
+ * - Supports common image formats (PNG, JPEG, GIF, WebP, SVG)
+ * - File size limit: 10MB per image
+ * - Images are optimized and transformed for better performance
+ * - Automatic fallback to base64 encoding if server uploads are not available
+ *
  * All data on the demo server is
  *
  * - Deleted after a day or so.
@@ -125,30 +133,102 @@ export function useSyncDemo(
 }
 
 function shouldDisallowUploads(host: string) {
-	const disallowedHosts = ['tldraw.com', 'tldraw.xyz']
-	return disallowedHosts.some(
-		(disallowedHost) => host === disallowedHost || host.endsWith(`.${disallowedHost}`)
+	// For demo purposes, we'll use base64 encoding for official tldraw servers
+	// and attempt server uploads for custom hosts
+	const officialDemoHosts = ['demo.tldraw.xyz', 'demo.tldraw.com']
+	return officialDemoHosts.some(
+		(demoHost) => host === demoHost || host.endsWith(`.${demoHost}`)
 	)
 }
 
 function createDemoAssetStore(host: string): TLAssetStore {
 	return {
 		upload: async (_asset, file) => {
-			if (shouldDisallowUploads(host)) {
-				alert('Uploading images is disabled in this demo.')
-				throw new Error('Uploading images is disabled in this demo.')
-			}
-			const id = uniqueId()
+			console.log('🖼️ TLDraw: Attempting to upload image:', {
+				name: file.name,
+				type: file.type,
+				size: file.size,
+				host
+			})
 
+			// Check if uploads are allowed for this host
+			if (shouldDisallowUploads(host)) {
+				console.log('🖼️ TLDraw: Using base64 encoding for official demo server')
+				// For disallowed hosts, use base64 encoding as fallback
+				return new Promise((resolve, reject) => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						console.log('🖼️ TLDraw: Base64 encoding successful')
+						resolve({ src: reader.result as string })
+					}
+					reader.onerror = () => {
+						console.error('🖼️ TLDraw: Base64 encoding failed')
+						reject(new Error('Failed to read file'))
+					}
+					reader.readAsDataURL(file)
+				})
+			}
+
+			// Validate file type (only allow images)
+			if (!file.type.startsWith('image/')) {
+				throw new Error('Only image files are allowed')
+			}
+
+			// Check file size limit (10MB for uploads, 5MB for base64)
+			const maxSize = 10 * 1024 * 1024 // 10MB
+			if (file.size > maxSize) {
+				throw new Error('File size too large. Maximum size is 10MB')
+			}
+			
+			const id = uniqueId()
 			const objectName = `${id}-${file.name}`.replace(/\W/g, '-')
 			const url = `${host}/uploads/${objectName}`
 
-			await fetch(url, {
-				method: 'POST',
-				body: file,
-			})
+			try {
+				console.log('🖼️ TLDraw: Attempting server upload to:', url)
+				const response = await fetch(url, {
+					method: 'POST',
+					body: file,
+					headers: {
+						'Content-Type': file.type,
+					},
+				})
 
-			return { src: url }
+				if (!response.ok) {
+					// If server upload fails, fallback to base64
+					console.warn('🖼️ TLDraw: Server upload failed, falling back to base64 encoding')
+					return new Promise((resolve, reject) => {
+						const reader = new FileReader()
+						reader.onload = () => {
+							console.log('🖼️ TLDraw: Base64 fallback successful')
+							resolve({ src: reader.result as string })
+						}
+						reader.onerror = () => {
+							console.error('🖼️ TLDraw: Base64 fallback failed')
+							reject(new Error('Failed to read file'))
+						}
+						reader.readAsDataURL(file)
+					})
+				}
+
+				console.log('🖼️ TLDraw: Server upload successful:', url)
+				return { src: url }
+			} catch (error) {
+				console.warn('🖼️ TLDraw: Upload failed, falling back to base64:', error)
+				// Fallback to base64 encoding if upload fails
+				return new Promise((resolve, reject) => {
+					const reader = new FileReader()
+					reader.onload = () => {
+						console.log('🖼️ TLDraw: Base64 fallback successful')
+						resolve({ src: reader.result as string })
+					}
+					reader.onerror = () => {
+						console.error('🖼️ TLDraw: Base64 fallback failed')
+						reject(new Error('Failed to read file'))
+					}
+					reader.readAsDataURL(file)
+				})
+			}
 		},
 
 		resolve(asset, context) {
@@ -160,35 +240,35 @@ function createDemoAssetStore(host: string): TLAssetStore {
 			// Assert it's an image to make TS happy.
 			if (asset.type !== 'image') return null
 
-			// Don't try to transform data: URLs, yikes.
+			// Don't try to transform data: URLs (base64 encoded images)
 			if (!asset.props.src.startsWith('http:') && !asset.props.src.startsWith('https:'))
 				return asset.props.src
 
 			if (context.shouldResolveToOriginal) return asset.props.src
 
-			// Don't try to transform animated images.
+			// Don't try to transform animated images (GIFs, etc.)
 			if (MediaHelpers.isAnimatedImageType(asset?.props.mimeType) || asset.props.isAnimated)
 				return asset.props.src
 
-			// Don't try to transform vector images.
+			// Don't try to transform vector images (SVG)
 			if (MediaHelpers.isVectorImageType(asset?.props.mimeType)) return asset.props.src
 
 			const url = new URL(asset.props.src)
 
-			// we only transform images that are hosted on domains we control
+			// Transform images hosted on our domains or tldraw domains
 			const isTldrawImage =
 				url.origin === host || /\.tldraw\.(?:com|xyz|dev|workers\.dev)$/.test(url.host)
 
 			if (!isTldrawImage) return asset.props.src
 
-			// Assets that are under a certain file size aren't worth transforming (and incurring cost).
-			// We still send them through the image worker to get them optimized though.
+			// Assets that are under a certain file size aren't worth transforming
+			// We still send them through the image worker for optimization
 			const { fileSize = 0 } = asset.props
-			const isWorthResizing = fileSize >= 1024 * 1024 * 1.5
+			const isWorthResizing = fileSize >= 1024 * 1024 * 1.5 // 1.5MB threshold
 
 			if (isWorthResizing) {
-				// N.B. navigator.connection is only available in certain browsers (mainly Blink-based browsers)
-				// 4g is as high the 'effectiveType' goes and we can pick a lower effective image quality for slower connections.
+				// Adjust image quality based on network connection
+				// navigator.connection is only available in certain browsers
 				const networkCompensation =
 					!context.networkEffectiveType || context.networkEffectiveType === '4g' ? 1 : 0.5
 
@@ -203,6 +283,8 @@ function createDemoAssetStore(host: string): TLAssetStore {
 				)
 
 				url.searchParams.set('w', width.toString())
+				// Add quality parameter for better optimization
+				url.searchParams.set('q', '85') // 85% quality for good balance
 			}
 
 			const newUrl = `${IMAGE_WORKER}/${url.host}/${url.toString().slice(url.origin.length + 1)}`

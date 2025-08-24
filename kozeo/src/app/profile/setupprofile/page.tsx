@@ -1,303 +1,614 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { theme } from "../../../theme";
-import InputField from "../../../components/common/InputField";
-import Header from "@/components/common/Header";
-import {useRouter} from "next/navigation";
+import Header from "../../../components/common/Header";
+import { useRouter } from "next/navigation";
+import {
+  updateUserProfile,
+  getCurrentUser,
+} from "../../../../utilities/kozeoApi";
+import { isAuthenticated } from "../../../../utilities/api";
+import { FiPlus, FiX } from "react-icons/fi";
+import { FaCamera, FaUpload, FaTimes } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
+import { useTheme } from "@/contexts/ThemeContext";
+import { PageLoader } from "../../../components/common/PageLoader";
+import {
+  uploadImageToS3,
+  validateImageFile,
+} from "../../../../utilities/helper.js";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
-  const isDark = true;
-  const currentTheme = isDark ? theme.dark : theme.light;
+  const { theme } = useTheme();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [uploadProgress, setUploadProgress] = useState<string>("");
+
+  // Profile image states
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [isProfileImageUpdated, setIsProfileImageUpdated] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
-    email: "a@demo.com",
-    username: "",
+    bio: "",
     phone: "",
-    country_code: "",
+    profile_Picture: "",
     resume: "",
-    links: [{ website: "", url: "" }],
+    links: [] as string[],
   });
 
-  const [otp, setOtp] = useState("");
-  const [showOtpStep, setShowOtpStep] = useState(false);
-  const [resendCooldown, setResendCooldown] = useState(0);
-  const [isSendingOtp, setIsSendingOtp] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-const otpRef = useRef<HTMLInputElement>(null);
+  const [newLink, setNewLink] = useState("");
 
-  const countryCodes = [
-    { code: "+91", name: "India" },
-    { code: "+1", name: "USA" },
-    { code: "+44", name: "UK" },
-    { code: "+81", name: "Japan" },
-    { code: "+61", name: "Australia" },
-  ];
-
+  // Check authentication and load current user
   useEffect(() => {
-    if (resendCooldown > 0) {
-      const timer = setTimeout(
-        () => setResendCooldown(resendCooldown - 1),
-        1000
-      );
-      return () => clearTimeout(timer);
+    const loadUser = async () => {
+      if (!isAuthenticated()) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+
+        // Pre-fill form with existing user data
+        setForm({
+          first_name: (user as any).first_name || "",
+          last_name: (user as any).last_name || "",
+          bio: (user as any).bio || "",
+          phone: (user as any).phone || "",
+          profile_Picture: (user as any).profile_Picture || "",
+          resume: (user as any).resume || "",
+          links: (user as any).links || [],
+        });
+
+        // Set existing profile image if available
+        if ((user as any).profile_Picture) {
+          setProfileImage((user as any).profile_Picture);
+        }
+      } catch (error) {
+        console.error("Error loading user:", error);
+        setError("Failed to load user data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, [router]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const addLink = () => {
+    if (newLink.trim() && !form.links.includes(newLink.trim())) {
+      setForm((prev) => ({
+        ...prev,
+        links: [...prev.links, newLink.trim()],
+      }));
+      setNewLink("");
     }
-  }, [resendCooldown]);
+  };
 
-  useEffect(() => {
-    if (showOtpStep && otpRef.current) otpRef.current.focus();
-  }, [showOtpStep]);
+  const removeLink = (linkToRemove: string) => {
+    setForm((prev) => ({
+      ...prev,
+      links: prev.links.filter((link) => link !== linkToRemove),
+    }));
+  };
+
+  // Image upload handlers
+  const handleImageUpload = (file: File) => {
+    if (!file) {
+      setError("Please select a valid file");
+      return;
+    }
+
+    // Validate the image file using our helper function
+    const validation = validateImageFile(file, {
+      maxSize: 5 * 1024 * 1024, // 5MB
+      allowedTypes: [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ],
+    }) as { isValid: boolean; errors: string[] };
+
+    if (!validation.isValid) {
+      setError(`Upload failed: ${validation.errors.join(", ")}`);
+      return;
+    }
+
+    // Store the file object for later S3 upload
+    setProfileImageFile(file);
+    setIsProfileImageUpdated(true);
+
+    // Create preview for UI
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProfileImage(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setUploadProgress("");
+
+    if (!currentUser) {
+      setError("User data not loaded");
+      return;
+    }
+
+    // Basic validation
+    if (!form.first_name.trim() || !form.last_name.trim()) {
+      setError("First name and last name are required");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      let profilePictureUrl = form.profile_Picture;
+
+      // If profile picture has been updated, upload to S3 first
+      if (isProfileImageUpdated && profileImageFile) {
+        try {
+          setUploadProgress("Uploading profile picture...");
+          console.log("Uploading profile picture to S3...");
+          profilePictureUrl = await uploadImageToS3(
+            profileImageFile,
+            "profile-pictures"
+          );
+          console.log(
+            "Profile picture uploaded successfully:",
+            profilePictureUrl
+          );
+          setUploadProgress("Profile picture uploaded successfully!");
+        } catch (uploadError) {
+          console.error("S3 upload failed:", uploadError);
+          setError(
+            `Failed to upload profile picture: ${
+              (uploadError as Error).message
+            }`
+          );
+          setIsSubmitting(false);
+          setUploadProgress("");
+          return;
+        }
+      }
+
+      setUploadProgress("Updating profile...");
+
+      const updateData = {
+        first_name: form.first_name.trim(),
+        last_name: form.last_name.trim(),
+        bio: form.bio.trim(),
+        phone: form.phone.trim(),
+        profile_Picture: profilePictureUrl,
+        resume: form.resume.trim(),
+        links: form.links,
+      };
+
+      await updateUserProfile((currentUser as any).id, updateData);
+      setSuccess("Profile updated successfully!");
+
+      // Reset the update flags
+      setIsProfileImageUpdated(false);
+      setProfileImageFile(null);
+      setUploadProgress("");
+
+      // Redirect to profile page after a short delay
+      setTimeout(() => {
+        router.push(`/profile/${(currentUser as any).username}`);
+      }, 2000);
+    } catch (error: any) {
+      setError(error?.message || "Failed to update profile. Please try again.");
+      setUploadProgress("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <PageLoader
+        duration={1500}
+        onComplete={() => {}}
+        useSlideAnimation={false}
+      />
+    );
+  }
 
   return (
     <>
-      <Header logoText="Kozeo" />
+      {isPageLoading && (
+        <PageLoader
+          duration={2000}
+          onComplete={() => setIsPageLoading(false)}
+          useSlideAnimation={false}
+        />
+      )}
+
       <div
-        className="min-h-screen w-full flex items-center justify-center px-6 py-10 bg-[radial-gradient(circle_at_center,_#111,_#000)]"
-        style={{ fontFamily: currentTheme.fonts.base }}
+        className={`transition-opacity duration-1000 ${
+          isPageLoading ? "opacity-0" : "opacity-100"
+        }`}
       >
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="w-full max-w-3xl space-y-8 rounded-lg shadow-lg p-8  border border-gray-700"
+        <Header logoText="Kozeo" />
+        {/* Glows */}
+        {theme === "dark" && (
+          <>
+            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          </>
+        )}
+
+        <div
+          className={`min-h-screen relative z-10 flex overflow-y-auto transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
+              : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+          }`}
         >
-          <h1 className="text-4xl font-bold text-white text-center mb-6">
-            Profile Setup
-          </h1>
-
-          {/* Personal Details */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
-              Personal Details
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <InputField
-                placeholder="First Name"
-                value={form.first_name}
-                onChange={(e) =>
-                  setForm({ ...form, first_name: e.target.value })
-                }
-                style={baseInputStyle(currentTheme)}
-              />
-              <InputField
-                placeholder="Last Name"
-                value={form.last_name}
-                onChange={(e) =>
-                  setForm({ ...form, last_name: e.target.value })
-                }
-                style={baseInputStyle(currentTheme)}
-              />
-              <InputField
-                type="email"
-                placeholder="Email"
-                value={form.email}
-                
-                style={baseInputStyle(currentTheme)}
-              />
-              <InputField
-                placeholder="Username"
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-                style={baseInputStyle(currentTheme)}
-              />
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
-              Contact Information
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <InputField
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                style={baseInputStyle(currentTheme)}
-              />
-              <select
-                value={form.country_code}
-                onChange={(e) =>
-                  setForm({ ...form, country_code: e.target.value })
-                }
-                className="p-3 rounded-md border sm:col-span-1"
-                style={baseInputStyle(currentTheme)}
+          <div className="flex-1 max-w-2xl mx-auto p-6">
+            <div className="mb-8 text-center">
+              <h1
+                className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
               >
-                <option value="">Code</option>
-                {countryCodes.map((item) => (
-                  <option key={item.code} value={item.code}>
-                    {item.name} ({item.code})
-                  </option>
-                ))}
-              </select>
-              {!showOtpStep ? (
-                <button
-                  type="button"
-                  disabled={isSendingOtp}
-                  onClick={() => {
-                    if (form.phone.length < 4) return;
-                    setShowOtpStep(true);
-                    setIsSendingOtp(true);
-                    setTimeout(() => {
-                      setIsSendingOtp(false);
-                      setResendCooldown(30);
-                    }, 1500);
-                  }}
-                  className="w-full py-3 px-4 text-white rounded-md transition-all"
-                  style={{ background: currentTheme.colors.primary }}
-                >
-                  {isSendingOtp ? "Sending OTP..." : "Verify Phone"}
-                </button>
-              ) : (
-                <>
-                  <InputField
-                    ref={otpRef}
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    style={baseInputStyle(currentTheme)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (otp.trim().length >= 4) setShowOtpStep(false);
-                    }}
-                    className="w-full py-3 text-white rounded-md"
-                    style={{ background: currentTheme.colors.primary }}
-                  >
-                    Confirm OTP
-                  </button>
-                  <p className="text-sm text-gray-400 text-center">
-                    Didn’t receive it?{" "}
-                    {resendCooldown === 0 ? (
-                      <button
-                        className="underline text-blue-400"
-                        onClick={() => {
-                          setIsSendingOtp(true);
-                          setTimeout(() => {
-                            setIsSendingOtp(false);
-                            setResendCooldown(30);
-                          }, 1500);
-                        }}
-                      >
-                        Resend OTP
-                      </button>
-                    ) : (
-                      `Wait ${resendCooldown}s`
-                    )}
-                  </p>
-                </>
-              )}
+                Complete Your Profile
+              </h1>
+              <p
+                className={`transition-colors duration-300 ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                Tell us more about yourself to get started
+              </p>
             </div>
-          </div>
 
-          {/* Professional Details */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
-              Professional Details
-            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div
+                className={`rounded-lg p-6 shadow-md transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-gradient-to-br from-[#111] to-[#1a1a1a]"
+                    : "bg-white/90 border border-gray-200 shadow-lg"
+                }`}
+              >
+                {/* Basic Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <label
+                      htmlFor="first_name"
+                      className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="first_name"
+                      name="first_name"
+                      value={form.first_name}
+                      onChange={handleInputChange}
+                      className="w-full p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="last_name"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Last Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="last_name"
+                      name="last_name"
+                      value={form.last_name}
+                      onChange={handleInputChange}
+                      className="w-full p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      required
+                    />
+                  </div>
+                </div>
 
-            <InputField
-              type="url"
-              placeholder="Resume Link"
-              value={form.resume}
-              onChange={(e) => setForm({ ...form, resume: e.target.value })}
-              style={baseInputStyle(currentTheme)}
-            />
-
-            <div className="space-y-3">
-              <label className="text-white block">Relevant Links</label>
-              {form.links.map((link, idx) => (
-                <div key={idx} className="flex gap-2 items-center">
-                  <InputField
-                    placeholder="Website"
-                    value={link.website}
-                    onChange={(e) => {
-                      const updated = [...form.links];
-                      updated[idx].website = e.target.value;
-                      setForm({ ...form, links: updated });
-                    }}
-                    className="w-[40%]"
-                    style={baseInputStyle(currentTheme)}
+                {/* Bio */}
+                <div className="mb-6">
+                  <label
+                    htmlFor="bio"
+                    className="block text-sm font-medium mb-2"
+                  >
+                    Bio
+                  </label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    value={form.bio}
+                    onChange={handleInputChange}
+                    placeholder="Tell us about yourself..."
+                    rows={4}
+                    className="w-full p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
                   />
-                  <InputField
+                </div>
+
+                {/* Phone */}
+                <div className="mb-6">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium mb-2"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleInputChange}
+                    placeholder="+1234567890"
+                    className="w-full p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  />
+                </div>
+
+                {/* Profile Picture Section */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-4">
+                    Profile Picture
+                  </label>
+
+                  <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
+                    {/* Avatar Display */}
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
+                        {profileImage ? (
+                          <img
+                            src={profileImage}
+                            alt="Profile"
+                            className="w-full h-full object-cover object-center"
+                            style={{
+                              minWidth: "100%",
+                              minHeight: "100%",
+                            }}
+                          />
+                        ) : (
+                          <FiUser className="w-12 h-12 text-gray-400" />
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="absolute bottom-1 right-1 w-8 h-8 bg-neutral-800 hover:bg-neutral-700 rounded-full flex items-center justify-center transition-colors border-2 border-neutral-600"
+                      >
+                        <FaCamera className="text-white text-xs" />
+                      </button>
+                    </div>
+
+                    {/* Upload Section */}
+                    <div className="flex-1 w-full">
+                      <div
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        className={`relative border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                          isDragging
+                            ? "border-cyan-400 bg-cyan-400/10"
+                            : "border-neutral-600 hover:border-neutral-500"
+                        }`}
+                      >
+                        <FaUpload className="mx-auto text-gray-400 text-xl mb-2" />
+                        <p className="text-gray-300 mb-1 text-sm">
+                          Drag and drop your image here
+                        </p>
+                        <p className="text-gray-500 text-xs mb-3">or</p>
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md transition text-sm"
+                        >
+                          Browse Files
+                        </button>
+                      </div>
+
+                      {profileImage && (
+                        <div className="flex gap-2 mt-3">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-3 py-1 bg-neutral-700 hover:bg-neutral-600 text-white rounded-md transition text-sm"
+                          >
+                            Change
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileImage(null);
+                              setProfileImageFile(null);
+                              setIsProfileImageUpdated(false);
+                            }}
+                            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md transition text-sm flex items-center gap-1"
+                          >
+                            <FaTimes className="text-xs" />
+                            Remove
+                          </button>
+                        </div>
+                      )}
+
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileInputChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Resume URL */}
+                <div className="mb-6">
+                  <label
+                    htmlFor="resume"
+                    className="block text-sm font-medium mb-2"
+                  >
+                    Resume URL
+                  </label>
+                  <input
                     type="url"
-                    placeholder="URL"
-                    value={link.url}
-                    onChange={(e) => {
-                      const updated = [...form.links];
-                      updated[idx].url = e.target.value;
-                      setForm({ ...form, links: updated });
-                    }}
-                    className="w-[50%]"
-                    style={baseInputStyle(currentTheme)}
+                    id="resume"
+                    name="resume"
+                    value={form.resume}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/your-resume.pdf"
+                    className="w-full p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   />
+                </div>
+
+                {/* Links */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">
+                    Portfolio/Social Links
+                  </label>
+
+                  {/* Add Link Input */}
+                  <div className="flex gap-2 mb-3">
+                    <input
+                      type="url"
+                      value={newLink}
+                      onChange={(e) => setNewLink(e.target.value)}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && (e.preventDefault(), addLink())
+                      }
+                      placeholder="https://your-portfolio.com"
+                      className="flex-1 p-3 rounded-md border border-neutral-700 bg-neutral-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={addLink}
+                      className="px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md transition flex items-center gap-2"
+                    >
+                      <FiPlus className="text-sm" />
+                      Add
+                    </button>
+                  </div>
+
+                  {/* Links List */}
+                  <div className="space-y-2">
+                    {form.links.map((link, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 p-2 bg-neutral-800 border border-neutral-600 rounded-md"
+                      >
+                        <span className="flex-1 text-cyan-400 truncate">
+                          {link}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeLink(link)}
+                          className="text-gray-400 hover:text-white transition p-1"
+                        >
+                          <FiX className="text-sm" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Error/Success Messages */}
+                {error && (
+                  <div className="mb-6 p-3 bg-red-900/50 border border-red-500 rounded-md">
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {success && (
+                  <div className="mb-6 p-3 bg-green-900/50 border border-green-500 rounded-md">
+                    <p className="text-green-400 text-sm">{success}</p>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <div className="flex gap-4">
                   <button
                     type="button"
-                    onClick={() => {
-                      const updated = [...form.links];
-                      updated.splice(idx, 1);
-                      setForm({ ...form, links: updated });
-                    }}
-                    className="text-red-400 font-bold"
+                    onClick={() => router.push("/Atrium")}
+                    className="flex-1 py-3 px-6 border border-neutral-600 text-white rounded-md hover:bg-neutral-800 transition"
                   >
-                    ✕
+                    Skip for Now
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 py-3 px-6 bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        {uploadProgress || "Saving..."}
+                      </>
+                    ) : (
+                      "Save Profile"
+                    )}
                   </button>
                 </div>
-              ))}
-              <button
-                type="button"
-                className="w-full py-2 text-white rounded-md"
-                style={{ background: currentTheme.colors.primary }}
-                onClick={() =>
-                  setForm({
-                    ...form,
-                    links: [...form.links, { website: "", url: "" }],
-                  })
-                }
-              >
-                + Add Link
-              </button>
-            </div>
+              </div>
+            </form>
           </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full mt-6 py-3 text-lg font-semibold rounded-md transition-all duration-200 shadow-md border hover:shadow-lg"
-            style={{
-              background: "#1f1f1f", // Default: dark
-              color: "#f5f5f5", // Default: light text
-              border: "1px solid #333",
-            }}
-            onClick={(e) => {
-
-             router.push("/Atrium");
-            }
-            }
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#f5f5f5"; // Light background
-              e.currentTarget.style.color = "#000"; // Dark text
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#1f1f1f"; // Revert to dark
-              e.currentTarget.style.color = "#f5f5f5"; // Revert to light text
-            }}
-          >
-            Save & Continue
-          </button>
-        </form>
+        </div>
       </div>
     </>
   );
-}
-
-// Helper style generator
-function baseInputStyle(currentTheme: any) {
-  return {
-    background: currentTheme.colors.input,
-    borderColor: currentTheme.colors.border,
-    color: currentTheme.colors.text,
-  };
 }

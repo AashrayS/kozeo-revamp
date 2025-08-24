@@ -41,7 +41,7 @@ export default function GigLobbyPage() {
       }
     }
     // Connect to WebSocket for incoming requests
-    const socket = io("ws://localhost:3001", {
+    const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL, {
       query: { gigID: gigId || "1" },
     });
     socketRef.current = socket;

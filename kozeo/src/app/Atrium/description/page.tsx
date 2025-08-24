@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import DescriptionClient from "./DescriptionClient";
+import { PageLoader } from "@/components/common/PageLoader";
 
 export default function DescriptionPage() {
   return (
-    <Suspense fallback={<p className="text-white p-10">Loading...</p>}>
+    <Suspense fallback={<PageLoader />}>
       <DescriptionClient />
     </Suspense>
   );
