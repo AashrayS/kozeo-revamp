@@ -17,6 +17,46 @@ import { PageLoader } from "../../components/common/PageLoader";
 import Image from "next/image";
 import Link from "next/link";
 
+// Eye Icons for password visibility toggle
+const EyeIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className={className}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.639 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.639 0-8.573-3.007-9.963-7.178z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
+
+const EyeSlashIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className={className}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88"
+    />
+  </svg>
+);
+
 // Navbar Component - Same as landing page but simplified for login
 const Navbar = () => {
   return (
@@ -100,6 +140,7 @@ export default function LoginSignupPage() {
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Signup state
   const [signupStep, setSignupStep] = useState(1);
@@ -120,6 +161,8 @@ export default function LoginSignupPage() {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Memoize star positions to prevent glitching during re-renders
   const starPositions = useMemo(() => {
@@ -256,7 +299,7 @@ export default function LoginSignupPage() {
           {/* Kozeo Logo positioned right above the container */}
 
           <div className="w-full sm:w-[90%]  md:w-4/10 h-[1000px] relative flex flex-col items-center justify-center px-6 py-10 overflow-hidden bg-transparent  rounded-2xl ">
-             <div className="mb-8 md:mb-12 flex justify-center items-center w-full">
+            <div className="mb-8 md:mb-12 flex justify-center items-center w-full">
               <Image
                 src="/logoFial.svg"
                 alt="Kozeo Full Logo"
@@ -304,15 +347,15 @@ export default function LoginSignupPage() {
                       htmlFor="login-email"
                       className="block w-full text-left mb-1 text-sm font-medium text-white"
                     >
-                      Email
+                      Email Address
                     </label>
                     <input
                       id="login-email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="Enter your email address (e.g., john@example.com)"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
-                      className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                      className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                     />
                   </div>
 
@@ -323,14 +366,27 @@ export default function LoginSignupPage() {
                     >
                       Password
                     </label>
-                    <input
-                      id="login-password"
-                      type="password"
-                      placeholder="Enter your password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
-                    />
+                    <div className="relative">
+                      <input
+                        id="login-password"
+                        type={showLoginPassword ? "text" : "password"}
+                        placeholder="Enter your password (minimum 6 characters)"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        className="w-full p-3 pr-12 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                      >
+                        {showLoginPassword ? (
+                          <EyeSlashIcon className="w-5 h-5" />
+                        ) : (
+                          <EyeIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   {loginError && (
@@ -364,6 +420,7 @@ export default function LoginSignupPage() {
                               email: loginEmail,
                             },
                             token: (response as any).token,
+                            loginEntry: true,
                           })
                         );
 
@@ -397,11 +454,11 @@ export default function LoginSignupPage() {
                     <>
                       <div>
                         <label className="block w-full text-left mb-1 text-sm font-medium text-white">
-                          Email
+                          Email Address
                         </label>
                         <input
                           type="email"
-                          placeholder="you@example.com"
+                          placeholder="Enter your email address (e.g., sarah@example.com)"
                           value={signupData.email}
                           onChange={(e) =>
                             setSignupData({
@@ -409,7 +466,7 @@ export default function LoginSignupPage() {
                               email: e.target.value,
                             })
                           }
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                         />
                       </div>
                       {emailError && (
@@ -464,18 +521,18 @@ export default function LoginSignupPage() {
                           className="block w-full text-left mb-1 text-sm font-medium"
                           style={{ color: currentTheme.colors.text }}
                         >
-                          Enter OTP
+                          Verification Code
                         </label>
                         <input
                           ref={otpRef}
                           type="text"
-                          placeholder="Enter OTP"
+                          placeholder="Enter the 6-digit verification code sent to your email"
                           value={otp}
                           onChange={(e) => {
                             setOtp(e.target.value);
                             setOtpError("");
                           }}
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                         />
                       </div>
                       {otpError && (
@@ -565,7 +622,7 @@ export default function LoginSignupPage() {
                         <input
                           ref={nameRef}
                           type="text"
-                          placeholder="First Name"
+                          placeholder="Enter your first name (e.g., John)"
                           value={signupData.first_name}
                           onChange={(e) =>
                             setSignupData({
@@ -573,7 +630,7 @@ export default function LoginSignupPage() {
                               first_name: e.target.value,
                             })
                           }
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                         />
                       </div>
 
@@ -583,7 +640,7 @@ export default function LoginSignupPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="Last Name"
+                          placeholder="Enter your last name (e.g., Doe)"
                           value={signupData.last_name}
                           onChange={(e) =>
                             setSignupData({
@@ -591,7 +648,7 @@ export default function LoginSignupPage() {
                               last_name: e.target.value,
                             })
                           }
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                         />
                       </div>
 
@@ -601,7 +658,7 @@ export default function LoginSignupPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="Username (no spaces allowed)"
+                          placeholder="Choose a unique username (e.g., john_doe123)"
                           value={signupData.username}
                           onChange={(e) => {
                             const value = e.target.value.replace(/\s/g, ""); // Remove all spaces
@@ -610,7 +667,7 @@ export default function LoginSignupPage() {
                               username: value,
                             });
                           }}
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
+                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
                         />
                       </div>
 
@@ -618,36 +675,66 @@ export default function LoginSignupPage() {
                         <label className="block w-full text-left mb-1 text-sm font-medium text-white">
                           Password
                         </label>
-                        <input
-                          type="password"
-                          placeholder="Enter your password"
-                          value={signupData.password}
-                          onChange={(e) =>
-                            setSignupData({
-                              ...signupData,
-                              password: e.target.value,
-                            })
-                          }
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
-                        />
+                        <div className="relative">
+                          <input
+                            type={showSignupPassword ? "text" : "password"}
+                            placeholder="Create a strong password (minimum 6 characters)"
+                            value={signupData.password}
+                            onChange={(e) =>
+                              setSignupData({
+                                ...signupData,
+                                password: e.target.value,
+                              })
+                            }
+                            className="w-full p-3 pr-12 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowSignupPassword(!showSignupPassword)
+                            }
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                          >
+                            {showSignupPassword ? (
+                              <EyeSlashIcon className="w-5 h-5" />
+                            ) : (
+                              <EyeIcon className="w-5 h-5" />
+                            )}
+                          </button>
+                        </div>
                       </div>
 
                       <div>
                         <label className="block w-full text-left mb-1 text-sm font-medium text-white">
                           Confirm Password
                         </label>
-                        <input
-                          type="password"
-                          placeholder="Confirm your password"
-                          value={signupData.confirmPassword}
-                          onChange={(e) =>
-                            setSignupData({
-                              ...signupData,
-                              confirmPassword: e.target.value,
-                            })
-                          }
-                          className="w-full p-3 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
-                        />
+                        <div className="relative">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Re-enter your password to confirm"
+                            value={signupData.confirmPassword}
+                            onChange={(e) =>
+                              setSignupData({
+                                ...signupData,
+                                confirmPassword: e.target.value,
+                              })
+                            }
+                            className="w-full p-3 pr-12 rounded-md border transform focus:outline-none focus:ring-0 transition-all duration-300 focus:-translate-y-1 focus:shadow-lg bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-gray-400"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                          >
+                            {showConfirmPassword ? (
+                              <EyeSlashIcon className="w-5 h-5" />
+                            ) : (
+                              <EyeIcon className="w-5 h-5" />
+                            )}
+                          </button>
+                        </div>
                       </div>
 
                       {signupError && (
@@ -713,6 +800,7 @@ export default function LoginSignupPage() {
                                   username: signupData.username,
                                 },
                                 token: (response as any).token,
+                                loginEntry: true,
                               })
                             );
 

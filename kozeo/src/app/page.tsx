@@ -58,6 +58,7 @@ const Navbar = () => {
 
       // Get all dark sections
       const heroSection = document.querySelector("#hero-section");
+      const usecaseSection = document.querySelector("#usecase-section");
       const resumeSection = document.querySelector("#resume-section");
       const skillForgeSection = document.querySelector("#skill-forge-section");
       const ctaSection = document.querySelector("#cta-section");
@@ -67,6 +68,7 @@ const Navbar = () => {
       // Check if we're in any dark section
       const darkSections = [
         heroSection,
+        usecaseSection,
         resumeSection,
         skillForgeSection,
         ctaSection,
@@ -137,7 +139,7 @@ const Navbar = () => {
         >
           <Link
             href="/login"
-            className={`rounded-full transition-all duration-300 hover:scale-105 border ${
+            className={`rounded-full transition-all duration-300 hover:scale-105  ${
               isOnDarkBackground
                 ? "border-white text-white bg-black hover:bg-white hover:text-black hover:shadow-lg"
                 : "border-black text-black bg-white hover:bg-black hover:text-white hover:shadow-lg"
@@ -308,9 +310,13 @@ const Hero = () => {
               lineHeight: "1.1",
             }}
           >
-            Ignore The Noise,
+            Real projects.
             <br />
-            Hire With Purpose
+            Real people.
+            <br />
+            Real impact.
+            {/* <br />
+            Hire With Purpose */}
           </h1>
           <p
             className="text-gray-300 leading-relaxed text-center sm:text-left sm:ml-0 md:ml-10  hero-subtitle"
@@ -397,6 +403,217 @@ export default function Home() {
           >
             <Hero />
           </div>
+
+          {/* What You Can Do Section */}
+          <section
+            id="usecase-section"
+            data-scroll-animation
+            className={`bg-black text-white transition-all duration-1000 ease-out ${
+              isVisible("usecase-section")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+            style={{ padding: "clamp(4rem, 10vh, 8rem) 0" }}
+          >
+            {/* Glow Effects */}
+            <div className="absolute top-1/3 right-12 w-2 h-0 rounded-full opacity-80 bg-purple-500 shadow-[0_0_200px_80px_rgba(168,85,247,0.25)] pointer-events-none z-0" />
+            <div className="absolute bottom-1/3 left-12 w-2 h-0 rounded-full opacity-80 bg-cyan-400 shadow-[0_0_200px_80px_rgba(34,211,238,0.25)] pointer-events-none z-0" />
+
+            <div
+              className="max-w-6xl mx-auto relative z-10"
+              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
+            >
+              <div
+                className="text-center"
+                style={{ marginBottom: "clamp(4rem, 8vh, 6rem)" }}
+              >
+                <h2
+                  className="font-bold leading-tight text-white"
+                  style={{
+                    fontSize: "clamp(2.5rem, 6vw, 4rem)",
+                    marginBottom: "clamp(1.5rem, 4vh, 2rem)",
+                  }}
+                >
+                  What Kozeo offers?
+                </h2>
+                <p
+                  className="text-gray-400 mx-auto leading-relaxed"
+                  style={{
+                    fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                    maxWidth: "min(90vw, 800px)",
+                    lineHeight: "1.7",
+                  }}
+                >
+                  Whether you're looking to build your portfolio, earn money, or
+                  find great developers to collaborate on exciting projects, Kozeo has everything you
+                  need to grow your tech career.
+                </p>
+              </div>
+
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                style={{
+                  gap: "clamp(2rem, 5vw, 3rem)",
+                }}
+              >
+                {/* Find Projects */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiUsers
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    Join Projects
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Browse exciting projects posted by others. Apply your
+                    skills, collaborate with talented developers, and get paid
+                    for your contributions while building your portfolio.
+                  </p>
+                </div>
+
+                {/* Create Projects */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiCode
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    Host Projects
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Have an idea but need help? Post your project, set your
+                    budget, and find skilled collaborators. Manage everything
+                    from concept to completion in one place.
+                  </p>
+                </div>
+
+                {/* Skill Forge */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl md:col-span-2 lg:col-span-1"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiStar
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    Skill Forge Projects
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Practice and learn through free collaborative projects.
+                    Perfect for beginners or when you want to explore new
+                    technologies without financial pressure.
+                  </p>
+                </div>
+              </div>
+
+              {/* Call to Action */}
+              <div
+                className="text-center"
+                style={{ marginTop: "clamp(4rem, 8vh, 6rem)" }}
+              >
+                <p
+                  className="text-gray-400 mb-6"
+                  style={{
+                    fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Ready to start your journey? Join thousands of developers
+                  already building their future on Kozeo.
+                </p>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-3 bg-black/80 backdrop-blur-sm border border-gray-800 hover:border-white/20 text-white font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{
+                    padding: "clamp(0.75rem, 2vh, 1rem) clamp(2rem, 5vw, 3rem)",
+                    fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+                  }}
+                >
+                  Get Started Today
+                  <FiArrowRight
+                    style={{
+                      width: "clamp(1rem, 2.5vw, 1.25rem)",
+                      height: "clamp(1rem, 2.5vw, 1.25rem)",
+                    }}
+                  />
+                </Link>
+              </div>
+            </div>
+          </section>
 
           {/* Value Proposition Section */}
           <section
@@ -871,45 +1088,8 @@ export default function Home() {
           </section>
 
           {/* CTA Section */}
-          <section
-            id="cta-section"
-            data-scroll-animation
-            data-section="cta"
-            className={`bg-black text-white py-12 sm:py-16 md:py-24 transition-all duration-1000 ease-out ${
-              isVisible("cta-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-tight mb-4 sm:mb-6 md:mb-8">
-                Ready to build your
-                <br />
-                tech portfolio?
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto">
-                Join the movement that's making freelancing purposeful and
-                profile development structured.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center">
-                <Link
-                  href="/login"
-                  className="bg-white text-black px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
-                >
-                  Start Building Your Profile
-                </Link>
-                <Link
-                  href="/login"
-                  className="border border-white text-white px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
-                >
-                  Post a Project
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          {/* Features Comparison */}
-          <section
+         
+           <section
             id="features-section"
             data-scroll-animation
             className={`py-24 bg-gray-50 transition-all duration-1000 ease-out ${
@@ -1002,6 +1182,44 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Features Comparison */}
+          <section
+            id="cta-section"
+            data-scroll-animation
+            data-section="cta"
+            className={`bg-black text-white py-12 sm:py-16 md:py-24 transition-all duration-1000 ease-out ${
+              isVisible("cta-section")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-tight mb-4 sm:mb-6 md:mb-8">
+                Ready to build your
+                <br />
+                tech portfolio?
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto">
+                Join the movement that's making freelancing purposeful and
+                profile development structured.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center">
+                <Link
+                  href="/login"
+                  className="bg-white text-black px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
+                >
+                  Start Building Your Profile
+                </Link>
+                <Link
+                  href="/login"
+                  className="border border-white text-white px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
+                >
+                  Post a Project
+                </Link>
               </div>
             </div>
           </section>

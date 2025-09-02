@@ -5,6 +5,7 @@ import {
   selectUserLoading,
   selectUserName,
   selectUserEmail,
+  selectLoginEntry
 } from "./userSlice.js";
 
 // Custom hook to easily access user state
@@ -14,6 +15,7 @@ export const useUser = () => {
   const loading = useSelector(selectUserLoading);
   const username = useSelector(selectUserName);
   const email = useSelector(selectUserEmail);
+  const loginEntry = useSelector(selectLoginEntry);
 
   return {
     user,
@@ -21,5 +23,6 @@ export const useUser = () => {
     loading,
     username,
     email,
+    loginEntry
   };
 };
