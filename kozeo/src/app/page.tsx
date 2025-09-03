@@ -461,8 +461,7 @@ const Hero = () => {
               fontSize: "clamp(2rem, 6vw, 4rem)",
               marginBottom: "clamp(1.5rem, 4vh, 3rem)",
               lineHeight: "1.1",
-              background:
-                "linear-gradient(135deg, #ffffff 0%, #8b5cf6 50%, #06b6d4 100%)",
+              background: "white",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -470,11 +469,7 @@ const Hero = () => {
           >
             <span className="block">Real Projects</span>
             <span className="block">Real People</span>
-            <span
-              className="block text-white/90 "
-            >
-              Real Impact
-            </span>
+            <span className="block text-white/90 ">Real Impact</span>
           </h1>
 
           {/* Enhanced Subtitle with Code Syntax */}
@@ -492,12 +487,7 @@ const Hero = () => {
             >
               Transform your coding skills into a powerful portfolio. Every line
               of code, every project, every collaboration on Kozeo builds toward
-              your
-              <span className="text-cyan-400 font-semibold">
-                {" "}
-                next career milestone
-              </span>
-              .
+              your next career milestone .
             </p>
           </div>
 
@@ -621,7 +611,7 @@ export default function Home() {
                 style={{ marginBottom: "clamp(4rem, 8vh, 6rem)" }}
               >
                 <h2
-                  className="font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-cyan-400"
+                  className="font-bold leading-tight text-transparent bg-clip-text bg-white from-white via-purple-400 to-cyan-400"
                   style={{
                     fontSize: "clamp(2.5rem, 6vw, 4rem)",
                     marginBottom: "clamp(1.5rem, 4vh, 2rem)",
@@ -651,12 +641,12 @@ export default function Home() {
               >
                 {/* Enhanced Feature Cards */}
                 <div
-                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-purple-900/20 backdrop-blur-sm border border-purple-500/30 rounded-xl hover:border-purple-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
                   <div className="relative z-10">
                     <div
-                      className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-full mb-4 flex items-center justify-center border border-purple-400/50"
+                      className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
                       style={{
                         width: "clamp(3rem, 8vw, 4rem)",
                         height: "clamp(3rem, 8vw, 4rem)",
@@ -672,13 +662,13 @@ export default function Home() {
                     </div>
 
                     <h3
-                      className="font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors"
+                      className="font-semibold text-white mb-3"
                       style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
                     >
                       Work on Real Projects
                     </h3>
                     <p
-                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      className="text-gray-400 leading-relaxed"
                       style={{
                         fontSize: "clamp(0.9rem, 2vw, 1rem)",
                         lineHeight: "1.6",
@@ -686,21 +676,19 @@ export default function Home() {
                     >
                       Take on projects from startups, NGOs, and growing
                       businesses. Build{" "}
-                      <span className="text-purple-400">
-                        real-world experience
-                      </span>{" "}
+                      <span className="text-white">real-world experience</span>{" "}
                       that enhances your portfolio and resume.
                     </p>
                   </div>
                 </div>
 
                 <div
-                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-cyan-900/20 backdrop-blur-sm border border-cyan-500/30 rounded-xl hover:border-cyan-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
                   <div className="relative z-10">
                     <div
-                      className="bg-gradient-to-br from-cyan-600 to-cyan-800 rounded-full mb-4 flex items-center justify-center border border-cyan-400/50"
+                      className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
                       style={{
                         width: "clamp(3rem, 8vw, 4rem)",
                         height: "clamp(3rem, 8vw, 4rem)",
@@ -716,13 +704,13 @@ export default function Home() {
                     </div>
 
                     <h3
-                      className="font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors"
+                      className="font-semibold text-white mb-3"
                       style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
                     >
                       Find collaboraters
                     </h3>
                     <p
-                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      className="text-gray-400 leading-relaxed"
                       style={{
                         fontSize: "clamp(0.9rem, 2vw, 1rem)",
                         lineHeight: "1.6",
@@ -730,19 +718,19 @@ export default function Home() {
                     >
                       Find developers or join interesting projects and work with
                       other developers. Develop{" "}
-                      <span className="text-cyan-400">teamwork skills</span>{" "}
-                      that are essential in professional environments.
+                      <span className="text-white">teamwork skills</span> that
+                      are essential in professional environments.
                     </p>
                   </div>
                 </div>
 
                 <div
-                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-emerald-900/20 backdrop-blur-sm border border-emerald-500/30 rounded-xl hover:border-emerald-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/20 md:col-span-2 lg:col-span-1"
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl md:col-span-2 lg:col-span-1"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
                   <div className="relative z-10">
                     <div
-                      className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-full mb-4 flex items-center justify-center border border-emerald-400/50"
+                      className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
                       style={{
                         width: "clamp(3rem, 8vw, 4rem)",
                         height: "clamp(3rem, 8vw, 4rem)",
@@ -758,13 +746,13 @@ export default function Home() {
                     </div>
 
                     <h3
-                      className="font-semibold text-white mb-3 group-hover:text-emerald-300 transition-colors"
+                      className="font-semibold text-white mb-3"
                       style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
                     >
                       Earn While Learning
                     </h3>
                     <p
-                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      className="text-gray-400 leading-relaxed"
                       style={{
                         fontSize: "clamp(0.9rem, 2vw, 1rem)",
                         lineHeight: "1.6",
@@ -772,7 +760,7 @@ export default function Home() {
                     >
                       Get paid for your contributions while building valuable
                       experience.
-                      <span className="text-emerald-400">
+                      <span className="text-white">
                         Installment based payments
                       </span>{" "}
                       ensures you get paid for your work properly.
@@ -782,12 +770,12 @@ export default function Home() {
 
                 {/* Additional Feature: Build Portfolio */}
                 <div
-                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-amber-900/20 backdrop-blur-sm border border-amber-500/30 rounded-xl hover:border-amber-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
                   <div className="relative z-10">
                     <div
-                      className="bg-gradient-to-br from-amber-600 to-amber-800 rounded-full mb-4 flex items-center justify-center border border-amber-400/50"
+                      className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
                       style={{
                         width: "clamp(3rem, 8vw, 4rem)",
                         height: "clamp(3rem, 8vw, 4rem)",
@@ -803,13 +791,13 @@ export default function Home() {
                     </div>
 
                     <h3
-                      className="font-semibold text-white mb-3 group-hover:text-amber-300 transition-colors"
+                      className="font-semibold text-white mb-3"
                       style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
                     >
                       Build Your Portfolio
                     </h3>
                     <p
-                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      className="text-gray-400 leading-relaxed"
                       style={{
                         fontSize: "clamp(0.9rem, 2vw, 1rem)",
                         lineHeight: "1.6",
@@ -817,7 +805,7 @@ export default function Home() {
                     >
                       Every completed project becomes part of your professional
                       portfolio.
-                      <span className="text-amber-400">
+                      <span className="text-white">
                         Showcase your abilities
                       </span>{" "}
                       to potential employers.
@@ -838,11 +826,8 @@ export default function Home() {
                     lineHeight: "1.6",
                   }}
                 >
-                  Join{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 font-semibold">
-                    thousands of developers
-                  </span>{" "}
-                  already building their future on Kozeo.
+                  Join thousands of developers already building their future on
+                  Kozeo.
                 </p>
 
                 <Link
@@ -1264,15 +1249,19 @@ export default function Home() {
           <section
             id="resume-section"
             data-scroll-animation
-            className={`bg-gradient-to-br from-gray-900 to-black transition-all duration-1000 ease-out ${
+            className={`bg-black transition-all duration-1000 ease-out ${
               isVisible("resume-section")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
             }`}
             style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
           >
+            {/* Glow Effects */}
+            <div className="absolute top-1/4 left-8 w-2 h-0 rounded-full opacity-80 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+            <div className="absolute bottom-1/4 right-8 w-2 h-0 rounded-full opacity-80 bg-blue-500 shadow-[0_0_200px_80px_rgba(59,130,246,0.25)] pointer-events-none z-0" />
+
             <div
-              className="max-w-6xl mx-auto"
+              className="max-w-6xl mx-auto relative z-10"
               style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -1317,7 +1306,7 @@ export default function Home() {
                   >
                     Showcase Your
                     <br />
-                    <span className="text-cyan-400">Kozeo Journey</span>
+                    <span className="text-white">Kozeo Journey</span>
                   </h2>
 
                   <p
@@ -1335,8 +1324,8 @@ export default function Home() {
 
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">1</span>
+                      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-black text-sm font-bold">1</span>
                       </div>
                       <div>
                         <h3 className="font-semibold text-white mb-2">
@@ -1351,8 +1340,8 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">2</span>
+                      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-black text-sm font-bold">2</span>
                       </div>
                       <div>
                         <h3 className="font-semibold text-white mb-2">
@@ -1367,8 +1356,8 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">3</span>
+                      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-black text-sm font-bold">3</span>
                       </div>
                       <div>
                         <h3 className="font-semibold text-white mb-2">
@@ -1398,8 +1387,12 @@ export default function Home() {
             }`}
             style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
           >
+            {/* Glow Effects */}
+            <div className="absolute top-1/4 left-8 w-2 h-0 rounded-full opacity-80 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+            <div className="absolute bottom-1/4 right-8 w-2 h-0 rounded-full opacity-80 bg-blue-500 shadow-[0_0_200px_80px_rgba(59,130,246,0.25)] pointer-events-none z-0" />
+
             <div
-              className="max-w-6xl mx-auto"
+              className="max-w-6xl mx-auto relative z-10"
               style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
             >
               <div
@@ -1418,7 +1411,7 @@ export default function Home() {
                     }}
                   /> */}
                   <span
-                    className="bg-yellow-100 text-yellow-800 font-medium rounded-full"
+                    className="bg-white/10 text-white font-medium rounded-full border border-white/20"
                     style={{
                       fontSize: "clamp(0.75rem, 1.5vw, 0.875rem)",
                       padding:
@@ -1484,7 +1477,7 @@ export default function Home() {
                         }}
                       >
                         <FiCheck
-                          className="text-green-400 mr-3 flex-shrink-0"
+                          className="text-white mr-3 flex-shrink-0"
                           style={{
                             width: "clamp(1rem, 2.5vw, 1.25rem)",
                             height: "clamp(1rem, 2.5vw, 1.25rem)",
@@ -1499,13 +1492,13 @@ export default function Home() {
                   {/* Header with badge */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-xs font-medium text-green-400 uppercase tracking-wider">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span className="text-xs font-medium text-white uppercase tracking-wider">
                         Available Now
                       </span>
                     </div>
-                    <div className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full">
-                      <span className="text-xs font-semibold text-yellow-300">
+                    <div className="px-3 py-1 bg-white/10 border border-white/20 rounded-full">
+                      <span className="text-xs font-semibold text-white">
                         Skill Forge
                       </span>
                     </div>
@@ -1532,7 +1525,7 @@ export default function Home() {
                         (tech, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded text-xs text-blue-300 font-medium"
+                            className="px-2 py-1 bg-white/10 border border-white/20 rounded text-xs text-white font-medium"
                           >
                             {tech}
                           </span>
@@ -1549,7 +1542,7 @@ export default function Home() {
                       <span>3-5 developers</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-green-400">
+                      <p className="text-sm font-bold text-white">
                         Portfolio + Certificate
                       </p>
                     </div>
