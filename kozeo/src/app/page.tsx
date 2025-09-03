@@ -10,6 +10,10 @@ import {
   FiTrendingUp,
   FiStar,
   FiCheck,
+  FiMessageCircle,
+  FiVideo,
+  FiEdit3,
+  FiDollarSign,
 } from "react-icons/fi";
 import { PageLoader } from "../components/common/PageLoader";
 
@@ -59,6 +63,9 @@ const Navbar = () => {
       // Get all dark sections
       const heroSection = document.querySelector("#hero-section");
       const usecaseSection = document.querySelector("#usecase-section");
+      const collaborationSection = document.querySelector(
+        "#collaboration-section"
+      );
       const resumeSection = document.querySelector("#resume-section");
       const skillForgeSection = document.querySelector("#skill-forge-section");
       const ctaSection = document.querySelector("#cta-section");
@@ -69,6 +76,7 @@ const Navbar = () => {
       const darkSections = [
         heroSection,
         usecaseSection,
+        collaborationSection,
         resumeSection,
         skillForgeSection,
         ctaSection,
@@ -292,7 +300,7 @@ const Hero = () => {
               alt="Kozeo Full Logo"
               width={625}
               height={147}
-              className="brightness-0 invert hero-logo"
+              className="brightness-0 invert hero-logo mr-10"
               style={{
                 width: "clamp(240px, 45vw, 500px)",
                 height: "auto",
@@ -305,14 +313,12 @@ const Hero = () => {
           <h1
             className="font-normal leading-tight text-white text-center sm:text-left sm:ml-0 md:ml-10 hero-title"
             style={{
-              fontSize: "clamp(1.5rem, 5vw, 4rem)",
+              fontSize: "clamp(1.5rem, 5vw, 3rem)",
               marginBottom: "clamp(1rem, 3vh, 2.5rem)",
               lineHeight: "1.1",
             }}
           >
-            Real projects.
-            <br />
-            Real people.
+            Real projects,Real people.
             <br />
             Real impact.
             {/* <br />
@@ -445,8 +451,8 @@ export default function Home() {
                   }}
                 >
                   Whether you're looking to build your portfolio, earn money, or
-                  find great developers to collaborate on exciting projects, Kozeo has everything you
-                  need to grow your tech career.
+                  find great developers to collaborate on exciting projects,
+                  Kozeo has everything you need to grow your tech career.
                 </p>
               </div>
 
@@ -578,6 +584,45 @@ export default function Home() {
                     technologies without financial pressure.
                   </p>
                 </div>
+                {/* Installment based payments */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiDollarSign
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    Installment Based Payments
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Spread the cost of your projects over time with our flexible
+                    payment plans. Get started today and pay later.
+                  </p>
+                </div>
               </div>
 
               {/* Call to Action */}
@@ -611,6 +656,229 @@ export default function Home() {
                     }}
                   />
                 </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* Collaboration Features Section */}
+          <section
+            id="collaboration-section"
+            data-scroll-animation
+            className={`bg-black text-white transition-all duration-1000 ease-out ${
+              isVisible("collaboration-section")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+            style={{ padding: "clamp(4rem, 10vh, 8rem) 0" }}
+          >
+            {/* Glow Effects */}
+            <div className="absolute top-1/4 left-8 w-2 h-0 rounded-full opacity-80 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+            <div className="absolute bottom-1/4 right-8 w-2 h-0 rounded-full opacity-80 bg-blue-500 shadow-[0_0_200px_80px_rgba(59,130,246,0.25)] pointer-events-none z-0" />
+
+            <div
+              className="max-w-6xl mx-auto relative z-10"
+              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
+            >
+              <div
+                className="text-center"
+                style={{ marginBottom: "clamp(4rem, 8vh, 6rem)" }}
+              >
+                <h2
+                  className="font-bold leading-tight text-white"
+                  style={{
+                    fontSize: "clamp(2.5rem, 6vw, 4rem)",
+                    marginBottom: "clamp(1.5rem, 4vh, 2rem)",
+                  }}
+                >
+                  Built for Seamless Collaboration
+                </h2>
+                <p
+                  className="text-gray-400 mx-auto leading-relaxed"
+                  style={{
+                    fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                    maxWidth: "min(90vw, 800px)",
+                    lineHeight: "1.7",
+                  }}
+                >
+                  Experience next-generation collaboration tools designed to
+                  make remote teamwork as natural as being in the same room.
+                </p>
+              </div>
+
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                style={{
+                  gap: "clamp(2rem, 5vw, 3rem)",
+                }}
+              >
+                {/* Chat Interface */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiMessageCircle
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    Intuitive Chat Interface
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Real-time messaging with code sharing, file attachments, and
+                    smart notifications. Stay connected with your team and never
+                    miss important updates.
+                  </p>
+                </div>
+
+                {/* Video Call Feature */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiVideo
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    HD Video Calls
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Crystal-clear video conferences with screen sharing,
+                    recording, and breakout rooms. Perfect for standups, code
+                    reviews, and brainstorming sessions.
+                  </p>
+                </div>
+
+                {/* Collabboard */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl md:col-span-2 lg:col-span-1"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div
+                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                    style={{
+                      width: "clamp(3rem, 8vw, 4rem)",
+                      height: "clamp(3rem, 8vw, 4rem)",
+                    }}
+                  >
+                    <FiEdit3
+                      className="text-white"
+                      style={{
+                        width: "clamp(1.5rem, 4vw, 2rem)",
+                        height: "clamp(1.5rem, 4vw, 2rem)",
+                      }}
+                    />
+                  </div>
+                  <h3
+                    className="font-semibold text-white mb-3"
+                    style={{
+                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
+                    }}
+                  >
+                    CollabBoard
+                  </h3>
+                  <p
+                    className="text-gray-400 leading-relaxed"
+                    style={{
+                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    Interactive whiteboard for visual collaboration. Draw
+                    diagrams, create flowcharts, and brainstorm ideas together
+                    in real-time with unlimited canvas space.
+                  </p>
+                </div>
+              </div>
+
+              {/* Additional Features Grid */}
+              <div
+                className="grid grid-cols-1 md:grid-cols-2"
+                style={{
+                  gap: "clamp(2rem, 5vw, 3rem)",
+                  marginTop: "clamp(3rem, 6vh, 4rem)",
+                }}
+              >
+                {/* Project Management */}
+                <div className="bg-black/60 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-white/10 transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-black rounded-lg p-3 border border-gray-700">
+                      <FiCheck className="text-white w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2 text-lg">
+                        Integrated Project Management (Upcoming)
+                      </h4>
+                      <p className="text-gray-400 leading-relaxed">
+                        Task tracking, milestone management, and progress
+                        visualization built right into your collaboration
+                        workspace.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Code Collaboration */}
+                <div className="bg-black/60 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-white/10 transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-black rounded-lg p-3 border border-gray-700">
+                      <FiCode className="text-white w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2 text-lg">
+                        Live Code Collaboration (Upcoming)
+                      </h4>
+                      <p className="text-gray-400 leading-relaxed">
+                        Real-time code editing, syntax highlighting, and version
+                        control integration for seamless development workflows.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -1088,8 +1356,8 @@ export default function Home() {
           </section>
 
           {/* CTA Section */}
-         
-           <section
+
+          <section
             id="features-section"
             data-scroll-animation
             className={`py-24 bg-gray-50 transition-all duration-1000 ease-out ${
