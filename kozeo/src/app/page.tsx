@@ -468,12 +468,12 @@ const Hero = () => {
               backgroundClip: "text",
             }}
           >
-            <span className="block">Real projects</span>
+            <span className="block">Real Projects</span>
             <span className="block">Real People</span>
             <span
               className="block text-white/90 "
             >
-              Real impact
+              Real Impact
             </span>
           </h1>
 
