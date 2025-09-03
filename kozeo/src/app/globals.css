@@ -1,17 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap");
 
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -95,7 +91,7 @@ img {
   animation: twinkleFast 2s ease-in-out infinite;
 }
 
-/* Landing Page Animations */
+/* Enhanced Landing Page Animations */
 @keyframes slideRight {
   0% {
     width: 20%;
@@ -116,6 +112,286 @@ img {
     width: 20%;
     right: 100%;
   }
+}
+
+/* Enhanced Float Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+/* Grid Movement Animation */
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Pulse Glow Animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Code Matrix Rain */
+@keyframes codeRain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Hologram Effect */
+@keyframes hologram {
+  0%, 100% {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: perspective(400px) rotateY(1deg);
+  }
+  75% {
+    opacity: 0.9;
+    transform: perspective(400px) rotateY(-1deg);
+  }
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Neon Glow */
+@keyframes neonGlow {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      0 0 40px currentColor;
+  }
+}
+
+/* Binary Rain */
+@keyframes binaryRain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Particle Float */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-15px) translateX(3px);
+  }
+}
+
+/* Circuit Animation */
+@keyframes circuit {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Tech Pulse */
+@keyframes techPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 0 rgba(139, 92, 246, 0.7),
+      0 0 0 0 rgba(6, 182, 212, 0.7);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 10px rgba(139, 92, 246, 0),
+      0 0 0 20px rgba(6, 182, 212, 0);
+  }
+}
+
+/* Data Stream */
+@keyframes dataStream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+
+/* Utility Classes for Engineering Effects */
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-delayed { animation: float 8s ease-in-out infinite 2s; }
+.animate-float-reverse { animation: float 10s ease-in-out infinite reverse; }
+.animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+.animate-hologram { animation: hologram 4s ease-in-out infinite; }
+.animate-glitch { animation: glitch 0.3s ease-in-out infinite; }
+.animate-neon { animation: neonGlow 2s ease-in-out infinite; }
+.animate-tech-pulse { animation: techPulse 2s ease-in-out infinite; }
+.animate-particle-float { animation: particleFloat 4s ease-in-out infinite; }
+
+/* Enhanced Twinkle Variations */
+.animate-twinkle-1 { animation: twinkle 3s ease-in-out infinite; }
+.animate-twinkle-2 { animation: twinkle 4s ease-in-out infinite 1s; }
+.animate-twinkle-3 { animation: twinkle 5s ease-in-out infinite 2s; }
+
+/* Additional Engineering-focused Animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rotateIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-5deg) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Terminal-style typing animation */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Additional utility classes */
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-slide-in-left { animation: slideInLeft 0.6s ease-out forwards; }
+.animate-slide-in-right { animation: slideInRight 0.6s ease-out forwards; }
+.animate-scale-in { animation: scaleIn 0.6s ease-out forwards; }
+.animate-rotate-in { animation: rotateIn 0.6s ease-out forwards; }
+.animate-typing { animation: typing 2s steps(20, end), blink 1s infinite; }
+
+/* Enhanced font family declarations */
+.font-mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 /* Star Animation */

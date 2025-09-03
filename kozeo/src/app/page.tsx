@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -14,10 +14,99 @@ import {
   FiVideo,
   FiEdit3,
   FiDollarSign,
+  FiGithub,
+  FiGitBranch,
+  FiTerminal,
+  FiCpu,
+  FiDatabase,
+  FiLayers,
+  FiZap,
+  FiActivity,
+  FiFolder,
+  FiClock,
 } from "react-icons/fi";
 import { PageLoader } from "../components/common/PageLoader";
 
-// Custom hook for scroll animations
+// Simple Star Animation Hook
+const useParticleSystem = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Initialize simple star particles
+    const particleCount = 80;
+    const particles = Array.from({ length: particleCount }, (_, i) => {
+      const intensity = Math.random();
+      return {
+        id: i,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 2 + 0.5, // Smaller dots: 0.5 to 2.5px
+        opacity: intensity * 0.4 + 0.1, // Subtle opacity: 0.1 to 0.5
+        twinkleSpeed: Math.random() * 0.02 + 0.005, // Slow twinkling
+        baseOpacity: intensity * 0.4 + 0.1,
+      };
+    });
+
+    let animationFrame: number;
+
+    const animate = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle) => {
+        // Simple twinkling effect
+        const time = Date.now() * particle.twinkleSpeed;
+        particle.opacity = particle.baseOpacity + Math.sin(time) * 0.1;
+
+        // Draw simple white dots
+        ctx.save();
+        ctx.globalAlpha = particle.opacity;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // Reposition particles on resize
+      particles.forEach((particle) => {
+        if (particle.x > canvas.width)
+          particle.x = Math.random() * canvas.width;
+        if (particle.y > canvas.height)
+          particle.y = Math.random() * canvas.height;
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, []);
+
+  return canvasRef;
+};
+
+// Enhanced Scroll Animation Hook
 const useScrollAnimation = (threshold = 0.1) => {
   const [visibleElements, setVisibleElements] = useState<Set<string>>(
     new Set()
@@ -51,14 +140,20 @@ const useScrollAnimation = (threshold = 0.1) => {
   return { isVisible };
 };
 
-// Navbar Component
+// Enhanced Navbar Component
 const Navbar = () => {
   const [isOnDarkBackground, setIsOnDarkBackground] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Calculate scroll progress
+      const progress = scrollY / (documentHeight - viewportHeight);
+      setScrollProgress(Math.min(progress, 1));
 
       // Get all dark sections
       const heroSection = document.querySelector("#hero-section");
@@ -104,76 +199,102 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all h-16 duration-300 ease-in-out ${
-        isOnDarkBackground ? "bg-black" : "bg-white border-gray-200"
-      }`}
+      className={`fixed top-0 inset-x-0 z-50 transition-all h-16 duration-300 ease-in-out backdrop-blur-md ${
+        isOnDarkBackground
+          ? "bg-black/10 border-white/10"
+          : "bg-white/10 border-gray-200/50"
+      } `}
     >
+      {/* Scroll Progress Bar */}
+      <div
+        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 via-cyan-400 to-emerald-400 transition-all duration-300"
+        style={{ width: `${scrollProgress * 100}%` }}
+      />
+
       <nav
-        className="flex items-center justify-center h-full relative"
-        style={{ padding: "0 clamp(1rem, 4vw, 3rem)" }}
+        className="flex items-center justify-between h-full relative px-4 sm:px-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
+        {/* Logo - Left side */}
+        <div className="flex items-center">
           <Link
             href="/"
-            className={`flex items-center font-bold tracking-tight transition-colors duration-300 ${
+            className={`flex items-center font-bold tracking-tight transition-all duration-300 hover:scale-105 group ${
               isOnDarkBackground ? "text-white" : "text-black"
             }`}
             style={{
               gap: "clamp(0.5rem, 1.5vw, 1rem)",
-              fontSize: "clamp(1.25rem, 3vw, 2rem)",
+              fontSize: "clamp(1rem, 3vw, 1.5rem)",
             }}
           >
-            <Image
-              src="/kozeoLogo.png"
-              alt="Kozeo Logo"
-              width={32}
-              height={32}
-              style={{
-                width: "clamp(24px, 4vw, 40px)",
-                height: "clamp(24px, 4vw, 40px)",
-                borderRadius: "100%",
-              }}
-            />
+            <div className="relative">
+              <Image
+                src="/kozeoLogo.png"
+                alt="Kozeo Logo"
+                width={32}
+                height={32}
+                className="transition-all duration-300 group-hover:rotate-12"
+                style={{
+                  width: "clamp(24px, 6vw, 36px)",
+                  height: "clamp(24px, 6vw, 36px)",
+                  borderRadius: "100%",
+                }}
+              />
+              {/* Tech Orbit Animation */}
+              <div
+                className="absolute inset-0 rounded-full border border-purple-500/30 animate-spin opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ animation: "spin 8s linear infinite" }}
+              />
+            </div>
+
+            {/* Terminal-style text decoration - Hidden on very small screens */}
+            {/* <span className="relative hidden sm:block">
+              <span className="opacity-60 text-green-400 mr-1 font-mono text-sm">
+                {">"}
+              </span>
+              Kozeo
+            </span> */}
           </Link>
         </div>
 
-        <div
-          className="flex items-center absolute right-0"
-          style={{
-            gap: "clamp(0.5rem, 2vw, 1rem)",
-            paddingRight: "clamp(1rem, 4vw, 3rem)",
-          }}
-        >
+        {/* Action Buttons - Always visible */}
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <Link
             href="/login"
-            className={`rounded-full transition-all duration-300 hover:scale-105  ${
+            className={`group relative overflow-hidden rounded-full transition-all duration-300 hover:scale-105 ${
               isOnDarkBackground
-                ? "border-white text-white bg-black hover:bg-white hover:text-black hover:shadow-lg"
-                : "border-black text-black bg-white hover:bg-black hover:text-white hover:shadow-lg"
+                ? "border border-white/20 text-white bg-black/20 hover:bg-white hover:text-black"
+                : "border border-black/20 text-black bg-white/20 hover:bg-black hover:text-white"
             }`}
             style={{
               padding:
-                "clamp(0.375rem, 1.5vh, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-              fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
+                "clamp(0.4rem, 1.5vh, 0.6rem) clamp(0.8rem, 3vw, 1.2rem)",
+              fontSize: "clamp(0.75rem, 2vw, 0.875rem)",
             }}
           >
-            Login
+            <span className="relative z-10">Login</span>
+            <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left bg-gradient-to-r from-purple-500/20 to-cyan-500/20" />
           </Link>
+
           <Link
             href="/login"
-            className={`rounded-full transition-all duration-300 hover:scale-105 ${
+            className={`group relative overflow-hidden rounded-full transition-all duration-300 hover:scale-105 shadow-lg ${
               isOnDarkBackground
-                ? "bg-white text-black hover:bg-gray-100 hover:shadow-lg"
-                : "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
+                ? "bg-white text-black hover:shadow-white/20"
+                : "bg-black text-white hover:shadow-black/20"
             }`}
             style={{
               padding:
-                "clamp(0.375rem, 1.5vh, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-              fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
+                "clamp(0.4rem, 1.5vh, 0.6rem) clamp(0.8rem, 3vw, 1.2rem)",
+              fontSize: "clamp(0.75rem, 2vw, 0.875rem)",
             }}
           >
-            Sign Up
+            <span className="relative z-10 flex items-center gap-1 sm:gap-2">
+              <FiZap className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Sign Up</span>
+              <span className="xs:hidden">Join</span>
+            </span>
+            <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left bg-gradient-to-r from-purple-500 to-cyan-500" />
           </Link>
         </div>
       </nav>
@@ -181,187 +302,253 @@ const Navbar = () => {
   );
 };
 
-// Hero Component
+// Enhanced Hero Component with Engineering Focus
 const Hero = () => {
+  const particleCanvasRef = useParticleSystem();
+
   return (
     <section className="h-screen relative overflow-hidden bg-black">
-      {/* Glow Effects */}
-      <div className="fixed top-1/4 right-8 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-1/4 left-8 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-      <div className="fixed top-2/3 right-1/3 w-2 h-0 rounded-full opacity-70 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+      {/* Simple Star Animation Canvas */}
+      <canvas
+        ref={particleCanvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        style={{ mixBlendMode: "screen" }}
+      />
 
-      {/* Animated Background */}
+      {/* Glow Effects - Same as Login Page */}
       <div className="absolute inset-0">
-        {/* Twinkling stars for immediate feedback */}
-        <div className="absolute top-20 left-20 w-2 h-2 bg-white rounded-full animate-twinkle"></div>
-        <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-        <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-
-        {/* Twinkling Stars */}
-        <div className="absolute inset-0">
-          {/* Large Stars */}
-          <div className="absolute top-20 left-20 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-40 right-20 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-60 left-1/4 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-
-          {/* Medium Stars */}
-          <div className="absolute top-32 right-40 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-52 left-16 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-32 left-1/2 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-20 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-1/2 left-8 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-
-          {/* Small Stars */}
-          <div className="absolute top-24 left-1/2 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute top-48 right-16 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute bottom-48 left-40 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute bottom-24 right-1/2 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute top-2/3 right-8 w-px h-px bg-white animate-twinkle"></div>
-        </div>
-
-        {/* Moving Stars */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 50 }, (_, i) => (
-            <div
-              key={i}
-              className="absolute bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                opacity: Math.random() * 0.5 + 0.3,
-                animation: `moveStars ${
-                  15 + Math.random() * 25
-                }s linear infinite`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Animated Lines */}
-        <div className="absolute inset-0">
-          {/* Horizontal Lines */}
-          {/* <div
-            className="absolute top-1/4 left-1/4 w-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-30 max-w-md"
-            style={{
-              animation: "slideRight 4s infinite linear",
-              // animationDelay: "0s",
-            }}
-          ></div>
-          <div
-            className="absolute top-3/4 right-1/4 w-0 h-px bg-gradient-to-l from-transparent via-white to-transparent opacity-25 max-w-md"
-            style={{
-              animation: "slideLeft 5s infinite linear",
-              // animationDelay: "0s", // Changed from "2s" to "0s"
-            }}
-          ></div> */}
-
-          {/* Diagonal Lines */}
-          {/* <div className="absolute top-1/3 left-0 w-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-20 rotate-12" 
-               style={{
-                 animation: 'slideRight 6s infinite linear',
-                 animationDelay: '1s'
-               }}></div>
-          <div className="absolute bottom-1/3 right-0 w-0 h-px bg-gradient-to-l from-transparent via-white to-transparent opacity-15 -rotate-12" 
-               style={{
-                 animation: 'slideLeft 7s infinite linear',
-                 animationDelay: '3s'
-               }}></div> */}
-        </div>
+        <div className="fixed top-1/4 right-8 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
+        <div className="fixed bottom-1/4 left-8 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+        <div className="fixed top-2/3 right-1/3 w-2 h-0 rounded-full opacity-70 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
       </div>
 
-      {/* Content */}
+      {/* Moving Stars - Same as Login Page */}
+      <div className="absolute inset-0">
+        {/* Static visible stars for immediate feedback */}
+        <div className="absolute top-20 left-20 w-2 h-2 bg-white rounded-full opacity-80"></div>
+        <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full opacity-60"></div>
+        <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full opacity-70"></div>
+
+        {/* Large Moving Stars */}
+        <div
+          className="absolute top-20 left-20 w-1 h-1 bg-white rounded-full opacity-80"
+          style={{ animation: "moveStars 20s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full opacity-60"
+          style={{ animation: "moveStars 25s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full opacity-70"
+          style={{ animation: "moveStars 30s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-40 right-20 w-1 h-1 bg-white rounded-full opacity-90"
+          style={{ animation: "moveStars 18s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-60 left-1/4 w-1 h-1 bg-white rounded-full opacity-75"
+          style={{ animation: "moveStars 35s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-1/3 right-1/4 w-1 h-1 bg-white rounded-full opacity-85"
+          style={{ animation: "moveStars 22s linear infinite" }}
+        ></div>
+
+        {/* Medium Moving Stars */}
+        <div
+          className="absolute top-32 right-40 w-0.5 h-0.5 bg-white rounded-full opacity-60"
+          style={{ animation: "moveStars 28s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-52 left-16 w-0.5 h-0.5 bg-white rounded-full opacity-50"
+          style={{ animation: "moveStars 32s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-32 left-1/2 w-0.5 h-0.5 bg-white rounded-full opacity-70"
+          style={{ animation: "moveStars 26s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-20 right-1/3 w-0.5 h-0.5 bg-white rounded-full opacity-55"
+          style={{ animation: "moveStars 38s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-8 w-0.5 h-0.5 bg-white rounded-full opacity-65"
+          style={{ animation: "moveStars 24s linear infinite" }}
+        ></div>
+
+        {/* Small Moving Stars */}
+        <div
+          className="absolute top-24 left-1/2 w-px h-px bg-white opacity-40"
+          style={{ animation: "moveStars 40s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-48 right-16 w-px h-px bg-white opacity-30"
+          style={{ animation: "moveStars 45s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-48 left-40 w-px h-px bg-white opacity-45"
+          style={{ animation: "moveStars 33s linear infinite" }}
+        ></div>
+        <div
+          className="absolute bottom-24 right-1/2 w-px h-px bg-white opacity-35"
+          style={{ animation: "moveStars 42s linear infinite" }}
+        ></div>
+        <div
+          className="absolute top-2/3 right-8 w-px h-px bg-white opacity-40"
+          style={{ animation: "moveStars 36s linear infinite" }}
+        ></div>
+      </div>
+
+      {/* Main Content */}
       <div
-        className="relative h-full flex items-center justify-center sm:justify-start px-4 z-10 hero-content"
+        className="relative h-full flex items-center justify-center sm:justify-start px-4 z-20"
         style={{
           paddingTop: "clamp(40px, 6vh, 100px)",
           paddingLeft: "clamp(1rem, 2vw, 2rem) clamp(1rem, 8vw, 8rem)",
         }}
       >
         <div
-          className="max-w-full text-center sm:text-left"
-          style={{ maxWidth: "min(90vw, 600px)" }}
+          className="max-w-full text-center sm:text-left  border-white ml-0 lg:ml-24"
+          style={{ maxWidth: "min(90vw, 700px)" }}
         >
-          {/* Kozeo Combined Logo */}
-          <div
-            className="flex items-center justify-center sm:justify-start w-full hero-logo"
-            style={
-              {
-                // marginBottom: "clamp(1rem, 4vh, 4rem)",
-              }
-            }
-          >
-            <Image
-              src="/logoFial.svg"
-              alt="Kozeo Full Logo"
-              width={625}
-              height={147}
-              className="brightness-0 invert hero-logo mr-10"
-              style={{
-                width: "clamp(240px, 45vw, 500px)",
-                height: "auto",
-                maxWidth: "90vw",
-              }}
-              priority
-            />
+          {/* Terminal-style Header */}
+          {/* <div className="font-mono text-green-400 text-sm mb-6 opacity-80">
+            kozeo@terminal:~$ init project --type=career-growth
+          </div> */}
+
+          {/* Enhanced Logo with Glitch Effect */}
+          <div className="flex items-center justify-center sm:justify-start w-full ml-0 lg:-ml-14 mb-8 group">
+            <div className="relative">
+              <Image
+                src="/logoFial.svg"
+                alt="Kozeo Full Logo"
+                width={625}
+                height={147}
+                className="transition-all duration-500 group-hover:scale-105"
+                style={{
+                  width: "clamp(240px, 45vw, 500px)",
+                  height: "auto",
+                  maxWidth: "90vw",
+                  filter:
+                    "brightness(0) invert(1) drop-shadow(0 0 20px rgba(139,92,246,0.5))",
+                }}
+                priority
+              />
+              {/* Glitch overlay effect */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                <Image
+                  src="/logoFial.svg"
+                  alt="Kozeo Full Logo"
+                  width={625}
+                  height={147}
+                  style={{
+                    width: "clamp(240px, 45vw, 500px)",
+                    height: "auto",
+                    maxWidth: "90vw",
+                    filter: "brightness(0) invert(1) hue-rotate(180deg)",
+                    transform: "translate(2px, 2px)",
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
+          {/* Enhanced Typewriter Title */}
           <h1
-            className="font-normal leading-tight text-white text-center sm:text-left sm:ml-0 md:ml-10 hero-title"
+            className="font-bold leading-tight text-center sm:text-left hero-title relative"
             style={{
-              fontSize: "clamp(1.5rem, 5vw, 3rem)",
-              marginBottom: "clamp(1rem, 3vh, 2.5rem)",
+              fontSize: "clamp(2rem, 6vw, 4rem)",
+              marginBottom: "clamp(1.5rem, 4vh, 3rem)",
               lineHeight: "1.1",
+              background:
+                "linear-gradient(135deg, #ffffff 0%, #8b5cf6 50%, #06b6d4 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
-            Real projects,Real people.
-            <br />
-            Real impact.
-            {/* <br />
-            Hire With Purpose */}
+            <span className="block">Real projects.</span>
+            <span className="block">Real People</span>
+            <span
+              className="block text-white/90 "
+            >
+              Real impact.
+            </span>
           </h1>
-          <p
-            className="text-gray-300 leading-relaxed text-center sm:text-left sm:ml-0 md:ml-10  hero-subtitle"
-            style={{
-              fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
-              marginBottom: "clamp(2rem, 5vh, 3rem)",
-              maxWidth: "min(90vw, 500px)",
-            }}
-          >
-            Build your tech portfolio with real-world projects that matter.
-            Every project on Kozeo contributes to your professional growth.
-          </p>
+
+          {/* Enhanced Subtitle with Code Syntax */}
+          <div className="mb-8">
+            {/* <div className="font-mono text-gray-400 text-sm mb-2">
+              // Professional growth through real-world projects
+            </div> */}
+            <p
+              className="text-gray-300 leading-relaxed text-center sm:text-left"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+                maxWidth: "min(90vw, 600px)",
+                lineHeight: "1.6",
+              }}
+            >
+              Transform your coding skills into a powerful portfolio. Every line
+              of code, every project, every collaboration on Kozeo builds toward
+              your
+              <span className="text-cyan-400 font-semibold">
+                {" "}
+                next career milestone
+              </span>
+              .
+            </p>
+          </div>
+
+          {/* Subtle Action Buttons - Dark Theme */}
           <div
-            className="flex flex-row items-center justify-center sm:justify-start sm:ml-0 md:ml-10  hero-buttons"
-            style={{ gap: "clamp(0.75rem, 3vw, 1.5rem)" }}
+            className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4"
+            style={{ gap: "clamp(1rem, 3vw, 1.5rem)" }}
           >
             <Link
               href="/login"
-              className="bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] text-center hero-button"
+              className="group relative overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:border-white/30 text-center"
               style={{
-                padding: "clamp(0.75rem, 2vh, 1rem) clamp(1.5rem, 4vw, 2rem)",
-                fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
-                minWidth: "clamp(140px, 25vw, 180px)",
+                padding: "clamp(1rem, 2.5vh, 1.25rem) clamp(2rem, 5vw, 2.5rem)",
+                fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+                minWidth: "clamp(180px, 30vw, 220px)",
               }}
             >
-              Start Building
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <FiTerminal className="w-5 h-5" />
+                git init career
+              </span>
+              <div className="absolute inset-0 bg-white/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </Link>
+
             <Link
               href="/login"
-              className="border border-white text-white rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] text-center hero-button"
+              className="group relative overflow-hidden bg-black/40 backdrop-blur-sm border border-gray-700/50 text-gray-300 rounded-lg font-semibold hover:bg-black/60 hover:text-white hover:border-gray-600 transition-all duration-300 hover:scale-105 text-center"
               style={{
-                padding: "clamp(0.75rem, 2vh, 1rem) clamp(1.5rem, 4vw, 2rem)",
-                fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
-                minWidth: "clamp(120px, 22vw, 160px)",
+                padding: "clamp(1rem, 2.5vh, 1.25rem) clamp(2rem, 5vw, 2.5rem)",
+                fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+                minWidth: "clamp(160px, 28vw, 200px)",
               }}
             >
-              Post Project
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <FiGitBranch className="w-5 h-5" />
+                npm start project
+              </span>
             </Link>
           </div>
+
+          {/* Status Bar */}
+          {/* <div className="mt-8 font-mono text-xs text-gray-500 flex items-center gap-4">
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              Live: 2,847 developers online
+            </span>
+            <span className="flex items-center gap-1">
+              <FiActivity className="w-3 h-3" />
+              342 projects active
+            </span>
+          </div> */}
         </div>
       </div>
     </section>
@@ -412,18 +599,18 @@ export default function Home() {
 
           {/* What You Can Do Section */}
           <section
-            id="usecase-section"
+            id="collaboration-section"
             data-scroll-animation
             className={`bg-black text-white transition-all duration-1000 ease-out ${
-              isVisible("usecase-section")
+              isVisible("collaboration-section")
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
             }`}
             style={{ padding: "clamp(4rem, 10vh, 8rem) 0" }}
           >
             {/* Glow Effects */}
-            <div className="absolute top-1/3 right-12 w-2 h-0 rounded-full opacity-80 bg-purple-500 shadow-[0_0_200px_80px_rgba(168,85,247,0.25)] pointer-events-none z-0" />
-            <div className="absolute bottom-1/3 left-12 w-2 h-0 rounded-full opacity-80 bg-cyan-400 shadow-[0_0_200px_80px_rgba(34,211,238,0.25)] pointer-events-none z-0" />
+            <div className="absolute top-1/4 left-8 w-2 h-0 rounded-full opacity-80 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+            <div className="absolute bottom-1/4 right-8 w-2 h-0 rounded-full opacity-80 bg-blue-500 shadow-[0_0_200px_80px_rgba(59,130,246,0.25)] pointer-events-none z-0" />
 
             <div
               className="max-w-6xl mx-auto relative z-10"
@@ -434,25 +621,25 @@ export default function Home() {
                 style={{ marginBottom: "clamp(4rem, 8vh, 6rem)" }}
               >
                 <h2
-                  className="font-bold leading-tight text-white"
+                  className="font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-cyan-400"
                   style={{
                     fontSize: "clamp(2.5rem, 6vw, 4rem)",
                     marginBottom: "clamp(1.5rem, 4vh, 2rem)",
                   }}
                 >
-                  What Kozeo offers?
+                  What you can do on Kozeo
                 </h2>
                 <p
-                  className="text-gray-400 mx-auto leading-relaxed"
+                  className="text-gray-300 mx-auto leading-relaxed"
                   style={{
                     fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
                     maxWidth: "min(90vw, 800px)",
                     lineHeight: "1.7",
                   }}
                 >
-                  Whether you're looking to build your portfolio, earn money, or
-                  find great developers to collaborate on exciting projects,
-                  Kozeo has everything you need to grow your tech career.
+                  Kozeo is designed to help you build a meaningful portfolio
+                  while earning. Every project contributes to your professional
+                  growth and resume enhancement.
                 </p>
               </div>
 
@@ -462,199 +649,216 @@ export default function Home() {
                   gap: "clamp(2rem, 5vw, 3rem)",
                 }}
               >
-                {/* Find Projects */}
+                {/* Enhanced Feature Cards */}
                 <div
-                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-purple-900/20 backdrop-blur-sm border border-purple-500/30 rounded-xl hover:border-purple-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
-                  <div
-                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiUsers
-                      className="text-white"
+                  <div className="relative z-10">
+                    <div
+                      className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-full mb-4 flex items-center justify-center border border-purple-400/50"
                       style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
+                        width: "clamp(3rem, 8vw, 4rem)",
+                        height: "clamp(3rem, 8vw, 4rem)",
                       }}
-                    />
+                    >
+                      <FiCode
+                        className="text-white"
+                        style={{
+                          width: "clamp(1.5rem, 4vw, 2rem)",
+                          height: "clamp(1.5rem, 4vw, 2rem)",
+                        }}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors"
+                      style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
+                    >
+                      Work on Real Projects
+                    </h3>
+                    <p
+                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Take on projects from startups, NGOs, and growing
+                      businesses. Build{" "}
+                      <span className="text-purple-400">
+                        real-world experience
+                      </span>{" "}
+                      that enhances your portfolio and resume.
+                    </p>
                   </div>
-                  <h3
-                    className="font-semibold text-white mb-3"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                    }}
-                  >
-                    Join Projects
-                  </h3>
-                  <p
-                    className="text-gray-400 leading-relaxed"
-                    style={{
-                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    Browse exciting projects posted by others. Apply your
-                    skills, collaborate with talented developers, and get paid
-                    for your contributions while building your portfolio.
-                  </p>
                 </div>
 
-                {/* Create Projects */}
                 <div
-                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-cyan-900/20 backdrop-blur-sm border border-cyan-500/30 rounded-xl hover:border-cyan-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
-                  <div
-                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiCode
-                      className="text-white"
+                  <div className="relative z-10">
+                    <div
+                      className="bg-gradient-to-br from-cyan-600 to-cyan-800 rounded-full mb-4 flex items-center justify-center border border-cyan-400/50"
                       style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
+                        width: "clamp(3rem, 8vw, 4rem)",
+                        height: "clamp(3rem, 8vw, 4rem)",
                       }}
-                    />
+                    >
+                      <FiUsers
+                        className="text-white"
+                        style={{
+                          width: "clamp(1.5rem, 4vw, 2rem)",
+                          height: "clamp(1.5rem, 4vw, 2rem)",
+                        }}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors"
+                      style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
+                    >
+                      Find collaboraters
+                    </h3>
+                    <p
+                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Find developers or join interesting projects and work with
+                      other developers. Develop{" "}
+                      <span className="text-cyan-400">teamwork skills</span>{" "}
+                      that are essential in professional environments.
+                    </p>
                   </div>
-                  <h3
-                    className="font-semibold text-white mb-3"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                    }}
-                  >
-                    Host Projects
-                  </h3>
-                  <p
-                    className="text-gray-400 leading-relaxed"
-                    style={{
-                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    Have an idea but need help? Post your project, set your
-                    budget, and find skilled collaborators. Manage everything
-                    from concept to completion in one place.
-                  </p>
                 </div>
 
-                {/* Skill Forge */}
                 <div
-                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl md:col-span-2 lg:col-span-1"
+                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-emerald-900/20 backdrop-blur-sm border border-emerald-500/30 rounded-xl hover:border-emerald-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/20 md:col-span-2 lg:col-span-1"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
-                  <div
-                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiStar
-                      className="text-white"
+                  <div className="relative z-10">
+                    <div
+                      className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-full mb-4 flex items-center justify-center border border-emerald-400/50"
                       style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
+                        width: "clamp(3rem, 8vw, 4rem)",
+                        height: "clamp(3rem, 8vw, 4rem)",
                       }}
-                    />
+                    >
+                      <FiDollarSign
+                        className="text-white"
+                        style={{
+                          width: "clamp(1.5rem, 4vw, 2rem)",
+                          height: "clamp(1.5rem, 4vw, 2rem)",
+                        }}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-semibold text-white mb-3 group-hover:text-emerald-300 transition-colors"
+                      style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
+                    >
+                      Earn While Learning
+                    </h3>
+                    <p
+                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Get paid for your contributions while building valuable
+                      experience.
+                      <span className="text-emerald-400">
+                        Installment based payments
+                      </span>{" "}
+                      ensures you get paid for your work properly.
+                    </p>
                   </div>
-                  <h3
-                    className="font-semibold text-white mb-3"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                    }}
-                  >
-                    Skill Forge Projects
-                  </h3>
-                  <p
-                    className="text-gray-400 leading-relaxed"
-                    style={{
-                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    Practice and learn through free collaborative projects.
-                    Perfect for beginners or when you want to explore new
-                    technologies without financial pressure.
-                  </p>
                 </div>
-                {/* Installment based payments */}
+
+                {/* Additional Feature: Build Portfolio */}
                 <div
-                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  className="group relative overflow-hidden bg-gradient-to-br from-black/90 to-amber-900/20 backdrop-blur-sm border border-amber-500/30 rounded-xl hover:border-amber-400/60 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20"
                   style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
                 >
-                  <div
-                    className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiDollarSign
-                      className="text-white"
+                  <div className="relative z-10">
+                    <div
+                      className="bg-gradient-to-br from-amber-600 to-amber-800 rounded-full mb-4 flex items-center justify-center border border-amber-400/50"
                       style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
+                        width: "clamp(3rem, 8vw, 4rem)",
+                        height: "clamp(3rem, 8vw, 4rem)",
                       }}
-                    />
+                    >
+                      <FiStar
+                        className="text-white"
+                        style={{
+                          width: "clamp(1.5rem, 4vw, 2rem)",
+                          height: "clamp(1.5rem, 4vw, 2rem)",
+                        }}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-semibold text-white mb-3 group-hover:text-amber-300 transition-colors"
+                      style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
+                    >
+                      Build Your Portfolio
+                    </h3>
+                    <p
+                      className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Every completed project becomes part of your professional
+                      portfolio.
+                      <span className="text-amber-400">
+                        Showcase your abilities
+                      </span>{" "}
+                      to potential employers.
+                    </p>
                   </div>
-                  <h3
-                    className="font-semibold text-white mb-3"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                    }}
-                  >
-                    Installment Based Payments
-                  </h3>
-                  <p
-                    className="text-gray-400 leading-relaxed"
-                    style={{
-                      fontSize: "clamp(0.9rem, 2vw, 1rem)",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    Spread the cost of your projects over time with our flexible
-                    payment plans. Get started today and pay later.
-                  </p>
                 </div>
               </div>
 
-              {/* Call to Action */}
+              {/* Enhanced Call to Action */}
               <div
                 className="text-center"
                 style={{ marginTop: "clamp(4rem, 8vh, 6rem)" }}
               >
                 <p
-                  className="text-gray-400 mb-6"
+                  className="text-gray-300 mb-8"
                   style={{
                     fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
                     lineHeight: "1.6",
                   }}
                 >
-                  Ready to start your journey? Join thousands of developers
+                  Join{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 font-semibold">
+                    thousands of developers
+                  </span>{" "}
                   already building their future on Kozeo.
                 </p>
+
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-3 bg-black/80 backdrop-blur-sm border border-gray-800 hover:border-white/20 text-white font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  className="group inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-lg transition-all duration-300 hover:transform hover:scale-105 hover:bg-white/15 hover:border-white/30 relative overflow-hidden"
                   style={{
-                    padding: "clamp(0.75rem, 2vh, 1rem) clamp(2rem, 5vw, 3rem)",
+                    padding:
+                      "clamp(1rem, 2.5vh, 1.25rem) clamp(2rem, 5vw, 3rem)",
                     fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
                   }}
                 >
-                  Get Started Today
-                  <FiArrowRight
-                    style={{
-                      width: "clamp(1rem, 2.5vw, 1.25rem)",
-                      height: "clamp(1rem, 2.5vw, 1.25rem)",
-                    }}
-                  />
+                  <span className="relative z-10 flex items-center gap-2">
+                    Start Building Your Future
+                    <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-white/5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </Link>
               </div>
             </div>
