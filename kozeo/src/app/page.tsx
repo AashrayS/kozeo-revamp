@@ -812,6 +812,52 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
+
+                {/* Discussion Rooms Feature */}
+                <div
+                  className="bg-black/80 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-white/20 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl"
+                  style={{ padding: "clamp(1.5rem, 4vh, 2rem)" }}
+                >
+                  <div className="relative z-10">
+                    <div
+                      className="bg-black rounded-full mb-4 flex items-center justify-center border border-gray-700"
+                      style={{
+                        width: "clamp(3rem, 8vw, 4rem)",
+                        height: "clamp(3rem, 8vw, 4rem)",
+                      }}
+                    >
+                      <FiMessageCircle
+                        className="text-white"
+                        style={{
+                          width: "clamp(1.5rem, 4vw, 2rem)",
+                          height: "clamp(1.5rem, 4vw, 2rem)",
+                        }}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-semibold text-white mb-3"
+                      style={{ fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)" }}
+                    >
+                      Join Discussion Rooms
+                    </h3>
+                    <p
+                      className="text-gray-400 leading-relaxed"
+                      style={{
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      Connect with the community through specialized discussion
+                      rooms for{" "}
+                      <span className="text-white">
+                        referrals, job opportunities, coding contests
+                      </span>{" "}
+                      and more. Build your professional network and get support
+                      from fellow developers.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Enhanced Call to Action */}
