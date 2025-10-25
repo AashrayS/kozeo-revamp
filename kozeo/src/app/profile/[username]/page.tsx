@@ -22,6 +22,10 @@ import {
   FiChevronUp,
   FiFileText,
   FiUser,
+  FiHeart,
+  FiMessageCircle,
+  FiImage,
+  FiExternalLink,
 } from "react-icons/fi";
 import {
   getUserByUsername,
@@ -31,6 +35,7 @@ import { useUser } from "../../../../store/hooks";
 import { isAuthenticated } from "../../../../utilities/api";
 import { useTheme } from "@/contexts/ThemeContext";
 import { identifyWebsite } from "../../../../utilities/helper";
+import timelineData from "../../../../data/timeline.js";
 
 interface ProfileData {
   id: string;
@@ -214,6 +219,15 @@ export default function UserProfilePage() {
   const [showAllHostedGigs, setShowAllHostedGigs] = useState(false);
   const [showAllCollaboratedGigs, setShowAllCollaboratedGigs] = useState(false);
   const [showAllOngoingProjects, setShowAllOngoingProjects] = useState(false);
+  const [showAllPosts, setShowAllPosts] = useState(false);
+  const [expandedComments, setExpandedComments] = useState<Set<string>>(
+    new Set()
+  );
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(
+    new Set()
+  );
 
   // Collapse state for sections
   const [isHostedSectionCollapsed, setIsHostedSectionCollapsed] =
@@ -224,6 +238,7 @@ export default function UserProfilePage() {
   ] = useState(false);
   const [isOngoingSectionCollapsed, setIsOngoingSectionCollapsed] =
     useState(false);
+  const [isPostsSectionCollapsed, setIsPostsSectionCollapsed] = useState(false);
 
   // Wallet-related state
   const [walletData, setWalletData] = useState<any>(null);
@@ -326,7 +341,7 @@ export default function UserProfilePage() {
     setShowWithdrawalModal(true);
   };
 
-  // Extract all unique skills from user's gigs
+  // Extract all unique skills from user's gigs and posts
   const allSkills = useMemo(() => {
     if (!profile) return [];
 
@@ -343,6 +358,13 @@ export default function UserProfilePage() {
     profile.gigsCollaborated?.forEach((gig) => {
       if (gig.skills && Array.isArray(gig.skills)) {
         gig.skills.forEach((skill) => skillsSet.add(skill));
+      }
+    });
+
+    // Extract skills from posts
+    timelineData.forEach((post) => {
+      if (post.skills && Array.isArray(post.skills)) {
+        post.skills.forEach((skill) => skillsSet.add(skill));
       }
     });
 
@@ -446,6 +468,60 @@ export default function UserProfilePage() {
     setShowAllOngoingProjects((prev) => !prev);
   };
 
+  const togglePosts = () => {
+    setShowAllPosts((prev) => !prev);
+  };
+
+  const toggleComments = (postId: string) => {
+    setExpandedComments((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleDescription = (postId: string) => {
+    setExpandedDescriptions((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
+  const openImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
+    setShowImageModal(false);
+  };
+
+  const isImageFile = (url: string) => {
+    return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
+  };
+
+  const truncateDescription = (description: string, maxLines: number = 3) => {
+    const words = description.split(" ");
+    const avgWordsPerLine = 12; // Estimated words per line
+    const maxWords = maxLines * avgWordsPerLine;
+
+    if (words.length <= maxWords) {
+      return description;
+    }
+
+    return words.slice(0, maxWords).join(" ") + "...";
+  };
+
   // Filter hosted gigs based on selected skills and exclude gigs with no reviews
   const filteredHostedGigs = useMemo(() => {
     let gigs = profile?.gigsHosted || [];
@@ -500,6 +576,14 @@ export default function UserProfilePage() {
     );
   }, [profile?.gigsHosted, profile?.gigsCollaborated, selectedSkills]);
 
+  // Filter posts based on selected skills
+  const filteredPosts = useMemo(() => {
+    if (selectedSkills.length === 0) return timelineData;
+    return timelineData.filter((post) =>
+      selectedSkills.some((skill) => post.skills && post.skills.includes(skill))
+    );
+  }, [selectedSkills]);
+
   // Display arrays that limit to 5 gigs when collapsed
   const displayedHostedGigs = useMemo(() => {
     return showAllHostedGigs
@@ -518,6 +602,10 @@ export default function UserProfilePage() {
       ? filteredOngoingProjects
       : filteredOngoingProjects.slice(0, 5);
   }, [filteredOngoingProjects, showAllOngoingProjects]);
+
+  const displayedPosts = useMemo(() => {
+    return showAllPosts ? filteredPosts : filteredPosts.slice(0, 5);
+  }, [filteredPosts, showAllPosts]);
 
   if (loading) {
     return (
@@ -2125,6 +2213,297 @@ export default function UserProfilePage() {
                     </>
                   )}
                 </section>
+
+                {/* Posts Section */}
+                <section
+                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    theme === "light"
+                      ? "bg-white/90 border-gray-200"
+                      : "bg-neutral-900/70 border-neutral-800"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <h3
+                      className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}
+                    >
+                      <FiFileText className="text-indigo-400" />
+                      Posts Created ({filteredPosts.length}
+                      {selectedSkills.length > 0
+                        ? ` of ${timelineData.length}`
+                        : ""}
+                      )
+                    </h3>
+                    <button
+                      onClick={() =>
+                        setIsPostsSectionCollapsed(!isPostsSectionCollapsed)
+                      }
+                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                        theme === "light"
+                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
+                      }`}
+                    >
+                      {isPostsSectionCollapsed ? (
+                        <FiChevronDown className="text-lg" />
+                      ) : (
+                        <FiChevronUp className="text-lg" />
+                      )}
+                    </button>
+                  </div>
+
+                  {!isPostsSectionCollapsed && (
+                    <>
+                      <div className="space-y-6">
+                        {displayedPosts.map((post, index) => (
+                          <div
+                            key={post.id}
+                            className={`group relative overflow-hidden rounded-xl border backdrop-blur-sm theme-transition ${
+                              theme === "light"
+                                ? "bg-white/80 border-gray-200/50 hover:bg-white/95 hover:shadow-lg"
+                                : "bg-neutral-800/40 border-neutral-700/50 hover:bg-neutral-800/60 hover:shadow-xl"
+                            }`}
+                          >
+                            <div className="p-6 pb-4">
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1">
+                                  <h4
+                                    className={`text-xl font-semibold mb-2 ${
+                                      theme === "light"
+                                        ? "text-gray-900"
+                                        : "text-white"
+                                    }`}
+                                  >
+                                    {post.Title}
+                                  </h4>
+                                  <p
+                                    className={`text-sm leading-relaxed ${
+                                      theme === "light"
+                                        ? "text-gray-600"
+                                        : "text-gray-300"
+                                    }`}
+                                  >
+                                    {expandedDescriptions.has(post.id)
+                                      ? post.Description
+                                      : truncateDescription(
+                                          post.Description,
+                                          3
+                                        )}
+                                  </p>
+                                  {post.Description.split(" ").length > 36 && (
+                                    <button
+                                      onClick={() => toggleDescription(post.id)}
+                                      className={`mt-2 text-sm font-medium transition-colors ${
+                                        theme === "light"
+                                          ? "text-indigo-600 hover:text-indigo-700"
+                                          : "text-indigo-400 hover:text-indigo-300"
+                                      }`}
+                                    >
+                                      {expandedDescriptions.has(post.id)
+                                        ? "Read less"
+                                        : "Read more"}
+                                    </button>
+                                  )}
+                                </div>
+                                <span
+                                  className={`text-xs px-2 py-1 rounded-full ml-4 ${
+                                    theme === "light"
+                                      ? "bg-indigo-100 text-indigo-700"
+                                      : "bg-indigo-900/50 text-indigo-300"
+                                  }`}
+                                >
+                                  {new Date(
+                                    post.posted_at
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+
+                              {/* Skills Tags */}
+                              {post.skills && post.skills.length > 0 && (
+                                <div className="mb-4">
+                                  <div className="flex flex-wrap gap-2">
+                                    {post.skills.map(
+                                      (skill: string, skillIdx: number) => (
+                                        <span
+                                          key={skillIdx}
+                                          className={`px-3 py-1 text-xs rounded-full font-medium border ${
+                                            theme === "light"
+                                              ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+                                              : "bg-indigo-950/50 border-indigo-800/50 text-indigo-300"
+                                          }`}
+                                        >
+                                          {skill}
+                                        </span>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Image Previews */}
+                              {post.attachments &&
+                                post.attachments.length > 0 && (
+                                  <div className="mb-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                      {post.attachments
+                                        .slice(0, 6)
+                                        .map((attachment, idx) => (
+                                          <div
+                                            key={idx}
+                                            className="relative group cursor-pointer"
+                                            onClick={() =>
+                                              openImageModal(attachment)
+                                            }
+                                          >
+                                            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                                              <img
+                                                src={attachment}
+                                                alt={`Post attachment ${
+                                                  idx + 1
+                                                }`}
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                onError={(e) => {
+                                                  e.currentTarget.style.display =
+                                                    "none";
+                                                }}
+                                              />
+                                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                                <FiImage className="text-white opacity-0 group-hover:opacity-100 text-2xl transition-opacity duration-300" />
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Show more indicator if there are more than 6 attachments */}
+                                    {post.attachments.length > 6 && (
+                                      <div className="mt-3 text-center">
+                                        <span
+                                          className={`text-sm ${
+                                            theme === "light"
+                                              ? "text-gray-500"
+                                              : "text-gray-400"
+                                          }`}
+                                        >
+                                          +{post.attachments.length - 6} more
+                                          attachments
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                            </div>
+
+                            {/* Post Footer */}
+                            <div
+                              className={`px-6 py-4 border-t flex items-center justify-between ${
+                                theme === "light"
+                                  ? "border-gray-200/50 bg-gray-50/50"
+                                  : "border-neutral-700/50 bg-neutral-900/30"
+                              }`}
+                            >
+                              <div className="flex items-center gap-4">
+                                <button
+                                  onClick={() => toggleComments(post.id)}
+                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                    expandedComments.has(post.id)
+                                      ? theme === "light"
+                                        ? "bg-indigo-100 text-indigo-700"
+                                        : "bg-indigo-900/50 text-indigo-300"
+                                      : theme === "light"
+                                      ? "text-gray-600 hover:bg-gray-100"
+                                      : "text-gray-400 hover:bg-neutral-700"
+                                  }`}
+                                >
+                                  <FiMessageCircle className="text-sm" />
+                                  {post.comments?.length || 0}
+                                </button>
+                              </div>
+
+                              <div className="flex items-center gap-1">
+                                <FiHeart className="text-red-400 text-sm" />
+                                <span className="text-sm font-medium text-red-400">
+                                  {post.likeCount}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Comments Section */}
+                            {expandedComments.has(post.id) &&
+                              post.comments &&
+                              post.comments.length > 0 && (
+                                <div
+                                  className={`px-6 py-4 border-t space-y-3 ${
+                                    theme === "light"
+                                      ? "border-gray-200/50 bg-gray-50/30"
+                                      : "border-neutral-700/50 bg-neutral-900/50"
+                                  }`}
+                                >
+                                  {post.comments.map((comment, commentIdx) => (
+                                    <div
+                                      key={commentIdx}
+                                      className={`p-3 rounded-lg ${
+                                        theme === "light"
+                                          ? "bg-white/80 border border-gray-200/50"
+                                          : "bg-neutral-800/50 border border-neutral-700/50"
+                                      }`}
+                                    >
+                                      <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-indigo-400">
+                                          @{comment.author}
+                                        </span>
+                                        <span
+                                          className={`text-xs ${
+                                            theme === "light"
+                                              ? "text-gray-500"
+                                              : "text-gray-400"
+                                          }`}
+                                        >
+                                          {new Date(
+                                            comment.time
+                                          ).toLocaleDateString()}
+                                        </span>
+                                      </div>
+                                      <p
+                                        className={`text-sm ${
+                                          theme === "light"
+                                            ? "text-gray-700"
+                                            : "text-gray-300"
+                                        }`}
+                                      >
+                                        {comment.string}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Load More / Show Less button for Posts */}
+                      {filteredPosts.length > 5 && (
+                        <div className="mt-6 flex justify-center">
+                          <button
+                            onClick={togglePosts}
+                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                              theme === "light"
+                                ? "bg-white/60 border-gray-200/50 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300"
+                                : "bg-neutral-800/50 border-neutral-700/50 text-indigo-400 hover:bg-indigo-950/30 hover:border-indigo-600/50"
+                            }`}
+                          >
+                            {showAllPosts
+                              ? `Show Less (${filteredPosts.length - 5} hidden)`
+                              : `Load More Posts (${
+                                  filteredPosts.length - 5
+                                } more)`}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </section>
               </>
             )}
           </main>
@@ -2141,7 +2520,9 @@ export default function UserProfilePage() {
                 }`}
               >
                 <FiFilter className="text-lg" />
-                <span className="text-sm font-medium hidden lg:block">Show Filters</span>
+                <span className="text-sm font-medium hidden lg:block">
+                  Show Filters
+                </span>
                 {selectedSkills.length > 0 && (
                   <span className="bg-cyan-500 text-white text-xs rounded-full px-2 py-1 ml-1">
                     {selectedSkills.length}
@@ -2629,10 +3010,31 @@ export default function UserProfilePage() {
                   </div>
                 </div>
               )}
+
+              {/* Posts Section */}
             </>
           )}
         </div>
       </div>
+
+      {/* Image Modal */}
+      {showImageModal && selectedImage && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center">
+            <button
+              onClick={closeImageModal}
+              className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+            >
+              <FiX className="text-xl" />
+            </button>
+            <img
+              src={selectedImage}
+              alt="Full size image"
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Transaction Modal */}
       <TransactionModal
