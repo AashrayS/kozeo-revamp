@@ -4,8 +4,6 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import type { KeyboardEvent } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import TransactionModal from "@/components/common/TransactionModal";
 import WithdrawalModal from "@/components/common/WithdrawalModal";
 import { PageLoader } from "@/components/common/PageLoader";
@@ -31,6 +29,7 @@ import { useUser } from "../../../../store/hooks";
 import { isAuthenticated } from "../../../../utilities/api";
 import { useTheme } from "@/contexts/ThemeContext";
 import { identifyWebsite } from "../../../../utilities/helper";
+import { getCurrencySymbol } from "@/utilities/currency";
 import ImagePreviewModal from "@/components/common/ImagePreviewModal";
 
 interface ProfileData {
@@ -529,2208 +528,388 @@ export default function UserProfilePage() {
 
   if (loading) {
     return (
-      <>
-        <Header logoText="Kozeo" />
+      <div className="flex justify-center items-center py-20 min-h-[60vh]">
         <div
-          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-            theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+          className={`transition-colors duration-300 ${
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
           }`}
         >
-          <Sidebar />
-          <div className="flex flex-1">
-            <main className="flex-1 p-6 overflow-y-auto">
-              <div className="flex justify-center items-center py-20">
-                <div
-                  className={`transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  Loading profile...
-                </div>
-              </div>
-            </main>
-          </div>
+          Loading profile...
         </div>
-      </>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <>
-        <Header logoText="Kozeo" />
-        <div
-          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-            theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
-          }`}
-        >
-          <Sidebar />
-          <div className="flex flex-1 overflow-y-hidden">
-            <main className="flex-1 p-6 overflow-y-hidden">
-              <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center max-w-md mx-auto">
-                  <div className="text-8xl mb-6 animate-bounce">🤖</div>
-                  <h2
-                    className={`text-4xl font-bold mb-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent ${
-                      theme === "dark" ? "drop-shadow-lg" : ""
-                    }`}
-                  >
-                    Oops! Profile not found
-                  </h2>
-                  <p
-                    className={`text-xl mb-6 font-medium ${
-                      theme === "dark" ? "text-gray-300" : "text-gray-700"
-                    }`}
-                  >
-                    Even our best developers can't find this page! 🕵️‍♂️
-                  </p>
-                  <p
-                    className={`text-lg mb-8 leading-relaxed ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}
-                  >
-                    It seems this profile has mastered the ancient art of
-                    digital hide-and-seek. Maybe try refreshing, or check if
-                    you've got the right username? 🎭
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                      onClick={() => window.location.reload()}
-                      className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                    >
-                      Try Again 🔄
-                    </button>
-                    <button
-                      onClick={() => router.push("/gigs")}
-                      className={`px-8 py-3 rounded-xl font-semibold border-2 transition-all duration-200 hover:scale-105 ${
-                        theme === "dark"
-                          ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
-                          : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
-                      }`}
-                    >
-                      Browse Projects
-                    </button>
-                  </div>
-                  {/* <div className="mt-8">
-                    <p
-                      className={`text-sm ${
-                        theme === "dark" ? "text-gray-500" : "text-gray-500"
-                      }`}
-                    >
-                      Error Code: {error} 📋
-                    </p>
-                  </div> */}
-                </div>
-              </div>
-            </main>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="text-center max-w-md mx-auto">
+          <div className="text-8xl mb-6 animate-bounce">🤖</div>
+          <h2
+            className={`text-4xl font-bold mb-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent ${
+              theme === "dark" ? "drop-shadow-lg" : ""
+            }`}
+          >
+            Oops! Profile not found
+          </h2>
+          <p
+            className={`text-xl mb-6 font-medium ${
+              theme === "dark" ? "text-gray-300" : "text-gray-700"
+            }`}
+          >
+            Even our best developers can't find this page! 🕵️‍♂️
+          </p>
+          <p
+            className={`text-lg mb-8 leading-relaxed ${
+              theme === "dark" ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
+            It seems this profile has mastered the ancient art of
+            digital hide-and-seek. Maybe try refreshing, or check if
+            you've got the right username? 🎭
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            >
+              Try Again 🔄
+            </button>
+            <button
+              onClick={() => router.push("/gigs")}
+              className={`px-8 py-3 rounded-xl font-semibold border-2 transition-all duration-200 hover:scale-105 ${
+                theme === "dark"
+                  ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
+                  : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+              }`}
+            >
+              Browse Projects
+            </button>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   if (!profile) {
-    return <div className="text-white">No profile data available</div>;
+    return (
+      <div className="flex justify-center items-center py-20 min-h-[60vh]">
+        <div className="text-white text-xl">No profile data available</div>
+      </div>
+    );
   }
 
   // Calculate stats from available data
   const totalEarnings = walletData?.amount || profile.wallet?.amount || 0;
   const avgRating = profile.rating || 0;
 
-  // Function to get currency symbol
-  const getCurrencySymbol = (currency: string) => {
-    const currencySymbols: { [key: string]: string } = {
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-      JPY: "¥",
-      INR: "₹",
-      CAD: "C$",
-      AUD: "A$",
-      CHF: "CHF",
-      CNY: "¥",
-      SEK: "kr",
-      NOK: "kr",
-      MXN: "$",
-      BRL: "R$",
-      RUB: "₽",
-      KRW: "₩",
-      SGD: "S$",
-      HKD: "HK$",
-      NZD: "NZ$",
-      TRY: "₺",
-      ZAR: "R",
-      PLN: "zł",
-      CZK: "Kč",
-      HUF: "Ft",
-      ILS: "₪",
-      CLP: "$",
-      PHP: "₱",
-      AED: "د.إ",
-      SAR: "﷼",
-      THB: "฿",
-      MYR: "RM",
-      IDR: "Rp",
-      VND: "₫",
-      EGP: "£",
-      MAD: "د.م.",
-      NGN: "₦",
-      KES: "KSh",
-      GHS: "GH₵",
-      UGX: "USh",
-      TZS: "TSh",
-      ZMW: "ZK",
-      BWP: "P",
-      MWK: "MK",
-      RWF: "RF",
-      ETB: "Br",
-      DZD: "د.ج",
-      TND: "د.ت",
-      LYD: "ل.د",
-      SDG: "ج.س.",
-      SSP: "£",
-      SOS: "S",
-      DJF: "Fdj",
-      ERN: "Nfk",
-      MRU: "UM",
-      CVE: "$",
-      SLL: "Le",
-      LRD: "L$",
-      GNF: "FG",
-      SEN: "F",
-      GMD: "D",
-      GWP: "P",
-      XOF: "F",
-      XAF: "F",
-      KMF: "CF",
-      MGA: "Ar",
-      MUR: "₨",
-      SCR: "₨",
-      MVR: ".ރ",
-      NPR: "₨",
-      BTN: "Nu.",
-      LKR: "₨",
-      BDT: "৳",
-      MMK: "K",
-      LAK: "₭",
-      KHR: "៛",
-      BND: "B$",
-      TWD: "NT$",
-      MNT: "₮",
-      KZT: "₸",
-      UZS: "лв",
-      KGS: "лв",
-      TJS: "SM",
-      TMT: "T",
-      AFN: "؋",
-      PKR: "₨",
-      IRR: "﷼",
-      IQD: "ع.د",
-      SYP: "£",
-      LBP: "ل.ل",
-      JOD: "د.ا",
-      KWD: "د.ك",
-      BHD: ".د.ب",
-      QAR: "ر.ق",
-      OMR: "ر.ع.",
-      YER: "﷼",
-      GEL: "₾",
-      AMD: "֏",
-      AZN: "₼",
-      BAM: "KM",
-      BGN: "лв",
-      HRK: "kn",
-      RSD: "дин",
-      MKD: "ден",
-      MDL: "L",
-      RON: "lei",
-      UAH: "₴",
-      BYN: "Br",
-      LTL: "Lt",
-      LVL: "Ls",
-      EEK: "kr",
-      ISK: "kr",
-      DKK: "kr",
-      CRC: "₡",
-      GTQ: "Q",
-      HNL: "L",
-      NIO: "C$",
-      PAB: "B/.",
-      PEN: "S/.",
-      PYG: "Gs",
-      UYU: "$U",
-      VES: "Bs",
-      BOB: "$b",
-      COP: "$",
-      ECU: "$",
-      GYD: "$",
-      SRD: "$",
-      TTD: "TT$",
-      BBD: "Bds$",
-      BMD: "$",
-      BSD: "$",
-      BZD: "BZ$",
-      KYD: "$",
-      JMD: "J$",
-      AWG: "ƒ",
-      ANG: "ƒ",
-      SVC: "$",
-      DOP: "RD$",
-      HTG: "G",
-      CUP: "₱",
-      CUC: "$",
-      XCD: "$",
-      FJD: "$",
-      PGK: "K",
-      SBD: "$",
-      TOP: "T$",
-      VUV: "VT",
-      WST: "WS$",
-      XPF: "₣",
-      NCR: "₣",
-      AOA: "Kz",
-      CDF: "FC",
-      // XAF: "FCFA",
-      // XOF: "CFA",
-      BIF: "FBu",
-      // KMF: "CF",
-      // MGA: "Ar",
-      // MUR: "₨",
-      // MWK: "MK",
-      MZN: "MT",
-      // RWF: "R₣",
-      // SCR: "₨",
-      STN: "Db",
-      SZL: "E",
-      // TZS: "TSh",
-      // UGX: "USh",
-      // ZMW: "ZK",
-      ZWL: "Z$",
-    };
-    return currencySymbols[currency.toUpperCase()] || currency;
-  };
-
   return (
-    <>
-      <Header logoText="Kozeo" />
-      {/* Glows */}
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-
-      <div
-        className={`min-h-screen relative z-10 flex flex-row theme-transition ${
-          theme === "light"
-            ? "bg-gradient-light text-gray-900"
-            : "bg-gradient-dark text-white"
-        }`}
-      >
-        {/* Main Layout */}
-        <Sidebar />
-        <div className="flex-1 flex flex-col lg:flex-row p-4 sm:p-8 gap-0 lg:gap-8 justify-center items-start pb-20 lg:pb-8">
-          {/* Main Content */}
-          <main className="flex-1 flex flex-col gap-8 items-stretch justify-center w-full max-w-8xl px-4 sm:px-6 lg:pr-10 mx-auto py-8">
-            {/* Loading State */}
-            {loading && <PageLoader />}
-
-            {/* Error State */}
-            {error && !loading && (
-              <section
-                className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                  theme === "light"
-                    ? "bg-white/90 border-gray-200"
-                    : "bg-neutral-900/70 border-neutral-800"
-                }`}
-              >
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  {error &&
-                  (error.toLowerCase().includes("user not found") ||
-                    error.toLowerCase().includes("not found")) ? (
-                    <>
-                      <div className="text-6xl mb-4">🕵️‍♂️</div>
-                      <h2
-                        className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        User Not Foundd
-                      </h2>
-                      <p
-                        className={`text-lg mb-6 font-medium ${
-                          theme === "light" ? "text-gray-700" : "text-gray-300"
-                        }`}
-                      >
-                        Looks like this user has mastered the art of digital
-                        invisibility! 🥷
-                      </p>
-                      <p
-                        className={`text-base mb-8 max-w-md leading-relaxed ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
-                        }`}
-                      >
-                        Either they're playing the ultimate hide-and-seek game,
-                        or this profile decided to take a vacation to the
-                        digital Bermuda Triangle. 🌴
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-6xl mb-4">⚠️</div>
-                      <h2
-                        className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        Oops! Something Went Wrong
-                      </h2>
-                      <p
-                        className={`text-lg mb-6 ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
-                        }`}
-                      >
-                        Our servers are having a bit of a coffee break! ☕
-                      </p>
-                      <p
-                        className={`text-sm mb-8 max-w-md ${
-                          theme === "light" ? "text-gray-500" : "text-gray-500"
-                        }`}
-                      >
-                        Error: {error}
-                      </p>
-                    </>
-                  )}
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <button
-                      onClick={() => router.back()}
-                      className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200 font-medium"
-                    >
-                      Go Back
-                    </button>
-                    <button
-                      onClick={() => router.push("/gigs")}
-                      className={`px-6 py-3 rounded-lg border transition-all duration-200 font-medium ${
-                        theme === "light"
-                          ? "border-gray-300 text-gray-700 hover:bg-gray-50"
-                          : "border-neutral-600 text-gray-300 hover:bg-neutral-800"
-                      }`}
-                    >
-                      Browse Projects
-                    </button>
-                  </div>
+    <div className="flex-1 flex flex-col gap-8 items-stretch w-full max-w-8xl mx-auto py-8">
+      {/* Profile Header */}
+      <section className="premium-card p-6 md:p-8">
+        <h2 className="premium-section-title">User Profile</h2>
+        <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
+          <ProfileImage
+            profilePic={profile.profile_Picture || ""}
+            username={profile.username}
+            size="lg"
+          />
+          <div className="text-center sm:text-left flex-1">
+            <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <h3 className="premium-section-title !mb-0">
+                  {profile.first_name} {profile.last_name}
+                </h3>
+                {canViewSensitiveInfo && (
+                  <button
+                    onClick={() => router.push(`/profile/${username}/edit`)}
+                    className="px-4 py-2 text-sm font-medium bg-black dark:bg-white text-white dark:text-black rounded-full hover:scale-105 transition-all duration-300 shadow-sm"
+                    type="button"
+                  >
+                    Edit Profile
+                  </button>
+                )}
+              </div>
+              {profile.achievements && profile.achievements.length > 0 && (
+                <div className="hidden lg:flex flex-wrap gap-2 ml-6">
+                  {profile.achievements.map((achievement) => (
+                    <div key={achievement.id} className="inline-block" title={achievement.title}>
+                      <img
+                        src={achievement.icon}
+                        alt={achievement.title}
+                        className="w-8 h-8 rounded-lg hover:scale-110 transition-transform object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
-              </section>
-            )}
+              )}
+            </div>
+            <div className={`text-lg font-medium mb-3 theme-transition ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>
+              @{profile.username}
+            </div>
+            <p className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${theme === "light" ? "text-gray-600" : "text-gray-300"}`}>
+              {profile.bio}
+            </p>
+            <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
+              <span className={`px-3 py-1 text-xs rounded-full font-bold tracking-widest uppercase border transition-all duration-300 ${theme === "light" ? "bg-black/5 border-black/10 text-black/40" : "bg-white/5 border-white/10 text-white/40"}`}>
+                Active
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Profile Content - Only show when profile is loaded and no error */}
-            {!loading && !error && profile && (
-              <>
-                {/* Profile Header */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
-                  }`}
-                >
-                  <h2
-                    className={`text-3xl md:text-4xl font-light tracking-tight mb-8 ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}
-                  >
-                    User Profile
-                  </h2>
-
-                  {/* Profile Card */}
-                  <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
-                    {/* Avatar */}
-                    <ProfileImage
-                      profilePic={profile.profile_Picture || ""}
-                      username={profile.username}
-                      size="lg"
-                    />
-
-                    {/* User Info */}
-                    <div className="text-center sm:text-left flex-1">
-                      <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center sm:justify-start gap-3 mb-4">
-                        <div className="flex items-center gap-3">
-                          <h3
-                            className={`text-2xl lg:text-3xl font-light tracking-tight theme-transition ${
-                              theme === "light" ? "text-gray-900" : "text-white"
-                            }`}
-                          >
-                            {profile.first_name} {profile.last_name}
-                          </h3>
-                          {canViewSensitiveInfo && (
-                            <button
-                              onClick={() =>
-                                router.push(`/profile/${username}/edit`)
-                              }
-                              className="px-3 py-1.5 text-sm bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200"
-                              type="button"
-                            >
-                              Edit Profile
-                            </button>
-                          )}
-                        </div>
-                        {/* Achievements beside username for lg+ screens */}
-                        {profile.achievements &&
-                          profile.achievements.length > 0 && (
-                            <div className="hidden lg:flex flex-wrap gap-2 ml-6">
-                              {profile.achievements.map((achievement, idx) => (
-                                <div
-                                  key={achievement.id}
-                                  className="inline-block"
-                                  title={achievement.title}
-                                >
-                                  <img
-                                    src={achievement.icon}
-                                    alt={achievement.title}
-                                    className="w-8 h-8 rounded-lg hover:scale-110 transition-transform object-cover"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                      </div>
-
-                      <div
-                        className={`text-lg font-medium mb-3 theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
-                        }`}
-                      >
-                        @{profile.username}
-                      </div>
-
-                      <p
-                        className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-300"
-                        }`}
-                      >
-                        {profile.bio}
-                      </p>
-
-                      <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
-                        <span
-                          className={`px-3 py-1 text-sm rounded-full font-medium border theme-transition ${
-                            theme === "light"
-                              ? "bg-green-50 border-green-200 text-green-700"
-                              : "bg-green-950/50 border-green-800/50 text-green-300"
-                          }`}
-                        >
-                          Active
-                        </span>
-                        {/* <span
-                          className={`text-sm theme-transition ${
-                            theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-500"
-                          }`}
-                        >
-                          Member since 2024
-                        </span> */}
-                      </div>
-
-                      {/* Links and Resume */}
-                      <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-                        {/* Website Links */}
-                        {profile.links && profile.links.length > 0 && (
-                          <>
-                            {profile.links.map((link, idx) => {
-                              const websiteName = identifyWebsite(link);
-                              return (
-                                <a
-                                  key={idx}
-                                  href={link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className={`px-3 py-1 text-sm rounded-full border transition-all duration-200 hover:scale-105 theme-transition ${
-                                    theme === "light"
-                                      ? "bg-cyan-50 border-cyan-200 text-cyan-700 hover:bg-cyan-100"
-                                      : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/50"
-                                  }`}
-                                >
-                                  {websiteName ||
-                                    link
-                                      .replace(/^https?:\/\//, "")
-                                      .replace(/\/$/, "")}
-                                </a>
-                              );
-                            })}
-                          </>
-                        )}
-
-                        {/* Resume Button */}
-                        <button
-                          onClick={() => {
-                            if (profile.resume) {
-                              window.open(
-                                profile.resume,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
-                            }
-                          }}
-                          disabled={!profile.resume}
-                          className={`px-3 py-1 text-sm rounded-full border transition-all duration-200 flex items-center gap-2 ${
-                            profile.resume
-                              ? `hover:scale-105 cursor-pointer ${
-                                  theme === "light"
-                                    ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
-                                    : "bg-green-950/50 border-green-800/50 text-green-300 hover:bg-green-900/50"
-                                }`
-                              : `cursor-not-allowed opacity-50 ${
-                                  theme === "light"
-                                    ? "bg-gray-50 border-gray-200 text-gray-400"
-                                    : "bg-gray-950/50 border-gray-800/50 text-gray-500"
-                                }`
-                          } theme-transition`}
-                          title={
-                            profile.resume
-                              ? "View Resume"
-                              : "Resume not available"
-                          }
-                        >
-                          <FiFileText className="text-xs" />
-                          Resume
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Achievements Board for small screens */}
-                  {profile.achievements && profile.achievements.length > 0 && (
-                    <div className="flex flex-wrap gap-3 justify-center sm:justify-start mt-8 lg:hidden">
-                      {profile.achievements.map((achievement, idx) => (
-                        <div
-                          key={achievement.id}
-                          className="inline-block"
-                          title={achievement.title}
-                        >
-                          <img
-                            src={achievement.icon}
-                            alt={achievement.title}
-                            className="w-12 h-12 rounded-lg hover:scale-110 transition-transform object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </section>
-
-                {/* Privacy Notice for non-owners */}
-                {!canViewSensitiveInfo && userLoggedIn && (
-                  <section
-                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
-                      theme === "light"
-                        ? "bg-blue-50/80 border-blue-200/50 text-blue-700"
-                        : "bg-blue-950/30 border-blue-800/50 text-blue-300"
-                    }`}
-                  >
-                    <p className="text-sm flex items-center gap-2">
-                      <FiUsers className="text-base" />
-                      You are viewing {profile.first_name}'s public profile.
-                      Some information like wallet details are private.
-                    </p>
-                  </section>
-                )}
-
-                {/* Login prompt for non-authenticated users */}
-                {!userLoggedIn && (
-                  <section
-                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
-                      theme === "light"
-                        ? "bg-amber-50/80 border-amber-200/50 text-amber-700"
-                        : "bg-amber-950/30 border-amber-800/50 text-amber-300"
-                    }`}
-                  >
-                    <p className="text-sm flex items-center gap-2">
-                      <FiUsers className="text-base" />
-                      <button
-                        onClick={() => router.push("/login")}
-                        className="underline hover:opacity-80 transition"
-                      >
-                        Login
-                      </button>{" "}
-                      to view more details and interact with this profile.
-                    </p>
-                  </section>
-                )}
-
-                {/* Profile Stats Grid */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/95 border-gray-200"
-                      : "bg-neutral-900/80 border-neutral-800"
-                  }`}
-                >
-                  {/* Section Header */}
-                  <div className="mb-6 sm:mb-8">
-                    <h3
-                      className={`text-xl sm:text-2xl font-light tracking-tight mb-2 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      Performance Overview
-                    </h3>
-                    <p
-                      className={`text-xs sm:text-sm ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
-                      }`}
-                    >
-                      Key metrics and achievements
-                    </p>
-                  </div>
-
-                  {/* Stats Grid - Mobile-first responsive design */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                    {[
-                      {
-                        count: profile.gigsHosted.length,
-                        label: "Projects Hosted",
-                        color: "text-cyan-400",
-                        bgGradient:
-                          theme === "light"
-                            ? "from-cyan-50 via-blue-50 to-indigo-50"
-                            : "from-cyan-950/50 via-blue-950/50 to-indigo-950/50",
-                        borderGradient:
-                          theme === "light"
-                            ? "from-cyan-200 to-blue-200"
-                            : "from-cyan-800/50 to-blue-800/50",
-                        iconBg:
-                          theme === "light"
-                            ? "bg-gradient-to-br from-cyan-100 to-blue-100"
-                            : "bg-gradient-to-br from-cyan-900/50 to-blue-900/50",
-                        icon: <FiUsers className="text-lg text-cyan-400" />,
-                        shadowColor: "hover:shadow-cyan-200/50",
-                      },
-                      {
-                        count: avgRating.toFixed(1),
-                        label: "Average Rating",
-                        color: "text-yellow-400",
-                        bgGradient:
-                          theme === "light"
-                            ? "from-yellow-50 via-orange-50 to-amber-50"
-                            : "from-yellow-950/50 via-orange-950/50 to-amber-950/50",
-                        borderGradient:
-                          theme === "light"
-                            ? "from-yellow-200 to-orange-200"
-                            : "from-yellow-800/50 to-orange-800/50",
-                        iconBg:
-                          theme === "light"
-                            ? "bg-gradient-to-br from-yellow-100 to-orange-100"
-                            : "bg-gradient-to-br from-yellow-900/50 to-orange-900/50",
-                        icon: (
-                          <FiStar
-                            className="text-lg text-yellow-400"
-                            fill="currentColor"
-                          />
-                        ),
-                        suffix: avgRating > 0 ? "/5.0" : "",
-                        shadowColor: "hover:shadow-yellow-200/50",
-                      },
-                      {
-                        count: profile.gigsCollaborated?.length || 0,
-                        label: "Collaborations",
-                        color: "text-purple-400",
-                        bgGradient:
-                          theme === "light"
-                            ? "from-purple-50 via-violet-50 to-indigo-50"
-                            : "from-purple-950/50 via-violet-950/50 to-indigo-950/50",
-                        borderGradient:
-                          theme === "light"
-                            ? "from-purple-200 to-violet-200"
-                            : "from-purple-800/50 to-violet-800/50",
-                        iconBg:
-                          theme === "light"
-                            ? "bg-gradient-to-br from-purple-100 to-violet-100"
-                            : "bg-gradient-to-br from-purple-900/50 to-violet-900/50 ",
-                        icon: <FiUsers className="text-lg text-purple-400" />,
-                        shadowColor: "hover:shadow-purple-200/50",
-                      },
-
-                      // Only show wallet info if user can view sensitive information
-                      ...(canViewSensitiveInfo
-                        ? [
-                            {
-                              count: walletLoading
-                                ? "..."
-                                : `${getCurrencySymbol(
-                                    walletCurrency
-                                  )}${totalEarnings}`,
-                              label: "Earning",
-                              color: "text-emerald-400",
-                              bgGradient:
-                                theme === "light"
-                                  ? "from-emerald-50 via-green-50 to-teal-50"
-                                  : "from-emerald-950/50 via-green-950/50 to-teal-950/50",
-                              borderGradient:
-                                theme === "light"
-                                  ? "from-emerald-200 to-green-200"
-                                  : "from-emerald-800/50 to-green-800/50",
-                              iconBg:
-                                theme === "light"
-                                  ? "bg-gradient-to-br from-emerald-100 to-green-100"
-                                  : "bg-gradient-to-br from-emerald-900/50 to-green-900/50",
-                              icon: (
-                                <FiDollarSign className="text-lg text-emerald-400" />
-                              ),
-                              isWallet: true,
-                              shadowColor: "hover:shadow-emerald-200/50",
-                            },
-                          ]
-                        : []),
-                    ].map((item, idx) => (
-                      <div
-                        key={idx}
-                        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${
-                          item.bgGradient
-                        } border-0 bg-clip-padding theme-transition cursor-pointer ${
-                          theme === "light"
-                            ? "sm:shadow-sm hover:shadow-md backdrop-blur-sm"
-                            : "sm:shadow-sm hover:shadow-lg backdrop-blur-sm"
-                        }`}
-                        style={{
-                          backgroundImage:
-                            theme === "light"
-                              ? `linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`
-                              : `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`,
-                          transform: "perspective(1000px)",
-                          transition:
-                            "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                          border:
-                            theme === "light"
-                              ? "1px solid rgba(229, 231, 235, 0.6)"
-                              : "1px solid rgba(55, 65, 81, 0.4)",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform =
-                            "perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-8px) scale(1.02)";
-                          e.currentTarget.style.boxShadow =
-                            theme === "light"
-                              ? `0 12px 25px -8px ${
-                                  item.shadowColor
-                                    ?.replace("hover:", "")
-                                    .replace("/50", "/20") || "rgba(0,0,0,0.08)"
-                                }, 0 0 0 1px rgba(255,255,255,0.05)`
-                              : "0 12px 25px -8px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform =
-                            "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)";
-                          e.currentTarget.style.boxShadow =
-                            theme === "light"
-                              ? "0 4px 12px -3px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)"
-                              : "0 4px 12px -3px rgba(0, 0, 0, 0.15), 0 2px 4px -2px rgba(0, 0, 0, 0.1)";
-                        }}
-                      >
-                        {/* Professional Gradient Border with Glow */}
-                        <div
-                          className={`absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-r ${item.borderGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
-                          style={{
-                            background: `linear-gradient(135deg, ${
-                              item.borderGradient.includes("cyan")
-                                ? "rgba(6, 182, 212, 0.3)"
-                                : item.borderGradient.includes("yellow")
-                                ? "rgba(245, 158, 11, 0.3)"
-                                : item.borderGradient.includes("purple")
-                                ? "rgba(147, 51, 234, 0.3)"
-                                : "rgba(16, 185, 129, 0.3)"
-                            } 0%, transparent 100%)`,
-                            filter: "blur(0.5px)",
-                          }}
-                        >
-                          <div
-                            className={`w-full h-full rounded-2xl bg-gradient-to-br ${item.bgGradient}`}
-                          ></div>
-                        </div>
-
-                        {/* Subtle Shimmer Effect on Hover */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                          <div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                            style={{
-                              transform: "translateX(-100%)",
-                              animation: "shimmer 2s ease-in-out infinite",
-                            }}
-                          ></div>
-                        </div>
-
-                        {/* Enhanced Pattern Overlay */}
-                        <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500">
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_70%)]"></div>
-                          <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(255,255,255,0.1)_60deg,transparent_120deg)]"></div>
-                        </div>
-
-                        {/* Content with Enhanced Typography - Mobile Optimized */}
-                        <div className="relative p-4 sm:p-5 group-hover:translate-y-[-2px] transition-transform duration-400">
-                          <div className="flex items-start justify-between mb-3 sm:mb-4">
-                            <div className="flex-1">
-                              <div
-                                className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${item.color} mb-1 flex items-baseline gap-1 group-hover:scale-105 transition-transform duration-300`}
-                              >
-                                {item.count}
-                                {item.suffix && (
-                                  <span
-                                    className={`text-xs sm:text-sm font-normal transition-colors duration-300 ${
-                                      theme === "light"
-                                        ? "text-gray-400 group-hover:text-gray-500"
-                                        : "text-gray-500 group-hover:text-gray-400"
-                                    }`}
-                                  >
-                                    {item.suffix}
-                                  </span>
-                                )}
-                              </div>
-                              <h4
-                                className={`text-xs font-semibold tracking-wide uppercase theme-transition group-hover:opacity-80 ${
-                                  theme === "light"
-                                    ? "text-gray-600"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {item.label}
-                              </h4>
-                            </div>
-                            <div
-                              className={`p-2 sm:p-3 rounded-xl ${item.iconBg} backdrop-blur-sm sm:shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
-                            >
-                              <div className="sm:group-hover:drop-shadow-lg transition-all duration-300">
-                                {item.icon}
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Enhanced Wallet Actions - Mobile Optimized */}
-                          {item.isWallet && (
-                            <div className="space-y-2 sm:space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
-                              <button
-                                onClick={handleWithdraw}
-                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                                style={{
-                                  background:
-                                    theme === "light"
-                                      ? "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)"
-                                      : "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)",
-                                  boxShadow:
-                                    "0 4px 15px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                                }}
-                              >
-                                {/* Button Shimmer Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
-
-                                {/* Button Content */}
-                                <div className="relative flex items-center justify-center gap-1 sm:gap-2">
-                                  <svg
-                                    className="w-3 sm:w-4 h-3 sm:h-4 transition-transform duration-300 group-hover/btn:scale-110"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                                    />
-                                  </svg>
-                                  <span className="tracking-wide">
-                                    Withdraw
-                                  </span>
-                                </div>
-
-                                {/* Professional Border Highlight */}
-                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
-                              </button>
-
-                              <button
-                                onClick={() => setShowTransactionModal(true)}
-                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                                style={{
-                                  background:
-                                    theme === "light"
-                                      ? "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)"
-                                      : "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)",
-                                  boxShadow:
-                                    "0 4px 15px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                                }}
-                              >
-                                {/* Button Shimmer Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
-
-                                {/* Button Content */}
-                                <div className="relative flex items-center justify-center gap-1 sm:gap-2">
-                                  <FiEye className="text-xs sm:text-sm transition-transform duration-300 group-hover/btn:scale-110" />
-                                  <span className="tracking-wide">
-                                    Transactions
-                                  </span>
-                                </div>
-
-                                {/* Professional Border Highlight */}
-                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Professional Glow Effect */}
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-                          <div
-                            className={`absolute inset-[-2px] rounded-2xl blur-md`}
-                            style={{
-                              background: `linear-gradient(135deg, ${
-                                item.borderGradient.includes("cyan")
-                                  ? "rgba(6, 182, 212, 0.15)"
-                                  : item.borderGradient.includes("yellow")
-                                  ? "rgba(245, 158, 11, 0.15)"
-                                  : item.borderGradient.includes("purple")
-                                  ? "rgba(147, 51, 234, 0.15)"
-                                  : "rgba(16, 185, 129, 0.15)"
-                              }, transparent)`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Gigs Hosted Section */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3
-                      className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      <FiUsers className="text-cyan-400" />
-                      Projects Hosted ({filteredHostedGigs.length}
-                      {selectedSkills.length > 0
-                        ? ` of ${profile.gigsHosted.length}`
-                        : ""}
-                      )
-                      {selectedSkills.length > 0 && (
-                        <span
-                          className={`text-sm font-normal ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          - Filtered by skills
-                        </span>
-                      )}
-                    </h3>
-                    <button
-                      onClick={() =>
-                        setIsHostedSectionCollapsed(!isHostedSectionCollapsed)
-                      }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                        theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
-                      }`}
-                      title={
-                        isHostedSectionCollapsed
-                          ? "Expand section"
-                          : "Collapse section"
-                      }
-                    >
-                      {isHostedSectionCollapsed ? (
-                        <FiChevronDown className="text-lg" />
-                      ) : (
-                        <FiChevronUp className="text-lg" />
-                      )}
-                    </button>
-                  </div>
-
-                  {!isHostedSectionCollapsed && (
-                    <>
-                      <div className="space-y-6">
-                        {displayedHostedGigs.map((gig, index) => (
-                          <div
-                            key={index}
-                            className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
-                              theme === "light"
-                                ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
-                            }`}
-                          >
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                              <h4
-                                className={`text-lg font-medium theme-transition ${
-                                  theme === "light"
-                                    ? "text-gray-900"
-                                    : "text-white"
-                                }`}
-                              >
-                                {gig.title}
-                              </h4>
-                              <div className="flex items-center gap-1">
-                                <FiStar
-                                  className="text-yellow-400 text-sm"
-                                  fill="currentColor"
-                                />
-                                <span className="text-sm text-yellow-400 font-medium">
-                                  {gig.reviews && gig.reviews.length > 0
-                                    ? (
-                                        gig.reviews.reduce(
-                                          (sum: number, review: any) =>
-                                            sum + review.rating,
-                                          0
-                                        ) / gig.reviews.length
-                                      ).toFixed(1)
-                                    : "No rating"}
-                                </span>
-                              </div>
-                            </div>
-
-                            <p
-                              className={`text-sm mb-3 leading-relaxed theme-transition ${
-                                theme === "light"
-                                  ? "text-gray-600"
-                                  : "text-gray-300"
-                              }`}
-                            >
-                              {gig.description}
-                            </p>
-
-                            <div
-                              className={`text-sm mb-4 theme-transition ${
-                                theme === "light"
-                                  ? "text-gray-500"
-                                  : "text-gray-400"
-                              }`}
-                            >
-                              Looking for:{" "}
-                              <span className="text-cyan-400 font-medium">
-                                {gig.looking_For}
-                              </span>
-                            </div>
-
-                            {/* Skills Tags */}
-                            {gig.skills && gig.skills.length > 0 && (
-                              <div className="mb-4">
-                                <div className="flex flex-wrap gap-2">
-                                  {gig.skills.map(
-                                    (skill: string, skillIdx: number) => (
-                                      <span
-                                        key={skillIdx}
-                                        className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
-                                          selectedSkills.includes(skill)
-                                            ? theme === "light"
-                                              ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                              : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
-                                            : theme === "light"
-                                            ? "bg-cyan-50 border-cyan-200 text-cyan-700"
-                                            : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300"
-                                        }`}
-                                      >
-                                        {skill}
-                                      </span>
-                                    )
-                                  )}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Review Section with Professional Layout */}
-                            {gig.reviews && gig.reviews.length > 0 && (
-                              <div
-                                className={`border rounded-lg backdrop-blur-sm theme-transition overflow-hidden ${
-                                  theme === "light"
-                                    ? "bg-gray-50/80 border-gray-200/50"
-                                    : "bg-neutral-900/50 border-neutral-700/50"
-                                }`}
-                              >
-                                <div className="flex flex-col lg:flex-row">
-                                  {/* Review Content - Left Side */}
-                                  <div className="flex-1 p-4">
-                                    <div
-                                      className={`text-sm font-medium mb-2 theme-transition ${
-                                        theme === "light"
-                                          ? "text-gray-900"
-                                          : "text-white"
-                                      }`}
-                                    >
-                                      "{gig.reviews[0].title}"
-                                    </div>
-                                    <div
-                                      className={`text-sm mb-2 theme-transition ${
-                                        theme === "light"
-                                          ? "text-gray-600"
-                                          : "text-gray-300"
-                                      }`}
-                                    >
-                                      {gig.reviews[0].description}
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <div className="text-sm text-cyan-400 font-medium">
-                                        @{gig.reviews[0].author?.username}
-                                      </div>
-                                      <div className="flex items-center gap-1">
-                                        {[...Array(5)].map((_, i) => (
-                                          <FiStar
-                                            key={i}
-                                            className={`w-3 h-3 ${
-                                              i < gig.reviews[0].rating
-                                                ? "text-yellow-400 fill-current"
-                                                : theme === "light"
-                                                ? "text-gray-300"
-                                                : "text-gray-600"
-                                            }`}
-                                          />
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Unified Review Images Section (max 3 images) */}
-                                  {gig.reviews[0].images &&
-                                    gig.reviews[0].images.length > 0 && (
-                                      <div className="mt-3">
-                                        {/* <h4
-                                          className={`text-xs font-semibold mb-2 ${
-                                            theme === "light"
-                                              ? "text-gray-700"
-                                              : "text-gray-300"
-                                          }`}
-                                        >
-                                          Review Images
-                                        </h4> */}
-                                        <div className="flex gap-2 flex-wrap">
-                                          {gig.reviews[0].images
-                                            .slice(0, 3)
-                                            .map(
-                                              (imgUrl: string, idx: number) => (
-                                                <img
-                                                  key={idx}
-                                                  src={imgUrl}
-                                                  onClick={() => {
-                                                    handleImageClick(imgUrl);
-                                                  }}
-                                                  alt={`Review Image ${
-                                                    idx + 1
-                                                  }`}
-                                                  className="w-14 h-14 object-cover rounded-lg  cursor-pointer"
-                                                />
-                                              )
-                                            )}
-                                        </div>
-                                      </div>
-                                    )}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Load More / Show Less button for Hosted Gigs */}
-                      {filteredHostedGigs.length > 5 && (
-                        <div className="mt-6 flex justify-center">
-                          <button
-                            onClick={toggleHostedGigs}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                              theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-cyan-600 hover:bg-cyan-50 hover:border-cyan-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-cyan-400 hover:bg-cyan-950/30 hover:border-cyan-600/50"
-                            }`}
-                          >
-                            {showAllHostedGigs
-                              ? `Show Less (${
-                                  filteredHostedGigs.length - 5
-                                } hidden)`
-                              : `Load More Projects (${
-                                  filteredHostedGigs.length - 5
-                                } more)`}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </section>
-
-                {/* Collaborations Section */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3
-                      className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      <FiUsers className="text-purple-400" />
-                      Collaborations ({filteredCollaboratedGigs.length}
-                      {selectedSkills.length > 0
-                        ? ` of ${profile.gigsCollaborated?.length || 0}`
-                        : ""}
-                      )
-                      {selectedSkills.length > 0 && (
-                        <span
-                          className={`text-sm font-normal ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          - Filtered by skills
-                        </span>
-                      )}
-                    </h3>
-                    <button
-                      onClick={() =>
-                        setIsCollaborationsSectionCollapsed(
-                          !isCollaborationsSectionCollapsed
-                        )
-                      }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                        theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
-                      }`}
-                      title={
-                        isCollaborationsSectionCollapsed
-                          ? "Expand section"
-                          : "Collapse section"
-                      }
-                    >
-                      {isCollaborationsSectionCollapsed ? (
-                        <FiChevronDown className="text-lg" />
-                      ) : (
-                        <FiChevronUp className="text-lg" />
-                      )}
-                    </button>
-                  </div>
-
-                  {!isCollaborationsSectionCollapsed && (
-                    <>
-                      <div className="space-y-6">
-                        {displayedCollaboratedGigs.map(
-                          (gig: any, index: number) => (
-                            <div
-                              key={index}
-                              className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
-                                theme === "light"
-                                  ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                  : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
-                              }`}
-                            >
-                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                                <h4
-                                  className={`text-lg font-medium theme-transition ${
-                                    theme === "light"
-                                      ? "text-gray-900"
-                                      : "text-white"
-                                  }`}
-                                >
-                                  {gig.title}
-                                </h4>
-                                <div className="flex items-center gap-1">
-                                  <FiStar
-                                    className="text-yellow-400 text-sm"
-                                    fill="currentColor"
-                                  />
-                                  <span className="text-sm text-yellow-400 font-medium">
-                                    {gig.reviews && gig.reviews.length > 0
-                                      ? (
-                                          gig.reviews.reduce(
-                                            (sum: number, review: any) =>
-                                              sum + review.rating,
-                                            0
-                                          ) / gig.reviews.length
-                                        ).toFixed(1)
-                                      : "No rating"}
-                                  </span>
-                                  {/* Show review images if present */}
-                                  {gig.reviews[0].images &&
-                                    gig.reviews[0].images.length > 0 && (
-                                      <div className="flex gap-2 mt-2 flex-wrap">
-                                        {gig.reviews[0].images.map(
-                                          (imgUrl: string, idx: number) => (
-                                            <img
-                                              key={idx}
-                                              src={imgUrl}
-                                              alt={`Review Image ${idx + 1}`}
-                                              className="w-20 h-20 object-cover rounded-lg "
-                                            />
-                                          )
-                                        )}
-                                      </div>
-                                    )}
-                                </div>
-                              </div>
-                              <p
-                                className={`text-sm mb-3 leading-relaxed theme-transition ${
-                                  theme === "light"
-                                    ? "text-gray-600"
-                                    : "text-gray-300"
-                                }`}
-                              >
-                                {gig.description}
-                              </p>
-                              <div
-                                className={`text-sm mb-4 theme-transition ${
-                                  theme === "light"
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                Looking for:{" "}
-                                <span className="text-purple-400 font-medium">
-                                  {gig.looking_For}
-                                </span>
-                              </div>
-                              {/* Skills Tags */}
-                              {gig.skills && gig.skills.length > 0 && (
-                                <div className="mb-4">
-                                  <div className="flex flex-wrap gap-2">
-                                    {gig.skills.map(
-                                      (skill: string, skillIdx: number) => (
-                                        <span
-                                          key={skillIdx}
-                                          className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
-                                            selectedSkills.includes(skill)
-                                              ? theme === "light"
-                                                ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                                : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
-                                              : theme === "light"
-                                              ? "bg-purple-50 border-purple-200 text-purple-700"
-                                              : "bg-purple-950/50 border-purple-800/50 text-purple-300"
-                                          }`}
-                                        >
-                                          {skill}
-                                        </span>
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                              {gig.reviews && gig.reviews.length > 0 && (
-                                <div
-                                  className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
-                                    theme === "light"
-                                      ? "bg-gray-50/80 border-gray-200/50"
-                                      : "bg-neutral-900/50 border-neutral-700/50"
-                                  }`}
-                                >
-                                  <div
-                                    className={`text-sm font-medium mb-2 theme-transition ${
-                                      theme === "light"
-                                        ? "text-gray-900"
-                                        : "text-white"
-                                    }`}
-                                  >
-                                    "{gig.reviews[0].title}"
-                                  </div>
-                                  <div
-                                    className={`text-sm mb-2 theme-transition ${
-                                      theme === "light"
-                                        ? "text-gray-600"
-                                        : "text-gray-300"
-                                    }`}
-                                  >
-                                    {gig.reviews[0].description}
-                                  </div>
-                                  <div className="text-sm text-purple-400 font-medium">
-                                    - @{gig.reviews[0].author?.username}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          )
-                        )}
-                      </div>
-
-                      {/* Load More / Show Less button for Collaborated Gigs */}
-                      {filteredCollaboratedGigs.length > 5 && (
-                        <div className="mt-6 flex justify-center">
-                          <button
-                            onClick={toggleCollaboratedGigs}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                              theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-purple-400 hover:bg-purple-950/30 hover:border-purple-600/50"
-                            }`}
-                          >
-                            {showAllCollaboratedGigs
-                              ? `Show Less (${
-                                  filteredCollaboratedGigs.length - 5
-                                } hidden)`
-                              : `Load More Projects (${
-                                  filteredCollaboratedGigs.length - 5
-                                } more)`}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </section>
-
-                {/* Ongoing Projects Section */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3
-                      className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      <FiCalendar className="text-orange-400" />
-                      Ongoing Projects ({filteredOngoingProjects.length}
-                      {selectedSkills.length > 0
-                        ? ` of ${
-                            (profile?.gigsHosted?.filter(
-                              (gig) => !gig.reviews || gig.reviews.length === 0
-                            )?.length || 0) +
-                            (profile?.gigsCollaborated?.filter(
-                              (gig) => !gig.reviews || gig.reviews.length === 0
-                            )?.length || 0)
-                          }`
-                        : ""}
-                      )
-                      {selectedSkills.length > 0 && (
-                        <span
-                          className={`text-sm font-normal ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          - Filtered by skills
-                        </span>
-                      )}
-                    </h3>
-                    <button
-                      onClick={() =>
-                        setIsOngoingSectionCollapsed(!isOngoingSectionCollapsed)
-                      }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                        theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
-                      }`}
-                      title={
-                        isOngoingSectionCollapsed
-                          ? "Expand section"
-                          : "Collapse section"
-                      }
-                    >
-                      {isOngoingSectionCollapsed ? (
-                        <FiChevronDown className="text-lg" />
-                      ) : (
-                        <FiChevronUp className="text-lg" />
-                      )}
-                    </button>
-                  </div>
-
-                  {!isOngoingSectionCollapsed && (
-                    <>
-                      {filteredOngoingProjects.length === 0 ? (
-                        <div
-                          className={`text-center py-12 theme-transition ${
-                            theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          <FiCalendar className="text-4xl mx-auto mb-3 opacity-50" />
-                          <div className="text-lg mb-2">
-                            No ongoing projects
-                          </div>
-                          <div className="text-sm">
-                            All projects have been completed and reviewed.
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-6">
-                          {displayedOngoingProjects.map(
-                            (gig: any, index: number) => (
-                              <div
-                                key={index}
-                                className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
-                                  theme === "light"
-                                    ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                    : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
-                                }`}
-                              >
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                                  <div className="flex items-center gap-3">
-                                    <h4
-                                      className={`text-lg font-medium theme-transition ${
-                                        theme === "light"
-                                          ? "text-gray-900"
-                                          : "text-white"
-                                      }`}
-                                    >
-                                      {gig.title}
-                                    </h4>
-                                    <span
-                                      className={`px-2 py-1 text-xs rounded-full font-medium ${
-                                        gig.type === "hosted"
-                                          ? "bg-cyan-100 text-cyan-800 border border-cyan-200"
-                                          : "bg-purple-100 text-purple-800 border border-purple-200"
-                                      } ${
-                                        theme === "dark" &&
-                                        (gig.type === "hosted"
-                                          ? "bg-cyan-900/50 text-cyan-300 border-cyan-600/50"
-                                          : "bg-purple-900/50 text-purple-300 border-purple-600/50")
-                                      }`}
-                                    >
-                                      {gig.type === "hosted"
-                                        ? "Hosting"
-                                        : "Collaborating"}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <FiCalendar className="text-orange-400 text-sm" />
-                                    <span className="text-sm text-orange-400 font-medium">
-                                      In Progress
-                                    </span>
-                                  </div>
-                                </div>
-                                <p
-                                  className={`text-sm mb-3 leading-relaxed theme-transition ${
-                                    theme === "light"
-                                      ? "text-gray-600"
-                                      : "text-gray-300"
-                                  }`}
-                                >
-                                  {gig.description}
-                                </p>
-                                <div
-                                  className={`text-sm mb-4 theme-transition ${
-                                    theme === "light"
-                                      ? "text-gray-500"
-                                      : "text-gray-400"
-                                  }`}
-                                >
-                                  Looking for:{" "}
-                                  <span className="text-orange-400 font-medium">
-                                    {gig.looking_For}
-                                  </span>
-                                </div>
-                                {/* Skills Tags */}
-                                {gig.skills && gig.skills.length > 0 && (
-                                  <div className="mb-4">
-                                    <div className="flex flex-wrap gap-2">
-                                      {gig.skills.map(
-                                        (skill: string, skillIdx: number) => (
-                                          <span
-                                            key={skillIdx}
-                                            className={`px-2 py-1 text-xs rounded-full font-medium border theme-transition ${
-                                              selectedSkills.includes(skill)
-                                                ? theme === "light"
-                                                  ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                                  : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
-                                                : theme === "light"
-                                                ? "bg-orange-50 border-orange-200 text-orange-700"
-                                                : "bg-orange-950/50 border-orange-800/50 text-orange-300"
-                                            }`}
-                                          >
-                                            {skill}
-                                          </span>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div
-                                  className={`text-sm font-medium flex items-center gap-2 theme-transition ${
-                                    theme === "light"
-                                      ? "text-gray-700"
-                                      : "text-gray-300"
-                                  }`}
-                                >
-                                  {gig.amount === 0 ? (
-                                    <div
-                                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
-                                        theme === "dark"
-                                          ? "bg-gradient-to-r from-purple-900/60 to-blue-900/60 text-purple-300 border border-purple-700/50"
-                                          : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200"
-                                      }`}
-                                    >
-                                      <FiStar className="w-3 h-3 mr-1" />
-                                      Skill Forge
-                                    </div>
-                                  ) : (
-                                    <>
-                                      <FiDollarSign className="text-green-400" />
-                                      {gig.currency}{" "}
-                                      {gig.amount?.toLocaleString()}
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      )}
-
-                      {/* Load More / Show Less button for Ongoing Projects */}
-                      {filteredOngoingProjects.length > 5 && (
-                        <div className="mt-6 flex justify-center">
-                          <button
-                            onClick={toggleOngoingProjects}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                              theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-orange-600 hover:bg-orange-50 hover:border-orange-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-orange-400 hover:bg-orange-950/30 hover:border-orange-600/50"
-                            }`}
-                          >
-                            {showAllOngoingProjects
-                              ? `Show Less (${
-                                  filteredOngoingProjects.length - 5
-                                } hidden)`
-                              : `Load More Projects (${
-                                  filteredOngoingProjects.length - 5
-                                } more)`}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </section>
-              </>
-            )}
-          </main>
-
-          {/* Mobile Filter Toggle Button */}
-          <div className="lg:hidden fixed bottom-20 right-6 z-50">
-            {!showSkillsFilter && (
-              <button
-                onClick={() => setShowSkillsFilter(true)}
-                className={`flex items-center gap-2 px-3 py-3 rounded-full shadow-lg transition-all duration-300 ${
-                  theme === "light"
-                    ? "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-                    : "bg-neutral-800 text-gray-300 hover:bg-neutral-700 border border-neutral-700"
-                }`}
-              >
-                <FiFilter className="text-lg" />
-                <span className="text-sm font-medium hidden lg:block">
-                  Show Filters
-                </span>
-                {selectedSkills.length > 0 && (
-                  <span className="bg-cyan-500 text-white text-xs rounded-full px-2 py-1 ml-1">
-                    {selectedSkills.length}
-                  </span>
-                )}
+      {/* Stats Grid */}
+      <section className="premium-card p-6 md:p-8">
+        <h2 className="premium-section-title">Kozeo Ledger</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Total Earnings</div>
+            <div className="text-2xl font-bold">{getCurrencySymbol(walletCurrency)} {totalEarnings.toLocaleString()}</div>
+            {canViewSensitiveInfo && (
+              <button onClick={() => setShowWithdrawalModal(true)} className="mt-4 w-full py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
+                Claim Rewards
               </button>
             )}
           </div>
-
-          {/* Skills Filter Sidebar */}
-          {allSkills.length > 0 && (
-            <>
-              {/* Desktop Filter Sidebar */}
-              <aside className="hidden lg:block w-80 xl:w-96  right-10 py-8">
-                <div className="sticky top-8">
-                  <section
-                    className={`rounded-2xl sm:rounded-3xl p-6 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                      theme === "light"
-                        ? "bg-white/90 border-gray-200"
-                        : "bg-neutral-900/70 border-neutral-800"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <h3
-                        className={`text-xl font-light tracking-tight flex items-center gap-3 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}
-                      >
-                        <FiFilter className="text-cyan-400" />
-                        Filter by Skills
-                      </h3>
-                      {selectedSkills.length > 0 && (
-                        <button
-                          onClick={clearSkillsFilter}
-                          className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
-                            theme === "light"
-                              ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                              : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
-                          }`}
-                        >
-                          <FiX className="text-sm" />
-                          Clear
-                        </button>
-                      )}
-                    </div>
-
-                    {tempSelectedSkills.length > 0 && (
-                      <div className="mb-4">
-                        <div
-                          className={`text-sm mb-2 theme-transition ${
-                            theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          Selected skills ({tempSelectedSkills.length}):
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {tempSelectedSkills.map((skill) => (
-                            <button
-                              key={skill}
-                              onClick={() => handleSkillToggle(skill)}
-                              className={`px-2 py-1 text-xs rounded-full font-medium border transition-all duration-200 flex items-center gap-1 ${
-                                theme === "light"
-                                  ? "bg-cyan-100 border-cyan-300 text-cyan-800 hover:bg-cyan-200"
-                                  : "bg-cyan-900/50 border-cyan-600/50 text-cyan-300 hover:bg-cyan-800/50"
-                              }`}
-                            >
-                              {skill}
-                              <FiX className="text-xs" />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Search Input */}
-                    <div className="mb-4">
-                      <div className="relative">
-                        <FiSearch
-                          className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-sm ${
-                            theme === "light"
-                              ? "text-gray-400"
-                              : "text-gray-500"
-                          }`}
-                        />
-                        <input
-                          type="text"
-                          placeholder="Search skills..."
-                          value={skillSearchQuery}
-                          onChange={(e) => setSkillSearchQuery(e.target.value)}
-                          onKeyDown={handleSearchKeyDown}
-                          className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
-                            theme === "light"
-                              ? "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400"
-                              : "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500"
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                    <div
-                      className={`text-sm mb-4 theme-transition ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}
-                    >
-                      Select skills to filter reviews ({filteredSkills.length}{" "}
-                      {skillSearchQuery ? `of ${allSkills.length}` : "total"}):
-                    </div>
-
-                    <div className="space-y-2 max-h-96 overflow-y-auto">
-                      {filteredSkills.length > 0
-                        ? filteredSkills.map((skill) => {
-                            const isSelected =
-                              tempSelectedSkills.includes(skill);
-                            const gigCount =
-                              (profile?.gigsHosted || []).filter(
-                                (gig) =>
-                                  gig.skills && gig.skills.includes(skill)
-                              ).length +
-                              (profile?.gigsCollaborated || []).filter(
-                                (gig) =>
-                                  gig.skills && gig.skills.includes(skill)
-                              ).length;
-
-                            return (
-                              <button
-                                key={skill}
-                                onClick={() => handleSkillToggle(skill)}
-                                className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-200 text-left ${
-                                  isSelected
-                                    ? theme === "light"
-                                      ? "bg-cyan-50 border-cyan-300 text-cyan-900"
-                                      : "bg-cyan-900/30 border-cyan-600/50 text-cyan-200"
-                                    : theme === "light"
-                                    ? "bg-white/60 border-gray-200/50 text-gray-700 hover:bg-gray-50"
-                                    : "bg-neutral-800/30 border-neutral-700/50 text-gray-300 hover:bg-neutral-700/50"
-                                }`}
-                              >
-                                <span className="font-medium">{skill}</span>
-                                <div className="flex items-center gap-2">
-                                  <span
-                                    className={`text-xs px-2 py-1 rounded-full ${
-                                      theme === "light"
-                                        ? "bg-gray-100 text-gray-600"
-                                        : "bg-neutral-700 text-gray-400"
-                                    }`}
-                                  >
-                                    {gigCount} gigs
-                                  </span>
-                                  <div
-                                    className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                                      isSelected
-                                        ? "bg-cyan-500 border-cyan-500"
-                                        : theme === "light"
-                                        ? "border-gray-300"
-                                        : "border-neutral-600"
-                                    }`}
-                                  >
-                                    {isSelected && (
-                                      <svg
-                                        className="w-2.5 h-2.5 text-white"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                          clipRule="evenodd"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                </div>
-                              </button>
-                            );
-                          })
-                        : null}
-
-                      {filteredSkills.length === 0 && (
-                        <div
-                          className={`text-center py-8 ${
-                            theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          <FiSearch className="mx-auto mb-2 text-2xl opacity-50" />
-                          <p className="text-sm">
-                            {skillSearchQuery
-                              ? `No skills found matching "${skillSearchQuery}"`
-                              : "No skills available"}
-                          </p>
-                          {skillSearchQuery && (
-                            <button
-                              onClick={() => setSkillSearchQuery("")}
-                              className={`mt-2 text-xs px-3 py-1 rounded-full transition-colors ${
-                                theme === "light"
-                                  ? "bg-gray-100 hover:bg-gray-200 text-gray-600"
-                                  : "bg-neutral-700 hover:bg-neutral-600 text-gray-300"
-                              }`}
-                            >
-                              Clear search
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Apply Filter Button */}
-                    <div className="mt-6 pt-4 border-t border-gray-200/50">
-                      <button
-                        onClick={applySkillsFilter}
-                        disabled={tempSelectedSkills.length === 0}
-                        className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
-                          tempSelectedSkills.length > 0
-                            ? theme === "light"
-                              ? "bg-cyan-600 hover:bg-cyan-700 text-white"
-                              : "bg-cyan-600 hover:bg-cyan-700 text-white"
-                            : theme === "light"
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : "bg-neutral-800 text-gray-500 cursor-not-allowed"
-                        }`}
-                      >
-                        <FiFilter className="text-sm" />
-                        Apply Filter ({tempSelectedSkills.length} skills)
-                      </button>
-                    </div>
-                  </section>
-                </div>
-              </aside>
-
-              {/* Mobile Filter Modal */}
-
-              {showSkillsFilter && (
-                <div className="lg:hidden fixed inset-0 z-40 overflow-hidden">
-                  {/* Backdrop */}
-                  <div
-                    className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-                    onClick={handleCloseSkillsFilter}
-                  />
-
-                  {/* Modal Content */}
-                  <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-hidden">
-                    <section
-                      className={`rounded-t-3xl p-6 border-0 relative backdrop-blur-md theme-transition ${
-                        theme === "light"
-                          ? "bg-white/95 border-gray-200"
-                          : "bg-neutral-900/95 border-neutral-800"
-                      }`}
-                    >
-                      {/* Header with close button */}
-                      <div className="flex items-center justify-between mb-6">
-                        <h3
-                          className={`text-xl font-light tracking-tight flex items-center gap-3 ${
-                            theme === "light" ? "text-gray-900" : "text-white"
-                          }`}
-                        >
-                          <FiFilter className="text-cyan-400" />
-                          Filter by Skills
-                        </h3>
-                        <div className="flex items-center gap-2">
-                          {selectedSkills.length > 0 && (
-                            <button
-                              onClick={clearSkillsFilter}
-                              className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
-                                theme === "light"
-                                  ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                  : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
-                              }`}
-                            >
-                              <FiX className="text-sm" />
-                              Clear
-                            </button>
-                          )}
-
-                          <button
-                            onClick={handleCloseSkillsFilter}
-                            className={`p-2 rounded-full transition-all duration-200 ${
-                              theme === "light"
-                                ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
-                            }`}
-                          >
-                            <FiX className="text-lg" />
-                          </button>
-                        </div>
-                      </div>
-
-                      {tempSelectedSkills.length > 0 && (
-                        <div className="mb-4">
-                          <div
-                            className={`text-sm mb-2 theme-transition ${
-                              theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            Selected skills ({tempSelectedSkills.length}):
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {tempSelectedSkills.map((skill) => (
-                              <button
-                                key={skill}
-                                onClick={() => handleSkillToggle(skill)}
-                                className={`px-2 py-1 text-xs rounded-full font-medium border transition-all duration-200 flex items-center gap-1 ${
-                                  theme === "light"
-                                    ? "bg-cyan-100 border-cyan-300 text-cyan-800 hover:bg-cyan-200"
-                                    : "bg-cyan-900/50 border-cyan-600/50 text-cyan-300 hover:bg-cyan-800/50"
-                                }`}
-                              >
-                                {skill}
-                                <FiX className="text-xs" />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Search Input */}
-                      <div className="mb-4">
-                        <div className="relative">
-                          <FiSearch
-                            className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-sm ${
-                              theme === "light"
-                                ? "text-gray-400"
-                                : "text-gray-500"
-                            }`}
-                          />
-                          <input
-                            type="text"
-                            placeholder="Search skills..."
-                            value={skillSearchQuery}
-                            onChange={(e) =>
-                              setSkillSearchQuery(e.target.value)
-                            }
-                            onKeyDown={handleSearchKeyDown}
-                            className={`w-full pl-10 pr-4 py-3 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
-                              theme === "light"
-                                ? "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400"
-                                : "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500"
-                            }`}
-                          />
-                        </div>
-                      </div>
-
-                      <div
-                        className={`text-sm mb-4 theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
-                        }`}
-                      >
-                        Select skills to filter reviews ({filteredSkills.length}{" "}
-                        {skillSearchQuery ? `of ${allSkills.length}` : "total"}
-                        ):
-                      </div>
-
-                      {/* Scrollable skills list */}
-                      <div className="space-y-2 max-h-60 overflow-y-auto mb-6">
-                        {filteredSkills.map((skill) => {
-                          const isSelected = tempSelectedSkills.includes(skill);
-                          const gigCount =
-                            (profile?.gigsHosted || []).filter(
-                              (gig) => gig.skills && gig.skills.includes(skill)
-                            ).length +
-                            (profile?.gigsCollaborated || []).filter(
-                              (gig) => gig.skills && gig.skills.includes(skill)
-                            ).length;
-
-                          return (
-                            <button
-                              key={skill}
-                              onClick={() => handleSkillToggle(skill)}
-                              className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-200 text-left ${
-                                isSelected
-                                  ? theme === "light"
-                                    ? "bg-cyan-50 border-cyan-300 text-cyan-900"
-                                    : "bg-cyan-900/30 border-cyan-600/50 text-cyan-200"
-                                  : theme === "light"
-                                  ? "bg-white/60 border-gray-200/50 text-gray-700 hover:bg-gray-50"
-                                  : "bg-neutral-800/30 border-neutral-700/50 text-gray-300 hover:bg-neutral-700/50"
-                              }`}
-                            >
-                              <span className="font-medium">{skill}</span>
-                              <div className="flex items-center gap-2">
-                                <span
-                                  className={`text-xs px-2 py-1 rounded-full ${
-                                    theme === "light"
-                                      ? "bg-gray-100 text-gray-600"
-                                      : "bg-neutral-700 text-gray-400"
-                                  }`}
-                                >
-                                  {gigCount} gigs
-                                </span>
-                                <div
-                                  className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                                    isSelected
-                                      ? "bg-cyan-500 border-cyan-500"
-                                      : theme === "light"
-                                      ? "border-gray-300"
-                                      : "border-neutral-600"
-                                  }`}
-                                >
-                                  {isSelected && (
-                                    <svg
-                                      className="w-2.5 h-2.5 text-white"
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
-                                </div>
-                              </div>
-                            </button>
-                          );
-                        })}
-
-                        {filteredSkills.length === 0 && (
-                          <div
-                            className={`text-center py-8 ${
-                              theme === "light"
-                                ? "text-gray-500"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            <FiSearch className="mx-auto mb-2 text-2xl opacity-50" />
-                            <p className="text-sm">
-                              {skillSearchQuery
-                                ? `No skills found matching "${skillSearchQuery}"`
-                                : "No skills available"}
-                            </p>
-                            {skillSearchQuery && (
-                              <button
-                                onClick={() => setSkillSearchQuery("")}
-                                className={`mt-2 text-xs px-3 py-1 rounded-full transition-colors ${
-                                  theme === "light"
-                                    ? "bg-gray-100 hover:bg-gray-200 text-gray-600"
-                                    : "bg-neutral-700 hover:bg-neutral-600 text-gray-300"
-                                }`}
-                              >
-                                Clear search
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Bottom action buttons */}
-                      <div className="flex gap-3">
-                        <button
-                          onClick={handleCloseSkillsFilter}
-                          className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 border ${
-                            theme === "light"
-                              ? "border-gray-300 text-gray-700 hover:bg-gray-50"
-                              : "border-neutral-600 text-gray-300 hover:bg-neutral-800"
-                          }`}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => {
-                            applySkillsFilter();
-                            handleCloseSkillsFilter();
-                          }}
-                          disabled={tempSelectedSkills.length === 0}
-                          className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
-                            tempSelectedSkills.length > 0
-                              ? theme === "light"
-                                ? "bg-cyan-600 hover:bg-cyan-700 text-white"
-                                : "bg-cyan-600 hover:bg-cyan-700 text-white"
-                              : theme === "light"
-                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : "bg-neutral-800 text-gray-500 cursor-not-allowed"
-                          }`}
-                        >
-                          <FiFilter className="text-sm" />
-                          Apply ({tempSelectedSkills.length})
-                        </button>
-                      </div>
-                    </section>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Gig Rating</div>
+            <div className="flex items-center gap-2">
+              <div className="text-2xl font-bold">{avgRating.toFixed(1)}</div>
+              <div className="flex text-black/10 dark:text-white/10">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <FiStar key={s} className={s <= Math.round(avgRating) ? "text-stone-400 fill-stone-400" : ""} />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Projects Hosted</div>
+            <div className="text-2xl font-bold">{profile.gigsHosted.length || 0}</div>
+          </div>
+          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Collaborations</div>
+            <div className="text-2xl font-bold">{profile.gigsCollaborated?.length || 0}</div>
+          </div>
         </div>
+      </section>
+
+      {/* Main Content Layout */}
+      <div className="flex flex-col lg:flex-row gap-8 mt-12 pb-20">
+        <div className="flex-1 space-y-12">
+          {/* Projects Hosted Section */}
+          <section className="premium-card p-6 md:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="premium-section-title !mb-0 flex items-center gap-3">
+                <FiUsers className="opacity-40" />
+                Projects Hosted ({filteredHostedGigs.length})
+              </h3>
+              <button
+                onClick={() => setIsHostedSectionCollapsed(!isHostedSectionCollapsed)}
+                className="p-2 rounded-lg opacity-40 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+              >
+                {isHostedSectionCollapsed ? <FiChevronDown /> : <FiChevronUp />}
+              </button>
+            </div>
+            {!isHostedSectionCollapsed && (
+              <div className="space-y-6">
+                {filteredHostedGigs.length === 0 ? (
+                  <div className="text-center py-12 opacity-40">
+                    <FiUsers className="text-4xl mx-auto mb-3" />
+                    <div className="text-sm">No hosted projects matching filters.</div>
+                  </div>
+                ) : (
+                  displayedHostedGigs.map((gig, index) => (
+                    <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                      <div className="flex justify-between items-start gap-4 mb-4">
+                        <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
+                        <div className="flex items-center gap-1 opacity-60">
+                          <FiStar className="text-stone-400" />
+                          <span className="text-sm font-bold">
+                            {gig.reviews?.length > 0
+                              ? (gig.reviews.reduce((s: number, r: any) => s + r.rating, 0) / gig.reviews.length).toFixed(1)
+                              : "N/A"
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-sm opacity-60 mb-4 leading-relaxed">{gig.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {gig.skills?.map((skill: string, sIdx: number) => (
+                          <span key={sIdx} className="premium-glass px-2 py-1 text-[10px] font-bold uppercase tracking-widest">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      {gig.reviews?.[0] && (
+                        <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 italic text-sm opacity-60">
+                          \"{gig.reviews[0].description}\"
+                          <div className="mt-2 text-[10px] font-bold uppercase tracking-widest opacity-40">
+                            — @{gig.reviews[0].author?.username}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+                {filteredHostedGigs.length > 5 && (
+                  <div className="mt-6 flex justify-center">
+                    <button onClick={toggleHostedGigs} className="px-6 py-2 text-xs font-bold uppercase tracking-widest border border-black/10 dark:border-white/10 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all">
+                      {showAllHostedGigs ? "Show Less" : "Load More"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+
+          {/* Collaborations Section */}
+          <section className="premium-card p-6 md:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="premium-section-title !mb-0 flex items-center gap-3">
+                <FiUsers className="opacity-40" />
+                Collaborations ({filteredCollaboratedGigs.length})
+              </h3>
+            </div>
+            <div className="space-y-6">
+              {filteredCollaboratedGigs.length === 0 ? (
+                <div className="text-center py-12 opacity-40">
+                  <FiUsers className="text-4xl mx-auto mb-3" />
+                  <div className="text-sm">No collaborations matching filters.</div>
+                </div>
+              ) : (
+                displayedCollaboratedGigs.map((gig: any, index: number) => (
+                  <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                    <div className="flex justify-between items-start gap-4 mb-4">
+                      <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
+                      <div className="flex items-center gap-1 opacity-60">
+                        <FiStar className="text-stone-400" />
+                        <span className="text-sm font-bold">
+                          {gig.reviews?.length > 0
+                            ? (gig.reviews.reduce((s: number, r: any) => s + r.rating, 0) / gig.reviews.length).toFixed(1)
+                            : "N/A"
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-sm opacity-60 mb-4 leading-relaxed">{gig.description}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {gig.skills?.map((skill: string, sIdx: number) => (
+                        <span key={sIdx} className="premium-glass px-2 py-1 text-[10px] font-bold uppercase tracking-widest">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
+          {/* Ongoing Projects Section */}
+          <section className="premium-card p-6 md:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="premium-section-title !mb-0 flex items-center gap-3">
+                <FiCalendar className="opacity-40" />
+                Ongoing Projects ({filteredOngoingProjects.length})
+              </h3>
+            </div>
+            <div className="space-y-6">
+              {filteredOngoingProjects.length === 0 ? (
+                <div className="text-center py-12 opacity-40">
+                  <FiCalendar className="text-4xl mx-auto mb-3" />
+                  <div className="text-sm">No active projects.</div>
+                </div>
+              ) : (
+                displayedOngoingProjects.map((gig: any, index: number) => (
+                  <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
+                      <div className="px-3 py-1 rounded-full bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold uppercase tracking-widest">
+                        In Progress
+                      </div>
+                    </div>
+                    <p className="text-sm opacity-60 mb-4">{gig.description}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-bold opacity-40 uppercase tracking-widest">
+                        {gig.amount === 0 ? "Skill Forge" : `${gig.currency} ${gig.amount?.toLocaleString()}`}
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">
+                        {gig.type === "hosted" ? "Hosting" : "Collaborating"}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
+
+        {/* Sticky Sidebar */}
+        <aside className="hidden lg:block w-80 xl:w-96">
+          <div className="sticky top-24">
+            <section className="premium-card p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[10px] font-bold tracking-widest uppercase opacity-40 flex items-center gap-2">
+                  <FiFilter /> Skill Filter
+                </h3>
+                {selectedSkills.length > 0 && (
+                  <button onClick={clearSkillsFilter} className="text-[10px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity flex items-center gap-1">
+                    <FiX /> Clear
+                  </button>
+                )}
+              </div>
+              <div className="mb-6">
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-xs opacity-40" />
+                  <input
+                    type="text"
+                    placeholder="SEARCH SKILLS..."
+                    value={skillSearchQuery}
+                    onChange={(e) => setSkillSearchQuery(e.target.value)}
+                    className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl pl-10 pr-4 py-3 text-[10px] font-bold tracking-widest uppercase focus:outline-none focus:border-black/30 dark:focus:border-white/30 transition-all placeholder:opacity-20"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {filteredSkills.map((skill) => {
+                  const isSelected = tempSelectedSkills.includes(skill);
+                  return (
+                    <button
+                      key={skill}
+                      onClick={() => handleSkillToggle(skill)}
+                      className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all duration-300 ${
+                        isSelected
+                          ? "bg-black dark:bg-white text-white dark:text-black border-transparent"
+                          : "bg-transparent border-black/5 dark:border-white/5 hover:bg-black/5 dark:hover:bg-white/5"
+                      }`}
+                    >
+                      <span className="text-[10px] font-bold uppercase tracking-widest">{skill}</span>
+                      {isSelected && <div className="w-1 h-1 rounded-full bg-white dark:bg-black" />}
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                onClick={applySkillsFilter}
+                disabled={tempSelectedSkills.length === 0 && selectedSkills.length === 0}
+                className="w-full mt-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity disabled:opacity-20"
+              >
+                Apply Filter
+              </button>
+            </section>
+          </div>
+        </aside>
       </div>
 
-      {/* review image preview Modal */}
-     <ImagePreviewModal
-  imgUrl={reviewImageModal}  // ✅ Same state variable
-  onClose={() => setReviewImageModal(null)}  // ✅ Same state variable
-  title="Review Image"
-  altText="Customer review image"
-  showActions={true}
-/>
+      <ImagePreviewModal
+        imgUrl={reviewImageModal}
+        onClose={() => setReviewImageModal(null)}
+        title="Review Image"
+        altText="Customer review image"
+        showActions={true}
+      />
 
-      {/* Transaction Modal */}
       <TransactionModal
         isOpen={showTransactionModal}
         onClose={() => setShowTransactionModal(false)}
@@ -2738,7 +917,6 @@ export default function UserProfilePage() {
         currency={walletCurrency}
       />
 
-      {/* Withdrawal Modal */}
       <WithdrawalModal
         isOpen={showWithdrawalModal}
         onClose={() => setShowWithdrawalModal(false)}
@@ -2746,7 +924,6 @@ export default function UserProfilePage() {
         currency={walletCurrency}
         getCurrencySymbol={getCurrencySymbol}
         onWithdrawSuccess={async () => {
-          // Refresh wallet data after successful withdrawal
           if (profile?.id) {
             try {
               const wallet = await getUserWallet(profile.id, walletCurrency);
@@ -2757,6 +934,6 @@ export default function UserProfilePage() {
           }
         }}
       />
-    </>
+    </div>
   );
 }

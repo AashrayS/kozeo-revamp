@@ -1,0 +1,9 @@
+﻿src/app/profile/[username]/page.tsx(607,6): error TS17008: JSX element 'div' has no corresponding closing tag.
+src/app/profile/[username]/page.tsx(608,8): error TS17008: JSX element 'div' has no corresponding closing tag.
+src/app/profile/[username]/page.tsx(1983,19): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/app/profile/[username]/page.tsx(1983,26): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/app/profile/[username]/page.tsx(2526,9): error TS17002: Expected corresponding JSX closing tag for 'section'.
+src/app/profile/[username]/page.tsx(2527,7): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/app/profile/[username]/page.tsx(2527,10): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/app/profile/[username]/page.tsx(2529,1): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/app/profile/[username]/page.tsx(2530,1): error TS1005: '</' expected.

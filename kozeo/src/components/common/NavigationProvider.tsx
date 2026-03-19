@@ -87,15 +87,6 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
       )}
 
       {children}
-
-      {/* Full screen loader with PageLoader */}
-      {(isLoading || manualLoading) && (
-        <PageLoader
-          duration={1200}
-          onComplete={() => {}}
-          useSlideAnimation={false}
-        />
-      )}
     </NavigationContext.Provider>
   );
 };

@@ -4,6 +4,9 @@ import { Suspense } from "react";
 import { NavigationProvider } from "./NavigationProvider";
 import { PageLoader } from "./PageLoader";
 
+import { usePathname } from "next/navigation";
+import AuthenticatedLayout from "../layouts/AuthenticatedLayout";
+
 interface NavigationWrapperProps {
   children: React.ReactNode;
 }
@@ -18,9 +21,20 @@ const NavigationFallback = () => (
 );
 
 export const NavigationWrapper = ({ children }: NavigationWrapperProps) => {
+  const pathname = usePathname();
+  
+  // Public routes that should not have the sidebar/header
+  const isPublicRoute = pathname === "/" || pathname === "/login";
+
   return (
     <Suspense fallback={<NavigationFallback />}>
-      <NavigationProvider>{children}</NavigationProvider>
+      <NavigationProvider>
+        {isPublicRoute ? (
+          children
+        ) : (
+          <AuthenticatedLayout>{children}</AuthenticatedLayout>
+        )}
+      </NavigationProvider>
     </Suspense>
   );
 };

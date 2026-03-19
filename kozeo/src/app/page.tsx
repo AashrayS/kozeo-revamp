@@ -1,354 +1,478 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  FiArrowRight,
-  FiCode,
-  FiUsers,
-  FiTrendingUp,
-  FiStar,
-  FiCheck,
-} from "react-icons/fi";
 import { PageLoader } from "../components/common/PageLoader";
+import { WordReveal, HeaderReveal } from "../components/common/ScrollReveal";
 
-// Custom hook for scroll animations
-const useScrollAnimation = (threshold = 0.1) => {
-  const [visibleElements, setVisibleElements] = useState<Set<string>>(
-    new Set()
-  );
+// ─── Typewriter Hook ──────────────────────────────────────────────────────────
+function useTypewriter(text: string, speed = 40, startDelay = 0, startTyping = true) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleElements((prev) => new Set(prev).add(entry.target.id));
-          }
-        });
-      },
-      {
-        threshold,
-        rootMargin: "50px 0px -100px 0px",
-      }
-    );
+    if (!startTyping) return;
 
-    const elements = document.querySelectorAll("[data-scroll-animation]");
-    elements.forEach((el) => observer.observe(el));
+    setDisplayedText("");
+    setIsTyping(false);
+    setIsComplete(false);
+
+    let timeout: NodeJS.Timeout;
+    const startInitialDelay = setTimeout(() => {
+      setIsTyping(true);
+      let i = 0;
+      
+      const typeNextChar = () => {
+        if (i < text.length) {
+          setDisplayedText(text.substring(0, i + 1));
+          i++;
+          // Add slight random variance to typing speed for a realistic feel
+          const currentSpeed = speed + (Math.random() - 0.5) * (speed * 0.5);
+          timeout = setTimeout(typeNextChar, currentSpeed);
+        } else {
+          setIsTyping(false);
+          setIsComplete(true);
+        }
+      };
+      
+      typeNextChar();
+    }, startDelay);
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      clearTimeout(startInitialDelay);
+      clearTimeout(timeout);
     };
-  }, [threshold]);
+  }, [text, speed, startDelay, startTyping]);
 
-  const isVisible = (elementId: string) => visibleElements.has(elementId);
+  return { displayedText, isTyping, isComplete };
+}
 
-  return { isVisible };
+// ─── Canvas Dash Field — 120 wandering dashes, soft rotary wave physics ───────
+type Dash = {
+  x: number; y: number;           // current px position
+  vx: number; vy: number;         // physics velocity (mouse influence)
+  baseVx: number; baseVy: number; // constant ambient drift velocity
+  baseX: number; baseY: number;   // base position (% of canvas size → px)
+  length: number;                 // dash length px
+  width: number;                  // dash width px
+  baseAlpha: number;              // resting opacity 0.1–0.35
+  phase: number;                  // idle pulse phase offset
+  speed: number;                  // idle pulse speed
+  rx: number; ry: number;         // drift phase
+  ox: number; oy: number;         // drift amplitude
 };
 
-// Navbar Component
-const Navbar = () => {
-  const [isOnDarkBackground, setIsOnDarkBackground] = useState(true);
+const DotField = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -9999, y: -9999 });
+  const frameRef = useRef<number>(0);
+  const dashesRef  = useRef<Dash[]>([]);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+
+    // --- Build radiating dash field with more gaps ------------------------
+    const initDashes = (w: number, h: number) => {
+      dashesRef.current = Array.from({ length: 200 }, () => { // Increased count for denser field
+        const bx = Math.random();
+        const by = Math.random();
+        return {
+          x: bx * w, y: by * h,
+          vx: 0, vy: 0,
+          baseVx: (Math.random() - 0.5) * 0.4, // ambient random drift
+          baseVy: (Math.random() - 0.5) * 0.4,
+          baseX: bx, baseY: by,
+          length: 3 + Math.random() * 3, // Smaller size: 3px to 6px
+          width: 1 + Math.random() * 1,  // Thinner: 1px to 2px
+          baseAlpha: 0.35 + Math.random() * 0.45, // Increased resting opacity so they are normally visible (0.35 to 0.8)
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.005 + Math.random() * 0.01,
+          rx: Math.random() * Math.PI * 2,
+          ry: Math.random() * Math.PI * 2,
+          ox: (Math.random() - 0.5) * 35, // wandering radius
+          oy: (Math.random() - 0.5) * 35,
+        };
+      });
+    };
+
+    // --- Resize handler ---------------------------------------------------
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+      initDashes(w, h);
+    };
+    resize();
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    // --- Physics constants ------------------------------------------------
+    const SPRING_K = 0.035;  // Tension pulling back to wandering base
+    const DAMPING = 0.82;    // Friction for bouncy/squishy effect
+    const RADIUS = 280;      // Mouse influence radius
+    const REPEL_FORCE = 4.5; // Strength of the 3D concave push
+
+    // --- Draw loop --------------------------------------------------------
+    let t = 0;
+    const draw = () => {
+      t += 0.01; // Global time for ambient wave math
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      const mx = mouseRef.current.x;
+      const my = mouseRef.current.y;
+      const rect = canvas.getBoundingClientRect();
+
+      ctx.clearRect(0, 0, w, h);
+
+      for (const dash of dashesRef.current) {
+        // Idle pulse
+        dash.phase += dash.speed;
+        const pulse = (Math.sin(dash.phase) + 1) / 2;
+
+        // Apply constant ambient drift
+        dash.x += dash.baseVx;
+        dash.y += dash.baseVy;
+
+        // Wrap around screen beautifully
+        if (dash.x < 0) dash.x += w;
+        if (dash.x > w) dash.x -= w;
+        if (dash.y < 0) dash.y += h;
+        if (dash.y > h) dash.y -= h;
+
+        // Target base position = Layout position + wandering Brownian motion
+        const tx = (dash.baseX * w) + Math.sin(t * 3 + dash.rx) * dash.ox;
+        const ty = (dash.baseY * h) + Math.cos(t * 2 + dash.ry) * dash.oy;
+
+        // Mouse position in canvas-local px
+        const localMx = mx - rect.left;
+        const localMy = my - rect.top;
+
+        const dxM = dash.x - localMx;
+        const dyM = dash.y - localMy;
+        const distM = Math.sqrt(dxM * dxM + dyM * dyM) || 1;
+        const proximity = distM < RADIUS ? 1 - distM / RADIUS : 0;
+
+        // Spring pulling back to wandering target
+        const dxBase = tx - dash.x;
+        const dyBase = ty - dash.y;
+        let ax = dxBase * SPRING_K;
+        let ay = dyBase * SPRING_K;
+
+        // Concave 3D plushie repel from mouse
+        if (proximity > 0) {
+          // Quadratic falloff gives a soft, squishy gradient to the 3D push
+          const force = Math.pow(proximity, 2) * REPEL_FORCE;
+          ax += (dxM / distM) * force * 15;
+          ay += (dyM / distM) * force * 15;
+        }
+
+        // Apply acceleration to velocity, then damping
+        dash.vx += ax;
+        dash.vy += ay;
+        dash.vx *= DAMPING;
+        dash.vy *= DAMPING;
+
+        // Apply mouse velocity + friction
+        dash.x += dash.vx;
+        dash.y += dash.vy;
+
+        // Calculate dynamic angle: always radiate out from screen center
+        const angle = Math.atan2(dash.y - h / 2, dash.x - w / 2);
+
+        // Alpha: base + idle pulse + subtle mouse glow (effect is little lesser)
+        const alpha = Math.min(dash.baseAlpha + pulse * 0.1 + proximity * 0.4, 1);
+
+        // Draw glow behind the dash when mouse is near
+        if (proximity > 0.05) {
+          const glowR = (dash.length / 2 + 3) + proximity * 15;
+          const grad = ctx.createRadialGradient(dash.x, dash.y, 0, dash.x, dash.y, glowR);
+          grad.addColorStop(0, `rgba(59,130,246,${proximity * 0.4})`);
+          grad.addColorStop(1, `rgba(59,130,246,0)`);
+          ctx.beginPath();
+          ctx.arc(dash.x, dash.y, glowR, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+
+        // Draw the radiating dash
+        ctx.save();
+        ctx.translate(dash.x, dash.y);
+        ctx.rotate(angle); 
+        
+        ctx.beginPath();
+        // Slightly lengthen the line based on proximity
+        const activeLength = dash.length + proximity * 4;
+        ctx.moveTo(-activeLength / 2, 0);
+        ctx.lineTo(activeLength / 2, 0);
+        
+        ctx.lineWidth = dash.width + proximity * 1.0;
+        ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
+        ctx.lineCap = "round";
+        ctx.stroke();
+        
+        ctx.restore();
+      }
+
+      frameRef.current = requestAnimationFrame(draw);
+    };
+
+    frameRef.current = requestAnimationFrame(draw);
+
+    // --- Mouse tracking ---------------------------------------------------
+    const onMove  = (e: MouseEvent) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
+    const onLeave = ()               => { mouseRef.current = { x: -9999, y: -9999 }; };
+    window.addEventListener("mousemove", onMove,  { passive: true });
+    window.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      cancelAnimationFrame(frameRef.current);
+      ro.disconnect();
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      aria-hidden="true"
+    />
+  );
+};
+
+
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../../store/userSlice";
+
+// ─── Navbar ──────────────────────────────────────────────────────────────────
+const Navbar = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [scrolled, setScrolled] = useState(false);
+  const [onDark, setOnDark] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const handler = () => {
       const scrollY = window.scrollY;
-      const viewportHeight = window.innerHeight;
-
-      // Get all dark sections
-      const heroSection = document.querySelector("#hero-section");
-      const resumeSection = document.querySelector("#resume-section");
-      const skillForgeSection = document.querySelector("#skill-forge-section");
-      const ctaSection = document.querySelector("#cta-section");
-
-      let isOnDark = false;
-
-      // Check if we're in any dark section
-      const darkSections = [
-        heroSection,
-        resumeSection,
-        skillForgeSection,
-        ctaSection,
-      ];
-
-      for (const section of darkSections) {
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          // Check if navbar overlaps with this dark section
-          if (rect.top <= 64 && rect.bottom >= 0) {
-            // 64px is navbar height
-            isOnDark = true;
+      setScrolled(scrollY > 10);
+      
+      let overDark = false;
+      const darkSections = ["dark-showcase", "cta-section"];
+      
+      for (const id of darkSections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // If the navbar (top 64px) is within this dark section
+          if (rect.top <= 64 && rect.bottom > 64) {
+            overDark = true;
             break;
           }
         }
       }
-
-      setIsOnDarkBackground(isOnDark);
+      setOnDark(overDark);
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handler, { passive: true });
+    handler(); // Initial check
+
+    return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  const isActuallyDark = onDark;
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all h-16 duration-300 ease-in-out ${
-        isOnDarkBackground ? "bg-black" : "bg-white border-gray-200"
-      }`}
+      className={`fixed top-0 inset-x-0 z-50 h-20 theme-transition transition-all duration-700 ease-out ${
+        scrolled
+          ? "bg-white/80 backdrop-blur-md border-b border-black/5"
+          : "bg-transparent border-transparent"
+      } ${isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-20px]"}`}
     >
-      <nav
-        className="flex items-center justify-center h-full relative"
-        style={{ padding: "0 clamp(1rem, 4vw, 3rem)" }}
-        aria-label="Global"
-      >
-        <div className="flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
-          <Link
-            href="/"
-            className={`flex items-center font-bold tracking-tight transition-colors duration-300 ${
-              isOnDarkBackground ? "text-white" : "text-black"
+      <nav className="max-w-7xl mx-auto h-full flex items-center justify-between px-6 lg:px-8">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Image
+            src="/kozeoLogo.png"
+            alt="Kozeo"
+            width={28}
+            height={28}
+            className="rounded-full"
+          />
+          <span
+            className={`font-semibold text-[15px] tracking-tight transition-colors duration-500 ${
+              isActuallyDark ? "text-white" : "text-black"
             }`}
-            style={{
-              gap: "clamp(0.5rem, 1.5vw, 1rem)",
-              fontSize: "clamp(1.25rem, 3vw, 2rem)",
-            }}
           >
-            <Image
-              src="/kozeoLogo.png"
-              alt="Kozeo Logo"
-              width={32}
-              height={32}
-              style={{
-                width: "clamp(24px, 4vw, 40px)",
-                height: "clamp(24px, 4vw, 40px)",
-                borderRadius: "100%",
-              }}
-            />
-          </Link>
+            Kozeo
+          </span>
+        </Link>
+
+        {/* Center Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {[
+            { label: "Speedruns", href: "#dark-showcase" },
+            { label: "Work Sprints", href: "#work-sprints" },
+            { label: "Projects", href: "#projects" },
+            { label: "Skill Forge", href: "/login" }
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`text-sm transition-colors duration-500 ${
+                isActuallyDark
+                  ? "text-white/70 hover:text-white"
+                  : "text-black/60 hover:text-black"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
 
-        <div
-          className="flex items-center absolute right-0"
-          style={{
-            gap: "clamp(0.5rem, 2vw, 1rem)",
-            paddingRight: "clamp(1rem, 4vw, 3rem)",
-          }}
-        >
-          <Link
-            href="/login"
-            className={`rounded-full transition-all duration-300 hover:scale-105 border ${
-              isOnDarkBackground
-                ? "border-white text-white bg-black hover:bg-white hover:text-black hover:shadow-lg"
-                : "border-black text-black bg-white hover:bg-black hover:text-white hover:shadow-lg"
-            }`}
-            style={{
-              padding:
-                "clamp(0.375rem, 1.5vh, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-              fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
-            }}
-          >
-            Login
-          </Link>
-          <Link
-            href="/login"
-            className={`rounded-full transition-all duration-300 hover:scale-105 ${
-              isOnDarkBackground
-                ? "bg-white text-black hover:bg-gray-100 hover:shadow-lg"
-                : "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
-            }`}
-            style={{
-              padding:
-                "clamp(0.375rem, 1.5vh, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-              fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
-            }}
-          >
-            Sign Up
-          </Link>
+        {/* Right CTAs */}
+        <div className="flex items-center gap-3">
+          {isAuthenticated ? (
+            <Link
+              href="/Atrium"
+              className={`text-sm px-6 py-2 rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${
+                isActuallyDark
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black text-white hover:bg-gray-800"
+              }`}
+            >
+              Open Atrium
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className={`hidden sm:block text-sm px-4 py-2 rounded-full transition-colors duration-500 ${
+                  isActuallyDark
+                    ? "text-white/80 hover:text-white"
+                    : "text-black/70 hover:text-black"
+                }`}
+              >
+                Login
+              </Link>
+              <Link
+                href="/login?mode=signup"
+                className={`text-sm px-5 py-2 rounded-full font-medium transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${
+                  isActuallyDark
+                    ? "bg-white text-black hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                    : "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
+                }`}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
   );
 };
 
-// Hero Component
-const Hero = () => {
+// ─── Scroll To Top ───────────────────────────────────────────────────────────
+const ScrollToTop = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handler = () => {
+      setVisible(window.scrollY > 800);
+    };
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
   return (
-    <section className="h-screen relative overflow-hidden bg-black">
-      {/* Glow Effects */}
-      <div className="fixed top-1/4 right-8 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-1/4 left-8 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-      <div className="fixed top-2/3 right-1/3 w-2 h-0 rounded-full opacity-70 bg-emerald-400 shadow-[0_0_200px_80px_rgba(52,211,153,0.25)] pointer-events-none z-0" />
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className={`fixed bottom-8 right-8 z-[60] w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+      }`}
+      aria-label="Scroll to top"
+    >
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+  );
+};
 
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Twinkling stars for immediate feedback */}
-        <div className="absolute top-20 left-20 w-2 h-2 bg-white rounded-full animate-twinkle"></div>
-        <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-        <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+const Hero = () => {
+  const { displayedText, isComplete } = useTypewriter("The Proof-First Portfolio\nfor Tech Pros.", 30, 1500);
 
-        {/* Twinkling Stars */}
-        <div className="absolute inset-0">
-          {/* Large Stars */}
-          <div className="absolute top-20 left-20 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-40 right-32 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-60 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-40 right-20 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-60 left-1/4 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-white rounded-full animate-twinkle"></div>
-
-          {/* Medium Stars */}
-          <div className="absolute top-32 right-40 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-52 left-16 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-32 left-1/2 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute bottom-20 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-          <div className="absolute top-1/2 left-8 w-0.5 h-0.5 bg-white rounded-full animate-twinkle"></div>
-
-          {/* Small Stars */}
-          <div className="absolute top-24 left-1/2 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute top-48 right-16 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute bottom-48 left-40 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute bottom-24 right-1/2 w-px h-px bg-white animate-twinkle"></div>
-          <div className="absolute top-2/3 right-8 w-px h-px bg-white animate-twinkle"></div>
-        </div>
-
-        {/* Moving Stars */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 50 }, (_, i) => (
-            <div
-              key={i}
-              className="absolute bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                opacity: Math.random() * 0.5 + 0.3,
-                animation: `moveStars ${
-                  15 + Math.random() * 25
-                }s linear infinite`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Animated Lines */}
-        <div className="absolute inset-0">
-          {/* Horizontal Lines */}
-          {/* <div
-            className="absolute top-1/4 left-1/4 w-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-30 max-w-md"
-            style={{
-              animation: "slideRight 4s infinite linear",
-              // animationDelay: "0s",
-            }}
-          ></div>
-          <div
-            className="absolute top-3/4 right-1/4 w-0 h-px bg-gradient-to-l from-transparent via-white to-transparent opacity-25 max-w-md"
-            style={{
-              animation: "slideLeft 5s infinite linear",
-              // animationDelay: "0s", // Changed from "2s" to "0s"
-            }}
-          ></div> */}
-
-          {/* Diagonal Lines */}
-          {/* <div className="absolute top-1/3 left-0 w-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-20 rotate-12" 
-               style={{
-                 animation: 'slideRight 6s infinite linear',
-                 animationDelay: '1s'
-               }}></div>
-          <div className="absolute bottom-1/3 right-0 w-0 h-px bg-gradient-to-l from-transparent via-white to-transparent opacity-15 -rotate-12" 
-               style={{
-                 animation: 'slideLeft 7s infinite linear',
-                 animationDelay: '3s'
-               }}></div> */}
-        </div>
-      </div>
-
-      {/* Content */}
+  return (
+    <section suppressHydrationWarning className="relative min-h-screen w-full bg-white flex flex-col items-center justify-center overflow-hidden pt-32 pb-16">
+      <DotField />
       <div
-        className="relative h-full flex items-center justify-center sm:justify-start px-4 z-10 hero-content"
+        className="absolute top-0 left-0 w-[700px] h-[700px] rounded-full pointer-events-none opacity-50"
         style={{
-          paddingTop: "clamp(40px, 6vh, 100px)",
-          paddingLeft: "clamp(1rem, 2vw, 2rem) clamp(1rem, 8vw, 8rem)",
+          background: "radial-gradient(circle at 15% 15%, rgba(59,130,246,0.12) 0%, transparent 65%)",
         }}
-      >
-        <div
-          className="max-w-full text-center sm:text-left"
-          style={{ maxWidth: "min(90vw, 600px)" }}
-        >
-          {/* Kozeo Combined Logo */}
-          <div
-            className="flex items-center justify-center sm:justify-start w-full hero-logo"
-            style={
-              {
-                // marginBottom: "clamp(1rem, 4vh, 4rem)",
-              }
-            }
-          >
-            <Image
-              src="/logoFial.svg"
-              alt="Kozeo Full Logo"
-              width={625}
-              height={147}
-              className="brightness-0 invert hero-logo"
-              style={{
-                width: "clamp(240px, 45vw, 500px)",
-                height: "auto",
-                maxWidth: "90vw",
-              }}
-              priority
-            />
-          </div>
+      />
 
-          <h1
-            className="font-normal leading-tight text-white text-center sm:text-left sm:ml-0 md:ml-10 hero-title"
-            style={{
-              fontSize: "clamp(1.5rem, 5vw, 4rem)",
-              marginBottom: "clamp(1rem, 3vh, 2.5rem)",
-              lineHeight: "1.1",
-            }}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-6xl mx-auto gap-8">
+        <div className="flex items-center gap-2.5 animate-fadeIn" style={{ animationDelay: "2s", opacity: 0 }}>
+          <Image src="/kozeoLogo.png" alt="Kozeo" width={26} height={26} className="rounded-full" priority />
+          <span className="text-black/80 font-medium text-[15px] tracking-tight">Kozeo</span>
+        </div>
+
+        <h1
+          className="font-black text-black tracking-tight min-h-[2.2em] whitespace-pre-wrap"
+          style={{ fontSize: "clamp(2.2rem, 6vw, 4.8rem)", lineHeight: "1.02" }}
+        >
+          {displayedText}
+          <span className="inline-block w-[4px] h-[0.85em] bg-gradient-to-b from-cyan-400 via-blue-500 to-purple-600 ml-2 align-baseline animate-pulse rounded-full" />
+        </h1>
+
+        <div
+          className={`transition-all duration-1000 ease-out flex flex-col items-center gap-8 ${
+            isComplete ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+          }`}
+        >
+          <WordReveal 
+            className="text-black/55 max-w-xl font-medium justify-center" 
+            baseDelay={2.5}
           >
-            Ignore The Noise,
-            <br />
-            Hire With Purpose
-          </h1>
-          <p
-            className="text-gray-300 leading-relaxed text-center sm:text-left sm:ml-0 md:ml-10  hero-subtitle"
-            style={{
-              fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
-              marginBottom: "clamp(2rem, 5vh, 3rem)",
-              maxWidth: "min(90vw, 500px)",
-            }}
-          >
-            Build your tech portfolio with real-world projects that matter.
-            Every project on Kozeo contributes to your professional growth.
-          </p>
-          <div
-            className="flex flex-row items-center justify-center sm:justify-start sm:ml-0 md:ml-10  hero-buttons"
-            style={{ gap: "clamp(0.75rem, 3vw, 1.5rem)" }}
-          >
-            <Link
-              href="/login"
-              className="bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] text-center hero-button"
-              style={{
-                padding: "clamp(0.75rem, 2vh, 1rem) clamp(1.5rem, 4vw, 2rem)",
-                fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
-                minWidth: "clamp(140px, 25vw, 180px)",
-              }}
-            >
-              Start Building
-            </Link>
-            <Link
-              href="/login"
-              className="border border-white text-white rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] text-center hero-button"
-              style={{
-                padding: "clamp(0.75rem, 2vh, 1rem) clamp(1.5rem, 4vw, 2rem)",
-                fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
-                minWidth: "clamp(120px, 22vw, 160px)",
-              }}
-            >
-              Post Project
-            </Link>
+            Stop sending static resumes. Build a live, verifiable record of your skills by solving real startup challenges.
+          </WordReveal>
+
+          <HeaderReveal delay={0.2}>
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+              <Link
+                href="/login"
+                className="flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full font-bold text-[15px] hover:bg-neutral-800 hover:-translate-y-1 hover:shadow-2xl active:scale-95 transition-all duration-300 shadow-xl"
+              >
+                Start Your First Speedrun
+              </Link>
+              <Link
+                href="/login"
+                className="flex items-center gap-2 px-8 py-4 bg-white text-black/80 rounded-full font-bold text-[15px] hover:bg-neutral-50 hover:-translate-y-1 hover:shadow-xl active:scale-95 transition-all duration-300 border border-black/10"
+              >
+                Browse Active Sprints
+              </Link>
+            </div>
+          </HeaderReveal>
+          
+          <div className="flex items-center gap-6 mt-4 text-[11px] font-bold text-black/30 uppercase tracking-[0.2em]">
+             <span>Verifiable</span>
+             <div className="w-1 h-1 rounded-full bg-black/20" />
+             <span>Proof-First</span>
+             <div className="w-1 h-1 rounded-full bg-black/20" />
+             <span>Career-Ready</span>
           </div>
         </div>
       </div>
@@ -356,8 +480,453 @@ const Hero = () => {
   );
 };
 
+// ─── Section: Feature Showcase ──────────────────────────────────────
+import { DynamicShowcase } from "../components/common/DynamicShowcase";
+
+const ShowcaseSection = () => (
+  <section id="dark-showcase" suppressHydrationWarning className="bg-[#050505] min-h-screen w-full flex items-center relative overflow-hidden py-24 lg:py-0">
+    {/* Remove the border-t to avoid sub-pixel rendering gaps if any, 
+        or ensure it matches the background perfectly. */}
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-20 lg:py-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* Text */}
+        <div className="lg:col-span-5 space-y-8 text-white">
+          <div className="space-y-4">
+            <HeaderReveal>
+              <h2
+                className="font-black text-white tracking-tighter"
+                style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", lineHeight: "1.0" }}
+              >
+                Proven, Not
+                <br />
+                Just Claimed.
+              </h2>
+            </HeaderReveal>
+            <WordReveal className="text-white/40 text-xl leading-relaxed font-medium">
+              Kozeo is the world's first platform where every entry in your portfolio is backed by verifiable proof.
+            </WordReveal>
+          </div>
+          
+          <div className="space-y-6">
+            {[
+              { t: "Elite Speedruns", d: "Timed, high-stakes coding missions evaluated by AI." },
+              { t: "Live Work Sprints", d: "Ship real features for fast-growing startups." },
+              { t: "Dynamic Identity", d: "Export a verifiable proof-of-work history instantly." }
+            ].map((f, i) => (
+              <div key={i} className="flex gap-4 group">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2.5 group-hover:scale-150 transition-transform" />
+                <div>
+                  <h4 className="font-bold text-[17px] text-white">{f.t}</h4>
+                  <p className="text-sm text-white/30 leading-snug">{f.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <HeaderReveal delay={0.3}>
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 text-sm font-black text-blue-400 hover:gap-4 transition-all"
+            >
+              EXPLORE THE ECOSYSTEM
+            </Link>
+          </HeaderReveal>
+        </div>
+
+        {/* Dynamic Visual */}
+        <div className="lg:col-span-7">
+           <DynamicShowcase />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ─── Removed DarkShowcase as it's now part of the master dynamic showcase ───
+
+// ─── Icon Strip + Tagline ──────────────────────────────────────────────────────
+const ICONS = ["⟳", "←", "✓", "⊞", "⊡", "↑", "⬡", "⟨/⟩", "⎘", "→", "□", "⋮⋮", "✦", "▶_", "⊕", "⟳"];
+const IconStripSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { displayedText } = useTypewriter(
+    "Kozeo is our verifiable career platform, evolving the resume into the proof-first era.",
+    40,
+    0,
+    isVisible
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} suppressHydrationWarning className="bg-white border-y border-black/5 py-32 relative overflow-hidden">
+      <div className="relative overflow-hidden mb-16">
+        <div className="icon-strip-track">
+          {[...ICONS, ...ICONS].map((icon, i) => (
+            <div
+              key={i}
+              className="shrink-0 mx-2 w-14 h-14 rounded-full bg-black/5 border border-black/8 flex items-center justify-center text-black/60 text-lg hover:bg-black/10 transition-colors cursor-default"
+            >
+              {icon}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+        <p
+          className="font-semibold text-black tracking-tight leading-tight min-h-[3em] whitespace-pre-wrap"
+          style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
+        >
+          {displayedText}
+          <span className="inline-block w-[3px] h-[0.9em] bg-gradient-to-b from-emerald-400 via-blue-500 to-purple-500 ml-2 align-baseline animate-pulse rounded-full" />
+        </p>
+      </div>
+    </section>
+  );
+};
+
+// ─── Agent-First / Work Sprints ────────────────────────────────────────────────
+const WorkSprintsSection = () => (
+  <section id="work-sprints" suppressHydrationWarning className="bg-[#f8f9fa] py-32 relative overflow-hidden">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+        {/* Text */}
+        <div className="lg:w-1/2 space-y-8">
+          <div className="space-y-5">
+            <HeaderReveal>
+              <h2
+                className="font-semibold text-black tracking-tight"
+                style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", lineHeight: "1.15" }}
+              >
+                A Proof-First
+                <br />
+                Experience
+              </h2>
+            </HeaderReveal>
+            <WordReveal className="text-black/55 text-lg leading-relaxed max-w-sm">
+              Run multiple sprints at the same time, across any skill domain, from
+              one central mission control view.
+            </WordReveal>
+          </div>
+          <HeaderReveal delay={0.4}>
+            <Link
+              href="/login"
+              className="inline-block px-6 py-3 rounded-full border border-black/20 text-black/70 text-sm font-medium hover:border-black/40 hover:text-black hover:-translate-y-0.5 hover:shadow-sm active:scale-95 transition-all duration-300"
+            >
+              Explore Product
+            </Link>
+          </HeaderReveal>
+        </div>
+
+        {/* Inbox / Task card mockup */}
+        <div className="lg:w-1/2 w-full">
+          <div className="bg-white rounded-2xl border border-black/8 shadow-xl overflow-hidden">
+            {/* Gradient header */}
+            <div
+              className="h-24 w-full"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(219,234,254,0.8) 0%, rgba(236,252,203,0.6) 50%, rgba(254,243,199,0.5) 100%)",
+              }}
+            />
+            {/* Inbox body */}
+            <div className="p-5 space-y-2 -mt-6">
+              <div className="flex items-center gap-2 text-sm font-semibold text-black/80 mb-3 px-1">
+                <span>Sprints</span>
+                <svg className="w-4 h-4 text-black/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8" strokeWidth="2" />
+                  <path d="M21 21l-4.35-4.35" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              {[
+                {
+                  title: "Build a fintech dashboard UI",
+                  time: "now",
+                  sub: "sprint-2024-q1",
+                  badge: null,
+                },
+                {
+                  title: "API Integration Research",
+                  time: "2 mins ago",
+                  sub: "sprint-2024-q1",
+                  badge: "⟳",
+                },
+                {
+                  title: "React Performance Sprint",
+                  time: "8 mins ago",
+                  sub: "sprint-2024-q1",
+                  badge: "Idle",
+                  review: true,
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-xl border border-black/8 px-4 py-3.5 shadow-sm"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-medium text-black/85">
+                        {item.title}{" "}
+                        <span className="text-black/35 font-normal">{item.time}</span>
+                      </div>
+                      <div className="text-xs text-black/40">{item.sub}</div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {item.badge && (
+                        <span className="text-xs text-black/40">{item.badge}</span>
+                      )}
+                      {item.review && (
+                        <button className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-md active:scale-95 transition-all duration-300">
+                           Review
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {i === 2 && (
+                    <div className="mt-2 text-xs text-black/40 leading-relaxed">
+                      I&apos;ve finished the Sprint. You can see a summary of the work and a
+                      verification video in the walkthrough.
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ─── Projects Section ──────────────────────────────────────────────────────────
+const ProjectsSection = () => (
+  <section id="projects" className="bg-white border-t border-black/6 py-24 lg:py-32">
+    <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-24">
+        {/* Text */}
+        <div className="lg:w-1/2 space-y-6">
+          <HeaderReveal>
+            <h2
+              className="font-semibold text-black tracking-tight"
+              style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", lineHeight: "1.15" }}
+            >
+              Your portfolio is
+              <br />
+              your new resume.
+            </h2>
+          </HeaderReveal>
+          <WordReveal className="text-black/55 text-lg leading-relaxed max-w-md">
+            Generate a dynamic profile URL packed with verifiable proof of your
+            capabilities. Stand out to recruiters instantly.
+          </WordReveal>
+          <div className="space-y-6 pt-2">
+            {[
+              { title: "Verified Work History", desc: "Employers see actual deliverables and code, not just claims" },
+              { title: "Reputation Signals", desc: "Showcase reviews and reliability scores from real startups" },
+              { title: "Skill Badges", desc: "Earn automatic badges based on Sprint and Project completions" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="w-px h-10 bg-blue-500/60 shrink-0 mt-1" />
+                <div>
+                  <div className="font-medium text-black text-[15px] mb-0.5">{item.title}</div>
+                  <div className="text-sm text-black/50">{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Profile card mockup */}
+        <div className="lg:w-1/2 w-full flex justify-center">
+          <div className="relative w-full max-w-sm">
+            <div className="bg-white rounded-2xl border border-black/10 shadow-xl p-6 relative z-10">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-500 to-blue-300 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                  JS
+                </div>
+                <div>
+                  <div className="h-4 w-28 bg-black/10 rounded mb-1.5" />
+                  <div className="h-3 w-20 bg-black/6 rounded" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { label: "Latest Project", value: "Fintech Dashboard Refactor" },
+                  { label: "Top Skill Signal", value: "React Performance Tuning" },
+                  { label: "Reputation Score", value: "98 / 100  ★★★★★" },
+                ].map(({ label, value }) => (
+                  <div key={label} className="p-3.5 rounded-xl border border-black/8 bg-black/2">
+                    <div className="text-[10px] text-black/40 font-semibold uppercase tracking-wider mb-0.5">{label}</div>
+                    <div className="text-sm text-black/75 font-medium">{value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Blue glow behind card */}
+            <div className="absolute -inset-4 bg-blue-500/10 blur-3xl rounded-full pointer-events-none z-0" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ─── CTA ──────────────────────────────────────────────────────────────────────
+const CTA = () => {
+  return (
+    <section id="cta-section" suppressHydrationWarning className="bg-black text-white py-32 relative overflow-hidden flex items-center min-h-[60vh]">
+      {/* Background glow for CTA */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[150px] pointer-events-none rounded-full" />
+      
+      <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-12 w-full relative z-10">
+        <HeaderReveal>
+          <h2
+            className="font-black tracking-tighter text-white"
+            style={{ fontSize: "clamp(3rem, 8vw, 6.5rem)", lineHeight: "0.95" }}
+          >
+            Own Your 
+            <br />
+            Technical Truth.
+          </h2>
+        </HeaderReveal>
+        <WordReveal className="text-white/50 text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed font-medium justify-center">
+          The era of claimed skills is over. Join the proof-first movement and build a career that cannot be ignored.
+        </WordReveal>
+        <HeaderReveal delay={0.5}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+            <Link
+              href="/login"
+              className="px-10 py-5 bg-white text-black rounded-full font-black text-[16px] hover:bg-gray-100 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] active:scale-95 transition-all duration-300 uppercase tracking-widest"
+            >
+              Claim Your Portfolio URL
+            </Link>
+            <Link
+              href="/login"
+              className="px-10 py-5 border-2 border-white/20 text-white rounded-full font-black text-[16px] hover:bg-white/10 hover:border-white/40 hover:-translate-y-1 active:scale-95 transition-all duration-300 uppercase tracking-widest"
+            >
+              Explore Active Sprints
+            </Link>
+          </div>
+        </HeaderReveal>
+        
+        <div className="pt-12 flex flex-col items-center gap-4">
+           <div className="text-[10px] text-white/30 font-black uppercase tracking-[0.4em]">Integrated with top startups</div>
+           <div className="flex gap-8 opacity-20 grayscale brightness-200">
+              {["SOLARIS", "FINTECHX", "AUTOSTREAM", "HEALTHLINK"].map(name => (
+                <span key={name} className="text-sm font-black italic">{name}</span>
+              ))}
+           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+const Footer = () => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return (
+    <footer suppressHydrationWarning className="bg-white pt-24 pb-12 border-t border-black/5 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Top Section */}
+        <div className="flex flex-col lg:flex-row justify-between gap-16 lg:gap-8 mb-24">
+          <div className="max-w-sm space-y-4">
+            <HeaderReveal>
+              <h3 className="text-2xl font-black tracking-tight text-black">Experience Proof</h3>
+            </HeaderReveal>
+            <WordReveal className="text-black/40 text-sm leading-relaxed font-medium">
+              Building the technical standard for verifiable careers. Join the ecosystem where skills are proven, not just claimed.
+            </WordReveal>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-12 lg:gap-24">
+            <div className="space-y-5">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Platform</h4>
+              <ul className="space-y-3">
+                {[
+                  { label: "Speedruns", href: "#dark-showcase" },
+                  { label: "Work Sprints", href: "#work-sprints" },
+                  { label: "Projects", href: "#projects" },
+                  { label: "Skill Forge", href: "/login" }
+                ].map(item => (
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-sm font-semibold text-black/60 hover:text-black transition-colors">{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Resources</h4>
+              <ul className="space-y-3">
+                 {["Docs", "Changelog", "Mission Control", "Reputation Hub"].map(item => (
+                  <li key={item}>
+                    <Link href="/login" className="text-sm font-semibold text-black/60 hover:text-black transition-colors">{item}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Brand Section: Massive Text */}
+        <div className="relative mb-20">
+          <h2 
+            className="text-black font-black leading-[0.8] select-none pointer-events-none text-center"
+            style={{ 
+              fontSize: "clamp(4rem, 21vw, 24rem)", 
+              letterSpacing: "-0.06em",
+              marginLeft: "-0.03em" 
+            }}
+          >
+            KOZEO
+          </h2>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-12 border-t border-black/5 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2.5">
+              <Image src="/kozeoLogo.png" alt="Kozeo" width={24} height={24} className="rounded-full shadow-sm" />
+              <span className="font-bold text-sm tracking-tight text-black">Kozeo</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-black/10" />
+            <span className="text-xs font-semibold text-black/30 tracking-tight">© {mounted ? new Date().getFullYear() : "2026"} Kozeo Ecosystems. All rights reserved.</span>
+          </div>
+
+          <div className="flex items-center gap-8">
+             {["About", "Careers", "Privacy", "Terms"].map((item) => (
+               <Link 
+                 key={item} 
+                 href="/login" 
+                 className="text-[11px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-colors"
+               >
+                 {item}
+               </Link>
+             ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+// ─── Root Page ────────────────────────────────────────────────────────────────
 export default function Home() {
-  const { isVisible } = useScrollAnimation();
   const [isLoading, setIsLoading] = useState(true);
 
   const orgLd = {
@@ -366,660 +935,37 @@ export default function Home() {
     name: "Kozeo",
     url: "/",
     description:
-      "Kozeo is a professional networking platform designed to help you build meaningful career connections.",
+      "Kozeo is a proof-first career platform for tech professionals to build verifiable portfolios through Speedruns, Work Sprints, and Projects.",
   };
 
   return (
     <>
       {isLoading && (
         <PageLoader
-          duration={2500}
+          duration={2000}
           onComplete={() => setIsLoading(false)}
           useSlideAnimation={true}
         />
       )}
 
       <div
-        className={`transition-opacity duration-1000 ${
+        suppressHydrationWarning
+        className={`w-full min-h-screen transition-opacity duration-700 bg-white text-black ${
           isLoading ? "opacity-0" : "opacity-100"
         }`}
       >
         <Navbar />
-        <main className="pb-20 lg:pb-0">
-          <div
-            id="hero-section"
-            data-scroll-animation
-            className={`transition-all duration-1000 ease-out ${
-              isVisible("hero-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            <Hero />
-          </div>
-
-          {/* Value Proposition Section */}
-          <section
-            id="value-section"
-            data-scroll-animation
-            className={`bg-stone-50 transition-all duration-1000 ease-out ${
-              isVisible("value-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-            style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
-          >
-            <div
-              className="max-w-6xl mx-auto"
-              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
-            >
-              <div
-                className="text-center"
-                style={{ marginBottom: "clamp(3rem, 8vh, 5rem)" }}
-              >
-                <h2
-                  className="font-normal leading-tight text-black"
-                  style={{
-                    fontSize: "clamp(2.5rem, 6vw, 4rem)",
-                    marginBottom: "clamp(1.5rem, 4vh, 2rem)",
-                  }}
-                >
-                  Profile &gt; Money
-                </h2>
-                <p
-                  className="text-gray-600 mx-auto"
-                  style={{
-                    fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
-                    maxWidth: "min(90vw, 750px)",
-                    lineHeight: "1.6",
-                  }}
-                >
-                  Kozeo transforms project culture into career growth. Unlike
-                  traditional platforms that focus only on task completion,
-                  every project on Kozeo contributes to your tech portfolio and
-                  professional identity.
-                </p>
-              </div>
-
-              <div
-                className="grid grid-cols-1 md:grid-cols-3"
-                style={{
-                  gap: "clamp(2rem, 5vw, 3rem)",
-                  marginTop: "clamp(3rem, 6vh, 5rem)",
-                }}
-              >
-                <div
-                  className="text-center"
-                  style={{ padding: "clamp(0.5rem, 2vh, 1rem)" }}
-                >
-                  <div
-                    className="bg-black rounded-full mx-auto mb-6 flex items-center justify-center"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiCode
-                      className="text-white"
-                      style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
-                      }}
-                    />
-                  </div>
-                  <h3
-                    className="font-semibold"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                      marginBottom: "clamp(0.75rem, 2vh, 1rem)",
-                    }}
-                  >
-                    Profile-First Approach
-                  </h3>
-                  <p
-                    className="text-gray-600"
-                    style={{
-                      fontSize: "clamp(0.875rem, 2vw, 1rem)",
-                      lineHeight: "1.5",
-                    }}
-                  >
-                    Every project builds your credible tech portfolio with
-                    real-world projects from startups and NGOs.
-                  </p>
-                </div>
-
-                <div
-                  className="text-center"
-                  style={{ padding: "clamp(0.5rem, 2vh, 1rem)" }}
-                >
-                  <div
-                    className="bg-black rounded-full mx-auto mb-6 flex items-center justify-center"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiTrendingUp
-                      className="text-white"
-                      style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
-                      }}
-                    />
-                  </div>
-                  <h3
-                    className="font-semibold"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                      marginBottom: "clamp(0.75rem, 2vh, 1rem)",
-                    }}
-                  >
-                    Resume-Enhancing Work
-                  </h3>
-                  <p
-                    className="text-gray-600"
-                    style={{
-                      fontSize: "clamp(0.875rem, 2vw, 1rem)",
-                      lineHeight: "1.5",
-                    }}
-                  >
-                    Collaborative projects that develop communication,
-                    leadership, and technical skills employers value.
-                  </p>
-                </div>
-
-                <div
-                  className="text-center"
-                  style={{ padding: "clamp(0.5rem, 2vh, 1rem)" }}
-                >
-                  <div
-                    className="bg-black rounded-full mx-auto mb-6 flex items-center justify-center"
-                    style={{
-                      width: "clamp(3rem, 8vw, 4rem)",
-                      height: "clamp(3rem, 8vw, 4rem)",
-                    }}
-                  >
-                    <FiUsers
-                      className="text-white"
-                      style={{
-                        width: "clamp(1.5rem, 4vw, 2rem)",
-                        height: "clamp(1.5rem, 4vw, 2rem)",
-                      }}
-                    />
-                  </div>
-                  <h3
-                    className="font-semibold"
-                    style={{
-                      fontSize: "clamp(1.125rem, 2.5vw, 1.375rem)",
-                      marginBottom: "clamp(0.75rem, 2vh, 1rem)",
-                    }}
-                  >
-                    Impact-Driven Projects
-                  </h3>
-                  <p
-                    className="text-gray-600"
-                    style={{
-                      fontSize: "clamp(0.875rem, 2vw, 1rem)",
-                      lineHeight: "1.5",
-                    }}
-                  >
-                    Work on meaningful projects that create real value while
-                    building proof of your domain expertise.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Resume Enhancement Section */}
-          <section
-            id="resume-section"
-            data-scroll-animation
-            className={`bg-gradient-to-br from-gray-900 to-black transition-all duration-1000 ease-out ${
-              isVisible("resume-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-            style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
-          >
-            <div
-              className="max-w-6xl mx-auto"
-              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                {/* Image Side - Shows first on mobile */}
-                <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-                  <div className="relative">
-                    <div
-                      className="bg-white  shadow-2xl p-6 lg:transform lg:rotate-3 lg:hover:rotate-0 transition-transform duration-300"
-                      style={{
-                        maxWidth: "clamp(280px, 50vw, 400px)",
-                        width: "100%",
-                      }}
-                    >
-                      <Image
-                        src="/Resume.jpg"
-                        alt="Resume with Kozeo profile integration"
-                        className="w-full h-auto "
-                        width={400}
-                        height={600}
-                        style={{
-                          aspectRatio: "3/4",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-
-                    {/* Floating badge */}
-                    {/* <div className="absolute -top-4 -right-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300">
-                       Stand Out
-                    </div> */}
-                  </div>
-                </div>
-
-                {/* Content Side - Shows second on mobile */}
-                <div className="order-2 lg:order-1">
-                  <h2
-                    className="font-normal leading-tight text-white text-center lg:text-left"
-                    style={{
-                      fontSize: "clamp(2.5rem, 6vw, 4rem)",
-                      marginBottom: "clamp(1.5rem, 4vh, 2rem)",
-                    }}
-                  >
-                    Showcase Your
-                    <br />
-                    <span className="text-cyan-400">Kozeo Journey</span>
-                  </h2>
-
-                  <p
-                    className="text-gray-300 mb-8"
-                    style={{
-                      fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
-                      lineHeight: "1.6",
-                      marginBottom: "clamp(2rem, 4vh, 2.5rem)",
-                    }}
-                  >
-                    Stand out to recruiters by showcasing your real-world
-                    project experience. Add your Kozeo profile URL and project
-                    details directly to your resume.
-                  </p>
-
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">1</span>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-white mb-2">
-                          Include Your Kozeo Profile URL
-                        </h3>
-                        <p className="text-gray-400">
-                          Add your personalized Kozeo profile link to let
-                          recruiters explore your complete project portfolio and
-                          professional achievements.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">2</span>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-white mb-2">
-                          Highlight Your Projects
-                        </h3>
-                        <p className="text-gray-400">
-                          List specific projects you've completed through Kozeo,
-                          showcasing the real-world impact of your technical
-                          skills and problem-solving abilities.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-white text-sm font-bold">3</span>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-white mb-2">
-                          Demonstrate Proven Experience
-                        </h3>
-                        <p className="text-gray-400">
-                          Show recruiters that you've worked on real projects
-                          with actual organizations, not just theoretical
-                          exercises or personal hobby projects.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Skill Forge Section */}
-          <section
-            id="skill-forge-section"
-            data-scroll-animation
-            className={`bg-black text-white transition-all duration-1000 ease-out ${
-              isVisible("skill-forge-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-            style={{ padding: "clamp(3rem, 8vh, 6rem) 0" }}
-          >
-            <div
-              className="max-w-6xl mx-auto"
-              style={{ padding: "0 clamp(1rem, 4vw, 2rem)" }}
-            >
-              <div
-                className="text-center"
-                style={{ marginBottom: "clamp(3rem, 8vh, 4rem)" }}
-              >
-                <div
-                  className="flex items-center justify-center"
-                  style={{ marginBottom: "clamp(1rem, 3vh, 1.5rem)" }}
-                >
-                  {/* <FiStar
-                    className="text-yellow-500 mr-2"
-                    style={{
-                      width: "clamp(1.5rem, 4vw, 2rem)",
-                      height: "clamp(1.5rem, 4vw, 2rem)",
-                    }}
-                  /> */}
-                  <span
-                    className="bg-yellow-100 text-yellow-800 font-medium rounded-full"
-                    style={{
-                      fontSize: "clamp(0.75rem, 1.5vw, 0.875rem)",
-                      padding:
-                        "clamp(0.25rem, 1vh, 0.375rem) clamp(0.75rem, 2vw, 1rem)",
-                    }}
-                  >
-                    Skill Forge
-                  </span>
-                </div>
-                <h2
-                  className="font-normal leading-tight text-white"
-                  style={{
-                    fontSize: "clamp(2.5rem, 6vw, 3.5rem)",
-                    marginBottom: "clamp(1.5rem, 4vh, 2rem)",
-                  }}
-                >
-                  Free Learning Opportunities
-                </h2>
-                <p
-                  className="text-gray-300 mx-auto"
-                  style={{
-                    fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
-                    maxWidth: "min(90vw, 750px)",
-                    lineHeight: "1.6",
-                  }}
-                >
-                  Discover projects marked as "Skill Forge" - free opportunities
-                  to learn, practice, and build your portfolio without any
-                  payment commitments.
-                </p>
-              </div>
-
-              <div
-                className="grid md:grid-cols-2 items-center"
-                style={{ gap: "clamp(3rem, 6vw, 4rem)" }}
-              >
-                <div>
-                  <h3
-                    className="font-semibold text-white"
-                    style={{
-                      fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                      marginBottom: "clamp(1.5rem, 3vh, 2rem)",
-                    }}
-                  >
-                    Perfect for:
-                  </h3>
-                  <ul
-                    className="space-y-4"
-                    style={{ gap: "clamp(1rem, 2vh, 1.5rem)" }}
-                  >
-                    {[
-                      "Students learning new technologies",
-                      "Developers switching to new frameworks",
-                      "Anyone wanting to contribute to open source",
-                      "Building a portfolio with real projects",
-                    ].map((item, index) => (
-                      <li
-                        key={index}
-                        className="flex items-center"
-                        style={{
-                          fontSize: "clamp(0.875rem, 2vw, 1rem)",
-                          marginBottom: "clamp(0.75rem, 2vh, 1rem)",
-                        }}
-                      >
-                        <FiCheck
-                          className="text-green-400 mr-3 flex-shrink-0"
-                          style={{
-                            width: "clamp(1rem, 2.5vw, 1.25rem)",
-                            height: "clamp(1rem, 2.5vw, 1.25rem)",
-                          }}
-                        />
-                        <span className="text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="p-6 rounded-2xl bg-black border border-gray-800 shadow-lg">
-                  {/* Header with badge */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-xs font-medium text-green-400 uppercase tracking-wider">
-                        Available Now
-                      </span>
-                    </div>
-                    <div className="px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full">
-                      <span className="text-xs font-semibold text-yellow-300">
-                        Skill Forge
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Project Title */}
-                  <h4 className="text-lg font-bold text-white mb-3">
-                    TaskFlow Pro
-                  </h4>
-
-                  {/* Project Description */}
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                    Collaborative task management platform with real-time
-                    updates, drag-and-drop interface, and team synchronization.
-                  </p>
-
-                  {/* Tech Stack */}
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">
-                      Tech Stack
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {["React", "TypeScript", "Node.js", "WebSocket"].map(
-                        (tech, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded text-xs text-blue-300 font-medium"
-                          >
-                            {tech}
-                          </span>
-                        )
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Project Info */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                    <div className="flex items-center space-x-4 text-xs text-gray-400">
-                      <span>4-6 weeks</span>
-                      <span>•</span>
-                      <span>3-5 developers</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-bold text-green-400">
-                        Portfolio + Certificate
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* CTA Section */}
-          <section
-            id="cta-section"
-            data-scroll-animation
-            data-section="cta"
-            className={`bg-black text-white py-12 sm:py-16 md:py-24 transition-all duration-1000 ease-out ${
-              isVisible("cta-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-tight mb-4 sm:mb-6 md:mb-8">
-                Ready to build your
-                <br />
-                tech portfolio?
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto">
-                Join the movement that's making freelancing purposeful and
-                profile development structured.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center">
-                <Link
-                  href="/login"
-                  className="bg-white text-black px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
-                >
-                  Start Building Your Profile
-                </Link>
-                <Link
-                  href="/login"
-                  className="border border-white text-white px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-medium hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] w-fit"
-                >
-                  Post a Project
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          {/* Features Comparison */}
-          <section
-            id="features-section"
-            data-scroll-animation
-            className={`py-24 bg-gray-50 transition-all duration-1000 ease-out ${
-              isVisible("features-section")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            <div className="max-w-6xl mx-auto px-8">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-normal leading-tight text-black mb-8">
-                  Why choose Kozeo?
-                </h2>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                {/* Desktop Table View */}
-                <div className="hidden md:grid grid-cols-3 gap-0">
-                  <div className="p-6 font-semibold text-gray-500 bg-gray-50">
-                    Feature
-                  </div>
-                  <div className="p-6 font-semibold text-center bg-black text-white">
-                    Kozeo
-                  </div>
-                  <div className="p-6 font-semibold text-center">
-                    Traditional Platforms
-                  </div>
-
-                  <div className="p-6 border-t">Profile-First Approach</div>
-                  <div className="p-6 border-t text-center bg-green-50 text-green-600 font-medium">
-                    ✓
-                  </div>
-                  <div className="p-6 border-t text-center text-red-500">✗</div>
-
-                  <div className="p-6 border-t">Resume-Enhancing Work</div>
-                  <div className="p-6 border-t text-center bg-green-50 text-green-600 font-medium">
-                    ✓
-                  </div>
-                  <div className="p-6 border-t text-center text-red-500">✗</div>
-
-                  <div className="p-6 border-t">
-                    No Upfront Cost for Posters
-                  </div>
-                  <div className="p-6 border-t text-center bg-green-50 text-green-600 font-medium">
-                    ✓
-                  </div>
-                  <div className="p-6 border-t text-center text-red-500">✗</div>
-
-                  <div className="p-6 border-t">Proof of Domain Expertise</div>
-                  <div className="p-6 border-t text-center bg-green-50 text-green-600 font-medium">
-                    ✓
-                  </div>
-                  <div className="p-6 border-t text-center text-red-500">✗</div>
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="md:hidden p-4 space-y-4">
-                  {[
-                    "Profile-First Approach",
-                    "Resume-Enhancing Work",
-                    "No Upfront Cost for Posters",
-                    "Proof of Domain Expertise",
-                  ].map((feature, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-4">
-                      <h3 className="font-semibold text-gray-900 mb-3">
-                        {feature}
-                      </h3>
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col items-center flex-1">
-                          <span className="text-sm font-medium text-gray-600 mb-1">
-                            Kozeo
-                          </span>
-                          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">
-                              ✓
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center flex-1">
-                          <span className="text-sm font-medium text-gray-600 mb-1">
-                            Traditional
-                          </span>
-                          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">
-                              ✗
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
+        <main>
+          <Hero />
+          <IconStripSection />
+          <ShowcaseSection />
+          <WorkSprintsSection />
+          <ProjectsSection />
+          <CTA />
         </main>
-
-        <footer className="border-t">
-          <div className="container mx-auto py-8 px-4 text-sm text-gray-600 flex items-center justify-between">
-            <span>© {new Date().getFullYear()} Kozeo</span>
-            <a href="/" className="hover:underline">
-              Contact Us
-            </a>
-          </div>
-        </footer>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }}
-        />
+        <ScrollToTop />
+        <Footer />
+        
       </div>
     </>
   );

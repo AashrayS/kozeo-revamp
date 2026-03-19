@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import { FiStar } from "react-icons/fi";
@@ -95,73 +93,41 @@ export default function GigListPage() {
 
   if (error) {
     return (
-      <>
-        <Header logoText="Kozeo" />
-        <div
-          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-            theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-900"
-          }`}
-        >
-          <Sidebar />
-          <div className="flex-1 flex flex-col">
-            <main className="flex-1 p-8 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-xl text-red-400 mb-2">
-                  Error loading projects
-                </div>
-                <div
-                  className={`text-sm ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  {error}
-                </div>
-                <ProfessionalButton
-                  onClick={() => window.location.reload()}
-                  variant="primary"
-                  size="md"
-                  className="mt-4"
-                >
-                  Try Again
-                </ProfessionalButton>
-              </div>
-            </main>
+      <main className="flex-1 p-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-xl text-red-400 mb-2">
+            Error loading projects
           </div>
+          <div
+            className={`text-sm ${
+              theme === "dark" ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
+            {error}
+          </div>
+          <ProfessionalButton
+            onClick={() => window.location.reload()}
+            variant="primary"
+            size="md"
+            className="mt-4"
+          >
+            Try Again
+          </ProfessionalButton>
         </div>
-      </>
+      </main>
     );
   }
 
   return (
-    <>
-      <Header logoText="Kozeo" />
-      <div
-        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-          theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-900"
-        }`}
-      >
-        {/* Glows - only show in dark mode */}
-        {theme === "dark" && (
-          <>
-            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-          </>
-        )}
-        <Sidebar />
-        <div className="flex-1 flex flex-col pb-20 lg:pb-0">
-          <main className="flex-1 p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <h1
-                className={`text-3xl font-bold drop-shadow-glow transition-colors duration-300 ${
-                  theme === "dark" ? "text-white" : "text-gray-900"
-                }`}
-              >
-                My Projects ({filteredGigs.length})
-              </h1>
+    <main className="flex-1">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h1
+          className={`text-3xl font-bold drop-shadow-glow transition-colors duration-300 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
+          }`}
+        >
+          My Projects ({filteredGigs.length})
+        </h1>
 
               {/* Filter buttons */}
               {user && gigs.length > 0 && (
@@ -440,9 +406,6 @@ export default function GigListPage() {
                 ))}
               </div>
             )}
-          </main>
-        </div>
-      </div>
-    </>
+    </main>
   );
 }

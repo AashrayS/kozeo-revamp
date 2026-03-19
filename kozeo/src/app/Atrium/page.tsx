@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { FiSearch, FiStar, FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import {
@@ -130,21 +128,7 @@ export default function Home() {
   };
 
   return (
-    <>
-      <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-      {/* Main Layout */}
-      <div
-        className={`min-h-screen relative z-10 flex flex-row theme-transition ${
-          theme === "light"
-            ? "bg-gradient-light text-gray-900"
-            : "bg-gradient-dark text-white"
-        }`}
-      >
-        <Sidebar />
-        <div className="flex flex-1 pb-20 lg:pb-0">
-          <main className="flex-1 p-6 overflow-y-auto">
+    <div className="max-w-7xl mx-auto">
             {/* Search & Create Gig Section */}
             <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full">
               {/* Searchbar - responsive width */}
@@ -155,11 +139,7 @@ export default function Home() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 theme-transition text-base ${
-                    theme === "light"
-                      ? "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-cyan-500 focus:border-cyan-500"
-                      : "bg-neutral-900 border-neutral-700 text-white placeholder-gray-400 focus:ring-neutral-600"
-                  }`}
+                  className="w-full py-2.5 pl-4 pr-10 rounded-full border border-black/5 dark:border-white/10 bg-black/5 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:outline-none focus:ring-1 focus:ring-black/10 dark:focus:ring-white/10 transition-all placeholder:text-black/30 dark:placeholder:text-white/30 text-sm font-medium"
                 />
                 <button
                   onClick={handleSearch}
@@ -177,9 +157,7 @@ export default function Home() {
               {/* Toggle Button for Projects/Users - responsive shrink and grow */}
               <div className="relative inline-flex items-center w-full sm:w-auto">
                 <div
-                  className={`relative flex items-center rounded-lg p-1 transition-all duration-200 w-full sm:w-auto ${
-                    theme === "light" ? "bg-gray-100" : "bg-neutral-800"
-                  }`}
+                  className="relative flex items-center rounded-full p-1 bg-black/5 dark:bg-white/5 w-full sm:w-auto"
                   style={{ minWidth: 0 }}
                 >
                   {/* Background Slider - More subtle */}
@@ -199,14 +177,10 @@ export default function Home() {
                   {/* Projects Option */}
                   <button
                     onClick={() => setViewMode("gigs")}
-                    className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                    className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full text-xs font-bold transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
                       viewMode === "gigs"
-                        ? theme === "light"
-                          ? "text-gray-900"
-                          : "text-gray-100"
-                        : theme === "light"
-                        ? "text-gray-500 hover:text-gray-700"
-                        : "text-gray-400 hover:text-gray-200"
+                        ? "text-black dark:text-white"
+                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
                     }`}
                     style={{ minWidth: 0 }}
                   >
@@ -216,14 +190,10 @@ export default function Home() {
                   {/* Users Option */}
                   <button
                     onClick={() => setViewMode("users")}
-                    className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                    className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full text-xs font-bold transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
                       viewMode === "users"
-                        ? theme === "light"
-                          ? "text-gray-900"
-                          : "text-gray-100"
-                        : theme === "light"
-                        ? "text-gray-500 hover:text-gray-700"
-                        : "text-gray-400 hover:text-gray-200"
+                        ? "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
+                        : "text-black dark:text-white"
                     }`}
                     style={{ minWidth: 0 }}
                   >
@@ -238,7 +208,7 @@ export default function Home() {
                   onClick={() => router.push("/gigs/create")}
                   variant="neutral"
                   size="md"
-                  className="w-full sm:w-auto !bg-white !text-gray-900 !border-gray-300 hover:!bg-gray-50 hover:!border-gray-400 !shadow-md"
+                  className="w-full sm:w-auto !bg-black !text-white dark:!bg-white dark:!text-black !rounded-full !font-bold !px-8 hover:!scale-105 transition-transform"
                 >
                   Create Project
                 </ProfessionalButton>
@@ -287,11 +257,7 @@ export default function Home() {
                         onClick={() => {
                           router.push(`/Atrium/description?gigId=${gig.id}`);
                         }}
-                        className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out hover:scale-[1.03] theme-transition ${
-                          theme === "light"
-                            ? "bg-white border border-gray-200 hover:shadow-lg hover:bg-gradient-to-br hover:from-cyan-50 hover:to-purple-50"
-                            : "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
-                        }`}
+                        className="premium-card p-6 flex flex-col justify-between h-full min-h-[340px]"
                       >
                         {/* ⭐ Host Rating Top-Right */}
                         <div
@@ -445,11 +411,7 @@ export default function Home() {
                       <div
                         key={user.id || user._id || user.username}
                         onClick={() => handleUserClick(user)}
-                        className={`relative flex flex-col justify-between h-full min-h-[220px] rounded-xl p-5 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.02] theme-transition ${
-                          theme === "light"
-                            ? "bg-white border border-gray-200 hover:shadow-md hover:bg-gradient-to-br hover:from-cyan-50/30 hover:to-purple-50/30"
-                            : " bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_rgba(168,85,247,0.08))]"
-                        }`}
+                        className="premium-card p-6 flex flex-col justify-between h-full min-h-[240px]"
                       >
                         {/* User Info Top Section */}
                         <div>
@@ -662,9 +624,6 @@ export default function Home() {
                 </span>
               </div>
             )}
-          </main>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

@@ -1,0 +1,72 @@
+﻿
+> kozeo@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.3.4
+
+   Creating an optimized production build ...
+node.exe : Failed to 
+compile.
+At C:\Program Files\nod
+ejs\npm.ps1:29 char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (Failed to com   
+ pile.:String) [],     
+RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+
+./src/app/profile/[user
+name]/page.tsx
+Error:   [31mx[0m 
+Unexpected token 
+`div`. Expected jsx 
+identifier
+     ,-[[36;1;4mC:\Use
+rs\Aashray\Desktop\KOZE
+O UI\Kozeo-ui\kozeo\src
+\app\profile\[username]
+\page.tsx[0m:607:1]
+ [2m604[0m |   const 
+avgRating = 
+profile.rating || 0;
+ [2m605[0m | 
+ [2m606[0m |   
+return (
+ [2m607[0m |     
+<div className="flex 
+flex-col lg:flex-row 
+gap-8 pb-20 lg:pb-8">
+     : [35;1m     
+^^^[0m
+ [2m608[0m |       
+<div className="flex-1 
+flex flex-col gap-8 
+items-stretch w-full 
+max-w-8xl mx-auto 
+py-8">
+ [2m609[0m |         
+  {/* Loading State */}
+ [2m609[0m |         
+  {loading && 
+<PageLoader />}
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for 
+requested module:
+./src/app/profile/[user
+name]/page.tsx
+
+
+> Build failed because 
+of webpack errors

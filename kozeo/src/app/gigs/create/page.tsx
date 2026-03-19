@@ -249,32 +249,12 @@ export default function CreateGigPage() {
 
               <form
                 onSubmit={handleSubmit}
-                className={`w-full rounded-2xl sm:rounded-3xl border-0 shadow-xl sm:shadow-2xl p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8 transition-all duration-300 relative ${
-                  theme === "dark"
-                    ? "bg-neutral-900/80 backdrop-blur-xl border border-neutral-800/50"
-                    : "bg-white/95 backdrop-blur-xl border border-gray-200/50"
-                }`}
-                style={{
-                  boxShadow:
-                    theme === "dark"
-                      ? "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)"
-                      : "0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.8)",
-                }}
+                className="w-full premium-card p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8"
               >
-                {/* Subtle background pattern */}
-                <div className="absolute inset-0 opacity-[0.02]">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(59,130,246,0.3),transparent_50%)]"></div>
-                </div>
-
                 <div className="relative z-10 space-y-6 sm:space-y-8">
                   {/* Title Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label
-                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
-                      }`}
-                    >
+                    <label className="premium-label">
                       Project Title
                     </label>
                     <input
@@ -282,22 +262,14 @@ export default function CreateGigPage() {
                       value={form.title}
                       onChange={handleChange}
                       placeholder="Enter an engaging project title..."
-                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
-                        theme === "dark"
-                          ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
-                          : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
-                      }`}
+                      className="premium-input"
                       required
                     />
                   </div>
 
                   {/* Looking For Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label
-                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
-                      }`}
-                    >
+                    <label className="premium-label">
                       Looking For
                     </label>
                     <input
@@ -305,22 +277,14 @@ export default function CreateGigPage() {
                       value={form.looking_For}
                       onChange={handleChange}
                       placeholder="e.g., React Developer, UI/UX Designer..."
-                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
-                        theme === "dark"
-                          ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
-                          : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
-                      }`}
+                      className="premium-input"
                       required
                     />
                   </div>
 
                   {/* Description Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label
-                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
-                      }`}
-                    >
+                    <label className="premium-label">
                       Project Description
                     </label>
                     <textarea
@@ -329,22 +293,14 @@ export default function CreateGigPage() {
                       onChange={handleChange}
                       placeholder="Describe your project vision, goals, and what makes it exciting..."
                       rows={4}
-                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 resize-none ${
-                        theme === "dark"
-                          ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
-                          : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
-                      }`}
+                      className="premium-input resize-none"
                       required
                     />
                   </div>
 
                   {/* Skills Section */}
                   <div className="space-y-3 sm:space-y-4">
-                    <label
-                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
-                      }`}
-                    >
+                    <label className="premium-label">
                       Required Skills
                     </label>
 
@@ -357,11 +313,7 @@ export default function CreateGigPage() {
                           e.key === "Enter" && (e.preventDefault(), addSkill())
                         }
                         placeholder="Add a skill (e.g., React, Figma...)"
-                        className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
-                          theme === "dark"
-                            ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-cyan-500/30 focus:border-cyan-500"
-                            : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"
-                        }`}
+                        className="premium-input border-2"
                       />
                       <ProfessionalButton
                         onClick={addSkill}
@@ -403,14 +355,10 @@ export default function CreateGigPage() {
 
                   {/* Skill Forge Toggle Section */}
                   <div
-                    className={`relative p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border transition-all duration-300 ${
+                    className={`relative p-4 sm:p-6 lg:p-8 premium-card border transition-all duration-300 ${
                       form.isSkillForge
-                        ? theme === "dark"
-                          ? "bg-neutral-800/60 border-blue-500/30 shadow-lg"
-                          : "bg-blue-50/50 border-blue-200/50 shadow-md"
-                        : theme === "dark"
-                        ? "bg-neutral-800/30 border-neutral-600/50"
-                        : "bg-gray-50/50 border-gray-200"
+                        ? "border-black/20 dark:border-white/20"
+                        : "border-black/5 dark:border-white/5 opacity-80"
                     }`}
                   >
                     <div className="relative z-10">
@@ -596,11 +544,7 @@ export default function CreateGigPage() {
                   {!form.isSkillForge && (
                     <div className="space-y-3 sm:space-y-4">
                       <div className="flex items-center justify-between">
-                        <label
-                          className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
-                          }`}
-                        >
+                        <label className="premium-label">
                           Project Budget
                         </label>
                         {form.currency !== "INR" && (
@@ -629,13 +573,9 @@ export default function CreateGigPage() {
                                 !isCurrencyDropdownOpen
                               );
                             }}
-                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 flex items-center justify-between ${
-                              theme === "dark"
-                                ? "bg-neutral-800/50 border-neutral-700 text-white focus:ring-cyan-500/30 focus:border-cyan-500 hover:bg-neutral-800/70"
-                                : "bg-white/80 border-gray-200 text-gray-900 focus:ring-blue-500/30 focus:border-blue-500 hover:bg-white"
-                            }`}
+                            className="premium-input flex items-center justify-between"
                           >
-                            <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="flex items-center gap-2 sm:gap-3 text-left">
                               <span className="text-lg sm:text-xl">
                                 {
                                   currencyOptions.find(
@@ -674,8 +614,6 @@ export default function CreateGigPage() {
                                   ? "rotate-180"
                                   : "rotate-0"
                               } ${
-                                theme === "dark"
-                                  ? "text-gray-400"
                                   : "text-gray-500"
                               }`}
                             />
@@ -684,17 +622,9 @@ export default function CreateGigPage() {
                           {/* Professional Dropdown Menu */}
                           {isCurrencyDropdownOpen && (
                             <div
-                              className={`absolute top-full left-0 right-0 mt-2 rounded-xl sm:rounded-2xl border-2 shadow-2xl overflow-hidden backdrop-blur-xl ${
-                                theme === "dark"
-                                  ? "bg-neutral-800/95 border-neutral-700"
-                                  : "bg-white/95 border-gray-200"
-                              }`}
+                              className="absolute top-full left-0 right-0 mt-2 rounded-2xl border border-black/5 dark:border-white/10 shadow-2xl overflow-hidden premium-glass"
                               style={{
                                 zIndex: 9999,
-                                boxShadow:
-                                  theme === "dark"
-                                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)"
-                                    : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8)",
                               }}
                             >
                               {currencyOptions.map((option) => (

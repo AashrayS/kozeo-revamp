@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { FaUsers, FaComments, FaArrowRight } from "react-icons/fa";
@@ -44,28 +42,7 @@ export default function DiscussionPage() {
   };
 
   return (
-    <>
-      {/* Glows */}
-      {theme === "dark" && (
-        <>
-          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-        </>
-      )}
-
-      <div className="flex flex-col h-screen">
-        <Header logoText="Kozeo" />
-        <div
-          className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
-            theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
-          }`}
-        >
-          <Sidebar />
-
-          <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
-            <div className="max-w-full mx-auto">
+    <div className="max-w-full mx-auto">
               {/* Header */}
               <div className="mb-8">
                 <h1
@@ -264,10 +241,6 @@ export default function DiscussionPage() {
                   Request Custom Room
                 </button>
               </div> */}
-            </div>
-          </main>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

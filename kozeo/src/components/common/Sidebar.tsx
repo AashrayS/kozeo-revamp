@@ -36,10 +36,10 @@ export default function Sidebar() {
   const profileUsername = username || "profile";
 
   const tabs: { name: string; icon: IconType; path: string }[] = [
-    { name: "Home", icon: FiHome, path: "/Atrium" },
+    { name: "Lobby", icon: FiHome, path: "/Atrium" },
     { name: "Profile", icon: FiUser, path: `/profile/${profileUsername}` },
-    { name: "Store", icon: FiShoppingBag, path: "/store" },
-    { name: "My Projects", icon: FiBriefcase, path: "/gigs" }, // Update to go to gig list
+    { name: "Marketplace", icon: FiShoppingBag, path: "/store" },
+    { name: "Workbench", icon: FiBriefcase, path: "/gigs" },
     { name: "Resume Builder", icon: FiFileText, path: "/resumeBuilder" },
     {
       name: "Discussion Rooms",
@@ -83,14 +83,10 @@ export default function Sidebar() {
         <aside
           className={`sticky top-0 h-screen border-r transition-all duration-300 z-[9999] flex flex-col justify-between ${
             collapsed ? "w-20" : "w-64"
-          } ${
-            theme === "light"
-              ? "bg-transaprent text-gray-900 border-gray-200"
-              : "bg-transparent text-white border-neutral-700"
-          }`}
+          } bg-white dark:bg-black border-black/5 dark:border-white/10`}
         >
           <div className="flex flex-col p-4 space-y-6">
-            <nav className="space-y-8">
+            <nav className="space-y-4 pt-4">
               {allTabs.map(({ name, icon: Icon, path }) => {
                 const isActive = isActivePath(path);
 
@@ -99,37 +95,29 @@ export default function Sidebar() {
                     <button
                       onClick={() => handleNavigation(path)}
                       disabled={isActive}
-                      className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
+                      className={`flex items-center w-full px-4 py-2.5 rounded-xl transition-all duration-300 ${
                         collapsed ? "justify-center" : "gap-3"
                       } ${
                         isActive
-                          ? theme === "light"
-                            ? "bg-blue-100 text-blue-600 cursor-default"
-                            : "bg-blue-900/50 text-blue-400 cursor-default"
-                          : theme === "light"
-                          ? "hover:bg-gray-100 cursor-pointer"
-                          : "hover:bg-neutral-800 cursor-pointer"
+                          ? "bg-black text-white dark:bg-white dark:text-black shadow-lg"
+                          : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
                       }`}
                     >
                       <Icon
-                        className={`text-2xl shrink-0 ${
-                          isActive ? "opacity-100" : "opacity-80"
+                        className={`text-xl shrink-0 transition-transform duration-300 ${
+                          isActive ? "opacity-100 scale-110" : "opacity-70 group-hover:scale-110"
                         }`}
                       />
                       {!collapsed && (
                         <span
-                          className={`text-base ${
-                            isActive ? "font-medium" : ""
-                          }`}
+                          className={`text-sm tracking-tight font-bold`}
                         >
                           {name}
                         </span>
                       )}
                       {isActive && !collapsed && (
                         <div
-                          className={`ml-auto w-2 h-2 rounded-full ${
-                            theme === "light" ? "bg-blue-600" : "bg-blue-400"
-                          }`}
+                          className={`ml-auto w-1.5 h-1.5 rounded-full bg-white dark:bg-black`}
                         ></div>
                       )}
                     </button>
@@ -214,11 +202,7 @@ export default function Sidebar() {
                 onClick={() => setCollapsed(!collapsed)}
                 className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
                   collapsed ? "justify-center" : "gap-3"
-                } ${
-                  theme === "light"
-                    ? "hover:bg-gray-100"
-                    : "hover:bg-neutral-800"
-                }`}
+                } hover:bg-black/5 dark:hover:bg-white/5 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white`}
               >
                 {collapsed ? (
                   <FiChevronRight className="text-2xl shrink-0" />

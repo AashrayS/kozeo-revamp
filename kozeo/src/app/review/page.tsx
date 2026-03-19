@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import { uploadReviewImagesToS3 } from "../../../utilities/helper";
 import { Fragment, useRef } from "react";
 import Image from "next/image";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { PageLoader } from "@/components/common/PageLoader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaStar } from "react-icons/fa";
@@ -236,127 +234,90 @@ export default function ReviewPage() {
 
   if (submitted) {
     return (
-      <>
-        <Header logoText="Kozeo" />
-        <div
-          className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-            theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+      <div
+        className={`w-full max-w-2xl mx-auto rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
+          theme === "dark"
+            ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md text-white"
+            : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg text-gray-900"
+        }`}
+      >
+        <div className="text-6xl mb-4">✅</div>
+        <h1
+          className={`text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-300 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
           }`}
         >
-          <Sidebar />
-          <div className="flex-1 flex flex-col pb-20 lg:pb-0">
-            <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
-              <div
-                className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
-                  theme === "dark"
-                    ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md"
-                    : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg"
-                }`}
-              >
-                <div className="text-6xl mb-4">✅</div>
-                <h1
-                  className={`text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  Review Submitted!
-                </h1>
-                <p
-                  className={`text-lg mb-4 transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-300" : "text-gray-600"
-                  }`}
-                >
-                  Thank you for your feedback.{" "}
-                  {isHost && "The project has been marked as completed. "}You'll
-                  be redirected to the projects page shortly.
-                </p>
-                <div className="flex gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                  <div
-                    className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
-                </div>
-              </div>
-            </main>
-          </div>
-          {/* Glows */}
-          {theme === "dark" && (
-            <>
-              <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-              <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-            </>
-          )}
+          Review Submitted!
+        </h1>
+        <p
+          className={`text-lg mb-4 transition-colors duration-300 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          }`}
+        >
+          Thank you for your feedback.{" "}
+          {isHost && "The project has been marked as completed. "}You'll
+          be redirected to the projects page shortly.
+        </p>
+        <div className="flex gap-2">
+          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+          <div
+            className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"
+            style={{ animationDelay: "0.4s" }}
+          ></div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <Header logoText="Kozeo" />
+    <div className="flex flex-col items-center">
+      {/* Disclaimer Banner */}
       <div
-        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+        className={`w-full mb-6 rounded-2xl px-5 py-4 text-sm font-medium shadow-sm flex items-start gap-3 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+            ? "bg-transparent border border-neutral-800 text-neutral-400"
+            : "bg-gray-50 border border-gray-200 text-gray-600"
         }`}
       >
-        <Sidebar />
-        <div className="flex-1 flex flex-col pb-20 lg:pb-0">
-          <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
-            {/* Disclaimer Banner */}
-            <div
-              className={`w-full max-w-7xl mb-6 rounded-2xl px-5 md:py-4  pt-10 text-sm font-medium shadow-md flex items-start gap-3 ${
-                theme === "dark"
-                  ? "bg-transaprent  border-neutral-700 text-neutral-200"
-                  : "bg-neutral-100 border border-neutral-300 text-neutral-800"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 flex-shrink-0 text-blue-400 mt-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
-                />
-              </svg>
-              <span className="leading-relaxed">
-                Please share a{" "}
-                <span className="font-semibold text-white">
-                  genuine, detailed review
-                </span>{" "}
-                to help build stronger profiles.{" "}
-                <span className="font-semibold text-red-400">
-                  Fake or inappropriate reviews
-                </span>{" "}
-                may lead to suspension. Honest feedback helps create a{" "}
-                <span className="font-semibold text-white">
-                  better community for everyone.
-                </span>
-              </span>
-            </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 flex-shrink-0 text-cyan-400 mt-0.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+          />
+        </svg>
+        <span className="leading-relaxed">
+          Please share a{" "}
+          <span className={theme === "dark" ? "text-white" : "text-gray-900"}>
+            genuine, detailed review
+          </span>{" "}
+          to help build stronger profiles.{" "}
+          <span className="text-red-400">
+            Fake or inappropriate reviews
+          </span>{" "}
+          may lead to suspension.
+        </span>
+      </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className={`w-full h-screen sm:h-auto max-w-7xl rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
-                theme === "dark"
-                  ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md"
-                  : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg"
-              }`}
-            >
+      <form
+        onSubmit={handleSubmit}
+        className={`w-full max-w-4xl rounded-2xl border p-6 md:p-10 flex flex-col gap-8 transition-all duration-300 ${
+          theme === "dark"
+            ? "bg-neutral-900/40 border-neutral-800 drop-shadow-glow"
+            : "bg-white border-gray-100 shadow-sm"
+        }`}
+      >
               <h1
                 className={`text-2xl sm:text-3xl font-bold mb-2 text-center tracking-tight transition-colors duration-300 ${
                   theme === "dark" ? "text-white" : "text-gray-900"
@@ -738,16 +699,6 @@ export default function ReviewPage() {
                 )}
               </button>
             </form>
-          </main>
-        </div>
-        {/* Glows */}
-        {theme === "dark" && (
-          <>
-            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
-          </>
-        )}
-      </div>
-    </>
+    </div>
   );
 }

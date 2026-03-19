@@ -464,9 +464,6 @@ export default function DescriptionClient() {
   return (
     <>
       <Header logoText="Kozeo" />
-      {/* Glows */}
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
 
       <div
         className={`min-h-screen relative z-10 flex flex-row theme-transition ${
@@ -480,11 +477,7 @@ export default function DescriptionClient() {
           <main className="flex-1 flex flex-col md:flex-row gap-4 md:gap-8 items-stretch justify-center w-full mx-auto py-4 md:py-8 px-4 md:px-0">
             {/* Gig Details Container - Golden Ratio smaller section (38.2%) */}
             <section
-              className={`md:flex-[0.618] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 min-w-[0] w-full border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
-              }`}
+              className="md:flex-[0.618] premium-card p-4 sm:p-6 md:p-8 min-w-[0] w-full"
             >
               {/* Header */}
               <div className="mb-8">

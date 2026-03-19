@@ -29,15 +29,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Kozeo",
+              url: "/",
+              description:
+                "Kozeo is a proof-first career platform for tech professionals to build verifiable portfolios through Speedruns, Work Sprints, and Projects.",
+            }),
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}
+        suppressHydrationWarning
       >
         <ReduxProvider>
           <ApolloWrapper>
