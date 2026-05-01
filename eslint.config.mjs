@@ -1,14 +1,11 @@
-import nextConfig from "eslint-config-next";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+});
 
 const eslintConfig = [
-  ...nextConfig,
-  {
-    rules: {
-      // Relax rules as needed
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "off",
-    },
-  },
+  ...compat.extends("next/core-web-vitals"),
 ];
 
 export default eslintConfig;
