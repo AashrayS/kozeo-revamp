@@ -49,16 +49,16 @@ function ProfilePictureWithFallback({
       <div
         className={`
           w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center
-          bg-gradient-to-br font-bold text-white shadow-lg border-2 transition-all duration-300
+          bg-forge-bg font-bold text-forge-ink shadow-[0_4px_20px_rgba(21,18,13,0.5)] border-2 transition-all duration-300
           text-xs sm:text-sm md:text-base
           ${
             status === "pending"
-              ? "from-gray-500 to-gray-600 border-gray-300"
+              ? "  border-forge-line"
               : status === "accepted"
-              ? "from-gray-600 to-gray-700 border-gray-400"
+              ? "  border-forge-line"
               : status === "rejected"
-              ? "from-gray-500 to-gray-600 border-gray-300"
-              : "from-gray-500 to-gray-600 border-gray-300"
+              ? "  border-forge-line"
+              : "  border-forge-line"
           }
         `}
       >
@@ -70,15 +70,15 @@ function ProfilePictureWithFallback({
   return (
     <div
       className={`
-        w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden shadow-lg border-2 transition-all duration-300
+        w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)] border-2 transition-all duration-300
         ${
           status === "pending"
-            ? "border-gray-300"
+            ? "border-forge-line"
             : status === "accepted"
-            ? "border-gray-400"
+            ? "border-forge-line"
             : status === "rejected"
-            ? "border-gray-300"
-            : "border-gray-300"
+            ? "border-forge-line"
+            : "border-forge-line"
         }
       `}
     >
@@ -106,26 +106,26 @@ export default function RequestCard({
   return (
     <div
       className={`
-        relative rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 flex flex-col gap-3 sm:gap-4 h-full
+        relative rounded-sm sm:rounded-sm p-3 sm:p-4 md:p-6 flex flex-col gap-3 sm:gap-4 h-full
         transition-all duration-300 ease-out
-        backdrop-blur-sm shadow-lg hover:shadow-xl
+         shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]
         border group overflow-hidden
         ${
           req.status === "pending"
             ? theme === "light"
-              ? "bg-white/95 border-gray-200/60 hover:border-gray-300/80 hover:shadow-gray-200/20"
-              : "bg-neutral-900/80 border-neutral-700/60 hover:border-neutral-600/80 hover:shadow-neutral-900/20"
+              ? "bg-forge-bg/95 border-forge-line/60 hover:border-forge-line/80 hover:shadow-gray-200/20"
+              : "bg-forge-bg-raised/80 border-forge-line/60 hover:border-forge-line/80 hover:shadow-neutral-900/20"
             : req.status === "accepted"
             ? theme === "light"
-              ? "bg-gray-50/95 border-gray-300/60 hover:border-gray-400/80 hover:shadow-gray-200/20"
-              : "bg-neutral-800/80 border-neutral-700/60 hover:border-neutral-500/80 hover:shadow-neutral-900/20"
+              ? "bg-forge-bg/95 border-forge-line/60 hover:border-forge-line/80 hover:shadow-gray-200/20"
+              : "bg-forge-bg-raised/80 border-forge-line/60 hover:border-forge-line/80 hover:shadow-neutral-900/20"
             : req.status === "rejected"
             ? theme === "light"
-              ? "bg-gray-100/95 border-gray-300/60 hover:border-gray-400/80 hover:shadow-gray-200/20"
-              : "bg-neutral-850/80 border-neutral-700/60 hover:border-neutral-600/80 hover:shadow-neutral-900/20"
+              ? "bg-forge-bg/95 border-forge-line/60 hover:border-forge-line/80 hover:shadow-gray-200/20"
+              : "bg-neutral-850/80 border-forge-line/60 hover:border-forge-line/80 hover:shadow-neutral-900/20"
             : theme === "light"
-            ? "bg-white/95 border-gray-200/60 hover:border-gray-300/80 hover:shadow-gray-200/20"
-            : "bg-neutral-900/80 border-neutral-700/60 hover:border-neutral-600/80 hover:shadow-neutral-900/20"
+            ? "bg-forge-bg/95 border-forge-line/60 hover:border-forge-line/80 hover:shadow-gray-200/20"
+            : "bg-forge-bg-raised/80 border-forge-line/60 hover:border-forge-line/80 hover:shadow-neutral-900/20"
         }
       `}
     >
@@ -134,7 +134,7 @@ export default function RequestCard({
         className={`
           absolute inset-0 opacity-0 transition-opacity duration-500
           ${req.status === "pending" ? "group-hover:opacity-100" : ""}
-          bg-gradient-to-r from-transparent via-white/3 to-transparent
+          bg-forge-bg from-transparent via-white/3 to-transparent
           transform -skew-x-12 translate-x-full group-hover:-translate-x-full
           transition-transform duration-700 pointer-events-none
         `}
@@ -158,7 +158,7 @@ export default function RequestCard({
           <div className="flex flex-col min-w-0 flex-1">
             <div
               className={`font-bold text-sm sm:text-base md:text-lg transition-colors duration-300 truncate ${
-                theme === "light" ? "text-gray-900" : "text-white"
+                theme === "light" ? "text-forge-ink" : "text-forge-ink"
               }`}
             >
               @{req.requesterName || req.name}
@@ -169,11 +169,11 @@ export default function RequestCard({
               <div
                 className={`
                   flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-xs font-medium
-                  backdrop-blur-sm border transition-colors duration-300
+                   border transition-colors duration-300
                   ${
                     theme === "light"
-                      ? "bg-gray-100/70 border-gray-200/70 text-gray-700"
-                      : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+                      ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
+                      : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
                   }
                 `}
               >
@@ -195,11 +195,11 @@ export default function RequestCard({
               <div
                 className={`
                   flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-xs font-medium
-                  backdrop-blur-sm border transition-colors duration-300
+                   border transition-colors duration-300
                   ${
                     theme === "light"
-                      ? "bg-gray-100/70 border-gray-200/70 text-gray-700"
-                      : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+                      ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
+                      : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
                   }
                 `}
               >
@@ -220,21 +220,21 @@ export default function RequestCard({
             <div
               className={`
                 inline-flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs font-semibold mt-1 sm:mt-2
-                backdrop-blur-sm border shadow-sm transition-all duration-300 w-fit
+                 border shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 w-fit
                 ${
                   req.status === "pending"
-                    ? "bg-gray-100/80 border-gray-300/50 text-gray-700 dark:bg-gray-800/50 dark:border-gray-600/50 dark:text-gray-300"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                     : req.status === "accepted"
-                    ? "bg-gray-100/80 border-gray-300/50 text-gray-700 dark:bg-gray-800/50 dark:border-gray-600/50 dark:text-gray-300"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                     : req.status === "rejected"
-                    ? "bg-gray-100/80 border-gray-300/50 text-gray-600 dark:bg-gray-800/50 dark:border-gray-600/50 dark:text-gray-400"
-                    : "bg-gray-100/80 border-gray-300/50 text-gray-700 dark:bg-gray-800/50 dark:border-gray-600/50 dark:text-gray-300"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink-muted dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink-muted"
+                    : "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                 }
               `}
             >
               {req.status === "pending" && (
                 <>
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-400 animate-pulse" />
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-forge-bg animate-pulse-slow" />
                   <span className="text-xs">Pending Review</span>
                 </>
               )}
@@ -278,18 +278,18 @@ export default function RequestCard({
         <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0">
           <div
             className={`
-            flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg
-            backdrop-blur-sm border transition-colors duration-300
+            flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-sm
+             border transition-colors duration-300
             ${
               theme === "light"
-                ? "bg-white/70 border-gray-200/70 text-gray-600"
-                : "bg-black/20 border-neutral-600/50 text-gray-300"
+                ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink-muted"
+                : "bg-forge-bg/20 border-forge-line/50 text-forge-ink"
             }
           `}
           >
             <FaStar
               className={`${
-                theme === "light" ? "text-yellow-500" : "text-yellow-400"
+                theme === "light" ? "text-forge-ember" : "text-forge-ember"
               }`}
               size={10}
             />
@@ -304,7 +304,7 @@ export default function RequestCard({
 
           <div
             className={`text-xs font-medium text-center ${
-              theme === "light" ? "text-gray-500" : "text-gray-400"
+              theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
             }`}
           >
             {req.timestamp
@@ -319,14 +319,14 @@ export default function RequestCard({
 
           {req.responseTime && req.status !== "pending" && (
             <div
-              className={`text-xs px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded backdrop-blur-sm border font-medium ${
+              className={`text-xs px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded  border font-medium ${
                 req.status === "accepted"
                   ? theme === "light"
-                    ? "bg-gray-100/70 border-gray-200/70 text-gray-700"
-                    : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+                    ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
+                    : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
                   : theme === "light"
-                  ? "bg-gray-100/70 border-gray-200/70 text-gray-600"
-                  : "bg-gray-800/50 border-gray-700/50 text-gray-400"
+                  ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink-muted"
+                  : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted"
               }`}
             >
               {new Date(req.responseTime).toLocaleString([], {
@@ -344,19 +344,19 @@ export default function RequestCard({
       {(req.requesterBio || req.sender?.bio) && (
         <div
           className={`
-            relative p-3 sm:p-4 rounded-lg sm:rounded-xl transition-colors duration-300
-            backdrop-blur-sm border
+            relative p-3 sm:p-4 rounded-sm sm:rounded-sm transition-colors duration-300
+             border
             ${
               theme === "light"
-                ? "bg-gray-50/60 border-gray-200/60 text-gray-700"
-                : "bg-neutral-800/30 border-neutral-700/50 text-gray-300"
+                ? "bg-forge-bg/60 border-forge-line/60 text-forge-ink"
+                : "bg-forge-bg-raised/30 border-forge-line/50 text-forge-ink"
             }
           `}
         >
           <div className="flex items-center gap-2 mb-2">
             <svg
               className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                theme === "light" ? "text-gray-500" : "text-gray-400"
+                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
               }`}
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -369,7 +369,7 @@ export default function RequestCard({
             </svg>
             <span
               className={`text-xs font-semibold uppercase tracking-wide ${
-                theme === "light" ? "text-gray-500" : "text-gray-400"
+                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
               }`}
             >
               About
@@ -384,12 +384,12 @@ export default function RequestCard({
       {/* Message section */}
       <div
         className={`
-          relative p-3 sm:p-4 rounded-lg sm:rounded-xl transition-colors duration-300
-          backdrop-blur-sm border flex-grow
+          relative p-3 sm:p-4 rounded-sm sm:rounded-sm transition-colors duration-300
+           border flex-grow
           ${
             theme === "light"
-              ? "bg-white/40 border-gray-200/40 text-gray-800"
-              : "bg-black/20 border-neutral-600/30 text-gray-200"
+              ? "bg-forge-bg/40 border-forge-line/40 text-forge-ink"
+              : "bg-forge-bg/20 border-forge-line/30 text-forge-ink"
           }
         `}
       >
@@ -490,12 +490,12 @@ export default function RequestCard({
       {req.status === "accepted" && (
         <div
           className={`
-          relative z-10 mt-2 sm:mt-3 p-3 sm:p-4 rounded-lg sm:rounded-xl backdrop-blur-sm border
+          relative z-10 mt-2 sm:mt-3 p-3 sm:p-4 rounded-sm sm:rounded-sm  border
           transition-all duration-300
           ${
             theme === "light"
-              ? "bg-gray-100/80 border-gray-200/80 text-gray-700"
-              : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+              ? "bg-forge-bg/80 border-forge-line/80 text-forge-ink"
+              : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
           }
         `}
         >
@@ -505,8 +505,8 @@ export default function RequestCard({
               w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center
               ${
                 theme === "light"
-                  ? "bg-gray-200 text-gray-700"
-                  : "bg-gray-700/70 text-gray-300"
+                  ? "bg-forge-bg text-forge-ink"
+                  : "bg-gray-700/70 text-forge-ink"
               }
             `}
             >
@@ -537,12 +537,12 @@ export default function RequestCard({
       {req.status === "rejected" && (
         <div
           className={`
-          relative z-10 mt-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg backdrop-blur-sm border
+          relative z-10 mt-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-sm  border
           transition-all duration-300 text-center
           ${
             theme === "light"
-              ? "bg-gray-100/60 border-gray-200/60 text-gray-600"
-              : "bg-gray-800/40 border-gray-700/50 text-gray-400"
+              ? "bg-forge-bg/60 border-forge-line/60 text-forge-ink-muted"
+              : "bg-forge-bg-raised/40 border-forge-line/50 text-forge-ink-muted"
           }
         `}
         >

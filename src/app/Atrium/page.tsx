@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Header from "@/components/common/Header";
+import Sidebar from "@/components/common/Sidebar";
 import { FiSearch, FiStar, FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import {
@@ -12,9 +14,16 @@ import { isAuthenticated } from "../../../utilities/api";
 import { useTheme } from "../../contexts/ThemeContext";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
+import { useUser } from "../../../store/hooks";
+import { useDispatch } from "react-redux";
+import { clearLoginEntry } from "../../../store/userSlice";
 export default function Home() {
   const router = useRouter();
   const { theme } = useTheme();
+  const { user, loginEntry } = useUser();
+  const dispatch = useDispatch();
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcomePage, setShowWelcomePage] = useState(false);
   const [gigs, setGigs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,6 +67,14 @@ export default function Home() {
 
   // Fetch gigs on component mount
   useEffect(() => {
+    // Check for loginEntry in user object
+    console.log("Debug loginEntry:", { user, loginEntry });
+    if (user && loginEntry) {
+      console.log("Setting welcome page to true");
+      setShowWelcomePage(true);
+      // Clear loginEntry after showing welcome page
+      dispatch(clearLoginEntry());
+    }
     const fetchGigs = async () => {
       try {
         setLoading(true);
@@ -76,7 +93,11 @@ export default function Home() {
     };
 
     fetchGigs();
-  }, []);
+  }, [user]);
+
+  const handleFindProjects = () => {
+    setShowWelcomePage(false);
+  };
 
   const handleUserClick = (user: any) => {
     router.push(`/profile/${user.username || user.username}`);
@@ -128,502 +149,611 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
-            {/* Search & Create Gig Section */}
-            <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full">
-              {/* Searchbar - responsive width */}
-              <div className="relative w-full sm:max-w-xl flex-shrink-0">
-                <input
-                  type="text"
-                  placeholder="What are you looking for?"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-full py-2.5 pl-4 pr-10 rounded-full border border-black/5 dark:border-white/10 bg-black/5 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:outline-none focus:ring-1 focus:ring-black/10 dark:focus:ring-white/10 transition-all placeholder:text-black/30 dark:placeholder:text-white/30 text-sm font-medium"
-                />
-                <button
-                  onClick={handleSearch}
-                  className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors ${
-                    theme === "light"
-                      ? "text-gray-400 hover:text-gray-600"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                  aria-label="Search"
-                >
-                  <FiSearch className="text-xl" />
-                </button>
-              </div>
+    <>
+      <Header logoText="Kozeo" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
-              {/* Toggle Button for Projects/Users - responsive shrink and grow */}
-              <div className="relative inline-flex items-center w-full sm:w-auto">
+      {/* Welcome Page */}
+      {showWelcomePage ? (
+        <div
+          className={`min-h-screen relative z-10 flex items-center justify-center theme-transition ${
+            theme === "light"
+              ? "bg-gradient-light text-forge-ink"
+              : "bg-gradient-dark text-forge-ink"
+          }`}
+        >
+          <div className="text-center max-w-4xl mx-auto px-6">
+            <h1
+              className={`text-6xl md:text-7xl font-bold mb-6 bg-forge-bg ${
+                theme === "light"
+                  ? "text-forge-ember"
+                  : "text-forge-ember"
+              } bg-clip-text text-transparent`}
+            >
+              Welcome to Kozeo
+            </h1>
+
+            <p
+              className={`text-xl md:text-2xl mb-4 font-medium ${
+                theme === "light" ? "text-forge-ink" : "text-forge-ink"
+              }`}
+            >
+              Hey there, {user?.username || "User"}!
+            </p>
+
+            <p
+              className={`text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed ${
+                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+              }`}
+            >
+              Your gateway to collaborative projects and skill sharing. Connect
+              with talented individuals, work on exciting projects, and grow
+              your skills in our vibrant community.
+            </p>
+
+            <div className="space-y-6">
+              <button
+                onClick={handleFindProjects}
+                className={`group relative inline-flex items-center justify-center px-12 py-4 text-lg font-medium transition-all duration-300 ease-out rounded-sm border-2 hover:scale-[1.02] focus:outline-none focus:ring-4 ${
+                  theme === "light"
+                    ? "bg-forge-bg text-forge-ink border-forge-line hover:bg-forge-bg hover:border-forge-line focus:ring-forge-line"
+                    : "bg-forge-bg-raised text-forge-ink border-forge-line hover:bg-forge-bg-raised hover:border-forge-line focus:ring-forge-line"
+                } shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]`}
+              >
+                <span className="relative z-10">Find Projects</span>
                 <div
-                  className="relative flex items-center rounded-full p-1 bg-black/5 dark:bg-white/5 w-full sm:w-auto"
-                  style={{ minWidth: 0 }}
-                >
-                  {/* Background Slider - More subtle */}
-                  <div
-                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-200 ease-out ${
-                      theme === "light"
-                        ? "bg-white shadow-sm"
-                        : "bg-neutral-700 shadow-sm"
-                    } ${
-                      viewMode === "users"
-                        ? "translate-x-full"
-                        : "translate-x-0"
-                    }`}
-                    style={{ left: 0, right: 0 }}
-                  />
+                  className={`absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+                    theme === "light"
+                      ? "bg-forge-bg bg-forge-bg"
+                      : "bg-forge-bg bg-forge-bg-raised"
+                  }`}
+                />
+              </button>
 
-                  {/* Projects Option */}
-                  <button
-                    onClick={() => setViewMode("gigs")}
-                    className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full text-xs font-bold transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
-                      viewMode === "gigs"
-                        ? "text-black dark:text-white"
-                        : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
-                    }`}
-                    style={{ minWidth: 0 }}
-                  >
-                    Projects
-                  </button>
-
-                  {/* Users Option */}
-                  <button
-                    onClick={() => setViewMode("users")}
-                    className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full text-xs font-bold transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
-                      viewMode === "users"
-                        ? "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white"
-                        : "text-black dark:text-white"
-                    }`}
-                    style={{ minWidth: 0 }}
-                  >
-                    Users
-                  </button>
-                </div>
-              </div>
-
-              {/* Create Project Button - full width on mobile */}
-              <div className="w-full sm:w-auto flex-shrink-0">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                 <ProfessionalButton
                   onClick={() => router.push("/gigs/create")}
                   variant="neutral"
                   size="md"
-                  className="w-full sm:w-auto !bg-black !text-white dark:!bg-white dark:!text-black !rounded-full !font-bold !px-8 hover:!scale-105 transition-transform"
+                  className="!px-8 !py-3"
                 >
-                  Create Project
+                  Create a Project
+                </ProfessionalButton>
+
+                <ProfessionalButton
+                  onClick={() => router.push("/profile/" + user?.username)}
+                  variant="neutral"
+                  size="md"
+                  className="!px-8 !py-3"
+                >
+                  View Profile
                 </ProfessionalButton>
               </div>
             </div>
+          </div>
+        </div>
+      ) : (
+        // Main Atrium Page
+        <div
+          className={`min-h-screen relative z-10 flex flex-row theme-transition ${
+            theme === "light"
+              ? "bg-gradient-light text-forge-ink"
+              : "bg-gradient-dark text-forge-ink"
+          }`}
+        >
+          <Sidebar />
+          <div className="flex flex-1 pb-20 lg:pb-0">
+            <main className="flex-1 p-6 overflow-y-auto">
+              {/* Search & Create Gig Section */}
+              <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full">
+                {/* Searchbar - responsive width */}
+                <div className="relative w-full sm:max-w-xl flex-shrink-0">
+                  <input
+                    type="text"
+                    placeholder="What are you looking for?"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 theme-transition text-base ${
+                      theme === "light"
+                        ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
+                        : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                    }`}
+                  />
+                  <button
+                    onClick={handleSearch}
+                    className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors ${
+                      theme === "light"
+                        ? "text-forge-ink-muted hover:text-forge-ink-muted"
+                        : "text-forge-ink-muted hover:text-forge-ink"
+                    }`}
+                    aria-label="Search"
+                  >
+                    <FiSearch className="text-xl" />
+                  </button>
+                </div>
 
-            {/* Heading */}
-            <h2 className="text-2xl font-bold mb-4">
-              {viewMode === "gigs" ? "Open Gigs" : "Users"}
-            </h2>
+                {/* Toggle Button for Projects/Users - responsive shrink and grow */}
+                <div className="relative inline-flex items-center w-full sm:w-auto">
+                  <div
+                    className={`relative flex items-center rounded-sm p-1 transition-all duration-200 w-full sm:w-auto ${
+                      theme === "light" ? "bg-forge-bg" : "bg-forge-bg-raised"
+                    }`}
+                    style={{ minWidth: 0 }}
+                  >
+                    {/* Background Slider - More subtle */}
+                    <div
+                      className={`absolute top-1 bottom-1 w-1/2 rounded-sm transition-all duration-200 ease-out ${
+                        theme === "light"
+                          ? "bg-forge-bg shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                          : "bg-forge-bg-raised shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                      } ${
+                        viewMode === "users"
+                          ? "translate-x-full"
+                          : "translate-x-0"
+                      }`}
+                      style={{ left: 0, right: 0 }}
+                    />
 
-            {/* Loading State */}
-            {loading && (
-              <PageLoader
-                duration={1000}
-                onComplete={() => {}}
-                useSlideAnimation={false}
-              />
-            )}
+                    {/* Projects Option */}
+                    <button
+                      onClick={() => setViewMode("gigs")}
+                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                        viewMode === "gigs"
+                          ? theme === "light"
+                            ? "text-forge-ink"
+                            : "text-forge-ink"
+                          : theme === "light"
+                          ? "text-forge-ink-muted hover:text-forge-ink"
+                          : "text-forge-ink-muted hover:text-forge-ink"
+                      }`}
+                      style={{ minWidth: 0 }}
+                    >
+                      Projects
+                    </button>
 
-            {/* Error State */}
-            {error && (
-              <div className="flex justify-center items-center py-20">
-                <div className="text-red-500">{error}</div>
+                    {/* Users Option */}
+                    <button
+                      onClick={() => setViewMode("users")}
+                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                        viewMode === "users"
+                          ? theme === "light"
+                            ? "text-forge-ink"
+                            : "text-forge-ink"
+                          : theme === "light"
+                          ? "text-forge-ink-muted hover:text-forge-ink"
+                          : "text-forge-ink-muted hover:text-forge-ink"
+                      }`}
+                      style={{ minWidth: 0 }}
+                    >
+                      Users
+                    </button>
+                  </div>
+                </div>
+
+                {/* Create Project Button - full width on mobile */}
+                <div className="w-full sm:w-auto flex-shrink-0">
+                  <ProfessionalButton
+                    onClick={() => router.push("/gigs/create")}
+                    variant="neutral"
+                    size="md"
+                    className="w-full sm:w-auto !bg-forge-bg !text-forge-ink !border-forge-line hover:!bg-forge-bg hover:!border-forge-line !shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                  >
+                    Create Project
+                  </ProfessionalButton>
+                </div>
               </div>
-            )}
 
-            {/* Cards Grid: Gigs or Users */}
-            {!loading &&
-              !error &&
-              (viewMode === "gigs" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
-                  {currentGigs.length === 0 ? (
-                    <div
-                      className={`col-span-full text-center py-20 ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}
-                    >
-                      No gigs found.{" "}
-                      {searchTerm && "Try a different search term."}
-                    </div>
-                  ) : (
-                    currentGigs.map((gig: any) => (
-                      <div
-                        key={gig.id}
-                        onClick={() => {
-                          router.push(`/Atrium/description?gigId=${gig.id}`);
-                        }}
-                        className="premium-card p-6 flex flex-col justify-between h-full min-h-[340px]"
-                      >
-                        {/* ⭐ Host Rating Top-Right */}
-                        <div
-                          className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-sm border backdrop-blur-sm flex items-center gap-1 ${
-                            theme === "light"
-                              ? "text-gray-700 bg-gray-100 bg-opacity-80 border-gray-300"
-                              : "text-gray-300 bg-neutral-800 bg-opacity-80 border-neutral-600"
-                          }`}
-                        >
-                          <FiStar
-                            className={`text-sm ${
-                              theme === "light"
-                                ? "text-yellow-500"
-                                : "text-gray-400"
-                            }`}
-                            fill={theme === "light" ? "#eab308" : "white"}
-                          />
-                          <span className="font-medium">
-                            {gig.host?.rating?.toFixed(1) || "N/A"}
-                          </span>
-                        </div>
+              {/* Heading */}
+              <h2 className="text-2xl font-bold mb-4">
+                {viewMode === "gigs" ? "Open Projects" : "Users"}
+              </h2>
 
-                        {/* Top Content */}
-                        <div>
-                          <div
-                            className={`text-sm font-semibold mb-1 ${
-                              theme === "light"
-                                ? "text-black/80"
-                                : "text-white/80"
-                            }`}
-                          >
-                            {gig.host?.username ||
-                              gig.creator?.username ||
-                              "Unknown"}
-                          </div>
+              {/* Loading State */}
+              {loading && (
+                <PageLoader
+                  duration={1000}
+                  onComplete={() => {}}
+                  useSlideAnimation={false}
+                />
+              )}
 
-                          <h3
-                            className={`text-lg font-semibold mb-2 ${
-                              theme === "light" ? "text-gray-900" : "text-white"
-                            }`}
-                          >
-                            {gig.title}
-                          </h3>
-
-                          <p
-                            style={{
-                              display: "-webkit-box",
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                            className={`text-sm mb-3 ${
-                              theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-300"
-                            }`}
-                          >
-                            {gig.description}
-                          </p>
-
-                          <p className="text-sm mb-2">
-                            <span
-                              className={
-                                theme === "light"
-                                  ? "text-gray-500"
-                                  : "text-gray-400"
-                              }
-                            >
-                              Looking For:{" "}
-                            </span>
-                            <span
-                              className={
-                                theme === "light"
-                                  ? "text-gray-900"
-                                  : "text-white"
-                              }
-                            >
-                              {gig.looking_For}
-                            </span>
-                          </p>
-
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {gig.skills?.map((skill: string, idx: number) => (
-                              <span
-                                key={idx}
-                                className={`px-2 py-0.5 text-xs border rounded-md ${
-                                  theme === "light"
-                                    ? "bg-gray-100 border-gray-300 text-gray-700"
-                                    : "bg-neutral-800 border-neutral-600 text-gray-300"
-                                }`}
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Bottom Bar */}
-                        <div
-                          className={`flex justify-between items-center border-t pt-3 mt-4 ${
-                            theme === "light"
-                              ? "border-gray-200"
-                              : "border-neutral-800"
-                          }`}
-                        >
-                          {gig.amount === 0 ? (
-                            <div
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
-                                theme === "dark"
-                                  ? "bg-white/10 text-white/90 border border-white/10"
-                                  : "bg-black/5 text-black/80 border border-black/5"
-                              }`}
-                            >
-                              <FiStar className="w-3 h-3 mr-1.5" />
-                              Skill Forge
-                            </div>
-                          ) : (
-                            <span className="text-sm font-bold text-black dark:text-white">
-                              {gig.currency}{" "}
-                              {Number(gig.amount).toLocaleString("en-IN")}
-                            </span>
-                          )}
-                          <span
-                            className={`text-xs ${
-                              theme === "light"
-                                ? "text-gray-500"
-                                : "text-gray-500"
-                            }`}
-                          >
-                            {gig.activeRequest?.length || 0} active requests
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  )}
+              {/* Error State */}
+              {error && (
+                <div className="flex justify-center items-center py-20">
+                  <div className="text-[forge-error">{error}</div>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
-                  {users.length === 0 ? (
-                    <div
-                      className={`col-span-full text-center py-20 ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}
-                    >
-                      No users found.{" "}
-                      {searchTerm && "Try a different search term."}
-                    </div>
-                  ) : (
-                    users.map((user: any) => (
+              )}
+
+              {/* Cards Grid: Gigs or Users */}
+              {!loading &&
+                !error &&
+                (viewMode === "gigs" ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
+                    {currentGigs.length === 0 ? (
                       <div
-                        key={user.id || user._id || user.username}
-                        onClick={() => handleUserClick(user)}
-                        className="premium-card p-6 flex flex-col justify-between h-full min-h-[240px]"
-                      >
-                        {/* User Info Top Section */}
-                        <div>
-                          {/* Profile Picture */}
-                          <div className="flex justify-center mb-4">
-                            <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-700 shadow-sm bg-gray-800 flex items-center justify-center">
-                              {user.profile_Picture ? (
-                                <img
-                                  src={user.profile_Picture}
-                                  alt={user.username}
-                                  className="w-full h-full object-cover object-center"
-                                  style={{
-                                    minWidth: "100%",
-                                    minHeight: "100%",
-                                  }}
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.style.display = "none";
-                                    const parent = target.parentElement;
-                                    if (parent) {
-                                      parent.innerHTML = `<svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
-                                    }
-                                  }}
-                                />
-                              ) : (
-                                <FiUser className="w-8 h-8 text-gray-400" />
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Username & Rating */}
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            <span
-                              className={`text-lg font-bold ${
-                                theme === "light"
-                                  ? "text-black"
-                                  : "text-white"
-                              }`}
-                            >
-                              {user.username}
-                            </span>
-                            <span className="flex items-center gap-1 text-gray-400 text-sm">
-                              <FiStar className="inline-block" />
-                              {user.rating ? user.rating.toFixed(1) : "N/A"}
-                            </span>
-                          </div>
-
-                          {/* Bio */}
-                          <p
-                            className={`text-sm text-center mb-3 ${
-                              theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
-                            }`}
-                            style={{
-                              display: "-webkit-box",
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {user.bio || "No bio provided."}
-                          </p>
-
-                          {/* Gig Stats */}
-                          <div className="flex justify-center items-center gap-6 mb-3">
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40">
-                              Hosted <br />
-                              <span className="text-black dark:text-white font-bold text-base">
-                                {user.gigHostedCount ?? 0}
-                              </span>
-                            </div>
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40">
-                              Collaborated <br />
-                              <span className="text-black dark:text-white font-bold text-base">
-                                {user.gigCollaboratedCount ?? 0}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Footer Info */}
-                        <div
-                          className={`flex justify-between items-center text-xs pt-3 mt-4 border-t ${
-                            theme === "light"
-                              ? "border-gray-200"
-                              : "border-neutral-700"
-                          }`}
-                        >
-                          <span className="text-gray-500">
-                            Joined:{" "}
-                            {user.createdAt
-                              ? new Date(user.createdAt).toLocaleDateString()
-                              : "N/A"}
-                          </span>
-                          <span className="text-gray-500">
-                            {user.role || "User"}
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              ))}
-
-            {/* Pagination for Gigs */}
-            {!loading && !error && viewMode === "gigs" && totalPages > 1 && (
-              <div className="flex justify-center items-center mt-8 gap-2">
-                {/* Previous Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                    currentPage === 1
-                      ? "cursor-not-allowed opacity-50"
-                      : "hover:scale-105"
-                  } ${
-                    theme === "light"
-                      ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
-                      : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
-                  }`}
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                <div className="flex gap-1">
-                  {[...Array(totalPages)].map((_, index) => {
-                    const page = index + 1;
-                    const isCurrentPage = page === currentPage;
-
-                    // Show first page, last page, current page, and pages around current
-                    const showPage =
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1);
-
-                    if (!showPage) {
-                      // Show ellipsis
-                      if (
-                        page === currentPage - 2 ||
-                        page === currentPage + 2
-                      ) {
-                        return (
-                          <span
-                            key={page}
-                            className={`px-3 py-2 text-sm ${
-                              theme === "light"
-                                ? "text-gray-400"
-                                : "text-gray-600"
-                            }`}
-                          >
-                            ...
-                          </span>
-                        );
-                      }
-                      return null;
-                    }
-
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 ${
-                          isCurrentPage
-                            ? theme === "light"
-                              ? "bg-black text-white border border-black"
-                              : "bg-white text-black border border-white"
-                            : theme === "light"
-                            ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-                            : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700"
+                        className={`col-span-full text-center py-20 ${
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
-                        {page}
-                      </button>
-                    );
-                  })}
+                        No gigs found.{" "}
+                        {searchTerm && "Try a different search term."}
+                      </div>
+                    ) : (
+                      currentGigs.map((gig: any) => (
+                        <div
+                          key={gig.id}
+                          onClick={() => {
+                            router.push(`/Atrium/description?gigId=${gig.id}`);
+                          }}
+                          className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-sm p-5 cursor-pointer transition-all duration-200 ease-in-out hover:scale-[1.02] theme-transition border ${
+                            gig.host.username === "Jayash"
+                              ? "bg-forge-bg-raised border-forge-ember/50 hover:border-forge-ember"
+                              : "bg-forge-bg-raised border-forge-line hover:border-forge-ember"
+                          }`}
+                        >
+                          {/* Host Rating Top-Right */}
+                          <div className="absolute top-3 right-3 text-xs px-2 py-0.5 flex items-center gap-1 text-forge-ink-muted font-mono tracking-wide">
+                            <FiStar className="text-xs opacity-60" />
+                            <span>{gig.host?.rating?.toFixed(1) || "—"}</span>
+                          </div>
+
+                          {/* Sponsored Tag */}
+                          {gig.host.username === "Jayash" && (
+                            <div className="absolute -top-2 left-3 px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase z-10 bg-forge-bg border border-forge-ember text-forge-ember">
+                              SPONSORED
+                            </div>
+                          )}
+
+                          {/* Top Content */}
+                          <div>
+                            <div
+                              className={`text-sm font-medium mb-1 ${
+                                theme === "light"
+                                  ? "text-forge-ember"
+                                  : "text-forge-ember"
+                              }`}
+                            >
+                              {gig.host?.username ||
+                                gig.creator?.username ||
+                                "Unknown"}
+                            </div>
+
+                            <h3
+                              className={`text-lg font-semibold mb-2 ${
+                                theme === "light"
+                                  ? "text-forge-ink"
+                                  : "text-forge-ink"
+                              }`}
+                            >
+                              {gig.title}
+                            </h3>
+
+                            <p
+                              style={{
+                                display: "-webkit-box",
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                              className={`text-sm mb-3 ${
+                                theme === "light"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink"
+                              }`}
+                            >
+                              {gig.description}
+                            </p>
+
+                            <p className="text-sm mb-2">
+                              <span
+                                className={
+                                  theme === "light"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
+                                }
+                              >
+                                Looking For:{" "}
+                              </span>
+                              <span
+                                className={
+                                  theme === "light"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
+                                }
+                              >
+                                {gig.looking_For}
+                              </span>
+                            </p>
+
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {gig.skills?.map((skill: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 border border-forge-line text-forge-ink-muted bg-forge-bg"
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Bottom Bar */}
+                          <div
+                            className={`flex justify-between items-center border-t pt-3 mt-4 ${
+                              theme === "light"
+                                ? "border-forge-line"
+                                : "border-forge-line"
+                            }`}
+                          >
+                            {gig.amount === 0 ? (
+                              <div className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase text-forge-ink-muted border border-forge-line px-2 py-0.5 bg-forge-bg">
+                                <FiStar className="w-2.5 h-2.5" />
+                                Skill Forge
+                              </div>
+                            ) : (
+                              <span className="text-sm font-semibold text-forge-ember">
+                                {gig.currency}{" "}
+                                {Number(gig.amount).toLocaleString("en-IN")}
+                              </span>
+                            )}
+                            <span
+                              className={`text-xs ${
+                                theme === "light"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
+                              }`}
+                            >
+                              {gig.activeRequest?.length || 0} active requests
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
+                    {users.length === 0 ? (
+                      <div
+                        className={`col-span-full text-center py-20 ${
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        }`}
+                      >
+                        No users found. Try searching something else{" "}
+                        {searchTerm && "Try a different search term."}
+                      </div>
+                    ) : (
+                      users.map((user: any) => (
+                        <div
+                          key={user.id || user._id || user.username}
+                          onClick={() => handleUserClick(user)}
+                          className={`relative flex flex-col justify-between h-full min-h-[220px] rounded-sm p-5 shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-transform duration-200 ease-in-out hover:scale-[1.02] theme-transition ${
+                            theme === "light"
+                              ? "bg-forge-bg border border-forge-line hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:bg-forge-bg "
+                              : " bg-forge-bg   hover:"
+                          }`}
+                        >
+                          {/* User Info Top Section */}
+                          <div>
+                            {/* Profile Picture */}
+                            <div className="flex justify-center mb-4">
+                              <div className="w-16 h-16 rounded-full overflow-hidden border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] bg-forge-bg-raised flex items-center justify-center">
+                                {user.profile_Picture ? (
+                                  <img
+                                    src={user.profile_Picture}
+                                    alt={user.username}
+                                    className="w-full h-full object-cover object-center"
+                                    style={{
+                                      minWidth: "100%",
+                                      minHeight: "100%",
+                                    }}
+                                    onError={(e) => {
+                                      const target =
+                                        e.target as HTMLImageElement;
+                                      target.style.display = "none";
+                                      const parent = target.parentElement;
+                                      if (parent) {
+                                        parent.innerHTML = `<svg class="w-8 h-8 text-forge-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  <FiUser className="w-8 h-8 text-forge-ink-muted" />
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Username & Rating */}
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <span
+                                className={`text-lg font-semibold ${
+                                  theme === "light"
+                                    ? "text-forge-ember"
+                                    : "text-forge-ember"
+                                }`}
+                              >
+                                {user.username}
+                              </span>
+                              <span className="flex items-center gap-1 text-forge-ember text-sm">
+                                <FiStar
+                                  className="inline-block"
+                                  fill="currentColor"
+                                />
+                                {user.rating ? user.rating.toFixed(1) : "N/A"}
+                              </span>
+                            </div>
+
+                            {/* Bio */}
+                            <p
+                              className={`text-sm text-center mb-3 ${
+                                theme === "light"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
+                              }`}
+                              style={{
+                                display: "-webkit-box",
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {user.bio || "No bio provided."}
+                            </p>
+
+                            {/* Gig Stats */}
+                            <div className="flex justify-center items-center gap-6 mb-3">
+                              <div className="text-xs font-medium text-forge-ink-muted">
+                                Hosted <br />
+                                <span className="text-forge-ember font-semibold text-base">
+                                  {user.gigHostedCount ?? 0}
+                                </span>
+                              </div>
+                              <div className="text-xs font-medium text-forge-ink-muted">
+                                Collaborated <br />
+                                <span className="text-forge-ink-muted font-semibold text-base">
+                                  {user.gigCollaboratedCount ?? 0}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Footer Info */}
+                          <div
+                            className={`flex justify-between items-center text-xs pt-3 mt-4 border-t ${
+                              theme === "light"
+                                ? "border-forge-line"
+                                : "border-forge-line"
+                            }`}
+                          >
+                            <span className="text-forge-ink-muted">
+                              Joined:{" "}
+                              {user.createdAt
+                                ? new Date(user.createdAt).toLocaleDateString()
+                                : "N/A"}
+                            </span>
+                            <span className="text-forge-ink-muted">
+                              {user.role || "User"}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                ))}
+
+              {/* Pagination for Gigs */}
+              {!loading && !error && viewMode === "gigs" && totalPages > 1 && (
+                <div className="flex justify-center items-center mt-8 gap-2">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${
+                      currentPage === 1
+                        ? "cursor-not-allowed opacity-50"
+                        : "hover:scale-105"
+                    } ${
+                      theme === "light"
+                        ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg disabled:bg-forge-bg"
+                        : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised disabled:bg-forge-bg-raised"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex gap-1">
+                    {[...Array(totalPages)].map((_, index) => {
+                      const page = index + 1;
+                      const isCurrentPage = page === currentPage;
+
+                      // Show first page, last page, current page, and pages around current
+                      const showPage =
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1);
+
+                      if (!showPage) {
+                        // Show ellipsis
+                        if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <span
+                              key={page}
+                              className={`px-3 py-2 text-sm ${
+                                theme === "light"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
+                              }`}
+                            >
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                            isCurrentPage
+                              ? theme === "light"
+                                ? "bg-forge-ember-low text-forge-ink border border-forge-ember"
+                                : "bg-forge-ember-low text-forge-ink border border-forge-ember"
+                              : theme === "light"
+                              ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg"
+                              : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${
+                      currentPage === totalPages
+                        ? "cursor-not-allowed opacity-50"
+                        : "hover:scale-105"
+                    } ${
+                      theme === "light"
+                        ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg disabled:bg-forge-bg"
+                        : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised disabled:bg-forge-bg-raised"
+                    }`}
+                  >
+                    Next
+                  </button>
                 </div>
+              )}
 
-                {/* Next Button */}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                    currentPage === totalPages
-                      ? "cursor-not-allowed opacity-50"
-                      : "hover:scale-105"
-                  } ${
-                    theme === "light"
-                      ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
-                      : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            )}
-
-            {/* Pagination Info */}
-            {!loading && !error && viewMode === "gigs" && totalGigs > 0 && (
-              <div className="text-center mt-4">
-                <span
-                  className={`text-sm ${
-                    theme === "light" ? "text-gray-600" : "text-gray-400"
-                  }`}
-                >
-                  Showing {startIndex + 1}-{Math.min(endIndex, totalGigs)} of{" "}
-                  {totalGigs} gigs
-                </span>
-              </div>
-            )}
-    </div>
+              {/* Pagination Info */}
+              {!loading && !error && viewMode === "gigs" && totalGigs > 0 && (
+                <div className="text-center mt-4">
+                  <span
+                    className={`text-sm ${
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    }`}
+                  >
+                    Showing {startIndex + 1}-{Math.min(endIndex, totalGigs)} of{" "}
+                    {totalGigs} gigs
+                  </span>
+                </div>
+              )}
+            </main>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

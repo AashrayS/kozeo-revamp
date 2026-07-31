@@ -81,12 +81,21 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
       {/* Top loading bar */}
       {(isLoading || manualLoading) && (
-        <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
-          <div className="h-full bg-gradient-to-r from-white/20 via-white/80 to-white/20 shadow-[0_0_10px_rgba(255,255,255,0.5)] animate-loading"></div>
+        <div className="fixed top-0 left-0 w-full h-1 bg-forge-bg-raised z-50">
+          <div className="h-full bg-forge-bg bg-forge-ember animate-loading"></div>
         </div>
       )}
 
       {children}
+
+      {/* Full screen loader with PageLoader */}
+      {(isLoading || manualLoading) && (
+        <PageLoader
+          duration={1200}
+          onComplete={() => {}}
+          useSlideAnimation={false}
+        />
+      )}
     </NavigationContext.Provider>
   );
 };

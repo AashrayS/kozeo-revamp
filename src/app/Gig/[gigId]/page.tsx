@@ -1702,9 +1702,9 @@ export default function GigPage({
           paymentSessionId: (orderResponse as any).paymentSessionId,
           // No returnUrl here!
           theme: {
-            backgroundColor: "#ffffff",
-            color: "#000000",
-            primaryColor: "#3b82f6",
+            backgroundColor: "var(--forge-ink)",
+            color: "var(--forge-bg)",
+            primaryColor: "var(--forge-ember)",
           },
         };
 
@@ -1904,7 +1904,7 @@ export default function GigPage({
             email: getCurrentUserEmail(),
           },
           theme: {
-            color: "#10B981",
+            color: "var(--forge-ember)",
           },
         };
 
@@ -2178,17 +2178,17 @@ export default function GigPage({
     return (
       <div className="min-h-screen flex flex-col">
         <Header logoText="Kozeo" />
-        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-center">
-              <div className="text-xl text-red-400 mb-4">
+              <div className="text-xl text-[forge-error mb-4">
                 Error loading project
               </div>
-              <div className="text-gray-400 mb-4">{gigError}</div>
+              <div className="text-forge-ink-muted mb-4">{gigError}</div>
               <button
                 onClick={() => router.push("/Atrium")}
-                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+                className="px-4 py-2 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded transition"
               >
                 Go back to Atrium
               </button>
@@ -2204,16 +2204,16 @@ export default function GigPage({
     return (
       <div className="min-h-screen flex flex-col">
         <Header logoText="Kozeo" />
-        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+        <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-center">
-              <div className="text-xl text-gray-400 mb-4">
+              <div className="text-xl text-forge-ink-muted mb-4">
                 Project not found
               </div>
               <button
                 onClick={() => router.push("/Atrium")}
-                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition"
+                className="px-4 py-2 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded transition"
               >
                 Go back to Atrium
               </button>
@@ -2226,15 +2226,15 @@ export default function GigPage({
 
   return (
     <>
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="flex flex-col h-screen bg-transparent">
         <Header logoText="Kozeo" />
         <div
           className={`relative z-10 flex flex-1 flex-row theme-transition ${
             theme === "light"
-              ? "bg-gradient-light text-gray-900"
-              : "bg-gradient-dark text-white"
+              ? "bg-gradient-light text-forge-ink"
+              : "bg-gradient-dark text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -2244,16 +2244,16 @@ export default function GigPage({
             ref={containerRef}
           >
             <div
-              className={`block md:hidden border p-3 text-center text-xs font-medium m-3 rounded-lg ${
+              className={`block md:hidden border p-3 text-center text-xs font-medium m-3 rounded-sm ${
                 theme === "light"
-                  ? "bg-gray-100/40 border-gray-300/30 text-gray-700"
-                  : "bg-neutral-800/40 border-neutral-700/30 text-neutral-300"
+                  ? "bg-forge-bg/40 border-forge-line/30 text-forge-ink"
+                  : "bg-forge-bg-raised/40 border-forge-line/30 text-forge-ink"
               }`}
             >
               <div className="flex items-center justify-center gap-2">
                 <svg
                   className={`w-4 h-4 ${
-                    theme === "light" ? "text-blue-500/70" : "text-blue-400/70"
+                    theme === "light" ? "text-forge-ember/70" : "text-forge-ember/70"
                   }`}
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -2270,14 +2270,14 @@ export default function GigPage({
 
             {/* Payment Gateway Indicator */}
             {/* <div
-              className={`hidden md:block border p-2 text-center text-xs font-medium mx-3 mb-3 rounded-lg ${
+              className={`hidden md:block border p-2 text-center text-xs font-medium mx-3 mb-3 rounded-sm ${
                 paymentGateway === "Cashfree"
                   ? theme === "light"
-                    ? "bg-orange-50/60 border-orange-200/40 text-orange-700"
-                    : "bg-orange-900/20 border-orange-700/30 text-orange-300"
+                    ? "bg-forge-ember-low/30 border-forge-line text-forge-ember"
+                    : "bg-forge-ember-low/20 border-forge-line/30 text-forge-ember"
                   : theme === "light"
-                  ? "bg-blue-50/60 border-blue-200/40 text-blue-700"
-                  : "bg-blue-900/20 border-blue-700/30 text-blue-300"
+                  ? "bg-forge-ember-low border-forge-ember/40 text-forge-ember"
+                  : "bg-forge-ember-low border-forge-ember/30 text-forge-ember"
               }`}
             >
               <div className="flex items-center justify-center gap-2">
@@ -2288,10 +2288,10 @@ export default function GigPage({
 
             {/* Mobile Navigation Tabs */}
             <div
-              className={`md:hidden flex border-b backdrop-blur-sm ${
+              className={`md:hidden flex border-b  ${
                 theme === "light"
-                  ? "bg-white/80 border-gray-200/50"
-                  : "bg-neutral-900/80 border-neutral-700/50"
+                  ? "bg-forge-bg/80 border-forge-line/50"
+                  : "bg-forge-bg-raised/80 border-forge-line/50"
               }`}
             >
               <button
@@ -2299,11 +2299,11 @@ export default function GigPage({
                 className={`flex-1 py-4 px-6 text-sm font-medium transition-all duration-200 relative ${
                   showMobileChat
                     ? theme === "light"
-                      ? "text-gray-900 bg-gray-100/60"
-                      : "text-white bg-neutral-800/60"
+                      ? "text-forge-ink bg-forge-bg/60"
+                      : "text-forge-ink bg-forge-bg-raised/60"
                     : theme === "light"
-                    ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100/30"
-                    : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                    ? "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg/30"
+                    : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised/30"
                 }`}
               >
                 <div className="flex items-center justify-center gap-2">
@@ -2321,15 +2321,15 @@ export default function GigPage({
                   <span>Chat</span>
                 </div>
                 {showMobileChat && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-400/80"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-forge-ember-low"></div>
                 )}
               </button>
               <button
                 onClick={() => setShowMobileChat(false)}
                 className={`flex-1 py-4 px-6 text-sm font-medium transition-all duration-200 relative ${
                   !showMobileChat
-                    ? "text-white bg-neutral-800/60"
-                    : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                    ? "text-forge-ink bg-forge-bg-raised/60"
+                    : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised/30"
                 }`}
               >
                 <div className="flex items-center justify-center gap-2">
@@ -2347,21 +2347,21 @@ export default function GigPage({
                   <span>Canvas</span>
                 </div>
                 {!showMobileChat && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-400/80"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-forge-ember/80"></div>
                 )}
               </button>
             </div>
 
             {/* Gig Info Bar */}
-            <div className="bg-transparent border-b border-neutral-800 px-4 md:px-6 py-2.5 md:py-2.5 transition-all duration-300 ease-in-out overflow-hidden">
+            <div className="bg-transparent border-b border-forge-line px-4 md:px-6 py-2.5 md:py-2.5 transition-all duration-300 ease-in-out overflow-hidden">
               {/* Mobile Toggle Button */}
               <div className="md:hidden flex justify-between items-center mb-3">
-                <h2 className="text-sm font-medium text-neutral-300">
+                <h2 className="text-sm font-medium text-forge-ink">
                   Gig Details
                 </h2>
                 <button
                   onClick={() => setIsGigInfoMinimized(!isGigInfoMinimized)}
-                  className="p-1.5 rounded-lg bg-neutral-800/60 hover:bg-neutral-700/60 border border-neutral-600/50 text-neutral-400 hover:text-white transition-all duration-200"
+                  className="p-1.5 rounded-sm bg-forge-bg-raised/60 hover:bg-forge-bg-raised/60 border border-forge-line/50 text-forge-ink-muted hover:text-forge-ink transition-all duration-200"
                 >
                   <svg
                     className={`w-4 h-4 transition-transform duration-300 ${
@@ -2392,27 +2392,27 @@ export default function GigPage({
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
                   {/* Left Section - Gig Details */}
                   <div className="flex-1 min-w-0">
-                    <h1 className="text-lg font-medium text-white mb-1 truncate">
+                    <h1 className="text-lg font-medium text-forge-ink mb-1 truncate">
                       {gig.title}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-400">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-forge-ink-muted">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-neutral-500">Host:</span>
-                        <span className="text-neutral-200 font-medium">
+                        <span className="text-forge-ink-muted">Host:</span>
+                        <span className="text-forge-ink font-medium">
                           @{gig.host?.username || "Unknown"}
                         </span>
                       </div>
                       {gig.guest && (
                         <div className="flex items-center gap-1.5">
-                          <span className="text-neutral-500">Guest:</span>
-                          <span className="text-neutral-200 font-medium">
+                          <span className="text-forge-ink-muted">Guest:</span>
+                          <span className="text-forge-ink font-medium">
                             @{gig.guest.username}
                           </span>
                         </div>
                       )}
                     </div>
                     {gig.description && (
-                      <p className="text-xs text-neutral-400 mt-1.5 max-w-2xl line-clamp-1">
+                      <p className="text-xs text-forge-ink-muted mt-1.5 max-w-2xl line-clamp-1">
                         {gig.description}
                       </p>
                     )}
@@ -2421,38 +2421,38 @@ export default function GigPage({
                   {/* Right Section - Payment Info */}
                   <div className="lg:min-w-[240px]">
                     {gig.amount === 0 ? (
-                      <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-md p-3 border border-purple-500/30">
+                      <div className="bg-forge-bg bg-forge-bg-raised rounded-sm p-3 border border-forge-line/30">
                         <div
                           className={`inline-flex items-center px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                             theme === "dark"
-                              ? "bg-gradient-to-r from-purple-900/60 to-blue-900/60 text-purple-300 border border-purple-700/50"
-                              : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200"
+                              ? "bg-forge-bg bg-forge-bg-raised text-forge-ink-muted border border-forge-line/50"
+                              : "bg-forge-bg bg-forge-bg text-forge-ink-muted border border-forge-line"
                           }`}
                         >
                           <FiStar className="w-4 h-4 mr-2" />
                           Skill Forge Gig - Learning & Collaboration
                         </div>
-                        <p className="text-xs text-neutral-400 mt-2">
+                        <p className="text-xs text-forge-ink-muted mt-2">
                           This is a collaborative learning project with no
                           monetary exchange.
                         </p>
                       </div>
                     ) : (
-                      <div className="bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-md p-3 border-blue-500/20">
+                      <div className="bg-forge-bg from-blue-500/5 to-purple-500/5 rounded-sm p-3 border-forge-ember/20">
                         <div className="grid grid-cols-2 gap-3 mb-2">
                           <div>
-                            <p className="text-xs text-blue-300/80 uppercase tracking-wide mb-0.5">
+                            <p className="text-xs text-forge-ember/80 uppercase tracking-wide mb-0.5">
                               Total
                             </p>
-                            <p className="text-base font-semibold text-white">
+                            <p className="text-base font-semibold text-forge-ink">
                               {gig.currency} {gig.amount}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-green-300/80 uppercase tracking-wide mb-0.5">
+                            <p className="text-xs text-forge-ember/80 uppercase tracking-wide mb-0.5">
                               Remaining
                             </p>
-                            <p className="text-base font-semibold text-neutral-300">
+                            <p className="text-base font-semibold text-forge-ink">
                               {gig.currency}{" "}
                               {(gig.amount - (gig.paidTillNow || 0)).toFixed(2)}
                             </p>
@@ -2462,19 +2462,19 @@ export default function GigPage({
                         {/* Progress Bar */}
                         <div className="space-y-1">
                           <div className="flex justify-between items-center">
-                            <span className="text-xs text-neutral-400">
+                            <span className="text-xs text-forge-ink-muted">
                               Progress
                             </span>
-                            <span className="text-xs text-blue-300/90 font-medium">
+                            <span className="text-xs text-forge-ember/90 font-medium">
                               {Math.round(
                                 ((gig.paidTillNow || 0) / gig.amount) * 100
                               )}
                               %
                             </span>
                           </div>
-                          <div className="w-full bg-neutral-700/60 rounded-full h-1.5">
+                          <div className="w-full bg-forge-bg-raised/60 rounded-full h-1.5">
                             <div
-                              className="bg-gradient-to-r from-blue-400 to-green-400 h-1.5 rounded-full transition-all duration-300"
+                              className="bg-forge-bg bg-forge-ember h-1.5 rounded-full transition-all duration-300"
                               style={{
                                 width: `${Math.min(
                                   ((gig.paidTillNow || 0) / gig.amount) * 100,
@@ -2503,10 +2503,10 @@ export default function GigPage({
               {/* Mobile Chat View */}
               {showMobileChat && (
                 <div
-                  className="md:hidden flex flex-col overflow-x-hidden border-neutral-700 w-full min-h-0 mb-16"
+                  className="md:hidden flex flex-col overflow-x-hidden border-forge-line w-full min-h-0 mb-16"
                   style={{ height: "100%" }}
                 >
-                  <div className="p-3 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 flex-shrink-0">
+                  <div className="p-3 border-b border-forge-line flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 flex-shrink-0">
                     <span className="font-bold text-base">
                       @{getOtherPartyUsername()}
                     </span>
@@ -2515,7 +2515,7 @@ export default function GigPage({
                       {gig?.status !== "completed" && (
                         <button
                           onClick={() => setShowEndGigModal(true)}
-                          className="group relative px-3 py-1.5 rounded-lg bg-neutral-800/80 hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs font-medium transition-all duration-200 ease-in-out shadow-sm"
+                          className="group relative px-3 py-1.5 rounded-sm bg-forge-bg-raised/80 hover:bg-[forge-error-bg/20 border border-forge-line hover:border-[forge-error/50 text-forge-ink hover:text-[forge-error text-xs font-medium transition-all duration-200 ease-in-out shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                         >
                           <span className="flex items-center gap-1.5">
                             <svg
@@ -2533,7 +2533,7 @@ export default function GigPage({
                           </span>
                         </button>
                       )}
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-forge-ink-muted">
                         Audio calls available on desktop
                       </div>
                     </div>
@@ -2555,19 +2555,19 @@ export default function GigPage({
                         msg.type === "payment-rejected" ? (
                           // Payment Message
                           <div
-                            className={`p-2 rounded-lg border max-w-[90%] min-w-[200px] ${
+                            className={`p-2 rounded-sm border max-w-[90%] min-w-[200px] ${
                               msg.type === "payment-accepted"
-                                ? "bg-green-500/10 border-green-500/30"
+                                ? "bg-forge-ember-low/10 border-forge-ember/30"
                                 : msg.type === "payment-rejected"
-                                ? "bg-red-500/10 border-red-500/30"
+                                ? "bg-[forge-error-bg/10 border-[forge-error/30"
                                 : msg.sender === getCurrentUserEmail()
-                                ? "bg-neutral-800/40 border-neutral-600 self-end ml-auto"
-                                : "bg-neutral-800/40 border-neutral-600"
+                                ? "bg-forge-bg-raised/40 border-forge-line self-end ml-auto"
+                                : "bg-forge-bg-raised/40 border-forge-line"
                             }`}
                           >
                             <div className="flex items-center gap-1 mb-2">
-                              <FaDollarSign className="text-sm text-neutral-400" />
-                              <span className="font-semibold text-white text-xs">
+                              <FaDollarSign className="text-sm text-forge-ink-muted" />
+                              <span className="font-semibold text-forge-ink text-xs">
                                 {msg.type === "payment-accepted"
                                   ? "✅ Payment Accepted"
                                   : msg.type === "payment-rejected"
@@ -2577,10 +2577,10 @@ export default function GigPage({
                                   : "Payment Request"}
                               </span>
                             </div>
-                            <div className="text-base font-bold mb-1 text-white">
+                            <div className="text-base font-bold mb-1 text-forge-ink">
                               ${msg.amount || msg.message}
                             </div>
-                            <div className="text-neutral-300 text-xs mb-2">
+                            <div className="text-forge-ink text-xs mb-2">
                               {msg.type === "payment-accepted"
                                 ? "Payment has been accepted and processed"
                                 : msg.type === "payment-rejected"
@@ -2594,10 +2594,10 @@ export default function GigPage({
                               <>
                                 {msg.sender === getCurrentUserEmail() ? (
                                   // Show waiting message for sender
-                                  <div className="mt-2 px-3 py-2 bg-neutral-700/50 border border-neutral-600/50 rounded-lg">
+                                  <div className="mt-2 px-3 py-2 bg-forge-bg-raised/50 border border-forge-line/50 rounded-sm">
                                     <div className="flex items-center gap-2">
-                                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                                      <span className="text-xs text-neutral-300 font-medium">
+                                      <div className="w-2 h-2 bg-forge-ember-low rounded-full animate-pulse-slow"></div>
+                                      <span className="text-xs text-forge-ink font-medium">
                                         Waiting for response...
                                       </span>
                                     </div>
@@ -2612,7 +2612,7 @@ export default function GigPage({
                                           "completed"
                                         )
                                       }
-                                      className="px-2 py-1 rounded bg-green-600/80 hover:bg-green-500 text-white text-xs font-semibold transition-colors"
+                                      className="px-2 py-1 rounded bg-forge-ember-low/80 hover:bg-forge-ember-low text-forge-ink text-xs font-semibold transition-colors"
                                     >
                                       Accept & Pay
                                     </button>
@@ -2623,7 +2623,7 @@ export default function GigPage({
                                           "declined"
                                         )
                                       }
-                                      className="px-2 py-1 rounded bg-neutral-600 hover:bg-neutral-500 text-white text-xs font-semibold transition-colors"
+                                      className="px-2 py-1 rounded bg-forge-bg-raised hover:bg-forge-line text-forge-ink text-xs font-semibold transition-colors"
                                     >
                                       Decline
                                     </button>
@@ -2631,25 +2631,25 @@ export default function GigPage({
                                 )}
                               </>
                             )}
-                            <div className="text-xs text-neutral-500 mt-1">
+                            <div className="text-xs text-forge-ink-muted mt-1">
                               {msg.time}
                             </div>
                           </div>
                         ) : (
                           // Regular Message
                           <div
-                            className={`p-3 rounded-lg border max-w-[85%] min-w-[120px] break-words ${
+                            className={`p-3 rounded-sm border max-w-[85%] min-w-[120px] break-words ${
                               msg.sender === getCurrentUserEmail()
-                                ? "bg-neutral-700/30 border-neutral-600/30 self-end ml-auto"
-                                : "bg-neutral-800/30 border-neutral-700/30"
+                                ? "bg-forge-bg-raised/30 border-forge-line/30 self-end ml-auto"
+                                : "bg-forge-bg-raised/30 border-forge-line/30"
                             }`}
                           >
                             {msg.sender !== getCurrentUserEmail() && (
-                              <div className="text-xs text-neutral-400 mb-1 font-medium">
+                              <div className="text-xs text-forge-ink-muted mb-1 font-medium">
                                 {msg.sender}
                               </div>
                             )}
-                            <div className="text-sm text-neutral-100">
+                            <div className="text-sm text-forge-ink">
                               {expandedMessages.has(i) ||
                               !shouldShowReadMore(msg.message)
                                 ? msg.message
@@ -2658,14 +2658,14 @@ export default function GigPage({
                             {shouldShowReadMore(msg.message) && (
                               <button
                                 onClick={() => toggleMessageExpansion(i)}
-                                className="text-xs text-blue-400/90 hover:text-blue-300 mt-1 font-medium transition-colors"
+                                className="text-xs text-forge-ember/90 hover:text-forge-ember mt-1 font-medium transition-colors"
                               >
                                 {expandedMessages.has(i)
                                   ? "Read less"
                                   : "Read more"}
                               </button>
                             )}
-                            <div className="text-xs text-neutral-500 mt-1.5 text-right">
+                            <div className="text-xs text-forge-ink-muted mt-1.5 text-right">
                               {msg.time}
                             </div>
                           </div>
@@ -2674,15 +2674,15 @@ export default function GigPage({
                     ))}
                   </div>
 
-                  <div className=" border-t border-neutral-700 p-2 relative flex-shrink-0">
+                  <div className=" border-t border-forge-line p-2 relative flex-shrink-0">
                     {/* Typing Indicator - Absolutely positioned */}
                     {otherUserTyping && (
-                      <div className="absolute -top-8 left-0 right-0 px-2 py-1  border-neutral-700/50 backdrop-blur-sm z-10">
-                        <div className="flex items-center gap-2 text-xs text-neutral-400">
+                      <div className="absolute -top-8 left-0 right-0 px-2 py-1  border-forge-line/50  z-10">
+                        <div className="flex items-center gap-2 text-xs text-forge-ink-muted">
                           <div className="flex gap-1">
-                            <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>
-                            <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse animation-delay-100"></div>
-                            <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse animation-delay-200"></div>
+                            <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow"></div>
+                            <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow animation-delay-100"></div>
+                            <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow animation-delay-200"></div>
                           </div>
                           <span>{getOtherPartyUsername()} is typing...</span>
                         </div>
@@ -2706,7 +2706,7 @@ export default function GigPage({
                     <div className="flex gap-1 items-center">
                       <button
                         onClick={() => setShowEmoji(!showEmoji)}
-                        className="text-lg text-gray-400 hover:text-orange-300 p-1 transition-colors"
+                        className="text-lg text-forge-ink-muted hover:text-forge-ember p-1 transition-colors"
                       >
                         <FaRegSmile />
                       </button>
@@ -2725,8 +2725,8 @@ export default function GigPage({
                           className={`text-lg p-1 transition-colors ${
                             getCurrentUserRole() === "host" ||
                             gig?.status === "completed"
-                              ? "text-gray-600 cursor-not-allowed"
-                              : "text-gray-400 hover:text-green-400 cursor-pointer"
+                              ? "text-forge-ink-muted cursor-not-allowed"
+                              : "text-forge-ink-muted hover:text-forge-ember cursor-pointer"
                           }`}
                           title={
                             getCurrentUserRole() === "host"
@@ -2739,13 +2739,13 @@ export default function GigPage({
                           <FaDollarSign />
                         </button>
                         {getCurrentUserRole() === "host" && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-forge-bg text-forge-ink text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                             Hosts cannot request payment
                           </div>
                         )}
                         {gig?.status === "completed" &&
                           getCurrentUserRole() !== "host" && (
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-forge-bg text-forge-ink text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                               Gig completed - payment requests disabled
                             </div>
                           )}
@@ -2755,10 +2755,10 @@ export default function GigPage({
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         disabled={gig?.status === "completed"}
-                        className={`flex-1 border p-2 rounded-md text-sm transition-all ${
+                        className={`flex-1 border p-2 rounded-sm text-sm transition-all ${
                           gig?.status === "completed"
-                            ? "bg-neutral-800/40 border-neutral-700 text-gray-500 placeholder-gray-600 cursor-not-allowed"
-                            : "bg-neutral-800/80 border-neutral-600 focus:border-blue-400/50 text-white placeholder-gray-400"
+                            ? "bg-forge-bg-raised/40 border-forge-line text-forge-ink-muted placeholder-gray-600 cursor-not-allowed"
+                            : "bg-forge-bg-raised/80 border-forge-line focus:border-forge-ember/50 text-forge-ink placeholder-gray-400"
                         }`}
                         placeholder={
                           gig?.status === "completed"
@@ -2767,17 +2767,17 @@ export default function GigPage({
                         }
                       />
                       {input.length > 1400 && (
-                        <div className="absolute -top-6 right-0 text-xs text-neutral-400">
+                        <div className="absolute -top-6 right-0 text-xs text-forge-ink-muted">
                           {input.length}/1500
                         </div>
                       )}
                       <button
                         onClick={handleSendMessage}
                         disabled={!input.trim() || gig?.status === "completed"}
-                        className={`group relative px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm shadow-sm disabled:cursor-not-allowed ${
+                        className={`group relative px-3 py-2 rounded-sm font-medium transition-all duration-200 text-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] disabled:cursor-not-allowed ${
                           gig?.status === "completed"
-                            ? "bg-neutral-800/30 text-gray-600 cursor-not-allowed"
-                            : "bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/30 disabled:to-neutral-700/30 disabled:opacity-40 text-white hover:shadow-blue-500/15"
+                            ? "bg-forge-bg-raised/30 text-forge-ink-muted cursor-not-allowed"
+                            : "bg-forge-bg /60 /60 hover:bg-forge-bg-raised/40 disabled:/30 disabled:/30 disabled:opacity-40 text-forge-ink hover:shadow-blue-500/15"
                         }`}
                       >
                         <span className="flex items-center justify-center">
@@ -2812,10 +2812,10 @@ export default function GigPage({
 
               {/* Desktop Chat Column */}
               <div
-                className="hidden md:flex flex-col overflow-x-auto border-neutral-700 min-h-0"
+                className="hidden md:flex flex-col overflow-x-auto border-forge-line min-h-0"
                 style={{ width, height: "100%" }}
               >
-                <div className="p-3 md:p-4 border-b border-neutral-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 min-w-0 flex-shrink-0">
+                <div className="p-3 md:p-4 border-b border-forge-line flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 min-w-0 flex-shrink-0">
                   <span className="font-bold text-base md:text-lg truncate">
                     @{getOtherPartyUsername()}
                   </span>
@@ -2825,7 +2825,7 @@ export default function GigPage({
                     {gig?.status !== "completed" && (
                       <button
                         onClick={() => setShowEndGigModal(true)}
-                        className="group relative px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent hover:bg-red-500/20 border border-neutral-600 hover:border-red-400/50 text-neutral-200 hover:text-red-300 text-xs md:text-sm font-medium transition-all duration-200 ease-in-out shadow-sm"
+                        className="group relative px-3 md:px-4 py-1.5 md:py-2 rounded-sm bg-transparent hover:bg-[forge-error-bg/20 border border-forge-line hover:border-[forge-error/50 text-forge-ink hover:text-[forge-error text-xs md:text-sm font-medium transition-all duration-200 ease-in-out shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                       >
                         <span className="flex items-center gap-1.5 md:gap-2">
                           {/* <svg
@@ -2846,15 +2846,15 @@ export default function GigPage({
                     <button
                       onClick={() => initiateCall("audio")}
                       disabled={gig?.status === "completed"}
-                      className={`hidden md:flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-transparent border transition-all duration-200 ease-in-out ${
+                      className={`hidden md:flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 rounded-sm bg-transparent border transition-all duration-200 ease-in-out ${
                         gig?.status === "completed"
-                          ? "border-neutral-700 text-gray-600 cursor-not-allowed"
-                          : "hover:bg-blue-500/20 border-neutral-600 hover:border-blue-400/50 text-gray-400 hover:text-blue-300"
+                          ? "border-forge-line text-forge-ink-muted cursor-not-allowed"
+                          : "hover:bg-forge-ember-low border-forge-line hover:border-forge-ember/50 text-forge-ink-muted hover:text-forge-ember"
                       }`}
                     >
                       <FiPhone className="text-lg md:text-xl" />
                     </button>
-                    <div className="md:hidden text-xs text-gray-400">
+                    <div className="md:hidden text-xs text-forge-ink-muted">
                       Audio calls available on desktop
                     </div>
                   </div>
@@ -2876,19 +2876,19 @@ export default function GigPage({
                       msg.type === "payment-rejected" ? (
                         // Payment Message
                         <div
-                          className={`p-2 md:p-3 rounded-lg border max-w-[90%] sm:max-w-xs min-w-[200px] ${
+                          className={`p-2 md:p-3 rounded-sm border max-w-[90%] sm:max-w-xs min-w-[200px] ${
                             msg.type === "payment-accepted"
-                              ? "bg-green-500/10 border-green-500/30"
+                              ? "bg-forge-ember-low/10 border-forge-ember/30"
                               : msg.type === "payment-rejected"
-                              ? "bg-red-500/10 border-red-500/30"
+                              ? "bg-[forge-error-bg/10 border-[forge-error/30"
                               : msg.sender === getCurrentUserEmail()
-                              ? "bg-neutral-800/40 border-neutral-600 self-end ml-auto"
-                              : "bg-neutral-800/40 border-neutral-600"
+                              ? "bg-forge-bg-raised/40 border-forge-line self-end ml-auto"
+                              : "bg-forge-bg-raised/40 border-forge-line"
                           }`}
                         >
                           <div className="flex items-center gap-1 md:gap-2 mb-2">
-                            <FaDollarSign className="text-sm text-neutral-400" />
-                            <span className="font-semibold text-white text-xs md:text-sm">
+                            <FaDollarSign className="text-sm text-forge-ink-muted" />
+                            <span className="font-semibold text-forge-ink text-xs md:text-sm">
                               {msg.type === "payment-accepted"
                                 ? "✅ Payment Accepted"
                                 : msg.type === "payment-rejected"
@@ -2898,10 +2898,10 @@ export default function GigPage({
                                 : "Payment Request"}
                             </span>
                           </div>
-                          <div className="text-base md:text-lg font-bold mb-1 text-white">
+                          <div className="text-base md:text-lg font-bold mb-1 text-forge-ink">
                             {gig.currency} {msg.amount || msg.message}
                           </div>
-                          <div className="text-neutral-300 text-xs mb-2">
+                          <div className="text-forge-ink text-xs mb-2">
                             {msg.type === "payment-accepted"
                               ? "Payment has been accepted and processed"
                               : msg.type === "payment-rejected"
@@ -2915,10 +2915,10 @@ export default function GigPage({
                             <>
                               {msg.sender === getCurrentUserEmail() ? (
                                 // Show waiting message for sender
-                                <div className="mt-2 px-3 py-2 bg-neutral-700/50 border border-neutral-600/50 rounded-lg">
+                                <div className="mt-2 px-3 py-2 bg-forge-bg-raised/50 border border-forge-line/50 rounded-sm">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                                    <span className="text-xs text-neutral-300 font-medium">
+                                    <div className="w-2 h-2 bg-forge-ember-low rounded-full animate-pulse-slow"></div>
+                                    <span className="text-xs text-forge-ink font-medium">
                                       Waiting for response...
                                     </span>
                                   </div>
@@ -2930,7 +2930,7 @@ export default function GigPage({
                                     onClick={() =>
                                       handlePaymentResponse(msg.id, "completed")
                                     }
-                                    className="px-2 md:px-3 py-1 rounded bg-green-600/80 hover:bg-green-500 text-white text-xs font-semibold transition-colors"
+                                    className="px-2 md:px-3 py-1 rounded bg-forge-ember-low/80 hover:bg-forge-ember-low text-forge-ink text-xs font-semibold transition-colors"
                                   >
                                     Accept & Pay
                                   </button>
@@ -2938,7 +2938,7 @@ export default function GigPage({
                                     onClick={() =>
                                       handlePaymentResponse(msg.id, "declined")
                                     }
-                                    className="px-2 md:px-3 py-1 rounded bg-neutral-600 hover:bg-neutral-500 text-white text-xs font-semibold transition-colors"
+                                    className="px-2 md:px-3 py-1 rounded bg-forge-bg-raised hover:bg-forge-line text-forge-ink text-xs font-semibold transition-colors"
                                   >
                                     Decline
                                   </button>
@@ -2946,25 +2946,25 @@ export default function GigPage({
                               )}
                             </>
                           )}
-                          <div className="text-xs text-neutral-500 mt-1">
+                          <div className="text-xs text-forge-ink-muted mt-1">
                             {msg.time}
                           </div>
                         </div>
                       ) : (
                         // Regular Message
                         <div
-                          className={`p-3 rounded-lg border max-w-[85%] sm:max-w-xs min-w-[120px] break-words ${
+                          className={`p-3 rounded-sm border max-w-[85%] sm:max-w-xs min-w-[120px] break-words ${
                             msg.sender === getCurrentUserEmail()
-                              ? "bg-neutral-700/30 border-neutral-600/30 self-end ml-auto"
-                              : "bg-neutral-800/30 border-neutral-700/30"
+                              ? "bg-forge-bg-raised/30 border-forge-line/30 self-end ml-auto"
+                              : "bg-forge-bg-raised/30 border-forge-line/30"
                           }`}
                         >
                           {msg.sender !== getCurrentUserEmail() && (
-                            <div className="text-xs text-neutral-400 mb-1 font-medium">
+                            <div className="text-xs text-forge-ink-muted mb-1 font-medium">
                               {msg.sender}
                             </div>
                           )}
-                          <div className="text-sm text-neutral-100">
+                          <div className="text-sm text-forge-ink">
                             {expandedMessages.has(i) ||
                             !shouldShowReadMore(msg.message)
                               ? msg.message
@@ -2973,14 +2973,14 @@ export default function GigPage({
                           {shouldShowReadMore(msg.message) && (
                             <button
                               onClick={() => toggleMessageExpansion(i)}
-                              className="text-xs text-blue-400/90 hover:text-blue-300 mt-1 font-medium transition-colors"
+                              className="text-xs text-forge-ember/90 hover:text-forge-ember mt-1 font-medium transition-colors"
                             >
                               {expandedMessages.has(i)
                                 ? "Read less"
                                 : "Read more"}
                             </button>
                           )}
-                          <div className="text-xs text-neutral-500 mt-1.5 text-right">
+                          <div className="text-xs text-forge-ink-muted mt-1.5 text-right">
                             {msg.time}
                           </div>
                         </div>
@@ -2989,15 +2989,15 @@ export default function GigPage({
                   ))}
                 </div>
 
-                <div className="border-t border-neutral-700 p-2 relative flex-shrink-0">
+                <div className="border-t border-forge-line p-2 relative flex-shrink-0">
                   {/* Typing Indicator - Absolutely positioned */}
                   {otherUserTyping && (
-                    <div className="absolute -top-8 left-0 right-0 px-2 py-1  border-neutral-700/50 backdrop-blur-sm z-10">
-                      <div className="flex items-center gap-2 text-xs text-neutral-400">
+                    <div className="absolute -top-8 left-0 right-0 px-2 py-1  border-forge-line/50  z-10">
+                      <div className="flex items-center gap-2 text-xs text-forge-ink-muted">
                         <div className="flex gap-1">
-                          <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>
-                          <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse animation-delay-100"></div>
-                          <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse animation-delay-200"></div>
+                          <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow"></div>
+                          <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow animation-delay-100"></div>
+                          <div className="w-1 h-1 bg-forge-ember-low rounded-full animate-pulse-slow animation-delay-200"></div>
                         </div>
                         <span>{getOtherPartyUsername()} is typing...</span>
                       </div>
@@ -3021,7 +3021,7 @@ export default function GigPage({
                   <div className="flex gap-1 md:gap-2 items-center">
                     <button
                       onClick={() => setShowEmoji(!showEmoji)}
-                      className="text-lg md:text-xl text-gray-400 hover:text-orange-300 p-1 transition-colors"
+                      className="text-lg md:text-xl text-forge-ink-muted hover:text-forge-ember p-1 transition-colors"
                     >
                       <FaRegSmile />
                     </button>
@@ -3043,8 +3043,8 @@ export default function GigPage({
                           getCurrentUserRole() === "host" ||
                           gig?.status === "completed" ||
                           gig?.amount === 0
-                            ? "text-gray-600 cursor-not-allowed"
-                            : "text-gray-400 hover:text-green-400 cursor-pointer"
+                            ? "text-forge-ink-muted cursor-not-allowed"
+                            : "text-forge-ink-muted hover:text-forge-ember cursor-pointer"
                         }`}
                         title={
                           getCurrentUserRole() === "host"
@@ -3059,20 +3059,20 @@ export default function GigPage({
                         <FaDollarSign />
                       </button>
                       {getCurrentUserRole() === "host" && (
-                        <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-forge-bg-raised text-forge-ink text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                           Request payment diabled for hosts
                         </div>
                       )}
                       {gig?.status === "completed" &&
                         getCurrentUserRole() !== "host" && (
-                          <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-forge-bg-raised text-forge-ink text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                             Gig completed - payment requests disabled
                           </div>
                         )}
                       {gig?.amount === 0 &&
                         getCurrentUserRole() !== "host" &&
                         gig?.status !== "completed" && (
-                          <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          <div className="absolute bottom-full left-16 transform -translate-x-1/2 mb-2 px-2 py-1 bg-forge-bg-raised text-forge-ink text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                             Payment requests not available for Skill Forge gigs
                           </div>
                         )}
@@ -3082,10 +3082,10 @@ export default function GigPage({
                       onChange={handleInputChange}
                       onKeyDown={handleKeyDown}
                       disabled={gig?.status === "completed"}
-                      className={`flex-1 border p-2 rounded-md text-sm md:text-base transition-all ${
+                      className={`flex-1 border p-2 rounded-sm text-sm md:text-base transition-all ${
                         gig?.status === "completed"
-                          ? "bg-neutral-800/40 border-neutral-700 text-gray-500 placeholder-gray-600 cursor-not-allowed"
-                          : "bg-neutral-800/80 border-neutral-600 focus:border-blue-400/50 text-white placeholder-gray-400"
+                          ? "bg-forge-bg-raised/40 border-forge-line text-forge-ink-muted placeholder-gray-600 cursor-not-allowed"
+                          : "bg-forge-bg-raised/80 border-forge-line focus:border-forge-ember/50 text-forge-ink placeholder-gray-400"
                       }`}
                       placeholder={
                         gig?.status === "completed"
@@ -3094,17 +3094,17 @@ export default function GigPage({
                       }
                     />
                     {input.length > 1400 && (
-                      <div className="absolute -top-6 right-0 text-xs text-neutral-400">
+                      <div className="absolute -top-6 right-0 text-xs text-forge-ink-muted">
                         {input.length}/1500
                       </div>
                     )}
                     <button
                       onClick={handleSendMessage}
                       disabled={!input.trim() || gig?.status === "completed"}
-                      className={`group relative px-3 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm disabled:cursor-not-allowed ${
+                      className={`group relative px-3 py-2 rounded-sm font-medium transition-all duration-200 shadow-[0_4px_20px_rgba(21,18,13,0.5)] disabled:cursor-not-allowed ${
                         gig?.status === "completed"
-                          ? "bg-neutral-800/30 text-gray-600 cursor-not-allowed"
-                          : "bg-gradient-to-r from-neutral-700/60 to-neutral-600/60 hover:from-blue-600/40 hover:to-blue-500/40 disabled:from-neutral-800/40 disabled:to-neutral-700/40 disabled:opacity-50 text-white hover:shadow-blue-500/15 disabled:shadow-none"
+                          ? "bg-forge-bg-raised/30 text-forge-ink-muted cursor-not-allowed"
+                          : "bg-forge-bg /60 /60 hover:bg-forge-bg-raised/40 disabled:/40 disabled:/40 disabled:opacity-50 text-forge-ink hover:shadow-blue-500/15 disabled:shadow-none"
                       }`}
                     >
                       <svg
@@ -3122,7 +3122,7 @@ export default function GigPage({
               <div
                 ref={resizerRef}
                 onMouseDown={startResize}
-                className="hidden md:block w-2 cursor-col-resize bg-transparent hover:bg-neutral-700 from-blue-500/40 hover:to-purple-500/40 transition-all duration-200"
+                className="hidden md:block w-2 cursor-col-resize bg-transparent hover:bg-forge-bg-raised from-blue-500/40 hover:to-purple-500/40 transition-all duration-200"
               />
 
               {/* Tldraw Board and screen Share Window */}
@@ -3132,9 +3132,9 @@ export default function GigPage({
                   <>
                     <div
                       style={{ height: topHeight }}
-                      className="relative p-4 rounded-xl bg-transparent shadow-lg"
+                      className="relative p-4 rounded-sm bg-transparent shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                     >
-                      <span className="font-semibold text-gray-100 text-md mb-2 block absolute">
+                      <span className="font-semibold text-forge-ink text-md mb-2 block absolute">
                         📺 Screen is being Shared
                       </span>
 
@@ -3143,13 +3143,13 @@ export default function GigPage({
                         autoPlay
                         playsInline
                         muted
-                        className="w-full h-full rounded-lg object-cover"
+                        className="w-full h-full rounded-sm object-cover"
                       />
                     </div>
                     <div
                       ref={dividerRef}
                       onMouseDown={startVerticalResize}
-                      className="h-2 cursor-row-resize bg-gradient-to-r from-orange-500/20 to-purple-500/20 hover:from-orange-500/40 hover:to-purple-500/40 transition-all duration-200"
+                      className="h-2 cursor-row-resize bg-forge-bg from-orange-500/20 to-purple-500/20 hover:bg-forge-line/40 transition-all duration-200"
                     />
                   </>
                 )}
@@ -3165,10 +3165,10 @@ export default function GigPage({
               {/* Call Column */}
               {callControls && (
                 <>
-                  <div className="w-80 border-l border-neutral-700 p-4 hidden md:flex flex-col gap-4">
-                    <div className="h-1/2 rounded-2xl p-[2px] ">
-                      <div className="flex flex-col h-full rounded-xl border border-neutral-700">
-                        <p className="text-gray-400 text-sm mb-1 px-2 pt-2">
+                  <div className="w-80 border-l border-forge-line p-4 hidden md:flex flex-col gap-4">
+                    <div className="h-1/2 rounded-sm p-[2px] ">
+                      <div className="flex flex-col h-full rounded-sm border border-forge-line">
+                        <p className="text-forge-ink-muted text-sm mb-1 px-2 pt-2">
                           User 1 (You)
                         </p>
                         <video
@@ -3181,9 +3181,9 @@ export default function GigPage({
                       </div>
                     </div>
 
-                    <div className="h-1/2 rounded-2xl p-[2px] bg-gradient-to-r  mt-4">
-                      <div className="flex flex-col h-full rounded-xl  border border-neutral-700">
-                        <p className="text-gray-400 text-sm mb-1 px-2 pt-2">
+                    <div className="h-1/2 rounded-sm p-[2px] bg-forge-bg  mt-4">
+                      <div className="flex flex-col h-full rounded-sm  border border-forge-line">
+                        <p className="text-forge-ink-muted text-sm mb-1 px-2 pt-2">
                           User 2
                         </p>
                         <video
@@ -3195,32 +3195,32 @@ export default function GigPage({
                       </div>
                     </div>
 
-                    <div className="flex justify-around py-4 border-t border-b border-neutral-700/50">
+                    <div className="flex justify-around py-4 border-t border-b border-forge-line/50">
                       <FaDesktop
                         onClick={startScreenShare}
-                        className="text-xl cursor-pointer hover:text-orange-300 text-gray-400 transition-colors"
+                        className="text-xl cursor-pointer hover:text-forge-ember text-forge-ink-muted transition-colors"
                       />
                       <FaMicrophone
                         onClick={toggleAudio}
                         className={`text-xl cursor-pointer transition-colors ${
                           isAudioEnabled
-                            ? "text-green-400 hover:text-green-300"
-                            : "text-red-400 hover:text-red-300"
+                            ? "text-forge-ember hover:text-forge-ember"
+                            : "text-[forge-error hover:text-[forge-error"
                         }`}
                       />
                       <FaVideo
                         onClick={toggleVideo}
                         className={`text-xl cursor-pointer transition-colors ${
                           isVideoEnabled
-                            ? "text-green-400 hover:text-green-300"
-                            : "text-red-400 hover:text-red-300"
+                            ? "text-forge-ember hover:text-forge-ember"
+                            : "text-[forge-error hover:text-[forge-error"
                         }`}
                       />
                     </div>
 
                     <button
                       onClick={endCall}
-                      className="mt-auto flex items-center justify-center gap-2 border border-neutral-700 text-white font-semibold py-2 px-4 rounded-xl shadow-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-500 hover:via-fuchsia-600 hover:to-pink-500 "
+                      className="mt-auto flex items-center justify-center gap-2 border border-forge-line text-forge-ink font-semibold py-2 px-4 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-200 hover:bg-forge-bg hover:from-pink-500 hover:via-fuchsia-600 hover:to-pink-500 "
                     >
                       <FaPhoneSlash className="text-md" />
                       <span>End Call</span>
@@ -3235,19 +3235,19 @@ export default function GigPage({
 
       {/* Payment Request Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-neutral-800 to-neutral-900 border border-blue-500/20 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-forge-bg/60  flex items-center justify-center z-50">
+          <div className="bg-forge-bg   border border-forge-ember/20 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-6 max-w-md w-full mx-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600/20 to-green-600/20 rounded-lg flex items-center justify-center border border-blue-500/30">
-                  <FaDollarSign className="text-green-300 text-lg" />
+                <div className="w-10 h-10 bg-forge-bg bg-forge-ember-low/20 rounded-sm flex items-center justify-center border border-forge-ember/30">
+                  <FaDollarSign className="text-forge-ember text-lg" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">
+                  <h3 className="text-xl font-semibold text-forge-ink">
                     Request Payment
                   </h3>
-                  <p className="text-sm text-blue-200/80">
+                  <p className="text-sm text-forge-ember/80">
                     Send a payment request via {paymentGateway}
                   </p>
                 </div>
@@ -3256,8 +3256,8 @@ export default function GigPage({
               <div
                 className={`px-3 py-1 rounded-full text-xs font-medium border ${
                   paymentGateway === "Cashfree"
-                    ? "bg-orange-500/20 border-orange-500/30 text-orange-200"
-                    : "bg-blue-500/20 border-blue-500/30 text-blue-200"
+                    ? "bg-forge-ember-low/30 border-forge-ember/30 text-forge-ember"
+                    : "bg-forge-ember-low border-forge-ember/30 text-forge-ember"
                 }`}
               >
                 {paymentGateway}
@@ -3266,24 +3266,24 @@ export default function GigPage({
 
             {/* Gig Payment Summary */}
             {gig && (
-              <div className="bg-neutral-900/40 border border-neutral-700/50 rounded-lg p-4 mb-6">
+              <div className="bg-forge-bg-raised/40 border border-forge-line/50 rounded-sm p-4 mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-medium text-neutral-300 uppercase tracking-wide">
+                  <h4 className="text-sm font-medium text-forge-ink uppercase tracking-wide">
                     Payment Summary
                   </h4>
-                  <span className="text-xs text-neutral-500">{gig.title}</span>
+                  <span className="text-xs text-forge-ink-muted">{gig.title}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <p className="text-xs text-neutral-500 mb-1">Total Value</p>
-                    <p className="text-base font-semibold text-white">
+                    <p className="text-xs text-forge-ink-muted mb-1">Total Value</p>
+                    <p className="text-base font-semibold text-forge-ink">
                       {gig.currency} {gig.amount}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-neutral-500 mb-1">Available</p>
-                    <p className="text-base font-semibold text-neutral-200">
+                    <p className="text-xs text-forge-ink-muted mb-1">Available</p>
+                    <p className="text-base font-semibold text-forge-ink">
                       {gig.currency}{" "}
                       {(gig.amount - (gig.paidTillNow || 0)).toFixed(2)}
                     </p>
@@ -3292,16 +3292,16 @@ export default function GigPage({
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-blue-300/80">
+                    <span className="text-xs text-forge-ember/80">
                       Payment Progress
                     </span>
-                    <span className="text-xs text-green-300/90 font-medium">
+                    <span className="text-xs text-forge-ember/90 font-medium">
                       {Math.round(((gig.paidTillNow || 0) / gig.amount) * 100)}%
                     </span>
                   </div>
-                  <div className="w-full bg-neutral-700/60 rounded-full h-1.5">
+                  <div className="w-full bg-forge-bg-raised/60 rounded-full h-1.5">
                     <div
-                      className="bg-gradient-to-r from-blue-400 to-green-400 h-1.5 rounded-full transition-all duration-300"
+                      className="bg-forge-bg bg-forge-ember h-1.5 rounded-full transition-all duration-300"
                       style={{
                         width: `${Math.min(
                           ((gig.paidTillNow || 0) / gig.amount) * 100,
@@ -3316,11 +3316,11 @@ export default function GigPage({
 
             {/* Payment Amount Input */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-neutral-300 mb-3">
+              <label className="block text-sm font-medium text-forge-ink mb-3">
                 Payment Amount
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 text-lg">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-forge-ink-muted text-lg">
                   {gig?.currency || "$"}
                 </span>
                 <input
@@ -3331,11 +3331,11 @@ export default function GigPage({
                   min="0"
                   max={gig ? gig.amount - (gig.paidTillNow || 0) : undefined}
                   step="0.01"
-                  className="w-full pl-16 pr-4 py-3 bg-neutral-900/50 border border-blue-500/30 rounded-lg text-white text-lg font-medium placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
+                  className="w-full pl-16 pr-4 py-3 bg-forge-bg-raised/50 border border-forge-ember/30 rounded-sm text-forge-ink text-lg font-medium placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-forge-line/50 focus:border-forge-ember/50 transition-all"
                 />
               </div>
               {gig && (
-                <p className="text-xs text-neutral-500 mt-2">
+                <p className="text-xs text-forge-ink-muted mt-2">
                   Maximum available: {gig.currency}{" "}
                   {(gig.amount - (gig.paidTillNow || 0)).toFixed(2)}
                 </p>
@@ -3350,14 +3350,14 @@ export default function GigPage({
                   setPaymentAmount("");
                   setPaymentDescription("");
                 }}
-                className="flex-1 px-4 py-3 bg-neutral-700 hover:bg-neutral-600 text-neutral-200 font-medium rounded-lg transition-colors"
+                className="flex-1 px-4 py-3 bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink font-medium rounded-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePaymentRequest}
                 disabled={!paymentAmount || parseFloat(paymentAmount) <= 0}
-                className="flex-1 px-4 py-3 bg-neutral-200 hover:bg-white text-neutral-900 font-medium rounded-lg disabled:bg-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 px-4 py-3 bg-forge-bg hover:bg-forge-bg text-forge-ink font-medium rounded-sm disabled:bg-forge-bg-raised disabled:text-forge-ink-muted disabled:cursor-not-allowed transition-colors"
               >
                 Send Request
               </button>
@@ -3368,25 +3368,25 @@ export default function GigPage({
 
       {/* End Gig Confirmation Modal */}
       {showEndGigModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-neutral-800 to-neutral-900 border border-red-500/20 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="fixed inset-0 bg-forge-bg bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-forge-bg   border border-[forge-error/20 rounded-sm p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-forge-ink mb-4">
               End Gig Confirmation
             </h3>
-            <p className="text-gray-300 mb-6">
+            <p className="text-forge-ink mb-6">
               Are you sure you want to end this gig? After ending, both parties
               will be asked to review each other.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowEndGigModal(false)}
-                className="px-4 py-2 rounded bg-neutral-600 hover:bg-neutral-500 text-white transition-colors border border-neutral-500"
+                className="px-4 py-2 rounded bg-forge-bg-raised hover:bg-forge-line text-forge-ink transition-colors border border-forge-line"
               >
                 Cancel
               </button>
               <button
                 onClick={endGig}
-                className="px-4 py-2 rounded bg-red-600/80 hover:bg-red-500 text-white transition-colors border border-red-500/50"
+                className="px-4 py-2 rounded bg-[forge-error-bg/80 hover:bg-[forge-error-bg text-forge-ink transition-colors border border-[forge-error/50"
               >
                 End Gig
               </button>
@@ -3397,10 +3397,10 @@ export default function GigPage({
 
       {/* Gig Ended by Other Party Modal */}
       {showGigEndedModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-neutral-800 to-neutral-900 border border-blue-500/20 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Gig Ended</h3>
-            <p className="text-gray-300 mb-6">
+        <div className="fixed inset-0 bg-forge-bg bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-forge-bg   border border-forge-ember/20 rounded-sm p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-forge-ink mb-4">Gig Ended</h3>
+            <p className="text-forge-ink mb-6">
               The gig has been ended by the other party. You will be redirected
               to the review page now.
             </p>
@@ -3428,7 +3428,7 @@ export default function GigPage({
                     router.push("/gigs");
                   }
                 }}
-                className="px-4 py-2 rounded bg-blue-600/80 hover:bg-blue-500 text-white transition-colors border border-blue-500/50"
+                className="px-4 py-2 rounded bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink transition-colors border border-forge-ember/50"
               >
                 Go to Review
               </button>
@@ -3439,13 +3439,13 @@ export default function GigPage({
 
       {/* Payment Processing Overlay */}
       {isProcessingPayment && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-br from-neutral-800 to-neutral-900 border border-green-500/20 rounded-lg p-8 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-forge-bg bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-forge-bg   border border-forge-ember/20 rounded-sm p-8 max-w-md w-full mx-4">
             <div className="text-center">
               <div className="mb-6">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-forge-ember-low/20 flex items-center justify-center">
                   <svg
-                    className="w-8 h-8 text-green-400 animate-spin"
+                    className="w-8 h-8 text-forge-ember animate-spin"
                     fill="none"
                     viewBox="0 0 24 24"
                   >
@@ -3464,24 +3464,24 @@ export default function GigPage({
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-forge-ink mb-2">
                   Processing Payment
                 </h3>
-                <p className="text-gray-300 text-sm mb-6">
+                <p className="text-forge-ink text-sm mb-6">
                   Please wait while we verify and process your payment...
                 </p>
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-neutral-700 rounded-full h-3 mb-4">
+              <div className="w-full bg-forge-bg-raised rounded-full h-3 mb-4">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-500 ease-out"
+                  className="bg-forge-bg bg-forge-ember h-3 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${paymentProgress}%` }}
                 />
               </div>
 
               {/* Progress Text */}
-              <div className="text-sm text-neutral-400">
+              <div className="text-sm text-forge-ink-muted">
                 {paymentProgress <= 20 && "Initializing..."}
                 {paymentProgress > 20 &&
                   paymentProgress <= 40 &&
@@ -3498,7 +3498,7 @@ export default function GigPage({
                 {paymentProgress > 90 && "Almost done..."}
               </div>
 
-              <div className="mt-4 text-xs text-neutral-500">
+              <div className="mt-4 text-xs text-forge-ink-muted">
                 {paymentProgress}% Complete
               </div>
             </div>
@@ -3507,23 +3507,23 @@ export default function GigPage({
       )}
       {/* Manual Payment Modal */}
       {showManualPaymentModal && (
-       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
+       <div className="fixed inset-0 z-50 flex items-center justify-center bg-forge-bg/60 ">
   <div
-    className={`bg-gradient-to-br from-neutral-900  to-black border border-neutral-600 rounded-2xl shadow-2xl p-8 max-w-lg w-full mx-4 ${
-      theme === "light" ? "text-gray-900" : "text-white"
+    className={`bg-forge-bg   to-black border border-forge-line rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-8 max-w-lg w-full mx-4 ${
+      theme === "light" ? "text-forge-ink" : "text-forge-ink"
     } relative overflow-hidden`}
   >
     {/* Subtle glow effect */}
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-600/5 via-transparent to-gray-700/5 rounded-2xl"></div>
+    <div className="absolute inset-0 bg-forge-bg /5 via-transparent /5 rounded-sm"></div>
     
     <div className="relative z-10">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-600 to-gray-700 flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-10 h-10 rounded-full bg-forge-bg   flex items-center justify-center">
+          <svg className="w-5 h-5 text-forge-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
           </svg>
         </div>
-        <h2 className="text-2xl font-semibold text-slate-100">
+        <h2 className="text-2xl font-semibold text-forge-ink">
           Payment Request
         </h2>
       </div>
@@ -3531,56 +3531,56 @@ export default function GigPage({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-forge-ink mb-2">
               Gig ID
             </label>
             <input
               type="text"
               value={gigId}
               readOnly
-              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 font-mono text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+              className="w-full border border-forge-line/40 rounded-sm px-4 py-3 bg-forge-bg-raised/60 text-forge-ink font-mono text-sm  focus:outline-none focus:ring-2 focus:ring-forge-line/40 focus:border-forge-line/40 transition-all"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-forge-ink mb-2">
               Amount
             </label>
             <input
               type="text"
               value={paymentAmount}
               readOnly
-              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+              className="w-full border border-forge-line/40 rounded-sm px-4 py-3 bg-forge-bg-raised/60 text-forge-ink font-semibold focus:outline-none focus:ring-2 focus:ring-forge-line/40 focus:border-forge-line/40 transition-all"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-forge-ink mb-2">
               To
             </label>
             <input
               type="text"
               value={getOtherPartyUsername()}
               readOnly
-              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+              className="w-full border border-forge-line/40 rounded-sm px-4 py-3 bg-forge-bg-raised/60 text-forge-ink focus:outline-none focus:ring-2 focus:ring-forge-line/40 focus:border-forge-line/40 transition-all"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-forge-ink mb-2">
               From
             </label>
             <input
               type="text"
               value={getCurrentUsername()}
               readOnly
-              className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/60 text-slate-200 focus:outline-none focus:ring-2 focus:ring-gray-500/40 focus:border-gray-500/40 transition-all"
+              className="w-full border border-forge-line/40 rounded-sm px-4 py-3 bg-forge-bg-raised/60 text-forge-ink focus:outline-none focus:ring-2 focus:ring-forge-line/40 focus:border-forge-line/40 transition-all"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-forge-ink mb-2">
             Your Contact Details
           </label>
           <input
@@ -3588,29 +3588,29 @@ export default function GigPage({
             value={manualContact}
             onChange={(e) => setManualContact(e.target.value)}
             placeholder=" Phone number"
-            className="w-full border border-slate-600/40 rounded-xl px-4 py-3 bg-slate-800/80 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 transition-all duration-200"
+            className="w-full border border-forge-line/40 rounded-sm px-4 py-3 bg-forge-bg-raised/80 text-forge-ink placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-forge-line/50 focus:border-forge-line/50 transition-all duration-200"
             required
           />
-          <p className="text-xs text-slate-400 mt-1">Required for payment verification</p>
+          <p className="text-xs text-forge-ink-muted mt-1">Required for payment verification</p>
         </div>
       </div>
 
       <div className="flex justify-end mt-8 gap-3">
         <button
-          className="px-6 py-3 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-medium rounded-xl border border-slate-600/40 transition-all duration-200 hover:shadow-lg backdrop-blur-sm"
+          className="px-6 py-3 bg-forge-bg-raised/50 hover:bg-forge-bg-raised/50 text-forge-ink font-medium rounded-sm border border-forge-line/40 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] "
           onClick={() => setShowManualPaymentModal(false)}
           disabled={isManualSubmitting}
         >
           Cancel
         </button>
         <button
-          className="px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-gray-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-6 py-3 bg-forge-bg   hover: hover: text-forge-ink font-semibold rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-gray-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           onClick={handleManualPaymentSubmit}
           disabled={isManualSubmitting || !manualContact}
         >
           {isManualSubmitting ? (
             <>
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <div className="w-4 h-4 border-2 border-forge-line/30 border-t-white rounded-full animate-spin"></div>
               Submitting...
             </>
           ) : (

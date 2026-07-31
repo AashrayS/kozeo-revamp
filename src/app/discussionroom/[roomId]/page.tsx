@@ -311,8 +311,8 @@ export default function DiscussionRoomPage({
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -321,7 +321,7 @@ export default function DiscussionRoomPage({
               <div className="text-xl mb-2">Loading discussion room...</div>
               <div
                 className={`text-sm ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                 }`}
               >
                 Please wait...
@@ -338,14 +338,14 @@ export default function DiscussionRoomPage({
       <div
         className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
         }`}
       >
         <div className="text-center">
           <h1
             className={`text-2xl font-bold mb-4 transition-colors duration-300 ${
-              theme === "dark" ? "text-white" : "text-gray-900"
+              theme === "dark" ? "text-forge-ink" : "text-forge-ink"
             }`}
           >
             {error
@@ -355,7 +355,7 @@ export default function DiscussionRoomPage({
           {error && (
             <p
               className={`mb-4 text-sm ${
-                theme === "dark" ? "text-red-400" : "text-red-600"
+                theme === "dark" ? "text-[forge-error" : "text-[forge-error"
               }`}
             >
               {error}
@@ -363,7 +363,7 @@ export default function DiscussionRoomPage({
           )}
           <button
             onClick={() => router.push("/Atrium/discussion")}
-            className="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors text-white"
+            className="px-6 py-2 bg-forge-ember hover:bg-forge-ember rounded-sm transition-colors text-forge-ink"
           >
             Back to Discussion Rooms
           </button>
@@ -377,8 +377,8 @@ export default function DiscussionRoomPage({
       {/* Glows */}
       {theme === "dark" && (
         <>
-          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
         </>
       )}
       <div className="flex flex-col h-screen">
@@ -386,8 +386,8 @@ export default function DiscussionRoomPage({
         <div
           className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -397,22 +397,22 @@ export default function DiscussionRoomPage({
             <div
               className={`p-3 md:p-4 border-b transition-all duration-300 ${
                 theme === "dark"
-                  ? "border-neutral-700 bg-neutral-900/50"
-                  : "border-gray-200 bg-white/80"
+                  ? "border-forge-line bg-forge-bg-raised/50"
+                  : "border-forge-line bg-forge-bg/80"
               }`}
             >
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <h1
                     className={`text-lg md:text-xl font-bold truncate transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     {room.title}
                   </h1>
                   <p
                     className={`text-xs md:text-sm truncate transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     {room.description}
@@ -423,8 +423,8 @@ export default function DiscussionRoomPage({
                     onClick={() => setShowMobileUsers(!showMobileUsers)}
                     className={`md:hidden flex items-center gap-1 text-xs transition-colors duration-300 ${
                       theme === "dark"
-                        ? "text-gray-400 hover:text-white"
-                        : "text-gray-600 hover:text-gray-900"
+                        ? "text-forge-ink-muted hover:text-forge-ink"
+                        : "text-forge-ink-muted hover:text-forge-ink"
                     }`}
                   >
                     <FaUsers />
@@ -432,7 +432,7 @@ export default function DiscussionRoomPage({
                   </button>
                   <div
                     className={`hidden md:flex items-center gap-1 md:gap-2 text-xs md:text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     <FaUsers />
@@ -460,8 +460,8 @@ export default function DiscussionRoomPage({
               <div
                 className={`md:hidden border-b max-h-32 overflow-y-auto transition-all duration-300 ${
                   theme === "dark"
-                    ? "border-neutral-700 bg-neutral-900/50"
-                    : "border-gray-200 bg-white/80"
+                    ? "border-forge-line bg-forge-bg-raised/50"
+                    : "border-forge-line bg-forge-bg/80"
                 }`}
               >
                 <div className="p-3">
@@ -471,16 +471,16 @@ export default function DiscussionRoomPage({
                         key={index}
                         className={`flex items-center gap-2 p-2 rounded text-xs transition-colors duration-300 ${
                           user === currentUser
-                            ? "bg-cyan-900/50 border border-cyan-500/30"
+                            ? "bg-forge-ember/50 border border-forge-ember/30"
                             : theme === "dark"
-                            ? "bg-neutral-800/50"
-                            : "bg-gray-100/80"
+                            ? "bg-forge-bg-raised/50"
+                            : "bg-forge-bg/80"
                         }`}
                       >
-                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full flex-shrink-0"></div>
+                        <div className="w-1.5 h-1.5 bg-forge-ember-low rounded-full flex-shrink-0"></div>
                         <span
                           className={`truncate transition-colors duration-300 ${
-                            theme === "dark" ? "text-white" : "text-gray-900"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           {user} {user === currentUser && "(You)"}
@@ -491,7 +491,7 @@ export default function DiscussionRoomPage({
                   {connectedUsers.length === 0 && (
                     <div
                       className={`text-xs text-center py-2 transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       No users online
@@ -505,14 +505,14 @@ export default function DiscussionRoomPage({
               {/* Global drag indicator */}
               {draggedMessage && (
                 <div
-                  className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ${
+                  className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 ${
                     isDragOver
                       ? theme === "dark"
-                        ? "bg-cyan-900 text-cyan-300 border border-cyan-500"
-                        : "bg-cyan-100 text-cyan-700 border border-cyan-400"
+                        ? "bg-forge-ember text-forge-ember border border-forge-ember"
+                        : "bg-forge-ember text-forge-ember border border-forge-ember"
                       : theme === "dark"
-                      ? "bg-neutral-800 text-gray-300 border border-neutral-600"
-                      : "bg-gray-200 text-gray-700 border border-gray-400"
+                      ? "bg-forge-bg-raised text-forge-ink border border-forge-line"
+                      : "bg-forge-bg text-forge-ink border border-forge-line"
                   }`}
                 >
                   <div className="text-sm font-medium flex items-center gap-2">
@@ -532,7 +532,7 @@ export default function DiscussionRoomPage({
                       {msg.type === "system" ? (
                         <div
                           className={`text-center text-xs italic py-1 transition-colors duration-300 cursor-text select-text ${
-                            theme === "dark" ? "text-gray-500" : "text-gray-400"
+                            theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                           }`}
                         >
                           {msg.message}
@@ -550,8 +550,8 @@ export default function DiscussionRoomPage({
                             <div
                               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 ${
                                 theme === "dark"
-                                  ? "bg-neutral-600 text-white"
-                                  : "bg-gray-300 text-gray-700"
+                                  ? "bg-forge-bg-raised text-forge-ink"
+                                  : "bg-forge-bg text-forge-ink"
                               }`}
                             >
                               {msg.sender.charAt(0).toUpperCase()}
@@ -559,16 +559,16 @@ export default function DiscussionRoomPage({
                           )}
 
                           <div
-                            className={`relative max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-lg break-words whitespace-pre-wrap transition-all duration-200 border select-text ${
-                              msg.type !== "system" ? "hover:shadow-md" : ""
+                            className={`relative max-w-[85%] sm:max-w-xs lg:max-w-md p-2 md:p-3 rounded-sm break-words whitespace-pre-wrap transition-all duration-200 border select-text ${
+                              msg.type !== "system" ? "hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]" : ""
                             } ${
                               msg.sender === currentUser
-                                ? "bg-neutral-700/30 border-neutral-600/30 text-neutral-100"
-                                : "bg-neutral-800/30 border-neutral-700/30 text-neutral-100"
+                                ? "bg-forge-bg-raised/30 border-forge-line/30 text-forge-ink"
+                                : "bg-forge-bg-raised/30 border-forge-line/30 text-forge-ink"
                             } ${
                               draggedMessage?.id === msg.id
                                 ? isDragOver
-                                  ? "opacity-75 transform translate-x-4 shadow-lg ring-2 ring-cyan-400"
+                                  ? "opacity-75 transform translate-x-4 shadow-[0_4px_20px_rgba(21,18,13,0.5)] ring-2 ring-forge-ember"
                                   : "opacity-50 transform translate-x-1"
                                 : ""
                             }`}
@@ -579,11 +579,11 @@ export default function DiscussionRoomPage({
                               <div
                                 className={`text-xs mb-2 p-2 rounded border-l-2 max-w-full overflow-hidden cursor-text select-text ${
                                   theme === "dark"
-                                    ? "bg-neutral-700/50 border-cyan-400 text-gray-300"
-                                    : "bg-gray-100/80 border-cyan-600 text-gray-600"
+                                    ? "bg-forge-bg-raised/50 border-forge-ember text-forge-ink"
+                                    : "bg-forge-bg/80 border-forge-ember text-forge-ink-muted"
                                 }`}
                               >
-                                <div className="font-semibold text-cyan-400 text-[10px] mb-1 truncate cursor-text select-text">
+                                <div className="font-semibold text-forge-ember text-[10px] mb-1 truncate cursor-text select-text">
                                   Replying to{" "}
                                   {findReplyMessage(msg.replyTo)?.sender ||
                                     "Unknown"}
@@ -598,7 +598,7 @@ export default function DiscussionRoomPage({
 
                             {/* Drag handle area */}
                             <div
-                              className="absolute left-0 top-0 w-2 h-full cursor-grab active:cursor-grabbing opacity-0 hover:opacity-30 bg-gray-500 transition-opacity"
+                              className="absolute left-0 top-0 w-2 h-full cursor-grab active:cursor-grabbing opacity-0 hover:opacity-30 bg-forge-line transition-opacity"
                               draggable={true}
                               onDragStart={(e) => handleDragStart(e, msg)}
                               onDrag={handleDrag}
@@ -610,8 +610,8 @@ export default function DiscussionRoomPage({
                               <div
                                 className={`text-xs mb-1 font-semibold truncate cursor-text select-text ${
                                   theme === "dark"
-                                    ? "text-gray-400"
-                                    : "text-gray-600"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 {msg.sender}
@@ -627,7 +627,7 @@ export default function DiscussionRoomPage({
                               <div className="flex items-center gap-2">
                                 {draggedMessage?.id === msg.id &&
                                   isDragOver && (
-                                    <span className="text-cyan-400 animate-pulse">
+                                    <span className="text-forge-ember animate-pulse-slow">
                                       →
                                     </span>
                                   )}
@@ -637,8 +637,8 @@ export default function DiscussionRoomPage({
                                     setReplyTo(msg.id)}}
                                   className={`text-[10px] opacity-50 hover:opacity-100 mx-2 transition-opacity ${
                                     theme === "dark"
-                                      ? "hover:text-cyan-400"
-                                      : "hover:text-cyan-600"
+                                      ? "hover:text-forge-ember"
+                                      : "hover:text-forge-ember"
                                   }`}
                                   title="Reply to this message"
                                 >
@@ -651,7 +651,7 @@ export default function DiscussionRoomPage({
                           {/* User Avatar - Only show for current user (right side) */}
                           {msg.sender === currentUser && (
                             <div
-                              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 bg-cyan-700 text-white`}
+                              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 bg-forge-ember text-forge-ink`}
                             >
                               {msg.sender.charAt(0).toUpperCase()}
                             </div>
@@ -666,12 +666,12 @@ export default function DiscussionRoomPage({
                 {/* Message Input */}
                 <div
                   className={`border-t p-2 md:p-4 relative transition-colors duration-300 ${
-                    theme === "dark" ? "border-neutral-700" : "border-gray-200"
+                    theme === "dark" ? "border-forge-line" : "border-forge-line"
                   } ${
                     isDragOver
                       ? theme === "dark"
-                        ? "bg-cyan-900/20 border-cyan-500"
-                        : "bg-cyan-50 border-cyan-300"
+                        ? "bg-forge-ember/20 border-forge-ember"
+                        : "bg-forge-ember border-forge-ember"
                       : ""
                   }`}
                 >
@@ -680,13 +680,13 @@ export default function DiscussionRoomPage({
                     <div
                       className={`mb-3 p-2 rounded border-l-4 max-w-full overflow-hidden ${
                         theme === "dark"
-                          ? "bg-neutral-800/50 border-cyan-400 text-gray-300"
-                          : "bg-gray-100/80 border-cyan-600 text-gray-600"
+                          ? "bg-forge-bg-raised/50 border-forge-ember text-forge-ink"
+                          : "bg-forge-bg/80 border-forge-ember text-forge-ink-muted"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-cyan-400 text-xs mb-1 truncate">
+                          <div className="font-semibold text-forge-ember text-xs mb-1 truncate">
                             Replying to{" "}
                             {findReplyMessage(replyTo)?.sender || "Unknown"}:
                           </div>
@@ -697,10 +697,10 @@ export default function DiscussionRoomPage({
                         </div>
                         <button
                           onClick={() => setReplyTo(null)}
-                          className={`flex-shrink-0 p-1 rounded hover:bg-red-500/20 transition-colors ${
+                          className={`flex-shrink-0 p-1 rounded hover:bg-[forge-error-bg/20 transition-colors ${
                             theme === "dark"
-                              ? "text-red-400 hover:text-red-300"
-                              : "text-red-600 hover:text-red-500"
+                              ? "text-[forge-error hover:text-[forge-error"
+                              : "text-[forge-error hover:text-[forge-error"
                           }`}
                         >
                           ✕
@@ -712,10 +712,10 @@ export default function DiscussionRoomPage({
                   {/* Drag Drop Indicator */}
                   {isDragOver && (
                     <div
-                      className={`mb-3 p-4 rounded-lg border-2 border-dashed text-center transition-colors ${
+                      className={`mb-3 p-4 rounded-sm border-2 border-dashed text-center transition-colors ${
                         theme === "dark"
-                          ? "border-cyan-400 bg-cyan-900/20 text-cyan-400"
-                          : "border-cyan-600 bg-cyan-50 text-cyan-600"
+                          ? "border-forge-ember bg-forge-ember/20 text-forge-ember"
+                          : "border-forge-ember bg-forge-ember text-forge-ember"
                       }`}
                     >
                       <div className="text-sm font-medium">
@@ -748,8 +748,8 @@ export default function DiscussionRoomPage({
                         onClick={() => setShowEmoji(!showEmoji)}
                         className={`text-lg md:text-xl p-1 transition-colors duration-300 ${
                           theme === "dark"
-                            ? "text-gray-400 hover:text-white"
-                            : "text-gray-600 hover:text-gray-900"
+                            ? "text-forge-ink-muted hover:text-forge-ink"
+                            : "text-forge-ink-muted hover:text-forge-ink"
                         }`}
                       >
                         <FaRegSmile />
@@ -761,12 +761,12 @@ export default function DiscussionRoomPage({
                       onKeyDown={handleKeyDown}
                       disabled={!user}
                       rows={Math.min(Math.max(input.split("\n").length, 1), 5)}
-                      className={`flex-1 border p-2 md:p-3 rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300 resize-none ${
+                      className={`flex-1 border p-2 md:p-3 rounded-sm text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-forge-line transition-all duration-300 resize-none ${
                         !user ? "opacity-50 cursor-not-allowed" : ""
                       } ${
                         theme === "dark"
-                          ? "bg-neutral-800 border-neutral-600 text-white placeholder-gray-400"
-                          : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                          : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                       }`}
                       placeholder={
                         replyTo
@@ -782,7 +782,7 @@ export default function DiscussionRoomPage({
                     <button
                       onClick={handleSendMessage}
                       disabled={!input.trim() || !user}
-                      className="px-2 md:px-4 py-2 md:py-3 bg-cyan-600 hover:bg-cyan-700 disabled:bg-cyan-800 disabled:opacity-50 rounded-md text-white font-semibold transition-colors text-sm md:text-base"
+                      className="px-2 md:px-4 py-2 md:py-3 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-ember disabled:opacity-50 rounded-sm text-forge-ink font-semibold transition-colors text-sm md:text-base"
                     >
                       <span className="hidden sm:inline">Send</span>
                       <span className="sm:hidden">→</span>
@@ -795,21 +795,21 @@ export default function DiscussionRoomPage({
               <div
                 className={`hidden md:block w-48 lg:w-64 border-l transition-colors duration-300 ${
                   theme === "dark"
-                    ? "border-neutral-700 bg-neutral-900/30"
-                    : "border-gray-200 bg-white/50"
+                    ? "border-forge-line bg-forge-bg-raised/30"
+                    : "border-forge-line bg-forge-bg/50"
                 }`}
               >
                 <div
                   className={`p-3 lg:p-4 border-b transition-colors duration-300 ${
-                    theme === "dark" ? "border-neutral-700" : "border-gray-200"
+                    theme === "dark" ? "border-forge-line" : "border-forge-line"
                   }`}
                 >
                   <h3
                     className={`font-semibold flex items-center gap-2 text-sm lg:text-base transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
-                    <FaUsers className="text-cyan-400" />
+                    <FaUsers className="text-forge-ember" />
                     <span className="hidden lg:inline">
                       Online Users ({connectedUsers.length})
                     </span>
@@ -822,18 +822,18 @@ export default function DiscussionRoomPage({
                   {connectedUsers.map((user, index) => (
                     <div
                       key={index}
-                      className={`flex items-center gap-1 lg:gap-2 p-1 lg:p-2 rounded-lg transition-colors duration-300 ${
+                      className={`flex items-center gap-1 lg:gap-2 p-1 lg:p-2 rounded-sm transition-colors duration-300 ${
                         user === currentUser
-                          ? "bg-cyan-900/50 border border-cyan-500/30"
+                          ? "bg-forge-ember/50 border border-forge-ember/30"
                           : theme === "dark"
-                          ? "bg-neutral-800/50"
-                          : "bg-gray-100/80"
+                          ? "bg-forge-bg-raised/50"
+                          : "bg-forge-bg/80"
                       }`}
                     >
-                      <div className="w-2 h-2 bg-green-400 rounded-full flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-forge-ember-low rounded-full flex-shrink-0"></div>
                       <span
                         className={`text-xs lg:text-sm truncate transition-colors duration-300 ${
-                          theme === "dark" ? "text-white" : "text-gray-900"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {user} {user === currentUser && "(You)"}
@@ -843,7 +843,7 @@ export default function DiscussionRoomPage({
                   {connectedUsers.length === 0 && (
                     <div
                       className={`text-xs lg:text-sm text-center py-4 transition-colors duration-300 ${
-                        theme === "dark" ? "text-gray-500" : "text-gray-400"
+                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       No users online

@@ -217,8 +217,8 @@ export default function CreateGigPage() {
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-900"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
         }`}
       >
         <Sidebar />
@@ -229,17 +229,17 @@ export default function CreateGigPage() {
               <div className="text-center mb-6 sm:mb-8 lg:mb-12">
                 <h1
                   className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light tracking-tight mb-3 sm:mb-4 transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Create Your Next
-                  <span className="bg-gradient-to-r from-black via-black/80 to-black/60 dark:from-white dark:via-white/80 dark:to-white/60 bg-clip-text text-transparent font-medium ml-2 sm:ml-3 block sm:inline">
+                  <span className="bg-forge-bg text-forge-ember bg-clip-text text-transparent font-medium ml-2 sm:ml-3 block sm:inline">
                     Collaboration
                   </span>
                 </h1>
                 <p
                   className={`text-base sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed transition-colors duration-300 px-4 sm:px-0 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                   }`}
                 >
                   Transform your ideas into reality by connecting with talented
@@ -249,12 +249,32 @@ export default function CreateGigPage() {
 
               <form
                 onSubmit={handleSubmit}
-                className="w-full premium-card p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8"
+                className={`w-full rounded-sm sm:rounded-sm border-0 shadow-[0_4px_20px_rgba(21,18,13,0.5)] sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 lg:p-12 xl:p-16 flex flex-col gap-6 sm:gap-8 transition-all duration-300 relative ${
+                  theme === "dark"
+                    ? "bg-forge-bg-raised/80  border border-forge-line/50"
+                    : "bg-forge-bg/95  border border-forge-line/50"
+                }`}
+                style={{
+                  boxShadow:
+                    theme === "dark"
+                      ? "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)"
+                      : "0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.8)",
+                }}
               >
+                {/* Subtle background pattern */}
+                <div className="absolute inset-0 opacity-[0.02]">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(90,47,24,0.2),transparent_50%)]"></div>
+                </div>
+
                 <div className="relative z-10 space-y-6 sm:space-y-8">
                   {/* Title Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label className="premium-label">
+                    <label
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      }`}
+                    >
                       Project Title
                     </label>
                     <input
@@ -262,14 +282,22 @@ export default function CreateGigPage() {
                       value={form.title}
                       onChange={handleChange}
                       placeholder="Enter an engaging project title..."
-                      className="premium-input"
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                        theme === "dark"
+                          ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line/30 focus:border-forge-ember"
+                          : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line/30 focus:border-forge-ember"
+                      }`}
                       required
                     />
                   </div>
 
                   {/* Looking For Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label className="premium-label">
+                    <label
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      }`}
+                    >
                       Looking For
                     </label>
                     <input
@@ -277,14 +305,22 @@ export default function CreateGigPage() {
                       value={form.looking_For}
                       onChange={handleChange}
                       placeholder="e.g., React Developer, UI/UX Designer..."
-                      className="premium-input"
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                        theme === "dark"
+                          ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line/30 focus:border-forge-ember"
+                          : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line/30 focus:border-forge-ember"
+                      }`}
                       required
                     />
                   </div>
 
                   {/* Description Input */}
                   <div className="space-y-2 sm:space-y-3">
-                    <label className="premium-label">
+                    <label
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      }`}
+                    >
                       Project Description
                     </label>
                     <textarea
@@ -293,14 +329,22 @@ export default function CreateGigPage() {
                       onChange={handleChange}
                       placeholder="Describe your project vision, goals, and what makes it exciting..."
                       rows={4}
-                      className="premium-input resize-none"
+                      className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 resize-none ${
+                        theme === "dark"
+                          ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line/30 focus:border-forge-ember"
+                          : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line/30 focus:border-forge-ember"
+                      }`}
                       required
                     />
                   </div>
 
                   {/* Skills Section */}
                   <div className="space-y-3 sm:space-y-4">
-                    <label className="premium-label">
+                    <label
+                      className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      }`}
+                    >
                       Required Skills
                     </label>
 
@@ -313,7 +357,11 @@ export default function CreateGigPage() {
                           e.key === "Enter" && (e.preventDefault(), addSkill())
                         }
                         placeholder="Add a skill (e.g., React, Figma...)"
-                        className="premium-input border-2"
+                        className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                          theme === "dark"
+                            ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line/30 focus:border-forge-ember"
+                            : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line/30 focus:border-forge-ember"
+                        }`}
                       />
                       <ProfessionalButton
                         onClick={addSkill}
@@ -330,10 +378,10 @@ export default function CreateGigPage() {
                       {form.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base ${
+                          className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-sm sm:rounded-sm border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base ${
                             theme === "dark"
-                              ? "bg-neutral-800/70 border-neutral-600 text-gray-200"
-                              : "bg-gray-50 border-gray-200 text-gray-800"
+                              ? "bg-forge-bg-raised/70 border-forge-line text-forge-ink"
+                              : "bg-forge-bg border-forge-line text-forge-ink"
                           }`}
                         >
                           <span className="font-medium">{skill}</span>
@@ -342,8 +390,8 @@ export default function CreateGigPage() {
                             onClick={() => removeSkill(skill)}
                             className={`transition-colors duration-300 hover:scale-110 ${
                               theme === "dark"
-                                ? "text-gray-400 hover:text-red-400"
-                                : "text-gray-500 hover:text-red-500"
+                                ? "text-forge-ink-muted hover:text-[forge-error"
+                                : "text-forge-ink-muted hover:text-[forge-error"
                             }`}
                           >
                             <FiX className="text-lg" />
@@ -355,41 +403,45 @@ export default function CreateGigPage() {
 
                   {/* Skill Forge Toggle Section */}
                   <div
-                    className={`relative p-4 sm:p-6 lg:p-8 premium-card border transition-all duration-300 ${
+                    className={`relative p-4 sm:p-6 lg:p-8 rounded-sm sm:rounded-sm border transition-all duration-300 ${
                       form.isSkillForge
-                        ? "border-black/20 dark:border-white/20"
-                        : "border-black/5 dark:border-white/5 opacity-80"
+                        ? theme === "dark"
+                          ? "bg-forge-bg-raised/60 border-forge-ember/30 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                          : "bg-forge-ember-low border-forge-ember/50 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                        : theme === "dark"
+                        ? "bg-forge-bg-raised/30 border-forge-line/50"
+                        : "bg-forge-bg/50 border-forge-line"
                     }`}
                   >
                     <div className="relative z-10">
                       <div className="flex items-start gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
                         <div
-                          className={`p-3 sm:p-4 rounded-lg sm:rounded-xl transition-all duration-300 flex-shrink-0 ${
+                          className={`p-3 sm:p-4 rounded-sm sm:rounded-sm transition-all duration-300 flex-shrink-0 ${
                             form.isSkillForge
                               ? theme === "dark"
-                                ? "bg-white/10 shadow-md"
-                                : "bg-black/5 shadow-sm"
+                                ? "bg-forge-ember-low shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                                : "bg-forge-ember-low shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                               : theme === "dark"
-                              ? "bg-neutral-800"
-                              : "bg-gray-200"
+                              ? "bg-forge-bg-raised"
+                              : "bg-forge-bg"
                           }`}
                         >
                           <FiUsers
                             className={`text-xl sm:text-2xl transition-all duration-300 ${
                               form.isSkillForge
                                 ? theme === "dark"
-                                  ? "text-white"
-                                  : "text-black"
+                                  ? "text-forge-ember"
+                                  : "text-forge-ember"
                                 : theme === "dark"
-                                ? "text-gray-400"
-                                : "text-gray-600"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3
                             className={`text-lg sm:text-xl font-semibold mb-2 transition-colors duration-300 ${
-                              theme === "dark" ? "text-white" : "text-gray-900"
+                              theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                             }`}
                           >
                             Profile Building Collaboration
@@ -397,8 +449,8 @@ export default function CreateGigPage() {
                           <p
                             className={`text-sm sm:text-base leading-relaxed transition-colors duration-300 ${
                               theme === "dark"
-                                ? "text-gray-300"
-                                : "text-gray-600"
+                                ? "text-forge-ink"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             Enable experience-based collaboration focused on
@@ -420,22 +472,22 @@ export default function CreateGigPage() {
                           className={`relative w-14 sm:w-16 h-7 sm:h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 flex-shrink-0 ${
                             form.isSkillForge
                               ? theme === "dark"
-                                ? "bg-white/40 focus:ring-white/30"
-                                : "bg-black/40 focus:ring-black/30"
+                                ? "bg-forge-ember-low focus:ring-forge-line/30"
+                                : "bg-forge-ember-low focus:ring-forge-line/30"
                               : theme === "dark"
-                              ? "bg-neutral-600 focus:ring-neutral-500/30"
-                              : "bg-gray-300 focus:ring-gray-400/30"
+                              ? "bg-forge-bg-raised focus:ring-neutral-500/30"
+                              : "bg-forge-bg focus:ring-gray-400/30"
                           }`}
                         >
                           <div
-                            className={`absolute top-0.5 left-0.5 sm:top-1 sm:left-1 w-6 h-6 sm:w-6 sm:h-6 bg-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center ${
+                            className={`absolute top-0.5 left-0.5 sm:top-1 sm:left-1 w-6 h-6 sm:w-6 sm:h-6 bg-forge-bg rounded-full shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 flex items-center justify-center ${
                               form.isSkillForge
                                 ? "translate-x-7 sm:translate-x-8"
                                 : "translate-x-0"
                             }`}
                           >
                             {form.isSkillForge && (
-                              <FiCheck className="text-black text-xs" />
+                              <FiCheck className="text-forge-ember text-xs" />
                             )}
                           </div>
                         </button>
@@ -443,11 +495,11 @@ export default function CreateGigPage() {
                           className={`text-sm sm:text-base font-medium transition-colors duration-300 ${
                             form.isSkillForge
                               ? theme === "dark"
-                                ? "text-white/60"
-                                : "text-black/60"
+                                ? "text-forge-ember"
+                                : "text-forge-ember"
                               : theme === "dark"
-                              ? "text-gray-400"
-                              : "text-gray-600"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           {form.isSkillForge ? "Enabled" : "Disabled"}
@@ -457,25 +509,25 @@ export default function CreateGigPage() {
                       {/* Professional Skill Forge Info Card */}
                       {form.isSkillForge && (
                         <div
-                          className={`p-4 sm:p-6 rounded-lg sm:rounded-xl border transition-all duration-300 ${
+                          className={`p-4 sm:p-6 rounded-sm sm:rounded-sm border transition-all duration-300 ${
                             theme === "dark"
-                              ? "bg-neutral-800/50 border-neutral-600/50"
-                              : "bg-white/80 border-gray-200/50"
+                              ? "bg-forge-bg-raised/50 border-forge-line/50"
+                              : "bg-forge-bg/80 border-forge-line/50"
                           }`}
                         >
                           <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div
-                              className={`p-2 sm:p-3 rounded-lg flex-shrink-0 ${
+                              className={`p-2 sm:p-3 rounded-sm flex-shrink-0 ${
                                 theme === "dark"
-                                  ? "bg-white/10"
-                                : "bg-black/5"
+                                  ? "bg-forge-ember-low"
+                                  : "bg-forge-ember-low"
                               }`}
                             >
                               <FiInfo
                                 className={`text-lg ${
                                   theme === "dark"
-                                    ? "text-white/60"
-                                    : "text-black/60"
+                                    ? "text-forge-ember"
+                                    : "text-forge-ember"
                                 }`}
                               />
                             </div>
@@ -483,8 +535,8 @@ export default function CreateGigPage() {
                               <h4
                                 className={`text-base sm:text-lg font-semibold mb-3 transition-colors duration-300 ${
                                   theme === "dark"
-                                    ? "text-white"
-                                    : "text-gray-900"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 Skill Forge Projects
@@ -492,44 +544,44 @@ export default function CreateGigPage() {
                               <div
                                 className={`grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm transition-colors duration-300 ${
                                   theme === "dark"
-                                    ? "text-gray-300"
-                                    : "text-gray-700"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                  <FiUsers className="text-green-500 text-sm flex-shrink-0" />
+                                  <FiUsers className="text-forge-ember text-sm flex-shrink-0" />
                                   <span>Get eager learners</span>
                                 </div>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                  <FiHeart className="text-red-500 text-sm flex-shrink-0" />
+                                  <FiHeart className="text-[forge-error text-sm flex-shrink-0" />
                                   <span>No payment required</span>
                                 </div>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                  <FiGift className="text-purple-500 text-sm flex-shrink-0" />
+                                  <FiGift className="text-forge-ink-muted text-sm flex-shrink-0" />
                                   <span>Help others learn</span>
                                 </div>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                  <FiTrendingUp className="text-blue-500 text-sm flex-shrink-0" />
+                                  <FiTrendingUp className="text-forge-ember text-sm flex-shrink-0" />
                                   <span>Build your network</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div
-                            className={`mt-3 sm:mt-4 p-3 sm:p-4 rounded-lg transition-colors duration-300 ${
+                            className={`mt-3 sm:mt-4 p-3 sm:p-4 rounded-sm transition-colors duration-300 ${
                               theme === "dark"
-                                ? "bg-white/5 border border-white/10"
-                                : "bg-black/5 border border-black/10"
+                                ? "bg-forge-ember-low border border-forge-ember/20"
+                                : "bg-forge-ember-low border border-forge-ember/30"
                             }`}
                           >
                             <p
                               className={`text-xs sm:text-sm leading-relaxed transition-colors duration-300 ${
                                 theme === "dark"
-                                  ? "text-gray-400"
-                                  : "text-gray-600"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             >
-                              <FiTarget className="inline mr-2 text-blue-500 flex-shrink-0" />
+                              <FiTarget className="inline mr-2 text-forge-ember flex-shrink-0" />
                               <strong>Good for:</strong> Projects where you want
                               to teach, share knowledge, or work with people who
                               are learning - no money involved.
@@ -544,17 +596,21 @@ export default function CreateGigPage() {
                   {!form.isSkillForge && (
                     <div className="space-y-3 sm:space-y-4">
                       <div className="flex items-center justify-between">
-                        <label className="premium-label">
+                        <label
+                          className={`block text-xs sm:text-sm font-semibold tracking-wide uppercase transition-colors duration-300 ${
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                          }`}
+                        >
                           Project Budget
                         </label>
                         {form.currency !== "INR" && (
                           <button
                             type="button"
                             onClick={updateExchangeRates}
-                            className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors duration-300 ${
+                            className={`flex items-center gap-1 px-2 py-1 text-xs rounded-sm transition-colors duration-300 ${
                               theme === "dark"
-                                ? "text-white/60 hover:bg-white/10"
-                                : "text-black/60 hover:bg-black/5"
+                                ? "text-forge-ember hover:bg-forge-ember-low"
+                                : "text-forge-ember hover:bg-forge-ember-low"
                             }`}
                           >
                             <FiRefreshCw className="text-xs" />
@@ -573,9 +629,13 @@ export default function CreateGigPage() {
                                 !isCurrencyDropdownOpen
                               );
                             }}
-                            className="premium-input flex items-center justify-between"
+                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 flex items-center justify-between ${
+                              theme === "dark"
+                                ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink focus:ring-forge-line/30 focus:border-forge-ember hover:bg-forge-bg-raised/70"
+                                : "bg-forge-bg/80 border-forge-line text-forge-ink focus:ring-forge-line/30 focus:border-forge-ember hover:bg-forge-bg"
+                            }`}
                           >
-                            <div className="flex items-center gap-2 sm:gap-3 text-left">
+                            <div className="flex items-center gap-2 sm:gap-3">
                               <span className="text-lg sm:text-xl">
                                 {
                                   currencyOptions.find(
@@ -594,8 +654,8 @@ export default function CreateGigPage() {
                                 <span
                                   className={`text-sm ${
                                     theme === "dark"
-                                      ? "text-gray-400"
-                                      : "text-gray-500"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink-muted"
                                   }`}
                                 >
                                   (
@@ -614,7 +674,9 @@ export default function CreateGigPage() {
                                   ? "rotate-180"
                                   : "rotate-0"
                               } ${
-                                theme === "dark" ? "text-gray-400" : "text-gray-500"
+                                theme === "dark"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             />
                           </button>
@@ -622,9 +684,17 @@ export default function CreateGigPage() {
                           {/* Professional Dropdown Menu */}
                           {isCurrencyDropdownOpen && (
                             <div
-                              className="absolute top-full left-0 right-0 mt-2 rounded-2xl border border-black/5 dark:border-white/10 shadow-2xl overflow-hidden premium-glass"
+                              className={`absolute top-full left-0 right-0 mt-2 rounded-sm sm:rounded-sm border-2 shadow-[0_4px_20px_rgba(21,18,13,0.5)] overflow-hidden  ${
+                                theme === "dark"
+                                  ? "bg-forge-bg-raised/95 border-forge-line"
+                                  : "bg-forge-bg/95 border-forge-line"
+                              }`}
                               style={{
                                 zIndex: 9999,
+                                boxShadow:
+                                  theme === "dark"
+                                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)"
+                                    : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8)",
                               }}
                             >
                               {currencyOptions.map((option) => (
@@ -637,11 +707,11 @@ export default function CreateGigPage() {
                                   className={`w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center gap-2 sm:gap-3 transition-all duration-200 ${
                                     form.currency === option.code
                                       ? theme === "dark"
-                                        ? "bg-blue-900/50 text-blue-400"
-                                        : "bg-blue-50 text-blue-600"
+                                        ? "bg-forge-ember-low text-forge-ember"
+                                        : "bg-forge-ember-low text-forge-ember"
                                       : theme === "dark"
-                                      ? "text-white hover:bg-neutral-700/50"
-                                      : "text-gray-900 hover:bg-gray-50"
+                                      ? "text-forge-ink hover:bg-forge-bg-raised/50"
+                                      : "text-forge-ink hover:bg-forge-bg"
                                   }`}
                                 >
                                   <span className="text-lg sm:text-xl">
@@ -655,11 +725,11 @@ export default function CreateGigPage() {
                                       className={`text-xs sm:text-sm ${
                                         form.currency === option.code
                                           ? theme === "dark"
-                                            ? "text-blue-300"
-                                            : "text-blue-500"
+                                            ? "text-forge-ember"
+                                            : "text-forge-ember"
                                           : theme === "dark"
-                                          ? "text-gray-400"
-                                          : "text-gray-500"
+                                          ? "text-forge-ink-muted"
+                                          : "text-forge-ink-muted"
                                       }`}
                                     >
                                       ({option.symbol})
@@ -669,11 +739,11 @@ export default function CreateGigPage() {
                                     className={`text-xs sm:text-sm ${
                                       form.currency === option.code
                                         ? theme === "dark"
-                                          ? "text-blue-300"
-                                          : "text-blue-500"
+                                          ? "text-forge-ember"
+                                          : "text-forge-ember"
                                         : theme === "dark"
-                                        ? "text-gray-500"
-                                        : "text-gray-400"
+                                        ? "text-forge-ink-muted"
+                                        : "text-forge-ink-muted"
                                     }`}
                                   >
                                     {option.name}
@@ -682,8 +752,8 @@ export default function CreateGigPage() {
                                     <FiCheck
                                       className={`text-sm ${
                                         theme === "dark"
-                                          ? "text-blue-400"
-                                          : "text-blue-600"
+                                          ? "text-forge-ember"
+                                          : "text-forge-ember"
                                       }`}
                                     />
                                   )}
@@ -699,10 +769,10 @@ export default function CreateGigPage() {
                           placeholder="Enter amount"
                           type="number"
                           min="0"
-                          className={`sm:col-span-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
+                          className={`sm:col-span-2 px-4 sm:px-6 py-3 sm:py-4 rounded-sm sm:rounded-sm border-2 text-base sm:text-lg focus:outline-none focus:ring-4 transition-all duration-300 ${
                             theme === "dark"
-                              ? "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500 focus:ring-white/20 focus:border-white/40"
-                              : "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-black/10 focus:border-black/40"
+                              ? "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line/30 focus:border-forge-ember"
+                              : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line/30 focus:border-forge-ember"
                           }`}
                           required
                         />
@@ -711,10 +781,10 @@ export default function CreateGigPage() {
                       {/* Currency Conversion Display */}
                       {form.currency !== "INR" && convertedAmount && (
                         <div
-                          className={`p-3 sm:p-4 rounded-lg border transition-all duration-300 ${
+                          className={`p-3 sm:p-4 rounded-sm border transition-all duration-300 ${
                             theme === "dark"
-                              ? "bg-neutral-800/40 border-neutral-600/50"
-                              : "bg-gray-50/80 border-gray-200/50"
+                              ? "bg-forge-bg-raised/40 border-forge-line/50"
+                              : "bg-forge-bg/80 border-forge-line/50"
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -722,15 +792,15 @@ export default function CreateGigPage() {
                               <div
                                 className={`w-2 h-2 rounded-full ${
                                   theme === "dark"
-                                    ? "bg-green-400"
-                                    : "bg-green-500"
+                                    ? "bg-forge-ember-low"
+                                    : "bg-forge-ember-low"
                                 }`}
                               ></div>
                               <span
                                 className={`text-xs sm:text-sm font-medium ${
                                   theme === "dark"
-                                    ? "text-gray-300"
-                                    : "text-gray-700"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 Converted to INR:
@@ -740,8 +810,8 @@ export default function CreateGigPage() {
                               <span
                                 className={`text-sm sm:text-base font-semibold ${
                                   theme === "dark"
-                                    ? "text-white"
-                                    : "text-gray-900"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 ₹{convertedAmount}
@@ -749,8 +819,8 @@ export default function CreateGigPage() {
                               <span
                                 className={`text-xs ${
                                   theme === "dark"
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 @
@@ -770,30 +840,30 @@ export default function CreateGigPage() {
                   {/* Skill Forge Payment Display */}
                   {form.isSkillForge && (
                     <div
-                      className={`p-4 sm:p-6 rounded-lg sm:rounded-xl border transition-all duration-300 ${
+                      className={`p-4 sm:p-6 rounded-sm sm:rounded-sm border transition-all duration-300 ${
                         theme === "dark"
-                          ? "bg-neutral-800/60 border-blue-500/20"
-                          : "bg-blue-50/50 border-blue-200/50"
+                          ? "bg-forge-bg-raised/60 border-forge-ember/20"
+                          : "bg-forge-ember-low border-forge-ember/50"
                       }`}
                     >
                       <div className="flex items-center justify-center gap-3 sm:gap-4">
                         <div
-                          className={`w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                            theme === "dark" ? "bg-blue-900/50" : "bg-blue-100"
+                          className={`w-8 sm:w-10 h-8 sm:h-10 rounded-sm flex items-center justify-center flex-shrink-0 ${
+                            theme === "dark" ? "bg-forge-ember-low" : "bg-forge-ember-low"
                           }`}
                         >
                           <FiGift
                             className={`text-lg sm:text-xl ${
                               theme === "dark"
-                                ? "text-white/60"
-                                : "text-black/60"
+                                ? "text-forge-ember"
+                                : "text-forge-ember"
                             }`}
                           />
                         </div>
                         <div className="text-center">
                           <p
                             className={`text-base sm:text-lg font-semibold mb-1 transition-colors duration-300 ${
-                              theme === "dark" ? "text-white" : "text-gray-900"
+                              theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                             }`}
                           >
                             Experience-Based Collaboration
@@ -801,8 +871,8 @@ export default function CreateGigPage() {
                           <p
                             className={`text-xs sm:text-sm transition-colors duration-300 ${
                               theme === "dark"
-                                ? "text-gray-300"
-                                : "text-gray-600"
+                                ? "text-forge-ink"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             No monetary exchange • Focus on skill development &
@@ -815,16 +885,16 @@ export default function CreateGigPage() {
 
                   {/* Error/Success Messages */}
                   {error && (
-                    <div className="p-3 sm:p-4 bg-red-500/10 border-2 border-red-500/30 rounded-xl sm:rounded-2xl backdrop-blur-sm">
-                      <p className="text-red-400 font-medium text-sm sm:text-base">
+                    <div className="p-3 sm:p-4 bg-[forge-error-bg/10 border-2 border-[forge-error/30 rounded-sm sm:rounded-sm ">
+                      <p className="text-[forge-error font-medium text-sm sm:text-base">
                         {error}
                       </p>
                     </div>
                   )}
 
                   {success && (
-                    <div className="p-3 sm:p-4 bg-green-500/10 border-2 border-green-500/30 rounded-xl sm:rounded-2xl backdrop-blur-sm">
-                      <p className="text-green-400 font-medium text-sm sm:text-base">
+                    <div className="p-3 sm:p-4 bg-forge-ember-low/10 border-2 border-forge-ember/30 rounded-sm sm:rounded-sm ">
+                      <p className="text-forge-ember font-medium text-sm sm:text-base">
                         {success}
                       </p>
                     </div>
@@ -861,8 +931,8 @@ export default function CreateGigPage() {
         {/* Glows - Hidden on mobile for better performance */}
         {theme === "dark" && (
           <>
-            <div className="hidden sm:block fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-            <div className="hidden sm:block fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+            <div className="hidden sm:block fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+            <div className="hidden sm:block fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
           </>
         )}
       </div>

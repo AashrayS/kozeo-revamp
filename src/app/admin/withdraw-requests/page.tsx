@@ -230,17 +230,17 @@ export default function WithdrawRequestsAdminPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "pending":
-        return "text-yellow-500 bg-yellow-500/10 border-yellow-500/20";
+        return "text-forge-ember bg-yellow-500/10 border-yellow-500/20";
       case "approved":
-        return "text-blue-500 bg-blue-500/10 border-blue-500/20";
+        return "text-forge-ember bg-forge-ember-low border-forge-ember/20";
       case "completed":
-        return "text-green-500 bg-green-500/10 border-green-500/20";
+        return "text-forge-ember bg-forge-ember-low/10 border-forge-ember/20";
       case "rejected":
-        return "text-red-500 bg-red-500/10 border-red-500/20";
+        return "text-[forge-error bg-[forge-error-bg/10 border-[forge-error/20";
       case "processed":
-        return "text-purple-500 bg-purple-500/10 border-purple-500/20";
+        return "text-forge-ink-muted bg-forge-ember-low/10 border-forge-line/20";
       default:
-        return "text-gray-500 bg-gray-500/10 border-gray-500/20";
+        return "text-forge-ink-muted bg-forge-line/10 border-forge-line/20";
     }
   };
 
@@ -294,16 +294,16 @@ export default function WithdrawRequestsAdminPage() {
       {/* Background glows */}
       {theme === "dark" && (
         <>
-          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
         </>
       )}
 
       <div
         className={`min-h-screen relative z-10 flex transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
         }`}
       >
         <Sidebar />
@@ -315,7 +315,7 @@ export default function WithdrawRequestsAdminPage() {
               <div className="flex items-center justify-between mb-4">
                 <h1
                   className={`text-3xl font-bold transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Withdraw Requests Management
@@ -323,10 +323,10 @@ export default function WithdrawRequestsAdminPage() {
                 <button
                   onClick={fetchWithdrawRequests}
                   disabled={loading}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-sm border transition-all duration-200 ${
                     theme === "dark"
-                      ? "bg-neutral-800 border-neutral-700 text-white hover:bg-neutral-700"
-                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                      ? "bg-forge-bg-raised border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                      : "bg-forge-bg border-forge-line text-forge-ink hover:bg-forge-bg"
                   }`}
                 >
                   <FiRefreshCw
@@ -338,7 +338,7 @@ export default function WithdrawRequestsAdminPage() {
 
               <p
                 className={`transition-colors duration-300 ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                 }`}
               >
                 Manage and update withdrawal request statuses
@@ -347,19 +347,19 @@ export default function WithdrawRequestsAdminPage() {
 
             {/* Messages */}
             {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <div className="mb-6 p-4 bg-[forge-error-bg/10 border border-[forge-error/20 rounded-sm">
                 <div className="flex items-center gap-3">
-                  <FiAlertTriangle className="text-red-500" />
-                  <p className="text-red-500">{error}</p>
+                  <FiAlertTriangle className="text-[forge-error" />
+                  <p className="text-[forge-error">{error}</p>
                 </div>
               </div>
             )}
 
             {success && (
-              <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <div className="mb-6 p-4 bg-forge-ember-low/10 border border-forge-ember/20 rounded-sm">
                 <div className="flex items-center gap-3">
-                  <FiCheck className="text-green-500" />
-                  <p className="text-green-500">{success}</p>
+                  <FiCheck className="text-forge-ember" />
+                  <p className="text-forge-ember">{success}</p>
                 </div>
               </div>
             )}
@@ -371,14 +371,14 @@ export default function WithdrawRequestsAdminPage() {
                   label: "Total Requests",
                   value: withdrawRequests.length,
                   icon: FiDollarSign,
-                  color: "text-blue-500",
+                  color: "text-forge-ember",
                 },
                 {
                   label: "Pending",
                   value: withdrawRequests.filter((r) => r.status === "pending")
                     .length,
                   icon: FiClock,
-                  color: "text-yellow-500",
+                  color: "text-forge-ember",
                 },
                 {
                   label: "Completed",
@@ -386,7 +386,7 @@ export default function WithdrawRequestsAdminPage() {
                     (r) => r.status === "completed"
                   ).length,
                   icon: FiCheck,
-                  color: "text-green-500",
+                  color: "text-forge-ember",
                 },
                 {
                   label: "Total Amount",
@@ -396,29 +396,29 @@ export default function WithdrawRequestsAdminPage() {
                       .reduce((sum, r) => sum + r.amount, 0)
                   ),
                   icon: FiDollarSign,
-                  color: "text-purple-500",
+                  color: "text-forge-ink-muted",
                 },
               ].map((stat, index) => (
                 <div
                   key={index}
-                  className={`p-6 rounded-xl border transition-all duration-300 ${
+                  className={`p-6 rounded-sm border transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-neutral-900/50 border-neutral-800"
-                      : "bg-white border-gray-200 shadow-sm"
+                      ? "bg-forge-bg-raised/50 border-forge-line"
+                      : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <p
                         className={`text-sm transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         {stat.label}
                       </p>
                       <p
                         className={`text-xl font-semibold mt-1 transition-colors duration-300 ${
-                          theme === "dark" ? "text-white" : "text-gray-900"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {stat.value}
@@ -432,29 +432,29 @@ export default function WithdrawRequestsAdminPage() {
 
             {/* Requests Table */}
             <div
-              className={`rounded-xl border overflow-hidden transition-all duration-300 ${
+              className={`rounded-sm border overflow-hidden transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-neutral-900/50 border-neutral-800"
-                  : "bg-white border-gray-200 shadow-sm"
+                  ? "bg-forge-bg-raised/50 border-forge-line"
+                  : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
               }`}
             >
               {withdrawRequests.length === 0 ? (
                 <div className="p-12 text-center">
                   <FiDollarSign
                     className={`text-4xl mx-auto mb-4 transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-600" : "text-gray-400"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   />
                   <h3
                     className={`text-lg font-medium mb-2 transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     No Withdraw Requests
                   </h3>
                   <p
                     className={`transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     There are currently no withdrawal requests to display.
@@ -467,48 +467,48 @@ export default function WithdrawRequestsAdminPage() {
                       <tr
                         className={`border-b transition-colors duration-300 ${
                           theme === "dark"
-                            ? "border-neutral-800 bg-neutral-900/30"
-                            : "border-gray-200 bg-gray-50"
+                            ? "border-forge-line bg-forge-bg-raised/30"
+                            : "border-forge-line bg-forge-bg"
                         }`}
                       >
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           User
                         </th>
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           Amount
                         </th>
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           Bank Details
                         </th>
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           Status
                         </th>
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           Created
                         </th>
                         <th
                           className={`px-6 py-4 text-left text-sm font-medium transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           Actions
@@ -521,14 +521,14 @@ export default function WithdrawRequestsAdminPage() {
                           key={request.id}
                           className={`border-b transition-colors duration-300 ${
                             theme === "dark"
-                              ? "border-neutral-800 hover:bg-neutral-900/30"
-                              : "border-gray-200 hover:bg-gray-50"
+                              ? "border-forge-line hover:bg-forge-bg-raised/30"
+                              : "border-forge-line hover:bg-forge-bg"
                           }`}
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full flex items-center justify-center">
-                                <span className="text-white text-sm font-bold">
+                              <div className="w-10 h-10 bg-forge-bg bg-forge-ember rounded-full flex items-center justify-center">
+                                <span className="text-forge-ink text-sm font-bold">
                                   {request.accountHolderName.charAt(0)}
                                 </span>
                               </div>
@@ -536,8 +536,8 @@ export default function WithdrawRequestsAdminPage() {
                                 <p
                                   className={`font-medium transition-colors duration-300 ${
                                     theme === "dark"
-                                      ? "text-white"
-                                      : "text-gray-900"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {request.accountHolderName}
@@ -545,8 +545,8 @@ export default function WithdrawRequestsAdminPage() {
                                 <p
                                   className={`text-sm transition-colors duration-300 ${
                                     theme === "dark"
-                                      ? "text-gray-400"
-                                      : "text-gray-600"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink-muted"
                                   }`}
                                 >
                                   {request.email}
@@ -558,8 +558,8 @@ export default function WithdrawRequestsAdminPage() {
                             <p
                               className={`font-semibold text-lg transition-colors duration-300 ${
                                 theme === "dark"
-                                  ? "text-green-400"
-                                  : "text-green-600"
+                                  ? "text-forge-ember"
+                                  : "text-forge-ember"
                               }`}
                             >
                               {formatCurrency(request.amount)}
@@ -569,12 +569,12 @@ export default function WithdrawRequestsAdminPage() {
                             <div className="space-y-3">
                               {/* Account Holder Name */}
                               <div className="flex items-center gap-2">
-                                <FiUser className="text-sm text-blue-500" />
+                                <FiUser className="text-sm text-forge-ember" />
                                 <p
                                   className={`text-sm font-medium transition-colors duration-300 ${
                                     theme === "dark"
-                                      ? "text-white"
-                                      : "text-gray-900"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {request.accountHolderName}
@@ -582,22 +582,22 @@ export default function WithdrawRequestsAdminPage() {
                               </div>
 
                               {/* Bank Details */}
-                              <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-3 space-y-2">
+                              <div className="bg-forge-bg dark:bg-forge-bg-raised rounded-sm p-3 space-y-2">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                  <span className="text-xs font-medium text-forge-ink-muted dark:text-forge-ink-muted">
                                     Bank Name
                                   </span>
-                                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                                  <span className="text-sm text-forge-ink dark:text-forge-ink">
                                     {request.bankName}
                                   </span>
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                  <span className="text-xs font-medium text-forge-ink-muted dark:text-forge-ink-muted">
                                     Account Number
                                   </span>
                                   <div className="flex items-center gap-2">
-                                    <span className="text-sm font-mono text-gray-700 dark:text-gray-300">
+                                    <span className="text-sm font-mono text-forge-ink dark:text-forge-ink">
                                       {visibleAccountNumbers.has(request.id)
                                         ? request.accountNumber
                                         : request.accountNumber.replace(
@@ -609,7 +609,7 @@ export default function WithdrawRequestsAdminPage() {
                                       onClick={() =>
                                         toggleAccountVisibility(request.id)
                                       }
-                                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                      className="text-forge-ink-muted hover:text-forge-ink-muted dark:hover:text-forge-ink"
                                     >
                                       {visibleAccountNumbers.has(request.id) ? (
                                         <FiEyeOff className="text-xs" />
@@ -621,7 +621,7 @@ export default function WithdrawRequestsAdminPage() {
                                       onClick={() =>
                                         copyToClipboard(request.accountNumber)
                                       }
-                                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                      className="text-forge-ink-muted hover:text-forge-ink-muted dark:hover:text-forge-ink"
                                     >
                                       <FiCopy className="text-xs" />
                                     </button>
@@ -629,18 +629,18 @@ export default function WithdrawRequestsAdminPage() {
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                  <span className="text-xs font-medium text-forge-ink-muted dark:text-forge-ink-muted">
                                     IFSC Code
                                   </span>
                                   <div className="flex items-center gap-2">
-                                    <span className="text-sm font-mono text-gray-700 dark:text-gray-300">
+                                    <span className="text-sm font-mono text-forge-ink dark:text-forge-ink">
                                       {request.ifscCode}
                                     </span>
                                     <button
                                       onClick={() =>
                                         copyToClipboard(request.ifscCode)
                                       }
-                                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                      className="text-forge-ink-muted hover:text-forge-ink-muted dark:hover:text-forge-ink"
                                     >
                                       <FiCopy className="text-xs" />
                                     </button>
@@ -650,17 +650,17 @@ export default function WithdrawRequestsAdminPage() {
 
                               {/* UPI Details (if available) */}
                               {request.upi && (
-                                <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-3">
+                                <div className="bg-forge-bg bg-forge-bg dark:from-purple-900/20 dark:to-blue-900/20 rounded-sm p-3">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
-                                      <FiSmartphone className="text-sm text-purple-500" />
-                                      <span className="text-xs font-medium text-purple-600 dark:text-purple-400">
+                                      <FiSmartphone className="text-sm text-forge-ink-muted" />
+                                      <span className="text-xs font-medium text-forge-ink-muted dark:text-forge-ink-muted">
                                         UPI ID Available
                                       </span>
                                     </div>
                                   </div>
                                   <div className="flex items-center justify-between">
-                                    <span className="text-sm font-mono text-gray-700 dark:text-gray-300">
+                                    <span className="text-sm font-mono text-forge-ink dark:text-forge-ink">
                                       {request.upi}
                                     </span>
                                     <div className="flex items-center gap-2">
@@ -668,7 +668,7 @@ export default function WithdrawRequestsAdminPage() {
                                         onClick={() =>
                                           copyToClipboard(request.upi || "")
                                         }
-                                        className="text-purple-500 hover:text-purple-700 dark:hover:text-purple-400"
+                                        className="text-forge-ink-muted hover:text-forge-ink-muted dark:hover:text-forge-ink-muted"
                                       >
                                         <FiCopy className="text-xs" />
                                       </button>
@@ -676,7 +676,7 @@ export default function WithdrawRequestsAdminPage() {
                                         onClick={() =>
                                           openUPIQR(request.upi || "")
                                         }
-                                        className="flex items-center gap-1 px-2 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs transition-colors"
+                                        className="flex items-center gap-1 px-2 py-1 bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink rounded text-xs transition-colors"
                                       >
                                         QR Code
                                         <FiExternalLink className="text-xs" />
@@ -702,15 +702,15 @@ export default function WithdrawRequestsAdminPage() {
                               <FiCalendar
                                 className={`text-sm transition-colors duration-300 ${
                                   theme === "dark"
-                                    ? "text-gray-400"
-                                    : "text-gray-600"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               />
                               <span
                                 className={`text-sm transition-colors duration-300 ${
                                   theme === "dark"
-                                    ? "text-gray-400"
-                                    : "text-gray-600"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 {formatDate(request.createdAt)}
@@ -729,7 +729,7 @@ export default function WithdrawRequestsAdminPage() {
                                       )
                                     }
                                     disabled={updatingRequest === request.id}
-                                    className="flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 disabled:bg-green-600/50 text-white rounded-md text-sm transition-all duration-200"
+                                    className="flex items-center gap-1 px-3 py-1 bg-forge-ember-low hover:bg-forge-ember-low disabled:bg-forge-ember-low/50 text-forge-ink rounded-sm text-sm transition-all duration-200"
                                   >
                                     {updatingRequest === request.id ? (
                                       <FiRefreshCw className="text-xs animate-spin" />
@@ -747,7 +747,7 @@ export default function WithdrawRequestsAdminPage() {
                                       )
                                     }
                                     disabled={updatingRequest === request.id}
-                                    className="flex items-center gap-1 px-3 py-1 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 text-white rounded-md text-sm transition-all duration-200"
+                                    className="flex items-center gap-1 px-3 py-1 bg-[forge-error-bg hover:bg-[forge-error-bg disabled:bg-[forge-error-bg/50 text-forge-ink rounded-sm text-sm transition-all duration-200"
                                   >
                                     <FiX className="text-xs" />
                                     Reject
@@ -758,8 +758,8 @@ export default function WithdrawRequestsAdminPage() {
                                 <span
                                   className={`text-sm transition-colors duration-300 ${
                                     theme === "dark"
-                                      ? "text-gray-400"
-                                      : "text-gray-600"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink-muted"
                                   }`}
                                 >
                                   No actions available
@@ -780,29 +780,29 @@ export default function WithdrawRequestsAdminPage() {
 
       {/* UPI QR Code Modal */}
       {showQRModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-forge-bg/50 flex items-center justify-center z-50 p-4">
           <div
-            className={`max-w-md w-full rounded-xl border transition-all duration-300 ${
+            className={`max-w-md w-full rounded-sm border transition-all duration-300 ${
               theme === "dark"
-                ? "bg-neutral-900 border-neutral-700"
-                : "bg-white border-gray-200"
+                ? "bg-forge-bg-raised border-forge-line"
+                : "bg-forge-bg border-forge-line"
             }`}
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3
                   className={`text-lg font-semibold transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   UPI QR Code
                 </h3>
                 <button
                   onClick={() => setShowQRModal(false)}
-                  className={`p-2 rounded-lg transition-colors duration-200 ${
+                  className={`p-2 rounded-sm transition-colors duration-200 ${
                     theme === "dark"
-                      ? "hover:bg-neutral-800 text-gray-400"
-                      : "hover:bg-gray-100 text-gray-600"
+                      ? "hover:bg-forge-bg-raised text-forge-ink-muted"
+                      : "hover:bg-forge-bg text-forge-ink-muted"
                   }`}
                 >
                   <FiX className="text-lg" />
@@ -812,7 +812,7 @@ export default function WithdrawRequestsAdminPage() {
               <div className="text-center space-y-4">
                 {/* QR Code */}
                 <div className="flex justify-center">
-                  <div className="p-4 bg-white rounded-lg border-2 border-gray-200">
+                  <div className="p-4 bg-forge-bg rounded-sm border-2 border-forge-line">
                     <img
                       src={generateUPIQRCode(selectedUPI)}
                       alt="UPI QR Code"
@@ -835,16 +835,16 @@ export default function WithdrawRequestsAdminPage() {
                 <div>
                   <p
                     className={`text-sm mb-2 transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     UPI ID
                   </p>
                   <div
-                    className={`p-3 rounded-lg border font-mono text-sm transition-colors duration-300 ${
+                    className={`p-3 rounded-sm border font-mono text-sm transition-colors duration-300 ${
                       theme === "dark"
-                        ? "bg-neutral-800 border-neutral-700 text-white"
-                        : "bg-gray-50 border-gray-200 text-gray-900"
+                        ? "bg-forge-bg-raised border-forge-line text-forge-ink"
+                        : "bg-forge-bg border-forge-line text-forge-ink"
                     }`}
                   >
                     {selectedUPI}
@@ -855,7 +855,7 @@ export default function WithdrawRequestsAdminPage() {
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={() => copyToClipboard(selectedUPI)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink rounded-sm transition-colors"
                   >
                     <FiCopy className="text-sm" />
                     Copy UPI ID
@@ -865,7 +865,7 @@ export default function WithdrawRequestsAdminPage() {
                       const upiUrl = `upi://pay?pa=${selectedUPI}&pn=Payment&cu=INR`;
                       window.open(upiUrl, "_blank");
                     }}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink rounded-sm transition-colors"
                   >
                     <FiSmartphone className="text-sm" />
                     Open UPI App
@@ -874,7 +874,7 @@ export default function WithdrawRequestsAdminPage() {
 
                 <p
                   className={`text-xs transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-500" : "text-gray-500"
+                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                   }`}
                 >
                   Scan this QR code with any UPI app to make payment
