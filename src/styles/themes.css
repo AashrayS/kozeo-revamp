@@ -1,0 +1,76 @@
+@reference "tailwindcss";
+
+/* Theme Variables */
+:root {
+  /* Dark Theme (Default) */
+  --bg-primary: #000000;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --text-accent: #06b6d4;
+  --border-primary: #404040;
+  --border-secondary: #262626;
+  --accent-primary: #06b6d4;
+  --accent-secondary: #8b5cf6;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+[data-theme="light"] {
+  /* Light Theme - Softer, more aesthetic colors */
+  --bg-primary: #fefefe;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --text-accent: #059669;
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --accent-primary: #059669;
+  --accent-secondary: #7c3aed;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+/* Premium Design System Utilities */
+@layer components {
+  .premium-card {
+    @apply rounded-3xl border border-black/5 dark:border-white/10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-sm transition-all duration-500;
+  }
+
+  .premium-card:hover {
+    @apply -translate-y-1 shadow-xl border-black/10 dark:border-white/20;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .premium-glass {
+    @apply backdrop-blur-2xl bg-white/40 dark:bg-black/40 border border-white/20 dark:border-white/10;
+  }
+
+  .premium-header {
+    @apply sticky top-0 z-50 backdrop-blur-xl border-b border-black/5 dark:border-white/10 bg-white/70 dark:bg-black/70;
+  }
+
+  .premium-input {
+    @apply w-full px-6 py-4 rounded-2xl border-2 border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 focus:outline-none focus:border-black/20 dark:focus:border-white/20 focus:ring-4 focus:ring-black/[0.02] dark:focus:ring-white/[0.02] transition-all duration-300;
+  }
+
+  .premium-label {
+    @apply block text-xs font-bold tracking-[0.2em] uppercase text-black/40 dark:text-white/40 mb-3 ml-1;
+  }
+
+  .premium-section-title {
+    @apply text-3xl md:text-4xl font-light tracking-tight text-black dark:text-white mb-8;
+  }
+
+  .premium-heading {
+    @apply tracking-tighter font-bold;
+  }
+
+  .premium-subheading {
+    @apply tracking-tight text-black/50 dark:text-white/50 font-medium;
+  }
+}
