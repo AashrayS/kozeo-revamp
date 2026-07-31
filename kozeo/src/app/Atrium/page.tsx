@@ -151,24 +151,24 @@ export default function Home() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       {/* Welcome Page */}
       {showWelcomePage ? (
         <div
           className={`min-h-screen relative z-10 flex items-center justify-center theme-transition ${
             theme === "light"
-              ? "bg-gradient-light text-gray-900"
-              : "bg-gradient-dark text-white"
+              ? "bg-gradient-light text-forge-ink"
+              : "bg-gradient-dark text-forge-ink"
           }`}
         >
           <div className="text-center max-w-4xl mx-auto px-6">
             <h1
-              className={`text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r ${
+              className={`text-6xl md:text-7xl font-bold mb-6 bg-forge-bg ${
                 theme === "light"
-                  ? "from-cyan-600 via-purple-600 to-pink-600"
-                  : "from-cyan-400 via-purple-400 to-pink-400"
+                  ? "text-forge-ember"
+                  : "text-forge-ember"
               } bg-clip-text text-transparent`}
             >
               Welcome to Kozeo
@@ -176,7 +176,7 @@ export default function Home() {
 
             <p
               className={`text-xl md:text-2xl mb-4 font-medium ${
-                theme === "light" ? "text-gray-700" : "text-gray-300"
+                theme === "light" ? "text-forge-ink" : "text-forge-ink"
               }`}
             >
               Hey there, {user?.username || "User"}!
@@ -184,7 +184,7 @@ export default function Home() {
 
             <p
               className={`text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed ${
-                theme === "light" ? "text-gray-600" : "text-gray-400"
+                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
               }`}
             >
               Your gateway to collaborative projects and skill sharing. Connect
@@ -195,18 +195,18 @@ export default function Home() {
             <div className="space-y-6">
               <button
                 onClick={handleFindProjects}
-                className={`group relative inline-flex items-center justify-center px-12 py-4 text-lg font-medium transition-all duration-300 ease-out rounded-lg border-2 hover:scale-[1.02] focus:outline-none focus:ring-4 ${
+                className={`group relative inline-flex items-center justify-center px-12 py-4 text-lg font-medium transition-all duration-300 ease-out rounded-sm border-2 hover:scale-[1.02] focus:outline-none focus:ring-4 ${
                   theme === "light"
-                    ? "bg-white text-gray-900 border-gray-300 hover:bg-gray-50 hover:border-gray-400 focus:ring-gray-200"
-                    : "bg-neutral-900 text-white border-neutral-600 hover:bg-neutral-800 hover:border-neutral-500 focus:ring-neutral-700"
-                } shadow-lg hover:shadow-xl`}
+                    ? "bg-forge-bg text-forge-ink border-forge-line hover:bg-forge-bg hover:border-forge-line focus:ring-forge-line"
+                    : "bg-forge-bg-raised text-forge-ink border-forge-line hover:bg-forge-bg-raised hover:border-forge-line focus:ring-forge-line"
+                } shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]`}
               >
                 <span className="relative z-10">Find Projects</span>
                 <div
-                  className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+                  className={`absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
                     theme === "light"
-                      ? "bg-gradient-to-r from-cyan-50 to-purple-50"
-                      : "bg-gradient-to-r from-cyan-900/20 to-purple-900/20"
+                      ? "bg-forge-bg bg-forge-bg"
+                      : "bg-forge-bg bg-forge-bg-raised"
                   }`}
                 />
               </button>
@@ -238,8 +238,8 @@ export default function Home() {
         <div
           className={`min-h-screen relative z-10 flex flex-row theme-transition ${
             theme === "light"
-              ? "bg-gradient-light text-gray-900"
-              : "bg-gradient-dark text-white"
+              ? "bg-gradient-light text-forge-ink"
+              : "bg-gradient-dark text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -255,18 +255,18 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                    className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 theme-transition text-base ${
+                    className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 theme-transition text-base ${
                       theme === "light"
-                        ? "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-cyan-500 focus:border-cyan-500"
-                        : "bg-neutral-900 border-neutral-700 text-white placeholder-gray-400 focus:ring-neutral-600"
+                        ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
+                        : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
                     }`}
                   />
                   <button
                     onClick={handleSearch}
                     className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors ${
                       theme === "light"
-                        ? "text-gray-400 hover:text-gray-600"
-                        : "text-gray-400 hover:text-white"
+                        ? "text-forge-ink-muted hover:text-forge-ink-muted"
+                        : "text-forge-ink-muted hover:text-forge-ink"
                     }`}
                     aria-label="Search"
                   >
@@ -277,17 +277,17 @@ export default function Home() {
                 {/* Toggle Button for Projects/Users - responsive shrink and grow */}
                 <div className="relative inline-flex items-center w-full sm:w-auto">
                   <div
-                    className={`relative flex items-center rounded-lg p-1 transition-all duration-200 w-full sm:w-auto ${
-                      theme === "light" ? "bg-gray-100" : "bg-neutral-800"
+                    className={`relative flex items-center rounded-sm p-1 transition-all duration-200 w-full sm:w-auto ${
+                      theme === "light" ? "bg-forge-bg" : "bg-forge-bg-raised"
                     }`}
                     style={{ minWidth: 0 }}
                   >
                     {/* Background Slider - More subtle */}
                     <div
-                      className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-200 ease-out ${
+                      className={`absolute top-1 bottom-1 w-1/2 rounded-sm transition-all duration-200 ease-out ${
                         theme === "light"
-                          ? "bg-white shadow-sm"
-                          : "bg-neutral-700 shadow-sm"
+                          ? "bg-forge-bg shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                          : "bg-forge-bg-raised shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                       } ${
                         viewMode === "users"
                           ? "translate-x-full"
@@ -299,14 +299,14 @@ export default function Home() {
                     {/* Projects Option */}
                     <button
                       onClick={() => setViewMode("gigs")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
                         viewMode === "gigs"
                           ? theme === "light"
-                            ? "text-gray-900"
-                            : "text-gray-100"
+                            ? "text-forge-ink"
+                            : "text-forge-ink"
                           : theme === "light"
-                          ? "text-gray-500 hover:text-gray-700"
-                          : "text-gray-400 hover:text-gray-200"
+                          ? "text-forge-ink-muted hover:text-forge-ink"
+                          : "text-forge-ink-muted hover:text-forge-ink"
                       }`}
                       style={{ minWidth: 0 }}
                     >
@@ -316,14 +316,14 @@ export default function Home() {
                     {/* Users Option */}
                     <button
                       onClick={() => setViewMode("users")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
                         viewMode === "users"
                           ? theme === "light"
-                            ? "text-gray-900"
-                            : "text-gray-100"
+                            ? "text-forge-ink"
+                            : "text-forge-ink"
                           : theme === "light"
-                          ? "text-gray-500 hover:text-gray-700"
-                          : "text-gray-400 hover:text-gray-200"
+                          ? "text-forge-ink-muted hover:text-forge-ink"
+                          : "text-forge-ink-muted hover:text-forge-ink"
                       }`}
                       style={{ minWidth: 0 }}
                     >
@@ -338,7 +338,7 @@ export default function Home() {
                     onClick={() => router.push("/gigs/create")}
                     variant="neutral"
                     size="md"
-                    className="w-full sm:w-auto !bg-white !text-gray-900 !border-gray-300 hover:!bg-gray-50 hover:!border-gray-400 !shadow-md"
+                    className="w-full sm:w-auto !bg-forge-bg !text-forge-ink !border-forge-line hover:!bg-forge-bg hover:!border-forge-line !shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                   >
                     Create Project
                   </ProfessionalButton>
@@ -362,7 +362,7 @@ export default function Home() {
               {/* Error State */}
               {error && (
                 <div className="flex justify-center items-center py-20">
-                  <div className="text-red-500">{error}</div>
+                  <div className="text-[forge-error">{error}</div>
                 </div>
               )}
 
@@ -374,7 +374,7 @@ export default function Home() {
                     {currentGigs.length === 0 ? (
                       <div
                         className={`col-span-full text-center py-20 ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         No gigs found.{" "}
@@ -387,46 +387,21 @@ export default function Home() {
                           onClick={() => {
                             router.push(`/Atrium/description?gigId=${gig.id}`);
                           }}
-                          className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-lg p-5 shadow-md transition-transform duration-200 ease-in-out hover:scale-[1.03] theme-transition ${
+                          className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-sm p-5 cursor-pointer transition-all duration-200 ease-in-out hover:scale-[1.02] theme-transition border ${
                             gig.host.username === "Jayash"
-                              ? theme === "light"
-                                ? "bg-white border border-cyan-200 shadow-cyan-100/50 shadow-lg hover:shadow-cyan-200/60 hover:shadow-xl hover:bg-gradient-to-br hover:from-cyan-50 hover:to-purple-50"
-                                : "bg-gradient-to-br from-[#111] to-[#1a1a1a] border border-cyan-500/30 shadow-cyan-400/20 shadow-lg hover:shadow-cyan-400/30 hover:shadow-xl hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.15),_rgba(168,85,247,0.1))]"
-                              : theme === "light"
-                              ? "bg-white border border-gray-200 hover:shadow-lg hover:bg-gradient-to-br hover:from-cyan-50 hover:to-purple-50"
-                              : "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.1),_rgba(168,85,247,0.1))]"
+                              ? "bg-forge-bg-raised border-forge-ember/50 hover:border-forge-ember"
+                              : "bg-forge-bg-raised border-forge-line hover:border-forge-ember"
                           }`}
                         >
-                          {/* ⭐ Host Rating Top-Right */}
-                          <div
-                            className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-sm border backdrop-blur-sm flex items-center gap-1 ${
-                              theme === "light"
-                                ? "text-gray-700 bg-gray-100 bg-opacity-80 border-gray-300"
-                                : "text-gray-300 bg-neutral-800 bg-opacity-80 border-neutral-600"
-                            }`}
-                          >
-                            <FiStar
-                              className={`text-sm ${
-                                theme === "light"
-                                  ? "text-yellow-500"
-                                  : "text-gray-400"
-                              }`}
-                              fill={theme === "light" ? "#eab308" : "white"}
-                            />
-                            <span className="font-medium">
-                              {gig.host?.rating?.toFixed(1) || "N/A"}
-                            </span>
+                          {/* Host Rating Top-Right */}
+                          <div className="absolute top-3 right-3 text-xs px-2 py-0.5 flex items-center gap-1 text-forge-ink-muted font-mono tracking-wide">
+                            <FiStar className="text-xs opacity-60" />
+                            <span>{gig.host?.rating?.toFixed(1) || "—"}</span>
                           </div>
 
-                          {/* Sponsored Tag Above Container */}
+                          {/* Sponsored Tag */}
                           {gig.host.username === "Jayash" && (
-                            <div
-                              className={`absolute -top-2 left-3 px-2 py-0.5 text-[10px] font-medium rounded-sm z-10 ${
-                                theme === "light"
-                                  ? "bg-cyan-100 text-cyan-700 border border-cyan-200"
-                                  : "bg-gradient-to-r from-cyan-900/80 to-purple-900/60 text-cyan-200 border border-cyan-500/50 backdrop-blur-sm"
-                              }`}
-                            >
+                            <div className="absolute -top-2 left-3 px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase z-10 bg-forge-bg border border-forge-ember text-forge-ember">
                               SPONSORED
                             </div>
                           )}
@@ -436,8 +411,8 @@ export default function Home() {
                             <div
                               className={`text-sm font-medium mb-1 ${
                                 theme === "light"
-                                  ? "text-cyan-600"
-                                  : "text-cyan-400"
+                                  ? "text-forge-ember"
+                                  : "text-forge-ember"
                               }`}
                             >
                               {gig.host?.username ||
@@ -448,8 +423,8 @@ export default function Home() {
                             <h3
                               className={`text-lg font-semibold mb-2 ${
                                 theme === "light"
-                                  ? "text-gray-900"
-                                  : "text-white"
+                                  ? "text-forge-ink"
+                                  : "text-forge-ink"
                               }`}
                             >
                               {gig.title}
@@ -465,8 +440,8 @@ export default function Home() {
                               }}
                               className={`text-sm mb-3 ${
                                 theme === "light"
-                                  ? "text-gray-600"
-                                  : "text-gray-300"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink"
                               }`}
                             >
                               {gig.description}
@@ -476,8 +451,8 @@ export default function Home() {
                               <span
                                 className={
                                   theme === "light"
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }
                               >
                                 Looking For:{" "}
@@ -485,23 +460,19 @@ export default function Home() {
                               <span
                                 className={
                                   theme === "light"
-                                    ? "text-gray-900"
-                                    : "text-white"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }
                               >
                                 {gig.looking_For}
                               </span>
                             </p>
 
-                            <div className="flex flex-wrap gap-2 mb-3">
+                            <div className="flex flex-wrap gap-1.5 mb-3">
                               {gig.skills?.map((skill: string, idx: number) => (
                                 <span
                                   key={idx}
-                                  className={`px-2 py-0.5 text-xs border rounded-md ${
-                                    theme === "light"
-                                      ? "bg-gray-100 border-gray-300 text-gray-700"
-                                      : "bg-neutral-800 border-neutral-600 text-gray-300"
-                                  }`}
+                                  className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 border border-forge-line text-forge-ink-muted bg-forge-bg"
                                 >
                                   {skill}
                                 </span>
@@ -513,23 +484,17 @@ export default function Home() {
                           <div
                             className={`flex justify-between items-center border-t pt-3 mt-4 ${
                               theme === "light"
-                                ? "border-gray-200"
-                                : "border-neutral-800"
+                                ? "border-forge-line"
+                                : "border-forge-line"
                             }`}
                           >
                             {gig.amount === 0 ? (
-                              <div
-                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
-                                  theme === "dark"
-                                    ? "bg-gradient-to-r from-purple-900/60 to-blue-900/60 text-purple-300 border border-purple-700/50"
-                                    : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200"
-                                }`}
-                              >
-                                <FiStar className="w-3 h-3 mr-1" />
+                              <div className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase text-forge-ink-muted border border-forge-line px-2 py-0.5 bg-forge-bg">
+                                <FiStar className="w-2.5 h-2.5" />
                                 Skill Forge
                               </div>
                             ) : (
-                              <span className="text-sm font-semibold text-emerald-500">
+                              <span className="text-sm font-semibold text-forge-ember">
                                 {gig.currency}{" "}
                                 {Number(gig.amount).toLocaleString("en-IN")}
                               </span>
@@ -537,8 +502,8 @@ export default function Home() {
                             <span
                               className={`text-xs ${
                                 theme === "light"
-                                  ? "text-gray-500"
-                                  : "text-gray-500"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             >
                               {gig.activeRequest?.length || 0} active requests
@@ -553,7 +518,7 @@ export default function Home() {
                     {users.length === 0 ? (
                       <div
                         className={`col-span-full text-center py-20 ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         No users found. Try searching something else{" "}
@@ -564,17 +529,17 @@ export default function Home() {
                         <div
                           key={user.id || user._id || user.username}
                           onClick={() => handleUserClick(user)}
-                          className={`relative flex flex-col justify-between h-full min-h-[220px] rounded-xl p-5 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.02] theme-transition ${
+                          className={`relative flex flex-col justify-between h-full min-h-[220px] rounded-sm p-5 shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-transform duration-200 ease-in-out hover:scale-[1.02] theme-transition ${
                             theme === "light"
-                              ? "bg-white border border-gray-200 hover:shadow-md hover:bg-gradient-to-br hover:from-cyan-50/30 hover:to-purple-50/30"
-                              : " bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_rgba(168,85,247,0.08))]"
+                              ? "bg-forge-bg border border-forge-line hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:bg-forge-bg "
+                              : " bg-forge-bg   hover:"
                           }`}
                         >
                           {/* User Info Top Section */}
                           <div>
                             {/* Profile Picture */}
                             <div className="flex justify-center mb-4">
-                              <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-700 shadow-sm bg-gray-800 flex items-center justify-center">
+                              <div className="w-16 h-16 rounded-full overflow-hidden border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] bg-forge-bg-raised flex items-center justify-center">
                                 {user.profile_Picture ? (
                                   <img
                                     src={user.profile_Picture}
@@ -590,12 +555,12 @@ export default function Home() {
                                       target.style.display = "none";
                                       const parent = target.parentElement;
                                       if (parent) {
-                                        parent.innerHTML = `<svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
+                                        parent.innerHTML = `<svg class="w-8 h-8 text-forge-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
                                       }
                                     }}
                                   />
                                 ) : (
-                                  <FiUser className="w-8 h-8 text-gray-400" />
+                                  <FiUser className="w-8 h-8 text-forge-ink-muted" />
                                 )}
                               </div>
                             </div>
@@ -605,16 +570,16 @@ export default function Home() {
                               <span
                                 className={`text-lg font-semibold ${
                                   theme === "light"
-                                    ? "text-cyan-600"
-                                    : "text-cyan-400"
+                                    ? "text-forge-ember"
+                                    : "text-forge-ember"
                                 }`}
                               >
                                 {user.username}
                               </span>
-                              <span className="flex items-center gap-1 text-yellow-500 text-sm">
+                              <span className="flex items-center gap-1 text-forge-ember text-sm">
                                 <FiStar
                                   className="inline-block"
-                                  fill="#eab308"
+                                  fill="currentColor"
                                 />
                                 {user.rating ? user.rating.toFixed(1) : "N/A"}
                               </span>
@@ -624,8 +589,8 @@ export default function Home() {
                             <p
                               className={`text-sm text-center mb-3 ${
                                 theme === "light"
-                                  ? "text-gray-600"
-                                  : "text-gray-400"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                               style={{
                                 display: "-webkit-box",
@@ -640,15 +605,15 @@ export default function Home() {
 
                             {/* Gig Stats */}
                             <div className="flex justify-center items-center gap-6 mb-3">
-                              <div className="text-xs font-medium text-gray-500">
+                              <div className="text-xs font-medium text-forge-ink-muted">
                                 Hosted <br />
-                                <span className="text-cyan-500 font-semibold text-base">
+                                <span className="text-forge-ember font-semibold text-base">
                                   {user.gigHostedCount ?? 0}
                                 </span>
                               </div>
-                              <div className="text-xs font-medium text-gray-500">
+                              <div className="text-xs font-medium text-forge-ink-muted">
                                 Collaborated <br />
-                                <span className="text-purple-500 font-semibold text-base">
+                                <span className="text-forge-ink-muted font-semibold text-base">
                                   {user.gigCollaboratedCount ?? 0}
                                 </span>
                               </div>
@@ -659,17 +624,17 @@ export default function Home() {
                           <div
                             className={`flex justify-between items-center text-xs pt-3 mt-4 border-t ${
                               theme === "light"
-                                ? "border-gray-200"
-                                : "border-neutral-700"
+                                ? "border-forge-line"
+                                : "border-forge-line"
                             }`}
                           >
-                            <span className="text-gray-500">
+                            <span className="text-forge-ink-muted">
                               Joined:{" "}
                               {user.createdAt
                                 ? new Date(user.createdAt).toLocaleDateString()
                                 : "N/A"}
                             </span>
-                            <span className="text-gray-500">
+                            <span className="text-forge-ink-muted">
                               {user.role || "User"}
                             </span>
                           </div>
@@ -686,14 +651,14 @@ export default function Home() {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${
                       currentPage === 1
                         ? "cursor-not-allowed opacity-50"
                         : "hover:scale-105"
                     } ${
                       theme === "light"
-                        ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
-                        : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
+                        ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg disabled:bg-forge-bg"
+                        : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised disabled:bg-forge-bg-raised"
                     }`}
                   >
                     Previous
@@ -722,8 +687,8 @@ export default function Home() {
                               key={page}
                               className={`px-3 py-2 text-sm ${
                                 theme === "light"
-                                  ? "text-gray-400"
-                                  : "text-gray-600"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             >
                               ...
@@ -737,14 +702,14 @@ export default function Home() {
                         <button
                           key={page}
                           onClick={() => handlePageChange(page)}
-                          className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                          className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 hover:scale-105 ${
                             isCurrentPage
                               ? theme === "light"
-                                ? "bg-blue-500 text-white border border-blue-500"
-                                : "bg-blue-600 text-white border border-blue-600"
+                                ? "bg-forge-ember-low text-forge-ink border border-forge-ember"
+                                : "bg-forge-ember-low text-forge-ink border border-forge-ember"
                               : theme === "light"
-                              ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-                              : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700"
+                              ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg"
+                              : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised"
                           }`}
                         >
                           {page}
@@ -757,14 +722,14 @@ export default function Home() {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    className={`px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${
                       currentPage === totalPages
                         ? "cursor-not-allowed opacity-50"
                         : "hover:scale-105"
                     } ${
                       theme === "light"
-                        ? "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:bg-gray-100"
-                        : "bg-neutral-800 border border-neutral-600 text-gray-300 hover:bg-neutral-700 disabled:bg-neutral-900"
+                        ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg disabled:bg-forge-bg"
+                        : "bg-forge-bg-raised border border-forge-line text-forge-ink hover:bg-forge-bg-raised disabled:bg-forge-bg-raised"
                     }`}
                   >
                     Next
@@ -777,7 +742,7 @@ export default function Home() {
                 <div className="text-center mt-4">
                   <span
                     className={`text-sm ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     Showing {startIndex + 1}-{Math.min(endIndex, totalGigs)} of{" "}

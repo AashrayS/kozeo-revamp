@@ -43,73 +43,51 @@ const ProfessionalButton = ({
       primary: {
         dark:
           disabled || loading
-            ? "bg-neutral-800/60 border-neutral-600/50 text-neutral-400 shadow-neutral-900/20"
-            : "bg-emerald-950/30 border-emerald-800/40 text-emerald-300 hover:bg-emerald-900/40 hover:border-emerald-700/60 hover:text-emerald-200 hover:shadow-emerald-900/30 focus:ring-emerald-500/30 hover:shadow-lg hover:-translate-y-0.5",
+            ? "bg-forge-bg-raised/60 border-forge-line/50 text-forge-ink-muted"
+            : "bg-forge-ember-low/40 border-forge-ember/40 text-forge-ember hover:bg-forge-ember-low/60 hover:border-forge-ember/60 hover:shadow-[0_4px_16px_rgba(90,47,24,0.3)] hover:-translate-y-0.5",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500 shadow-gray-200/30"
-            : "bg-emerald-50/80 border-emerald-200/60 text-emerald-700 hover:bg-emerald-100/90 hover:border-emerald-300/70 hover:text-emerald-800 hover:shadow-emerald-200/40 focus:ring-emerald-400/30 hover:shadow-lg hover:-translate-y-0.5",
+            ? "bg-forge-paper border-forge-line text-forge-ink-muted"
+            : "bg-forge-ember-low/60 border-forge-ember/60 text-forge-ember hover:bg-forge-ember-low hover:border-forge-ember hover:shadow-[0_4px_16px_rgba(90,47,24,0.25)] hover:-translate-y-0.5",
       },
       danger: {
         dark:
           disabled || loading
-            ? "bg-neutral-800/60 border-neutral-600/50 text-neutral-400 shadow-neutral-900/20"
-            : "bg-red-950/30 border-red-800/40 text-red-300 hover:bg-red-900/40 hover:border-red-700/60 hover:text-red-200 hover:shadow-red-900/30 focus:ring-red-500/30 hover:shadow-lg",
+            ? "bg-forge-bg-raised/60 border-forge-line/50 text-forge-ink-muted shadow-neutral-900/20"
+            : "bg-[forge-error-bg/30 border-[forge-error/40 text-[forge-error hover:bg-[forge-error-bg/40 hover:border-[forge-error/60 hover:text-[forge-error hover:shadow-red-900/30 focus:ring-red-500/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500 shadow-gray-200/30"
-            : "bg-red-50/80 border-red-200/60 text-red-700 hover:bg-red-100/90 hover:border-red-300/70 hover:text-red-800 hover:shadow-red-200/40 focus:ring-red-400/30 hover:shadow-lg",
+            ? "bg-forge-bg/80 border-forge-line text-forge-ink-muted shadow-gray-200/30"
+            : "bg-[forge-error-bg/80 border-[forge-error/60 text-[forge-error hover:bg-[forge-error-bg/90 hover:border-[forge-error/70 hover:text-[forge-error hover:shadow-red-200/40 focus:ring-red-400/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
       },
       warning: {
         dark:
           disabled || loading
-            ? "bg-neutral-800/60 border-neutral-600/50 text-neutral-400 shadow-neutral-900/20"
-            : "bg-amber-950/30 border-amber-800/40 text-amber-300 hover:bg-amber-900/40 hover:border-amber-700/60 hover:text-amber-200 hover:shadow-amber-900/30 focus:ring-amber-500/30 hover:shadow-lg",
+            ? "bg-forge-bg-raised/60 border-forge-line/50 text-forge-ink-muted shadow-neutral-900/20"
+            : "bg-amber-950/30 border-amber-800/40 text-amber-300 hover:bg-amber-900/40 hover:border-amber-700/60 hover:text-amber-200 hover:shadow-amber-900/30 focus:ring-amber-500/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500 shadow-gray-200/30"
-            : "bg-amber-50/80 border-amber-200/60 text-amber-700 hover:bg-amber-100/90 hover:border-amber-300/70 hover:text-amber-800 hover:shadow-amber-200/40 focus:ring-amber-400/30 hover:shadow-lg",
+            ? "bg-forge-bg/80 border-forge-line text-forge-ink-muted shadow-gray-200/30"
+            : "bg-amber-50/80 border-amber-200/60 text-amber-700 hover:bg-amber-100/90 hover:border-amber-300/70 hover:text-amber-800 hover:shadow-amber-200/40 focus:ring-amber-400/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
       },
       neutral: {
         dark:
           disabled || loading
-            ? "bg-neutral-800/60 border-neutral-600/50 text-neutral-400 shadow-neutral-900/20"
-            : "bg-neutral-800/60 border-neutral-600/50 text-neutral-300 hover:bg-neutral-700/70 hover:border-neutral-500/60 hover:text-neutral-200 hover:shadow-neutral-900/30 focus:ring-neutral-500/30 hover:shadow-lg",
+            ? "bg-forge-bg-raised/60 border-forge-line/50 text-forge-ink-muted shadow-neutral-900/20"
+            : "bg-forge-bg-raised/60 border-forge-line/50 text-forge-ink hover:bg-forge-bg-raised/70 hover:border-forge-line/60 hover:text-forge-ink hover:shadow-neutral-900/30 focus:ring-neutral-500/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500 shadow-gray-200/30"
-            : "bg-gray-100/80 border-gray-200 text-gray-700 hover:bg-gray-200/90 hover:border-gray-300/70 hover:text-gray-800 hover:shadow-gray-200/40 focus:ring-gray-400/30 hover:shadow-lg",
+            ? "bg-forge-bg/80 border-forge-line text-forge-ink-muted shadow-gray-200/30"
+            : "bg-forge-bg/80 border-forge-line text-forge-ink hover:bg-forge-bg/90 hover:border-forge-line/70 hover:text-forge-ink hover:shadow-gray-200/40 focus:ring-gray-400/30 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]",
       },
     };
 
     return variants[variant][theme === "dark" ? "dark" : "light"];
   };
 
-  // Gradient effect colors based on variant
+  // Shimmer overlay for hover — single warm tone, no gradient
   const getGradientClasses = () => {
-    const gradients = {
-      primary: {
-        dark: "bg-gradient-to-r from-emerald-800/10 via-emerald-700/20 to-emerald-800/10",
-        light:
-          "bg-gradient-to-r from-emerald-200/20 via-emerald-100/30 to-emerald-200/20",
-      },
-      danger: {
-        dark: "bg-gradient-to-r from-red-800/10 via-red-700/20 to-red-800/10",
-        light: "bg-gradient-to-r from-red-200/20 via-red-100/30 to-red-200/20",
-      },
-      warning: {
-        dark: "bg-gradient-to-r from-amber-800/10 via-amber-700/20 to-amber-800/10",
-        light:
-          "bg-gradient-to-r from-amber-200/20 via-amber-100/30 to-amber-200/20",
-      },
-      neutral: {
-        dark: "bg-gradient-to-r from-neutral-600/10 via-neutral-500/20 to-neutral-600/10",
-        light:
-          "bg-gradient-to-r from-gray-300/20 via-gray-200/30 to-gray-300/20",
-      },
-    };
-
-    return gradients[variant][theme === "dark" ? "dark" : "light"];
+    return "bg-forge-ember-low/10";
   };
 
   // Loading spinner icon
@@ -135,9 +113,9 @@ const ProfessionalButton = ({
       onClick={onClick}
       disabled={disabled || loading}
       className={`
-        relative ${sizeClasses[size]} rounded-lg font-medium
+        relative ${sizeClasses[size]} rounded-sm font-medium
         transition-all duration-300 ease-out overflow-hidden
-        border backdrop-blur-sm shadow-sm
+        border  shadow-[0_4px_20px_rgba(21,18,13,0.5)]
         focus:outline-none focus:ring-2 focus:ring-opacity-50
         disabled:cursor-not-allowed disabled:opacity-75
         group
@@ -158,11 +136,11 @@ const ProfessionalButton = ({
       {loading && (
         <div
           className={`
-            absolute inset-0 rounded-lg animate-pulse
+            absolute inset-0 rounded-sm animate-pulse-slow
             ${
               theme === "dark"
-                ? "bg-gradient-to-r from-transparent via-neutral-600/20 to-transparent"
-                : "bg-gradient-to-r from-transparent via-gray-300/20 to-transparent"
+                ? "bg-forge-bg from-transparent /20 to-transparent"
+                : "bg-forge-bg from-transparent /20 to-transparent"
             }
           `}
         />
@@ -184,7 +162,7 @@ const ProfessionalButton = ({
         className={`
           absolute inset-0 opacity-0 transition-all duration-500
           ${!loading && !disabled ? "group-hover:opacity-100" : ""}
-          bg-gradient-to-r from-transparent via-white/10 to-transparent
+          bg-forge-bg from-transparent via-white/10 to-transparent
           transform -skew-x-12 translate-x-full group-hover:-translate-x-full
           transition-transform duration-700
         `}

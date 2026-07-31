@@ -352,11 +352,11 @@ export default function EditProfilePage() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       {/* Main Layout */}
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white">
+      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
         <Sidebar />
         <div className="flex flex-1 pb-20 lg:pb-0">
           <main className="flex-1 p-6 overflow-y-auto">
@@ -366,22 +366,22 @@ export default function EditProfilePage() {
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-8 rounded-lg shadow-lg p-8 border border-gray-700"
+                  className="space-y-8 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-8 border border-forge-line"
                 >
-                  <h1 className="text-4xl font-bold text-white text-center mb-6">
+                  <h1 className="text-4xl font-bold text-forge-ink text-center mb-6">
                     Edit Profile
                   </h1>
 
                   {/* Profile Picture Section */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
+                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
                       Profile Picture
                     </h2>
 
                     <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                       {/* Avatar Display */}
                       <div className="relative">
-                        <div className="w-32 h-32 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
+                        <div className="w-32 h-32 bg-forge-bg-raised border border-forge-line rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
                           {profileImage ? (
                             <img
                               src={profileImage}
@@ -393,16 +393,16 @@ export default function EditProfilePage() {
                               }}
                             />
                           ) : (
-                            <FiUser className="w-16 h-16 text-gray-400" />
+                            <FiUser className="w-16 h-16 text-forge-ink-muted" />
                           )}
                         </div>
 
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="absolute bottom-2 right-2 w-10 h-10 bg-neutral-800 hover:bg-neutral-700 rounded-full flex items-center justify-center transition-colors border-2 border-neutral-600"
+                          className="absolute bottom-2 right-2 w-10 h-10 bg-forge-bg-raised hover:bg-forge-bg-raised rounded-full flex items-center justify-center transition-colors border-2 border-forge-line"
                         >
-                          <FaCamera className="text-white text-sm" />
+                          <FaCamera className="text-forge-ink text-sm" />
                         </button>
                       </div>
 
@@ -412,17 +412,17 @@ export default function EditProfilePage() {
                           onDragOver={handleDragOver}
                           onDragLeave={handleDragLeave}
                           onDrop={handleDrop}
-                          className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                          className={`relative border-2 border-dashed rounded-sm p-6 text-center transition-colors ${
                             isDragging
-                              ? "border-cyan-400 bg-cyan-400/10"
-                              : "border-neutral-600 hover:border-neutral-500"
+                              ? "border-forge-ember bg-forge-ember/10"
+                              : "border-forge-line hover:border-forge-line"
                           }`}
                         >
-                          <FaUpload className="mx-auto text-gray-400 text-2xl mb-3" />
-                          <p className="text-gray-300 mb-2">
+                          <FaUpload className="mx-auto text-forge-ink-muted text-2xl mb-3" />
+                          <p className="text-forge-ink mb-2">
                             Drag and drop your image here
                           </p>
-                          <p className="text-gray-500 text-sm mb-4">or</p>
+                          <p className="text-forge-ink-muted text-sm mb-4">or</p>
                           <ProfessionalButton
                             onClick={() => fileInputRef.current?.click()}
                             variant="primary"
@@ -465,7 +465,7 @@ export default function EditProfilePage() {
 
                   {/* Personal Details */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
+                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
                       Personal Details
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -495,7 +495,7 @@ export default function EditProfilePage() {
                           setForm({ ...form, bio: e.target.value })
                         }
                         rows={4}
-                        className="w-full p-3 rounded-md border resize-none"
+                        className="w-full p-3 rounded-sm border resize-none"
                         style={baseInputStyle(currentTheme)}
                       />
                     </div>
@@ -503,7 +503,7 @@ export default function EditProfilePage() {
 
                   {/* Contact Info */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
+                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
                       Contact Information
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -520,7 +520,7 @@ export default function EditProfilePage() {
                         onChange={(e) =>
                           setForm({ ...form, country_Code: e.target.value })
                         }
-                        className="p-3 rounded-md border"
+                        className="p-3 rounded-sm border"
                         style={baseInputStyle(currentTheme)}
                       >
                         <option value="">Select Country Code</option>
@@ -535,8 +535,8 @@ export default function EditProfilePage() {
 
                   {/* Security */}
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-gray-600 pb-2">
-                      <h2 className="text-xl font-semibold text-gray-300">
+                    <div className="flex items-center justify-between border-b border-forge-line pb-2">
+                      <h2 className="text-xl font-semibold text-forge-ink">
                         Security
                       </h2>
                       <ProfessionalButton
@@ -555,7 +555,7 @@ export default function EditProfilePage() {
                     </div>
 
                     {showPasswordSection && (
-                      <div className="bg-neutral-800/30 border border-neutral-700 rounded-lg p-4 space-y-4">
+                      <div className="bg-forge-bg-raised/30 border border-forge-line rounded-sm p-4 space-y-4">
                         <form
                           onSubmit={handlePasswordSubmit}
                           className="space-y-4"
@@ -607,12 +607,12 @@ export default function EditProfilePage() {
                           {/* Error Message Display */}
                           {passwordError && (
                             <div
-                              className={`border rounded-lg p-4 ${
+                              className={`border rounded-sm p-4 ${
                                 passwordError.includes(
                                   "Current password is incorrect"
                                 )
-                                  ? "bg-red-600/20 border-red-500/50 shadow-red-500/10 shadow-lg"
-                                  : "bg-red-500/10 border-red-500/30"
+                                  ? "bg-[forge-error-bg/20 border-[forge-error/50 shadow-red-500/10 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                                  : "bg-[forge-error-bg/10 border-[forge-error/30"
                               }`}
                             >
                               <div className="flex items-start gap-3">
@@ -621,8 +621,8 @@ export default function EditProfilePage() {
                                     passwordError.includes(
                                       "Current password is incorrect"
                                     )
-                                      ? "text-red-300"
-                                      : "text-red-400"
+                                      ? "text-[forge-error"
+                                      : "text-[forge-error"
                                   }`}
                                   fill="currentColor"
                                   viewBox="0 0 20 20"
@@ -639,8 +639,8 @@ export default function EditProfilePage() {
                                       passwordError.includes(
                                         "Current password is incorrect"
                                       )
-                                        ? "text-red-100"
-                                        : "text-red-300"
+                                        ? "text-[forge-error"
+                                        : "text-[forge-error"
                                     }`}
                                   >
                                     {passwordError}
@@ -649,15 +649,15 @@ export default function EditProfilePage() {
                                     "Current password is incorrect"
                                   ) && (
                                     <div className="space-y-1">
-                                      <p className="text-red-200/90 text-xs">
+                                      <p className="text-[forge-error/90 text-xs">
                                         Make sure you're entering your current
                                         password correctly.
                                       </p>
-                                      <p className="text-red-200/80 text-xs">
+                                      <p className="text-[forge-error/80 text-xs">
                                         • Double-check for typos or incorrect
                                         capitalization
                                       </p>
-                                      <p className="text-red-200/80 text-xs">
+                                      <p className="text-[forge-error/80 text-xs">
                                         • Ensure Caps Lock is not accidentally
                                         enabled
                                       </p>
@@ -668,7 +668,7 @@ export default function EditProfilePage() {
                             </div>
                           )}
 
-                          <p className="text-sm text-gray-400">
+                          <p className="text-sm text-forge-ink-muted">
                             Enter your current password and new password in the
                             fields above.
                           </p>
@@ -716,7 +716,7 @@ export default function EditProfilePage() {
 
                   {/* Professional Details */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-300 border-b border-gray-600 pb-2">
+                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
                       Professional Details
                     </h2>
 
@@ -731,7 +731,7 @@ export default function EditProfilePage() {
                     />
 
                     <div className="space-y-3">
-                      <label className="text-white block">Relevant Links</label>
+                      <label className="text-forge-ink block">Relevant Links</label>
                       {form.links.map((link, idx) => (
                         <div key={idx} className="flex gap-2 items-center">
                           <InputField
@@ -764,7 +764,7 @@ export default function EditProfilePage() {
                               updated.splice(idx, 1);
                               setForm({ ...form, links: updated });
                             }}
-                            className="text-red-400 font-bold"
+                            className="text-[forge-error font-bold"
                           >
                             ✕
                           </button>
@@ -798,11 +798,11 @@ export default function EditProfilePage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                      className="px-6 py-3 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-bg-raised text-forge-ink rounded-sm font-medium transition-colors flex items-center gap-2"
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4 border-2 border-forge-line border-t-transparent rounded-full animate-spin"></div>
                           {uploadProgress || "Saving..."}
                         </>
                       ) : (

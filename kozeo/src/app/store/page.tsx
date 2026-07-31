@@ -63,8 +63,8 @@ export default function StorePage() {
       {/* Glow Effects */}
       {theme === "dark" && (
         <>
-          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
         </>
       )}
 
@@ -72,8 +72,8 @@ export default function StorePage() {
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
         }`}
       >
         <Sidebar />
@@ -85,17 +85,17 @@ export default function StorePage() {
               <input
                 type="text"
                 placeholder="Search items..."
-                className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-neutral-900 border-neutral-700 placeholder-gray-400 focus:ring-neutral-600 text-white"
-                    : "bg-white border-gray-300 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    ? "bg-forge-bg-raised border-forge-line placeholder-gray-400 focus:ring-forge-line text-forge-ink"
+                    : "bg-forge-bg border-forge-line placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember text-forge-ink"
                 }`}
               />
               <button
                 className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
                   theme === "dark"
-                    ? "text-gray-400 hover:text-white"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "text-forge-ink-muted hover:text-forge-ink"
+                    : "text-forge-ink-muted hover:text-forge-ink"
                 }`}
               >
                 <FiSearch className="text-xl" />
@@ -105,34 +105,34 @@ export default function StorePage() {
 
           {/* Store Closed Banner */}
           <div
-            className={`w-full mb-8 p-6 rounded-xl border transition-all duration-300 ${
+            className={`w-full mb-8 p-6 rounded-sm border transition-all duration-300 ${
               theme === "dark"
-                ? "border-neutral-700 bg-gradient-to-r from-neutral-900/50 to-neutral-800/50 text-gray-300"
-                : "border-gray-200 bg-gradient-to-r from-gray-50 to-white text-gray-700 shadow-sm"
+                ? "border-forge-line bg-forge-bg /50 /50 text-forge-ink"
+                : "border-forge-line bg-forge-bg  to-white text-forge-ink shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
             }`}
           >
             <div className="flex items-center justify-center gap-3 mb-3">
               <div
-                className={`w-2 h-2 rounded-full animate-pulse ${
-                  theme === "dark" ? "bg-cyan-400" : "bg-blue-500"
+                className={`w-2 h-2 rounded-full animate-pulse-slow ${
+                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
                 }`}
               ></div>
               <h3
                 className={`text-xl font-semibold ${
-                  theme === "dark" ? "text-white" : "text-gray-900"
+                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                 }`}
               >
                 Store Coming Soon
               </h3>
               <div
-                className={`w-2 h-2 rounded-full animate-pulse ${
-                  theme === "dark" ? "bg-cyan-400" : "bg-blue-500"
+                className={`w-2 h-2 rounded-full animate-pulse-slow ${
+                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
                 }`}
               ></div>
             </div>
             <p
               className={`text-center leading-relaxed ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
+                theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
               }`}
             >
               We're curating an exclusive collection of premium developer
@@ -146,12 +146,12 @@ export default function StorePage() {
           <div className="flex justify-between items-center mb-4">
             <h2
               className={`text-2xl font-bold transition-colors duration-300 ${
-                theme === "dark" ? "text-white" : "text-gray-900"
+                theme === "dark" ? "text-forge-ink" : "text-forge-ink"
               }`}
             >
               Kozeo Store
             </h2>
-            <span className="text-emerald-400 font-semibold text-lg">
+            <span className="text-forge-ember font-semibold text-lg">
               Available: ₹{isLoadingWallet ? "..." : walletBalance.toFixed(2)}
             </span>
           </div>
@@ -161,29 +161,29 @@ export default function StorePage() {
             {storeItems.map((item) => (
               <div
                 key={item.id}
-                className={`relative flex flex-col justify-between rounded-lg p-4 shadow-md hover:scale-[1.02] transition-all duration-300 text-sm ${
+                className={`relative flex flex-col justify-between rounded-sm p-4 shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:scale-[1.02] transition-all duration-300 text-sm ${
                   theme === "dark"
-                    ? "bg-gradient-to-br from-[#111] to-[#1a1a1a] hover:bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.08),_rgba(168,85,247,0.08))]"
-                    : "bg-white/90 hover:bg-white border border-gray-200 shadow-lg hover:shadow-xl"
+                    ? "bg-forge-bg   hover:"
+                    : "bg-forge-bg/90 hover:bg-forge-bg border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 <img
                   src={item.displayPicture}
                   alt={item.title}
-                  className="w-full h-80 object-cover rounded-md mb-3"
+                  className="w-full h-80 object-cover rounded-sm mb-3"
                 />
 
                 <div className="mb-2">
                   <h3
                     className={`text-base font-semibold transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     {item.title}
                   </h3>
                   <p
                     className={`text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-300" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
                     }`}
                   >
                     {item.description}
@@ -192,10 +192,10 @@ export default function StorePage() {
 
                 {item.type.toLowerCase() === "tshirt" && (
                   <select
-                    className={`w-full mb-2 border text-xs p-1 rounded-md transition-all duration-300 ${
+                    className={`w-full mb-2 border text-xs p-1 rounded-sm transition-all duration-300 ${
                       theme === "dark"
-                        ? "bg-neutral-800 border-neutral-600 text-white"
-                        : "bg-white border-gray-300 text-gray-900"
+                        ? "bg-forge-bg-raised border-forge-line text-forge-ink"
+                        : "bg-forge-bg border-forge-line text-forge-ink"
                     }`}
                   >
                     <option value="S">Size S</option>
@@ -206,15 +206,15 @@ export default function StorePage() {
                 )}
 
                 <div className="flex justify-between items-center mt-1">
-                  <span className="text-emerald-400 font-semibold text-sm">
+                  <span className="text-forge-ember font-semibold text-sm">
                     ₹{item.creditsAmount}
                   </span>
                   <button
                     onClick={() => toggleCartItem(item)}
-                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                    className={`px-3 py-1 rounded-sm text-xs font-semibold transition-colors ${
                       cart.includes(item.id)
-                        ? "bg-red-500 text-white hover:bg-red-600"
-                        : "bg-emerald-400 text-black hover:bg-emerald-500"
+                        ? "bg-[forge-error-bg text-forge-ink hover:bg-[forge-error-bg"
+                        : "bg-forge-ember text-forge-ink hover:bg-forge-ember"
                     }`}
                   >
                     {cart.includes(item.id) ? "Remove" : <FiPlus size={14} />}
@@ -228,10 +228,10 @@ export default function StorePage() {
           {cart.length > 0 && (
             <div className="mt-10 flex justify-center">
               <button
-                className={`border font-semibold tracking-wide shadow-lg py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
+                className={`border font-semibold tracking-wide shadow-[0_4px_20px_rgba(21,18,13,0.5)] py-3 px-8 rounded-sm transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
                   theme === "dark"
-                    ? "border-neutral-700 hover:from-fuchsia-600 hover:to-cyan-500 text-white"
-                    : "border-gray-300 bg-blue-600 hover:bg-blue-700 text-white"
+                    ? "border-forge-line hover:from-fuchsia-600 hover:to-cyan-500 text-forge-ink"
+                    : "border-forge-line bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink"
                 }`}
               >
                 <FaShoppingCart className="text-lg" />

@@ -85,8 +85,8 @@ export default function Sidebar() {
             collapsed ? "w-20" : "w-64"
           } ${
             theme === "light"
-              ? "bg-transaprent text-gray-900 border-gray-200"
-              : "bg-transparent text-white border-neutral-700"
+              ? "bg-transaprent text-forge-ink border-forge-line"
+              : "bg-transparent text-forge-ink border-forge-line"
           }`}
         >
           <div className="flex flex-col p-4 space-y-6">
@@ -99,16 +99,12 @@ export default function Sidebar() {
                     <button
                       onClick={() => handleNavigation(path)}
                       disabled={isActive}
-                      className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
+                      className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
                         collapsed ? "justify-center" : "gap-3"
                       } ${
                         isActive
-                          ? theme === "light"
-                            ? "bg-blue-100 text-blue-600 cursor-default"
-                            : "bg-blue-900/50 text-blue-400 cursor-default"
-                          : theme === "light"
-                          ? "hover:bg-gray-100 cursor-pointer"
-                          : "hover:bg-neutral-800 cursor-pointer"
+                          ? "bg-forge-ember-low text-forge-ember cursor-default"
+                          : "hover:bg-forge-bg-raised cursor-pointer text-forge-ink"
                       }`}
                     >
                       <Icon
@@ -126,39 +122,21 @@ export default function Sidebar() {
                         </span>
                       )}
                       {isActive && !collapsed && (
-                        <div
-                          className={`ml-auto w-2 h-2 rounded-full ${
-                            theme === "light" ? "bg-blue-600" : "bg-blue-400"
-                          }`}
-                        ></div>
+                        <div className="ml-auto w-2 h-2 rounded-sm bg-forge-ember" />
                       )}
                     </button>
                     {/* Tooltip for collapsed view */}
                     {collapsed && (
                       <div
-                        className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-lg border ${
+                        className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 border ${
                           isActive
-                            ? theme === "light"
-                              ? "bg-blue-100 text-blue-600 border-blue-200"
-                              : "bg-blue-900/50 text-blue-400 border-blue-800"
-                            : theme === "light"
-                            ? "bg-white text-gray-900 border-gray-200"
-                            : "bg-neutral-800 text-white border-neutral-700"
+                            ? "bg-forge-ember-low text-forge-ember border-forge-ember-low"
+                            : "bg-forge-bg-raised text-forge-ink border-forge-line"
                         }`}
                       >
                         {name}
                         {isActive && " (Current)"}
-                        <div
-                          className={`absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent ${
-                            isActive
-                              ? theme === "light"
-                                ? "border-r-blue-100"
-                                : "border-r-blue-900/50"
-                              : theme === "light"
-                              ? "border-r-white"
-                              : "border-r-neutral-800"
-                          }`}
-                        ></div>
+                        <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-forge-bg-raised" />
                       </div>
                     )}
                   </div>
@@ -170,10 +148,10 @@ export default function Sidebar() {
             {/* <div className="relative group">
             <button
               onClick={toggleTheme}
-              className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
+              className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
                 collapsed ? "justify-center" : "gap-3"
               } ${
-                theme === "light" ? "hover:bg-gray-100" : "hover:bg-neutral-800"
+                theme === "light" ? "hover:bg-forge-bg" : "hover:bg-forge-bg-raised"
               }`}
             >
               {theme === "light" ? (
@@ -190,10 +168,10 @@ export default function Sidebar() {
             {/* Tooltip for collapsed view */}
             {/* {collapsed && (
               <div
-                className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-lg border ${
+                className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                   theme === "light"
-                    ? "bg-white text-gray-900 border-gray-200"
-                    : "bg-neutral-800 text-white border-neutral-700"
+                    ? "bg-forge-bg text-forge-ink border-forge-line"
+                    : "bg-forge-bg-raised text-forge-ink border-forge-line"
                 }`}
               >
                 {theme === "light" ? "Dark Mode" : "Light Mode"}
@@ -212,12 +190,12 @@ export default function Sidebar() {
             <div className="relative group hidden sm:block">
               <button
                 onClick={() => setCollapsed(!collapsed)}
-                className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
+                className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
                   collapsed ? "justify-center" : "gap-3"
                 } ${
                   theme === "light"
-                    ? "hover:bg-gray-100"
-                    : "hover:bg-neutral-800"
+                    ? "hover:bg-forge-bg"
+                    : "hover:bg-forge-bg-raised"
                 }`}
               >
                 {collapsed ? (
@@ -232,10 +210,10 @@ export default function Sidebar() {
               {/* Tooltip for collapsed view */}
               {collapsed && (
                 <div
-                  className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-lg border ${
+                  className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                     theme === "light"
-                      ? "bg-white text-gray-900 border-gray-200"
-                      : "bg-neutral-800 text-white border-neutral-700"
+                      ? "bg-forge-bg text-forge-ink border-forge-line"
+                      : "bg-forge-bg-raised text-forge-ink border-forge-line"
                   }`}
                 >
                   Expand

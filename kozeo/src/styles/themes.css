@@ -1,48 +1,44 @@
-/* Theme Variables */
+/**
+ * themes.css — legacy CSS custom property aliases.
+ * Mirrors globals.css :root. Update both together.
+ *
+ * Palette: Studio Black — monochromatic
+ */
+
 :root {
-  /* Dark Theme (Default) */
-  --bg-primary: #000000;
-  --bg-secondary: #111111;
-  --bg-tertiary: #1a1a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #a3a3a3;
-  --text-accent: #06b6d4;
-  --border-primary: #404040;
-  --border-secondary: #262626;
-  --accent-primary: #06b6d4;
-  --accent-secondary: #8b5cf6;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --bg-primary:       #080808;
+  --bg-secondary:     #111111;
+  --bg-tertiary:      #1a1a1a;
+  --text-primary:     #f0f0f0;
+  --text-secondary:   #888888;
+  --text-accent:      #d4d4d4;
+  --border-primary:   #2c2c2c;
+  --border-secondary: #1a1a1a;
+  --accent-primary:   #d4d4d4;
+  --accent-secondary: #ffffff;
+  --accent-verdigris: #909090;
+  --success: #909090;
+  --warning: #d4d4d4;
+  --error:   #c0543e;
 }
 
 [data-theme="light"] {
-  /* Light Theme - Softer, more aesthetic colors */
-  --bg-primary: #fefefe;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --text-primary: #374151;
-  --text-secondary: #6b7280;
-  --text-accent: #059669;
-  --border-primary: #e5e7eb;
-  --border-secondary: #d1d5db;
-  --accent-primary: #059669;
-  --accent-secondary: #7c3aed;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --bg-primary:       #f2f2f2;
+  --bg-secondary:     #e8e8e8;
+  --bg-tertiary:      #dcdcdc;
+  --text-primary:     #0a0a0a;
+  --text-secondary:   #444444;
+  --text-accent:      #1a1a1a;
+  --border-primary:   #c0c0c0;
+  --border-secondary: #b0b0b0;
+  --accent-primary:   #1a1a1a;
+  --accent-secondary: #333333;
+  --accent-verdigris: #666666;
+  --success: #666666;
+  --warning: #444444;
+  --error:   #8c3020;
 }
 
-/* Utility classes for theme transitions */
 .theme-transition {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Custom background gradients for themes */
-.bg-gradient-dark {
-  background: radial-gradient(circle at center, rgba(17,17,17,0.8), rgba(0,0,0,0.6));
-}
-
-.bg-gradient-light {
-  background: linear-gradient(135deg, rgba(249,250,251,0.95) 0%, rgba(243,244,246,0.9) 50%, rgba(229,231,235,0.85) 100%);
 }

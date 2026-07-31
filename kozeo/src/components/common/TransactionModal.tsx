@@ -137,14 +137,14 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     switch (status.toLowerCase()) {
       case "completed":
       case "success":
-        return <FiCheckCircle className="text-green-500" />;
+        return <FiCheckCircle className="text-forge-ember" />;
       case "pending":
-        return <FiClock className="text-yellow-500" />;
+        return <FiClock className="text-forge-ink-muted" />;
       case "failed":
       case "cancelled":
-        return <FiXCircle className="text-red-500" />;
+        return <FiXCircle className="text-[forge-error" />;
       default:
-        return <FiClock className="text-gray-500" />;
+        return <FiClock className="text-forge-ink-muted" />;
     }
   };
 
@@ -153,21 +153,21 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
       case "completed":
       case "success":
         return theme === "light"
-          ? "text-green-600 bg-green-50"
-          : "text-green-400 bg-green-900/30";
+          ? "text-forge-ember bg-forge-ember-low"
+          : "text-forge-ember bg-forge-ember-low/30";
       case "pending":
         return theme === "light"
-          ? "text-yellow-600 bg-yellow-50"
-          : "text-yellow-400 bg-yellow-900/30";
+          ? "text-forge-ink-muted bg-forge-bg"
+          : "text-forge-ink-muted bg-forge-bg-raised/30";
       case "failed":
       case "cancelled":
         return theme === "light"
-          ? "text-red-600 bg-red-50"
-          : "text-red-400 bg-red-900/30";
+          ? "text-[forge-error bg-[forge-error-bg"
+          : "text-[forge-error bg-[forge-error-bg/30";
       default:
         return theme === "light"
-          ? "text-gray-600 bg-gray-50"
-          : "text-gray-400 bg-gray-900/30";
+          ? "text-forge-ink-muted bg-forge-bg"
+          : "text-forge-ink-muted bg-forge-bg-raised/30";
     }
   };
 
@@ -208,24 +208,24 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-forge-bg/50 "
         onClick={onClose}
       />
 
       {/* Modal Content */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div
-          className={`w-full max-w-4xl max-h-[90vh] rounded-2xl border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+          className={`w-full max-w-4xl max-h-[90vh] rounded-sm border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
             theme === "light"
-              ? "bg-white/95 border-gray-200"
-              : "bg-neutral-900/95 border-neutral-800"
+              ? "bg-forge-bg/95 border-forge-line"
+              : "bg-forge-bg-raised/95 border-forge-line"
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
+          <div className="flex items-center justify-between p-6 border-b border-forge-line/50">
             <h2
               className={`text-2xl font-light tracking-tight ${
-                theme === "light" ? "text-gray-900" : "text-white"
+                theme === "light" ? "text-forge-ink" : "text-forge-ink"
               }`}
             >
               Transaction History
@@ -234,8 +234,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               onClick={onClose}
               className={`p-2 rounded-full transition-all duration-200 ${
                 theme === "light"
-                  ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
+                  ? "bg-forge-bg hover:bg-forge-bg text-forge-ink"
+                  : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
               }`}
             >
               <FiX className="text-lg" />
@@ -247,7 +247,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             {visibleTransactions.length === 0 && (
               <div
                 className={`text-center py-12 ${
-                  theme === "light" ? "text-gray-500" : "text-gray-400"
+                  theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                 }`}
               >
                 <FiDollarSign className="mx-auto mb-4 text-4xl opacity-50" />
@@ -264,10 +264,10 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               {visibleTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                  className={`p-4 md:p-6 rounded-sm border  theme-transition ${
                     theme === "light"
-                      ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                      : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                      ? "bg-forge-bg/60 border-forge-line/50 hover:bg-forge-bg/80"
+                      : "bg-forge-bg-raised/30 border-forge-line/50 hover:bg-forge-bg-raised/50"
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -277,13 +277,13 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         {getStatusIcon(transaction.status)}
                         <h3
                           className={`text-lg font-medium ${
-                            theme === "light" ? "text-gray-900" : "text-white"
+                            theme === "light" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
                           {transaction.title}
                         </h3>
                         <span
-                          className={`px-2 py-1 text-xs rounded-full font-medium ${getStatusColor(
+                          className={`px-2 py-1 text-xs rounded-sm font-mono tracking-widest uppercase font-medium ${getStatusColor(
                             transaction.status
                           )}`}
                         >
@@ -293,11 +293,11 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
                             transaction.type === "withdrawal"
                               ? theme === "light"
-                                ? "bg-blue-50 text-blue-700"
-                                : "bg-blue-900/30 text-blue-300"
+                                ? "bg-forge-ember-low text-forge-ember"
+                                : "bg-forge-ember-low text-forge-ember"
                               : theme === "light"
-                              ? "bg-purple-50 text-purple-700"
-                              : "bg-purple-900/30 text-purple-300"
+                              ? "bg-forge-ember-low text-forge-ink-muted"
+                              : "bg-forge-ember-low/30 text-forge-ink-muted"
                           }`}
                         >
                           {transaction.type === "withdrawal"
@@ -308,12 +308,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div className="flex items-center gap-2">
-                          <FiHash className="text-cyan-400" />
+                          <FiHash className="text-forge-ember" />
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             {transaction.transactionNumber}
@@ -321,12 +321,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <FiCalendar className="text-cyan-400" />
+                          <FiCalendar className="text-forge-ember" />
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             {formatDate(transaction.createdAt)}
@@ -334,12 +334,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <FiUser className="text-purple-400" />
+                          <FiUser className="text-forge-ink-muted" />
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             {transaction.type === "withdrawal" ? "User" : "To"}:
@@ -349,12 +349,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 
                         {transaction.type === "gig" && (
                           <div className="flex items-center gap-2">
-                            <FiUser className="text-green-400" />
+                            <FiUser className="text-forge-ember" />
                             <span
                               className={`${
                                 theme === "light"
-                                  ? "text-gray-600"
-                                  : "text-gray-400"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             >
                               From: @
@@ -369,7 +369,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                     <div className="text-right">
                       <div
                         className={`text-2xl font-bold mb-1 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {formatAmount(
@@ -381,8 +381,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         <div
                           className={`text-sm ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           Charges:{" "}
@@ -396,8 +396,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         <div
                           className={`text-sm ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           Commission:{" "}
@@ -409,7 +409,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                       )}
                       <div
                         className={`text-sm font-medium ${
-                          theme === "light" ? "text-gray-700" : "text-gray-300"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         Total:{" "}
@@ -429,10 +429,10 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               <div className="mt-6 text-center">
                 <button
                   onClick={loadMoreTransactions}
-                  className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                  className={`px-6 py-3 text-sm font-medium rounded-sm border transition-all duration-200 ${
                     theme === "light"
-                      ? "bg-white/60 border-gray-200/50 text-cyan-600 hover:bg-cyan-50 hover:border-cyan-300"
-                      : "bg-neutral-800/50 border-neutral-700/50 text-cyan-400 hover:bg-cyan-950/30 hover:border-cyan-600/50"
+                      ? "bg-forge-bg/60 border-forge-line/50 text-forge-ember hover:bg-forge-ember hover:border-forge-ember"
+                      : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ember hover:bg-forge-ember/30 hover:border-forge-ember/50"
                   }`}
                 >
                   Load More (

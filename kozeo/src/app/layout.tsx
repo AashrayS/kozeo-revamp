@@ -1,6 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, IBM_Plex_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import "../styles/themes.css";
 import { NavigationWrapper } from "@/components/common/NavigationWrapper";
@@ -9,14 +9,23 @@ import ApolloWrapper from "@/components/common/ApolloWrapper";
 import { ReduxProvider } from "../../store/Provider";
 import { ThemeProvider } from "../contexts/ThemeContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  weight: ["400", "500"],
   subsets: ["latin"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | Kozeo",
   },
   description:
-    "Kozeo empowers computer science students and developers with real-world paid projects from startups and NGOs. Build your portfolio, gain practical experience, earn while learning, and grow your professional network.",
+    "Kozeo empowers computer science students and developers with real-world paid projects from startups and passion projects. Build your portfolio, gain practical experience, earn while learning, and grow your professional network.",
   keywords: [
     "freelance development",
     "computer science projects",
@@ -111,8 +120,8 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "var(--forge-ink)" },
+    { media: "(prefers-color-scheme: dark)", color: "var(--forge-bg)" },
   ],
   viewport: {
     width: "device-width",
@@ -135,9 +144,9 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
     "apple-mobile-web-app-title": "Kozeo",
-    "msapplication-TileColor": "#000000",
+    "msapplication-TileColor": "var(--forge-bg)",
     "msapplication-config": "/browserconfig.xml",
-    "theme-color": "#000000",
+    "theme-color": "var(--forge-bg)",
 
     // Geo targeting
     "geo.region": "IN",
@@ -357,7 +366,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}
+        className={`${inter.variable} ${plexMono.variable} ${fraunces.variable} antialiased theme-transition font-sans`}
       >
         <ReduxProvider>
           <ApolloWrapper>

@@ -9,9 +9,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        sans:  ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "ui-serif", "Georgia", "serif"],
+        mono:  ["IBM Plex Mono", "ui-monospace", "SFMono-Regular", "monospace"],
       },
     },
   },
   plugins: [require("@tailwindcss/line-clamp")],
 };
+

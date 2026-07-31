@@ -179,7 +179,7 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
 
   return (
     <div
-      className={`${sizeClasses[size]} bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm`}
+      className={`${sizeClasses[size]} bg-forge-bg-raised border border-forge-line rounded-full flex items-center justify-center shrink-0 overflow-hidden relative shadow-[0_4px_20px_rgba(21,18,13,0.5)]`}
     >
       {shouldShowImage && (
         <img
@@ -197,7 +197,7 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
         />
       )}
       {!shouldShowImage && (
-        <FiUser className={`${iconSizeClasses[size]} text-gray-400`} />
+        <FiUser className={`${iconSizeClasses[size]} text-forge-ink-muted`} />
       )}
     </div>
   );
@@ -614,8 +614,8 @@ export default function UserProfilePage() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -624,7 +624,7 @@ export default function UserProfilePage() {
               <div className="flex justify-center items-center py-20">
                 <div
                   className={`transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                   }`}
                 >
                   Loading profile...
@@ -644,8 +644,8 @@ export default function UserProfilePage() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -655,22 +655,22 @@ export default function UserProfilePage() {
                 <div className="text-center max-w-md mx-auto">
                   <div className="text-8xl mb-6 animate-bounce">🤖</div>
                   <h2
-                    className={`text-4xl font-bold mb-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent ${
-                      theme === "dark" ? "drop-shadow-lg" : ""
+                    className={`text-4xl font-bold mb-4 bg-forge-bg from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent ${
+                      theme === "dark" ? "drop-shadow-[0_4px_20px_rgba(21,18,13,0.5)]" : ""
                     }`}
                   >
                     Oops! Profile not found
                   </h2>
                   <p
                     className={`text-xl mb-6 font-medium ${
-                      theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Even our best developers can't find this page! 🕵️‍♂️
                   </p>
                   <p
                     className={`text-lg mb-8 leading-relaxed ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     It seems this profile has mastered the ancient art of
@@ -680,16 +680,16 @@ export default function UserProfilePage() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
                       onClick={() => window.location.reload()}
-                      className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                      className="px-8 py-3 bg-forge-bg from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-forge-ink rounded-sm font-semibold shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] transform hover:scale-105 transition-all duration-200"
                     >
                       Try Again 🔄
                     </button>
                     <button
                       onClick={() => router.push("/gigs")}
-                      className={`px-8 py-3 rounded-xl font-semibold border-2 transition-all duration-200 hover:scale-105 ${
+                      className={`px-8 py-3 rounded-sm font-semibold border-2 transition-all duration-200 hover:scale-105 ${
                         theme === "dark"
-                          ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
-                          : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                          ? "border-forge-line text-forge-ink hover:bg-forge-bg-raised hover:border-forge-line"
+                          : "border-forge-line text-forge-ink hover:bg-forge-bg hover:border-forge-line"
                       }`}
                     >
                       Browse Projects
@@ -698,7 +698,7 @@ export default function UserProfilePage() {
                   {/* <div className="mt-8">
                     <p
                       className={`text-sm ${
-                        theme === "dark" ? "text-gray-500" : "text-gray-500"
+                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       Error Code: {error} 📋
@@ -714,7 +714,7 @@ export default function UserProfilePage() {
   }
 
   if (!profile) {
-    return <div className="text-white">No profile data available</div>;
+    return <div className="text-forge-ink">No profile data available</div>;
   }
 
   // Calculate stats from available data
@@ -898,14 +898,14 @@ export default function UserProfilePage() {
     <>
       <Header logoText="Kozeo" />
       {/* Glows */}
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       <div
         className={`min-h-screen relative z-10 flex flex-row theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-gray-900"
-            : "bg-gradient-dark text-white"
+            ? "bg-gradient-light text-forge-ink"
+            : "bg-gradient-dark text-forge-ink"
         }`}
       >
         {/* Main Layout */}
@@ -919,10 +919,10 @@ export default function UserProfilePage() {
             {/* Error State */}
             {error && !loading && (
               <section
-                className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                className={`rounded-sm sm:rounded-sm p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                   theme === "light"
-                    ? "bg-white/90 border-gray-200"
-                    : "bg-neutral-900/70 border-neutral-800"
+                    ? "bg-forge-bg/90 border-forge-line"
+                    : "bg-forge-bg-raised/70 border-forge-line"
                 }`}
               >
                 <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -933,14 +933,14 @@ export default function UserProfilePage() {
                       <div className="text-6xl mb-4">🕵️‍♂️</div>
                       <h2
                         className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         User Not Foundd
                       </h2>
                       <p
                         className={`text-lg mb-6 font-medium ${
-                          theme === "light" ? "text-gray-700" : "text-gray-300"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         Looks like this user has mastered the art of digital
@@ -948,7 +948,7 @@ export default function UserProfilePage() {
                       </p>
                       <p
                         className={`text-base mb-8 max-w-md leading-relaxed ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Either they're playing the ultimate hide-and-seek game,
@@ -961,21 +961,21 @@ export default function UserProfilePage() {
                       <div className="text-6xl mb-4">⚠️</div>
                       <h2
                         className={`text-2xl md:text-3xl font-light tracking-tight mb-4 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         Oops! Something Went Wrong
                       </h2>
                       <p
                         className={`text-lg mb-6 ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Our servers are having a bit of a coffee break! ☕
                       </p>
                       <p
                         className={`text-sm mb-8 max-w-md ${
-                          theme === "light" ? "text-gray-500" : "text-gray-500"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Error: {error}
@@ -985,16 +985,16 @@ export default function UserProfilePage() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <button
                       onClick={() => router.back()}
-                      className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200 font-medium"
+                      className="px-6 py-3 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded-sm transition-all duration-200 font-medium"
                     >
                       Go Back
                     </button>
                     <button
                       onClick={() => router.push("/gigs")}
-                      className={`px-6 py-3 rounded-lg border transition-all duration-200 font-medium ${
+                      className={`px-6 py-3 rounded-sm border transition-all duration-200 font-medium ${
                         theme === "light"
-                          ? "border-gray-300 text-gray-700 hover:bg-gray-50"
-                          : "border-neutral-600 text-gray-300 hover:bg-neutral-800"
+                          ? "border-forge-line text-forge-ink hover:bg-forge-bg"
+                          : "border-forge-line text-forge-ink hover:bg-forge-bg-raised"
                       }`}
                     >
                       Browse Projects
@@ -1009,15 +1009,15 @@ export default function UserProfilePage() {
               <>
                 {/* Profile Header */}
                 <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  className={`rounded-sm sm:rounded-sm p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                     theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
+                      ? "bg-forge-bg/90 border-forge-line"
+                      : "bg-forge-bg-raised/70 border-forge-line"
                   }`}
                 >
                   <h2
                     className={`text-3xl md:text-4xl font-light tracking-tight mb-8 ${
-                      theme === "light" ? "text-gray-900" : "text-white"
+                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     User Profile
@@ -1038,7 +1038,7 @@ export default function UserProfilePage() {
                         <div className="flex items-center gap-3">
                           <h3
                             className={`text-2xl lg:text-3xl font-light tracking-tight theme-transition ${
-                              theme === "light" ? "text-gray-900" : "text-white"
+                              theme === "light" ? "text-forge-ink" : "text-forge-ink"
                             }`}
                           >
                             {profile.first_name} {profile.last_name}
@@ -1048,7 +1048,7 @@ export default function UserProfilePage() {
                               onClick={() =>
                                 router.push(`/profile/${username}/edit`)
                               }
-                              className="px-3 py-1.5 text-sm bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200"
+                              className="px-3 py-1.5 text-sm bg-forge-ember hover:bg-forge-ember text-forge-ink rounded-sm transition-all duration-200"
                               type="button"
                             >
                               Edit Profile
@@ -1068,7 +1068,7 @@ export default function UserProfilePage() {
                                   <img
                                     src={achievement.icon}
                                     alt={achievement.title}
-                                    className="w-8 h-8 rounded-lg hover:scale-110 transition-transform object-cover"
+                                    className="w-8 h-8 rounded-sm hover:scale-110 transition-transform object-cover"
                                   />
                                 </div>
                               ))}
@@ -1078,7 +1078,7 @@ export default function UserProfilePage() {
 
                       <div
                         className={`text-lg font-medium mb-3 theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         @{profile.username}
@@ -1086,7 +1086,7 @@ export default function UserProfilePage() {
 
                       <p
                         className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-300"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
                         }`}
                       >
                         {profile.bio}
@@ -1096,8 +1096,8 @@ export default function UserProfilePage() {
                         <span
                           className={`px-3 py-1 text-sm rounded-full font-medium border theme-transition ${
                             theme === "light"
-                              ? "bg-green-50 border-green-200 text-green-700"
-                              : "bg-green-950/50 border-green-800/50 text-green-300"
+                              ? "bg-forge-ember-low border-forge-ember text-forge-ember"
+                              : "bg-forge-ember-low/50 border-forge-ember/50 text-forge-ember"
                           }`}
                         >
                           Active
@@ -1105,8 +1105,8 @@ export default function UserProfilePage() {
                         {/* <span
                           className={`text-sm theme-transition ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-500"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           Member since 2024
@@ -1128,8 +1128,8 @@ export default function UserProfilePage() {
                                   rel="noopener noreferrer"
                                   className={`px-3 py-1 text-sm rounded-full border transition-all duration-200 hover:scale-105 theme-transition ${
                                     theme === "light"
-                                      ? "bg-cyan-50 border-cyan-200 text-cyan-700 hover:bg-cyan-100"
-                                      : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/50"
+                                      ? "bg-forge-ember border-forge-ember text-forge-ember hover:bg-forge-ember"
+                                      : "bg-forge-ember/50 border-forge-ember/50 text-forge-ember hover:bg-forge-ember/50"
                                   }`}
                                 >
                                   {websiteName ||
@@ -1158,13 +1158,13 @@ export default function UserProfilePage() {
                             profile.resume
                               ? `hover:scale-105 cursor-pointer ${
                                   theme === "light"
-                                    ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
-                                    : "bg-green-950/50 border-green-800/50 text-green-300 hover:bg-green-900/50"
+                                    ? "bg-forge-ember-low border-forge-ember text-forge-ember hover:bg-forge-ember-low"
+                                    : "bg-forge-ember-low/50 border-forge-ember/50 text-forge-ember hover:bg-forge-ember-low/50"
                                 }`
                               : `cursor-not-allowed opacity-50 ${
                                   theme === "light"
-                                    ? "bg-gray-50 border-gray-200 text-gray-400"
-                                    : "bg-gray-950/50 border-gray-800/50 text-gray-500"
+                                    ? "bg-forge-bg border-forge-line text-forge-ink-muted"
+                                    : "bg-forge-bg/50 border-forge-line/50 text-forge-ink-muted"
                                 }`
                           } theme-transition`}
                           title={
@@ -1192,7 +1192,7 @@ export default function UserProfilePage() {
                           <img
                             src={achievement.icon}
                             alt={achievement.title}
-                            className="w-12 h-12 rounded-lg hover:scale-110 transition-transform object-cover"
+                            className="w-12 h-12 rounded-sm hover:scale-110 transition-transform object-cover"
                           />
                         </div>
                       ))}
@@ -1203,10 +1203,10 @@ export default function UserProfilePage() {
                 {/* Privacy Notice for non-owners */}
                 {!canViewSensitiveInfo && userLoggedIn && (
                   <section
-                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
+                    className={`rounded-sm p-4 md:p-6 border  theme-transition ${
                       theme === "light"
-                        ? "bg-blue-50/80 border-blue-200/50 text-blue-700"
-                        : "bg-blue-950/30 border-blue-800/50 text-blue-300"
+                        ? "bg-forge-ember-low border-forge-ember/50 text-forge-ember"
+                        : "bg-forge-ember-low border-forge-ember/50 text-forge-ember"
                     }`}
                   >
                     <p className="text-sm flex items-center gap-2">
@@ -1220,7 +1220,7 @@ export default function UserProfilePage() {
                 {/* Login prompt for non-authenticated users */}
                 {!userLoggedIn && (
                   <section
-                    className={`rounded-2xl p-4 md:p-6 border backdrop-blur-md theme-transition ${
+                    className={`rounded-sm p-4 md:p-6 border  theme-transition ${
                       theme === "light"
                         ? "bg-amber-50/80 border-amber-200/50 text-amber-700"
                         : "bg-amber-950/30 border-amber-800/50 text-amber-300"
@@ -1241,24 +1241,24 @@ export default function UserProfilePage() {
 
                 {/* Profile Stats Grid */}
                 <section
-                  className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  className={`rounded-sm sm:rounded-sm p-4 sm:p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                     theme === "light"
-                      ? "bg-white/95 border-gray-200"
-                      : "bg-neutral-900/80 border-neutral-800"
+                      ? "bg-forge-bg/95 border-forge-line"
+                      : "bg-forge-bg-raised/80 border-forge-line"
                   }`}
                 >
                   {/* Section Header */}
                   <div className="mb-6 sm:mb-8">
                     <h3
                       className={`text-xl sm:text-2xl font-light tracking-tight mb-2 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
+                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       Performance Overview
                     </h3>
                     <p
                       className={`text-xs sm:text-sm ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
+                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       Key metrics and achievements
@@ -1271,7 +1271,7 @@ export default function UserProfilePage() {
                       {
                         count: profile.gigsHosted.length,
                         label: "Projects Hosted",
-                        color: "text-cyan-400",
+                        color: "text-forge-ember",
                         bgGradient:
                           theme === "light"
                             ? "from-cyan-50 via-blue-50 to-indigo-50"
@@ -1282,15 +1282,15 @@ export default function UserProfilePage() {
                             : "from-cyan-800/50 to-blue-800/50",
                         iconBg:
                           theme === "light"
-                            ? "bg-gradient-to-br from-cyan-100 to-blue-100"
-                            : "bg-gradient-to-br from-cyan-900/50 to-blue-900/50",
-                        icon: <FiUsers className="text-lg text-cyan-400" />,
+                            ? "bg-forge-bg from-cyan-100 to-blue-100"
+                            : "bg-forge-bg from-cyan-900/50 to-blue-900/50",
+                        icon: <FiUsers className="text-lg text-forge-ember" />,
                         shadowColor: "hover:shadow-cyan-200/50",
                       },
                       {
                         count: avgRating.toFixed(1),
                         label: "Average Rating",
-                        color: "text-yellow-400",
+                        color: "text-forge-ember",
                         bgGradient:
                           theme === "light"
                             ? "from-yellow-50 via-orange-50 to-amber-50"
@@ -1301,11 +1301,11 @@ export default function UserProfilePage() {
                             : "from-yellow-800/50 to-orange-800/50",
                         iconBg:
                           theme === "light"
-                            ? "bg-gradient-to-br from-yellow-100 to-orange-100"
-                            : "bg-gradient-to-br from-yellow-900/50 to-orange-900/50",
+                            ? "bg-forge-bg from-yellow-100 to-orange-100"
+                            : "bg-forge-bg from-yellow-900/50 to-orange-900/50",
                         icon: (
                           <FiStar
-                            className="text-lg text-yellow-400"
+                            className="text-lg text-forge-ember"
                             fill="currentColor"
                           />
                         ),
@@ -1315,7 +1315,7 @@ export default function UserProfilePage() {
                       {
                         count: profile.gigsCollaborated?.length || 0,
                         label: "Collaborations",
-                        color: "text-purple-400",
+                        color: "text-forge-ink-muted",
                         bgGradient:
                           theme === "light"
                             ? "from-purple-50 via-violet-50 to-indigo-50"
@@ -1326,9 +1326,9 @@ export default function UserProfilePage() {
                             : "from-purple-800/50 to-violet-800/50",
                         iconBg:
                           theme === "light"
-                            ? "bg-gradient-to-br from-purple-100 to-violet-100"
-                            : "bg-gradient-to-br from-purple-900/50 to-violet-900/50 ",
-                        icon: <FiUsers className="text-lg text-purple-400" />,
+                            ? "bg-forge-bg from-purple-100 to-violet-100"
+                            : "bg-forge-bg from-purple-900/50 to-violet-900/50 ",
+                        icon: <FiUsers className="text-lg text-forge-ink-muted" />,
                         shadowColor: "hover:shadow-purple-200/50",
                       },
 
@@ -1342,7 +1342,7 @@ export default function UserProfilePage() {
                                     walletCurrency
                                   )}${totalEarnings}`,
                               label: "Earning",
-                              color: "text-emerald-400",
+                              color: "text-forge-ember",
                               bgGradient:
                                 theme === "light"
                                   ? "from-emerald-50 via-green-50 to-teal-50"
@@ -1353,10 +1353,10 @@ export default function UserProfilePage() {
                                   : "from-emerald-800/50 to-green-800/50",
                               iconBg:
                                 theme === "light"
-                                  ? "bg-gradient-to-br from-emerald-100 to-green-100"
-                                  : "bg-gradient-to-br from-emerald-900/50 to-green-900/50",
+                                  ? "bg-forge-bg from-emerald-100 to-green-100"
+                                  : "bg-forge-bg from-emerald-900/50 to-green-900/50",
                               icon: (
-                                <FiDollarSign className="text-lg text-emerald-400" />
+                                <FiDollarSign className="text-lg text-forge-ember" />
                               ),
                               isWallet: true,
                               shadowColor: "hover:shadow-emerald-200/50",
@@ -1366,18 +1366,18 @@ export default function UserProfilePage() {
                     ].map((item, idx) => (
                       <div
                         key={idx}
-                        className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${
+                        className={`group relative overflow-hidden rounded-sm bg-forge-bg ${
                           item.bgGradient
                         } border-0 bg-clip-padding theme-transition cursor-pointer ${
                           theme === "light"
-                            ? "sm:shadow-sm hover:shadow-md backdrop-blur-sm"
-                            : "sm:shadow-sm hover:shadow-lg backdrop-blur-sm"
+                            ? "sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] "
+                            : "sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] "
                         }`}
                         style={{
                           backgroundImage:
                             theme === "light"
-                              ? `linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`
-                              : `linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`,
+                              ? `linear-gradient(135deg, rgba(201,138,79,0.15) 0%, rgba(201,138,79,0.15) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`
+                              : `linear-gradient(135deg, rgba(201,138,79,0.15) 0%, rgba(201,138,79,0.15) 100%), linear-gradient(to bottom right, var(--tw-gradient-stops))`,
                           transform: "perspective(1000px)",
                           transition:
                             "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
@@ -1395,8 +1395,8 @@ export default function UserProfilePage() {
                                   item.shadowColor
                                     ?.replace("hover:", "")
                                     .replace("/50", "/20") || "rgba(0,0,0,0.08)"
-                                }, 0 0 0 1px rgba(255,255,255,0.05)`
-                              : "0 12px 25px -8px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03)";
+                                }, 0 0 0 1px rgba(201,138,79,0.15)`
+                              : "0 12px 25px -8px rgba(0,0,0,0.25), 0 0 0 1px rgba(201,138,79,0.15)";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform =
@@ -1409,7 +1409,7 @@ export default function UserProfilePage() {
                       >
                         {/* Professional Gradient Border with Glow */}
                         <div
-                          className={`absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-r ${item.borderGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
+                          className={`absolute inset-0 rounded-sm p-[1px] bg-forge-bg ${item.borderGradient} opacity-0 group-hover:opacity-100 transition-all duration-500`}
                           style={{
                             background: `linear-gradient(135deg, ${
                               item.borderGradient.includes("cyan")
@@ -1424,14 +1424,14 @@ export default function UserProfilePage() {
                           }}
                         >
                           <div
-                            className={`w-full h-full rounded-2xl bg-gradient-to-br ${item.bgGradient}`}
+                            className={`w-full h-full rounded-sm bg-forge-bg ${item.bgGradient}`}
                           ></div>
                         </div>
 
                         {/* Subtle Shimmer Effect on Hover */}
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                           <div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                            className="absolute inset-0 bg-forge-bg from-transparent via-white/10 to-transparent"
                             style={{
                               transform: "translateX(-100%)",
                               animation: "shimmer 2s ease-in-out infinite",
@@ -1441,8 +1441,8 @@ export default function UserProfilePage() {
 
                         {/* Enhanced Pattern Overlay */}
                         <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500">
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_70%)]"></div>
-                          <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(255,255,255,0.1)_60deg,transparent_120deg)]"></div>
+                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,138,79,0.15),transparent_70%)]"></div>
+                          <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,rgba(201,138,79,0.15)_60deg,transparent_120deg)]"></div>
                         </div>
 
                         {/* Content with Enhanced Typography - Mobile Optimized */}
@@ -1457,8 +1457,8 @@ export default function UserProfilePage() {
                                   <span
                                     className={`text-xs sm:text-sm font-normal transition-colors duration-300 ${
                                       theme === "light"
-                                        ? "text-gray-400 group-hover:text-gray-500"
-                                        : "text-gray-500 group-hover:text-gray-400"
+                                        ? "text-forge-ink-muted group-hover:text-forge-ink-muted"
+                                        : "text-forge-ink-muted group-hover:text-forge-ink-muted"
                                     }`}
                                   >
                                     {item.suffix}
@@ -1468,17 +1468,17 @@ export default function UserProfilePage() {
                               <h4
                                 className={`text-xs font-semibold tracking-wide uppercase theme-transition group-hover:opacity-80 ${
                                   theme === "light"
-                                    ? "text-gray-600"
-                                    : "text-gray-400"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 {item.label}
                               </h4>
                             </div>
                             <div
-                              className={`p-2 sm:p-3 rounded-xl ${item.iconBg} backdrop-blur-sm sm:shadow-sm group-hover:shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
+                              className={`p-2 sm:p-3 rounded-sm ${item.iconBg}  sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] group-hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] group-hover:scale-110 group-hover:rotate-3 transition-all duration-400`}
                             >
-                              <div className="sm:group-hover:drop-shadow-lg transition-all duration-300">
+                              <div className="sm:group-hover:drop-shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300">
                                 {item.icon}
                               </div>
                             </div>
@@ -1489,20 +1489,8 @@ export default function UserProfilePage() {
                             <div className="space-y-2 sm:space-y-3 group-hover:translate-y-[-1px] transition-transform duration-300">
                               <button
                                 onClick={handleWithdraw}
-                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-600 via-emerald-600 to-green-600 hover:from-emerald-700 hover:via-emerald-700 hover:to-green-700 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-emerald-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                                style={{
-                                  background:
-                                    theme === "light"
-                                      ? "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)"
-                                      : "linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%)",
-                                  boxShadow:
-                                    "0 4px 15px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                                }}
+                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-forge-bg-raised border border-forge-line hover:border-forge-ember text-forge-ink rounded-sm transition-all duration-300 text-xs sm:text-sm font-semibold hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] focus:outline-none focus:ring-1 focus:ring-forge-line"
                               >
-                                {/* Button Shimmer Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
-
-                                {/* Button Content */}
                                 <div className="relative flex items-center justify-center gap-1 sm:gap-2">
                                   <svg
                                     className="w-3 sm:w-4 h-3 sm:h-4 transition-transform duration-300 group-hover/btn:scale-110"
@@ -1521,25 +1509,14 @@ export default function UserProfilePage() {
                                     Withdraw
                                   </span>
                                 </div>
-
-                                {/* Professional Border Highlight */}
-                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
                               </button>
 
                               <button
                                 onClick={() => setShowTransactionModal(true)}
-                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-blue-700 hover:from-cyan-700 hover:via-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-400 text-xs sm:text-sm font-semibold shadow-lg hover:shadow-cyan-500/40 transform hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] active:translate-y-[0px] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                                style={{
-                                  background:
-                                    theme === "light"
-                                      ? "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)"
-                                      : "linear-gradient(135deg, #0891b2 0%, #1d4ed8 50%, #1e40af 100%)",
-                                  boxShadow:
-                                    "0 4px 15px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-                                }}
+                                className="group/btn w-full relative overflow-hidden px-3 sm:px-4 py-2 sm:py-3 bg-forge-bg-raised border border-forge-line hover:border-forge-ember text-forge-ink rounded-sm transition-all duration-300 text-xs sm:text-sm font-semibold hover:scale-[1.02] hover:translate-y-[-2px] active:scale-[0.98] focus:outline-none focus:ring-1 focus:ring-forge-line"
                               >
                                 {/* Button Shimmer Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
+                                <div className="absolute inset-0 bg-forge-bg from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 transform -translate-x-full group-hover/btn:translate-x-full group-hover/btn:duration-700"></div>
 
                                 {/* Button Content */}
                                 <div className="relative flex items-center justify-center gap-1 sm:gap-2">
@@ -1550,16 +1527,16 @@ export default function UserProfilePage() {
                                 </div>
 
                                 {/* Professional Border Highlight */}
-                                <div className="absolute inset-0 rounded-xl border border-white/20 group-hover/btn:border-white/30 transition-colors duration-300"></div>
+                                <div className="absolute inset-0 rounded-sm border border-forge-line group-hover/btn:border-forge-line/30 transition-colors duration-300"></div>
                               </button>
                             </div>
                           )}
                         </div>
 
                         {/* Professional Glow Effect */}
-                        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                        <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
                           <div
-                            className={`absolute inset-[-2px] rounded-2xl blur-md`}
+                            className={`absolute inset-[-2px] rounded-sm blur-md`}
                             style={{
                               background: `linear-gradient(135deg, ${
                                 item.borderGradient.includes("cyan")
@@ -1580,19 +1557,19 @@ export default function UserProfilePage() {
 
                 {/* Gigs Hosted Section */}
                 <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  className={`rounded-sm sm:rounded-sm p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                     theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
+                      ? "bg-forge-bg/90 border-forge-line"
+                      : "bg-forge-bg-raised/70 border-forge-line"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-6">
                     <h3
                       className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
+                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
-                      <FiUsers className="text-cyan-400" />
+                      <FiUsers className="text-forge-ember" />
                       Projects Hosted ({filteredHostedGigs.length}
                       {selectedSkills.length > 0
                         ? ` of ${profile.gigsHosted.length}`
@@ -1602,8 +1579,8 @@ export default function UserProfilePage() {
                         <span
                           className={`text-sm font-normal ${
                             theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           - Filtered by skills
@@ -1614,10 +1591,10 @@ export default function UserProfilePage() {
                       onClick={() =>
                         setIsHostedSectionCollapsed(!isHostedSectionCollapsed)
                       }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                      className={`p-2 rounded-sm transition-all duration-200 hover:scale-105 ${
                         theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
+                          ? "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg"
+                          : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised"
                       }`}
                       title={
                         isHostedSectionCollapsed
@@ -1639,28 +1616,28 @@ export default function UserProfilePage() {
                         {displayedHostedGigs.map((gig, index) => (
                           <div
                             key={index}
-                            className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                            className={`p-4 md:p-6 rounded-sm border  theme-transition ${
                               theme === "light"
-                                ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                                ? "bg-forge-bg/60 border-forge-line/50 hover:bg-forge-bg/80"
+                                : "bg-forge-bg-raised/30 border-forge-line/50 hover:bg-forge-bg-raised/50"
                             }`}
                           >
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                               <h4
                                 className={`text-lg font-medium theme-transition ${
                                   theme === "light"
-                                    ? "text-gray-900"
-                                    : "text-white"
+                                    ? "text-forge-ink"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 {gig.title}
                               </h4>
                               <div className="flex items-center gap-1">
                                 <FiStar
-                                  className="text-yellow-400 text-sm"
+                                  className="text-forge-ember text-sm"
                                   fill="currentColor"
                                 />
-                                <span className="text-sm text-yellow-400 font-medium">
+                                <span className="text-sm text-forge-ember font-medium">
                                   {gig.reviews && gig.reviews.length > 0
                                     ? (
                                         gig.reviews.reduce(
@@ -1676,8 +1653,8 @@ export default function UserProfilePage() {
                             <p
                               className={`text-sm mb-3 leading-relaxed theme-transition ${
                                 theme === "light"
-                                  ? "text-gray-600"
-                                  : "text-gray-300"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink"
                               }`}
                             >
                               {gig.description}
@@ -1685,12 +1662,12 @@ export default function UserProfilePage() {
                             <div
                               className={`text-sm mb-4 theme-transition ${
                                 theme === "light"
-                                  ? "text-gray-500"
-                                  : "text-gray-400"
+                                  ? "text-forge-ink-muted"
+                                  : "text-forge-ink-muted"
                               }`}
                             >
                               Looking for:{" "}
-                              <span className="text-cyan-400 font-medium">
+                              <span className="text-forge-ember font-medium">
                                 {gig.looking_For}
                               </span>
                             </div>
@@ -1706,10 +1683,10 @@ export default function UserProfilePage() {
                                           selectedSkills.includes(skill)
                                             ? theme === "light"
                                               ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                              : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
+                                              : "bg-yellow-900/50 border-yellow-600/50 text-forge-ember"
                                             : theme === "light"
-                                            ? "bg-cyan-50 border-cyan-200 text-cyan-700"
-                                            : "bg-cyan-950/50 border-cyan-800/50 text-cyan-300"
+                                            ? "bg-forge-ember border-forge-ember text-forge-ember"
+                                            : "bg-forge-ember/50 border-forge-ember/50 text-forge-ember"
                                         }`}
                                       >
                                         {skill}
@@ -1721,17 +1698,17 @@ export default function UserProfilePage() {
                             )}
                             {gig.reviews && gig.reviews.length > 0 && (
                               <div
-                                className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
+                                className={`p-4 border rounded-sm  theme-transition ${
                                   theme === "light"
-                                    ? "bg-gray-50/80 border-gray-200/50"
-                                    : "bg-neutral-900/50 border-neutral-700/50"
+                                    ? "bg-forge-bg/80 border-forge-line/50"
+                                    : "bg-forge-bg-raised/50 border-forge-line/50"
                                 }`}
                               >
                                 <div
                                   className={`text-sm font-medium mb-2 theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-900"
-                                      : "text-white"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   "{gig.reviews[0].title}"
@@ -1739,13 +1716,13 @@ export default function UserProfilePage() {
                                 <div
                                   className={`text-sm mb-2 theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-600"
-                                      : "text-gray-300"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {gig.reviews[0].description}
                                 </div>
-                                <div className="text-sm text-cyan-400 font-medium">
+                                <div className="text-sm text-forge-ember font-medium">
                                   - @{gig.reviews[0].author?.username}
                                 </div>
                               </div>
@@ -1759,10 +1736,10 @@ export default function UserProfilePage() {
                         <div className="mt-6 flex justify-center">
                           <button
                             onClick={toggleHostedGigs}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                            className={`px-6 py-3 text-sm font-medium rounded-sm border transition-all duration-200 ${
                               theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-cyan-600 hover:bg-cyan-50 hover:border-cyan-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-cyan-400 hover:bg-cyan-950/30 hover:border-cyan-600/50"
+                                ? "bg-forge-bg/60 border-forge-line/50 text-forge-ember hover:bg-forge-ember hover:border-forge-ember"
+                                : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ember hover:bg-forge-ember/30 hover:border-forge-ember/50"
                             }`}
                           >
                             {showAllHostedGigs
@@ -1781,19 +1758,19 @@ export default function UserProfilePage() {
 
                 {/* Collaborations Section */}
                 <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  className={`rounded-sm sm:rounded-sm p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                     theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
+                      ? "bg-forge-bg/90 border-forge-line"
+                      : "bg-forge-bg-raised/70 border-forge-line"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-6">
                     <h3
                       className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
+                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
-                      <FiUsers className="text-purple-400" />
+                      <FiUsers className="text-forge-ink-muted" />
                       Collaborations ({filteredCollaboratedGigs.length}
                       {selectedSkills.length > 0
                         ? ` of ${profile.gigsCollaborated?.length || 0}`
@@ -1803,8 +1780,8 @@ export default function UserProfilePage() {
                         <span
                           className={`text-sm font-normal ${
                             theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           - Filtered by skills
@@ -1817,10 +1794,10 @@ export default function UserProfilePage() {
                           !isCollaborationsSectionCollapsed
                         )
                       }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                      className={`p-2 rounded-sm transition-all duration-200 hover:scale-105 ${
                         theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
+                          ? "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg"
+                          : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised"
                       }`}
                       title={
                         isCollaborationsSectionCollapsed
@@ -1843,28 +1820,28 @@ export default function UserProfilePage() {
                           (gig: any, index: number) => (
                             <div
                               key={index}
-                              className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                              className={`p-4 md:p-6 rounded-sm border  theme-transition ${
                                 theme === "light"
-                                  ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                  : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                                  ? "bg-forge-bg/60 border-forge-line/50 hover:bg-forge-bg/80"
+                                  : "bg-forge-bg-raised/30 border-forge-line/50 hover:bg-forge-bg-raised/50"
                               }`}
                             >
                               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                                 <h4
                                   className={`text-lg font-medium theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-900"
-                                      : "text-white"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {gig.title}
                                 </h4>
                                 <div className="flex items-center gap-1">
                                   <FiStar
-                                    className="text-yellow-400 text-sm"
+                                    className="text-forge-ember text-sm"
                                     fill="currentColor"
                                   />
-                                  <span className="text-sm text-yellow-400 font-medium">
+                                  <span className="text-sm text-forge-ember font-medium">
                                     {gig.reviews && gig.reviews.length > 0
                                       ? (
                                           gig.reviews.reduce(
@@ -1880,8 +1857,8 @@ export default function UserProfilePage() {
                               <p
                                 className={`text-sm mb-3 leading-relaxed theme-transition ${
                                   theme === "light"
-                                    ? "text-gray-600"
-                                    : "text-gray-300"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 {gig.description}
@@ -1889,12 +1866,12 @@ export default function UserProfilePage() {
                               <div
                                 className={`text-sm mb-4 theme-transition ${
                                   theme === "light"
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 Looking for:{" "}
-                                <span className="text-purple-400 font-medium">
+                                <span className="text-forge-ink-muted font-medium">
                                   {gig.looking_For}
                                 </span>
                               </div>
@@ -1910,10 +1887,10 @@ export default function UserProfilePage() {
                                             selectedSkills.includes(skill)
                                               ? theme === "light"
                                                 ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                                : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
+                                                : "bg-yellow-900/50 border-yellow-600/50 text-forge-ember"
                                               : theme === "light"
-                                              ? "bg-purple-50 border-purple-200 text-purple-700"
-                                              : "bg-purple-950/50 border-purple-800/50 text-purple-300"
+                                              ? "bg-forge-ember-low border-forge-line text-forge-ink-muted"
+                                              : "bg-forge-ember-low/50 border-forge-line/50 text-forge-ink-muted"
                                           }`}
                                         >
                                           {skill}
@@ -1925,17 +1902,17 @@ export default function UserProfilePage() {
                               )}
                               {gig.reviews && gig.reviews.length > 0 && (
                                 <div
-                                  className={`p-4 border rounded-lg backdrop-blur-sm theme-transition ${
+                                  className={`p-4 border rounded-sm  theme-transition ${
                                     theme === "light"
-                                      ? "bg-gray-50/80 border-gray-200/50"
-                                      : "bg-neutral-900/50 border-neutral-700/50"
+                                      ? "bg-forge-bg/80 border-forge-line/50"
+                                      : "bg-forge-bg-raised/50 border-forge-line/50"
                                   }`}
                                 >
                                   <div
                                     className={`text-sm font-medium mb-2 theme-transition ${
                                       theme === "light"
-                                        ? "text-gray-900"
-                                        : "text-white"
+                                        ? "text-forge-ink"
+                                        : "text-forge-ink"
                                     }`}
                                   >
                                     "{gig.reviews[0].title}"
@@ -1943,13 +1920,13 @@ export default function UserProfilePage() {
                                   <div
                                     className={`text-sm mb-2 theme-transition ${
                                       theme === "light"
-                                        ? "text-gray-600"
-                                        : "text-gray-300"
+                                        ? "text-forge-ink-muted"
+                                        : "text-forge-ink"
                                     }`}
                                   >
                                     {gig.reviews[0].description}
                                   </div>
-                                  <div className="text-sm text-purple-400 font-medium">
+                                  <div className="text-sm text-forge-ink-muted font-medium">
                                     - @{gig.reviews[0].author?.username}
                                   </div>
                                 </div>
@@ -1964,10 +1941,10 @@ export default function UserProfilePage() {
                         <div className="mt-6 flex justify-center">
                           <button
                             onClick={toggleCollaboratedGigs}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                            className={`px-6 py-3 text-sm font-medium rounded-sm border transition-all duration-200 ${
                               theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-purple-400 hover:bg-purple-950/30 hover:border-purple-600/50"
+                                ? "bg-forge-bg/60 border-forge-line/50 text-forge-ink-muted hover:bg-forge-ember-low hover:border-forge-line"
+                                : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted hover:bg-forge-ember-low/30 hover:border-forge-line/50"
                             }`}
                           >
                             {showAllCollaboratedGigs
@@ -1986,16 +1963,16 @@ export default function UserProfilePage() {
 
                 {/* Ongoing Projects Section */}
                 <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                  className={`rounded-sm sm:rounded-sm p-6 md:p-8 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                     theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
+                      ? "bg-forge-bg/90 border-forge-line"
+                      : "bg-forge-bg-raised/70 border-forge-line"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-6">
                     <h3
                       className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
+                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       <FiCalendar className="text-orange-400" />
@@ -2015,8 +1992,8 @@ export default function UserProfilePage() {
                         <span
                           className={`text-sm font-normal ${
                             theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           - Filtered by skills
@@ -2027,10 +2004,10 @@ export default function UserProfilePage() {
                       onClick={() =>
                         setIsOngoingSectionCollapsed(!isOngoingSectionCollapsed)
                       }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                      className={`p-2 rounded-sm transition-all duration-200 hover:scale-105 ${
                         theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
+                          ? "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg"
+                          : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised"
                       }`}
                       title={
                         isOngoingSectionCollapsed
@@ -2052,8 +2029,8 @@ export default function UserProfilePage() {
                         <div
                           className={`text-center py-12 theme-transition ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           <FiCalendar className="text-4xl mx-auto mb-3 opacity-50" />
@@ -2070,10 +2047,10 @@ export default function UserProfilePage() {
                             (gig: any, index: number) => (
                               <div
                                 key={index}
-                                className={`p-4 md:p-6 rounded-xl border backdrop-blur-sm theme-transition ${
+                                className={`p-4 md:p-6 rounded-sm border  theme-transition ${
                                   theme === "light"
-                                    ? "bg-white/60 border-gray-200/50 hover:bg-white/80"
-                                    : "bg-neutral-800/30 border-neutral-700/50 hover:bg-neutral-800/50"
+                                    ? "bg-forge-bg/60 border-forge-line/50 hover:bg-forge-bg/80"
+                                    : "bg-forge-bg-raised/30 border-forge-line/50 hover:bg-forge-bg-raised/50"
                                 }`}
                               >
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
@@ -2081,8 +2058,8 @@ export default function UserProfilePage() {
                                     <h4
                                       className={`text-lg font-medium theme-transition ${
                                         theme === "light"
-                                          ? "text-gray-900"
-                                          : "text-white"
+                                          ? "text-forge-ink"
+                                          : "text-forge-ink"
                                       }`}
                                     >
                                       {gig.title}
@@ -2090,13 +2067,13 @@ export default function UserProfilePage() {
                                     <span
                                       className={`px-2 py-1 text-xs rounded-full font-medium ${
                                         gig.type === "hosted"
-                                          ? "bg-cyan-100 text-cyan-800 border border-cyan-200"
-                                          : "bg-purple-100 text-purple-800 border border-purple-200"
+                                          ? "bg-forge-ember text-forge-ember border border-forge-ember"
+                                          : "bg-forge-ember-low text-forge-ink-muted border border-forge-line"
                                       } ${
                                         theme === "dark" &&
                                         (gig.type === "hosted"
-                                          ? "bg-cyan-900/50 text-cyan-300 border-cyan-600/50"
-                                          : "bg-purple-900/50 text-purple-300 border-purple-600/50")
+                                          ? "bg-forge-ember/50 text-forge-ember border-forge-ember/50"
+                                          : "bg-forge-ember-low/50 text-forge-ink-muted border-forge-line/50")
                                       }`}
                                     >
                                       {gig.type === "hosted"
@@ -2114,8 +2091,8 @@ export default function UserProfilePage() {
                                 <p
                                   className={`text-sm mb-3 leading-relaxed theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-600"
-                                      : "text-gray-300"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {gig.description}
@@ -2123,8 +2100,8 @@ export default function UserProfilePage() {
                                 <div
                                   className={`text-sm mb-4 theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-500"
-                                      : "text-gray-400"
+                                      ? "text-forge-ink-muted"
+                                      : "text-forge-ink-muted"
                                   }`}
                                 >
                                   Looking for:{" "}
@@ -2144,10 +2121,10 @@ export default function UserProfilePage() {
                                               selectedSkills.includes(skill)
                                                 ? theme === "light"
                                                   ? "bg-yellow-100 border-yellow-300 text-yellow-800"
-                                                  : "bg-yellow-900/50 border-yellow-600/50 text-yellow-300"
+                                                  : "bg-yellow-900/50 border-yellow-600/50 text-forge-ember"
                                                 : theme === "light"
-                                                ? "bg-orange-50 border-orange-200 text-orange-700"
-                                                : "bg-orange-950/50 border-orange-800/50 text-orange-300"
+                                                ? "bg-orange-50 border-orange-200 text-forge-ember"
+                                                : "bg-orange-950/50 border-orange-800/50 text-forge-ember"
                                             }`}
                                           >
                                             {skill}
@@ -2160,16 +2137,16 @@ export default function UserProfilePage() {
                                 <div
                                   className={`text-sm font-medium flex items-center gap-2 theme-transition ${
                                     theme === "light"
-                                      ? "text-gray-700"
-                                      : "text-gray-300"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {gig.amount === 0 ? (
                                     <div
                                       className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
                                         theme === "dark"
-                                          ? "bg-gradient-to-r from-purple-900/60 to-blue-900/60 text-purple-300 border border-purple-700/50"
-                                          : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200"
+                                          ? "bg-forge-bg bg-forge-bg-raised text-forge-ink-muted border border-forge-line/50"
+                                          : "bg-forge-bg bg-forge-bg text-forge-ink-muted border border-forge-line"
                                       }`}
                                     >
                                       <FiStar className="w-3 h-3 mr-1" />
@@ -2177,7 +2154,7 @@ export default function UserProfilePage() {
                                     </div>
                                   ) : (
                                     <>
-                                      <FiDollarSign className="text-green-400" />
+                                      <FiDollarSign className="text-forge-ember" />
                                       {gig.currency}{" "}
                                       {gig.amount?.toLocaleString()}
                                     </>
@@ -2194,10 +2171,10 @@ export default function UserProfilePage() {
                         <div className="mt-6 flex justify-center">
                           <button
                             onClick={toggleOngoingProjects}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                            className={`px-6 py-3 text-sm font-medium rounded-sm border transition-all duration-200 ${
                               theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-orange-600 hover:bg-orange-50 hover:border-orange-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-orange-400 hover:bg-orange-950/30 hover:border-orange-600/50"
+                                ? "bg-forge-bg/60 border-forge-line/50 text-orange-600 hover:bg-orange-50 hover:border-orange-300"
+                                : "bg-forge-bg-raised/50 border-forge-line/50 text-orange-400 hover:bg-orange-950/30 hover:border-orange-600/50"
                             }`}
                           >
                             {showAllOngoingProjects
@@ -2214,296 +2191,7 @@ export default function UserProfilePage() {
                   )}
                 </section>
 
-                {/* Posts Section */}
-                <section
-                  className={`rounded-2xl sm:rounded-3xl p-6 md:p-8 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
-                    theme === "light"
-                      ? "bg-white/90 border-gray-200"
-                      : "bg-neutral-900/70 border-neutral-800"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3
-                      className={`text-2xl font-light tracking-tight flex items-center gap-3 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      <FiFileText className="text-indigo-400" />
-                      Posts Created ({filteredPosts.length}
-                      {selectedSkills.length > 0
-                        ? ` of ${timelineData.length}`
-                        : ""}
-                      )
-                    </h3>
-                    <button
-                      onClick={() =>
-                        setIsPostsSectionCollapsed(!isPostsSectionCollapsed)
-                      }
-                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                        theme === "light"
-                          ? "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                          : "text-gray-400 hover:text-gray-200 hover:bg-neutral-800"
-                      }`}
-                    >
-                      {isPostsSectionCollapsed ? (
-                        <FiChevronDown className="text-lg" />
-                      ) : (
-                        <FiChevronUp className="text-lg" />
-                      )}
-                    </button>
-                  </div>
-
-                  {!isPostsSectionCollapsed && (
-                    <>
-                      <div className="space-y-6">
-                        {displayedPosts.map((post, index) => (
-                          <div
-                            key={post.id}
-                            className={`group relative overflow-hidden rounded-xl border backdrop-blur-sm theme-transition ${
-                              theme === "light"
-                                ? "bg-white/80 border-gray-200/50 hover:bg-white/95 hover:shadow-lg"
-                                : "bg-neutral-800/40 border-neutral-700/50 hover:bg-neutral-800/60 hover:shadow-xl"
-                            }`}
-                          >
-                            <div className="p-6 pb-4">
-                              <div className="flex items-start justify-between mb-4">
-                                <div className="flex-1">
-                                  <h4
-                                    className={`text-xl font-semibold mb-2 ${
-                                      theme === "light"
-                                        ? "text-gray-900"
-                                        : "text-white"
-                                    }`}
-                                  >
-                                    {post.Title}
-                                  </h4>
-                                  <p
-                                    className={`text-sm leading-relaxed ${
-                                      theme === "light"
-                                        ? "text-gray-600"
-                                        : "text-gray-300"
-                                    }`}
-                                  >
-                                    {expandedDescriptions.has(post.id)
-                                      ? post.Description
-                                      : truncateDescription(
-                                          post.Description,
-                                          3
-                                        )}
-                                  </p>
-                                  {post.Description.split(" ").length > 36 && (
-                                    <button
-                                      onClick={() => toggleDescription(post.id)}
-                                      className={`mt-2 text-sm font-medium transition-colors ${
-                                        theme === "light"
-                                          ? "text-indigo-600 hover:text-indigo-700"
-                                          : "text-indigo-400 hover:text-indigo-300"
-                                      }`}
-                                    >
-                                      {expandedDescriptions.has(post.id)
-                                        ? "Read less"
-                                        : "Read more"}
-                                    </button>
-                                  )}
-                                </div>
-                                <span
-                                  className={`text-xs px-2 py-1 rounded-full ml-4 ${
-                                    theme === "light"
-                                      ? "bg-indigo-100 text-indigo-700"
-                                      : "bg-indigo-900/50 text-indigo-300"
-                                  }`}
-                                >
-                                  {new Date(
-                                    post.posted_at
-                                  ).toLocaleDateString()}
-                                </span>
-                              </div>
-
-                              {/* Skills Tags */}
-                              {post.skills && post.skills.length > 0 && (
-                                <div className="mb-4">
-                                  <div className="flex flex-wrap gap-2">
-                                    {post.skills.map(
-                                      (skill: string, skillIdx: number) => (
-                                        <span
-                                          key={skillIdx}
-                                          className={`px-3 py-1 text-xs rounded-full font-medium border ${
-                                            theme === "light"
-                                              ? "bg-indigo-50 border-indigo-200 text-indigo-700"
-                                              : "bg-indigo-950/50 border-indigo-800/50 text-indigo-300"
-                                          }`}
-                                        >
-                                          {skill}
-                                        </span>
-                                      )
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Image Previews */}
-                              {post.attachments &&
-                                post.attachments.length > 0 && (
-                                  <div className="mb-4">
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                      {post.attachments
-                                        .slice(0, 6)
-                                        .map((attachment, idx) => (
-                                          <div
-                                            key={idx}
-                                            className="relative group cursor-pointer"
-                                            onClick={() =>
-                                              openImageModal(attachment)
-                                            }
-                                          >
-                                            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                                              <img
-                                                src={attachment}
-                                                alt={`Post attachment ${
-                                                  idx + 1
-                                                }`}
-                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                                onError={(e) => {
-                                                  e.currentTarget.style.display =
-                                                    "none";
-                                                }}
-                                              />
-                                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                                <FiImage className="text-white opacity-0 group-hover:opacity-100 text-2xl transition-opacity duration-300" />
-                                              </div>
-                                            </div>
-                                          </div>
-                                        ))}
-                                    </div>
-
-                                    {/* Show more indicator if there are more than 6 attachments */}
-                                    {post.attachments.length > 6 && (
-                                      <div className="mt-3 text-center">
-                                        <span
-                                          className={`text-sm ${
-                                            theme === "light"
-                                              ? "text-gray-500"
-                                              : "text-gray-400"
-                                          }`}
-                                        >
-                                          +{post.attachments.length - 6} more
-                                          attachments
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                            </div>
-
-                            {/* Post Footer */}
-                            <div
-                              className={`px-6 py-4 border-t flex items-center justify-between ${
-                                theme === "light"
-                                  ? "border-gray-200/50 bg-gray-50/50"
-                                  : "border-neutral-700/50 bg-neutral-900/30"
-                              }`}
-                            >
-                              <div className="flex items-center gap-4">
-                                <button
-                                  onClick={() => toggleComments(post.id)}
-                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                    expandedComments.has(post.id)
-                                      ? theme === "light"
-                                        ? "bg-indigo-100 text-indigo-700"
-                                        : "bg-indigo-900/50 text-indigo-300"
-                                      : theme === "light"
-                                      ? "text-gray-600 hover:bg-gray-100"
-                                      : "text-gray-400 hover:bg-neutral-700"
-                                  }`}
-                                >
-                                  <FiMessageCircle className="text-sm" />
-                                  {post.comments?.length || 0}
-                                </button>
-                              </div>
-
-                              <div className="flex items-center gap-1">
-                                <FiHeart className="text-red-400 text-sm" />
-                                <span className="text-sm font-medium text-red-400">
-                                  {post.likeCount}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Comments Section */}
-                            {expandedComments.has(post.id) &&
-                              post.comments &&
-                              post.comments.length > 0 && (
-                                <div
-                                  className={`px-6 py-4 border-t space-y-3 ${
-                                    theme === "light"
-                                      ? "border-gray-200/50 bg-gray-50/30"
-                                      : "border-neutral-700/50 bg-neutral-900/50"
-                                  }`}
-                                >
-                                  {post.comments.map((comment, commentIdx) => (
-                                    <div
-                                      key={commentIdx}
-                                      className={`p-3 rounded-lg ${
-                                        theme === "light"
-                                          ? "bg-white/80 border border-gray-200/50"
-                                          : "bg-neutral-800/50 border border-neutral-700/50"
-                                      }`}
-                                    >
-                                      <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-indigo-400">
-                                          @{comment.author}
-                                        </span>
-                                        <span
-                                          className={`text-xs ${
-                                            theme === "light"
-                                              ? "text-gray-500"
-                                              : "text-gray-400"
-                                          }`}
-                                        >
-                                          {new Date(
-                                            comment.time
-                                          ).toLocaleDateString()}
-                                        </span>
-                                      </div>
-                                      <p
-                                        className={`text-sm ${
-                                          theme === "light"
-                                            ? "text-gray-700"
-                                            : "text-gray-300"
-                                        }`}
-                                      >
-                                        {comment.string}
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Load More / Show Less button for Posts */}
-                      {filteredPosts.length > 5 && (
-                        <div className="mt-6 flex justify-center">
-                          <button
-                            onClick={togglePosts}
-                            className={`px-6 py-3 text-sm font-medium rounded-lg border transition-all duration-200 ${
-                              theme === "light"
-                                ? "bg-white/60 border-gray-200/50 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300"
-                                : "bg-neutral-800/50 border-neutral-700/50 text-indigo-400 hover:bg-indigo-950/30 hover:border-indigo-600/50"
-                            }`}
-                          >
-                            {showAllPosts
-                              ? `Show Less (${filteredPosts.length - 5} hidden)`
-                              : `Load More Posts (${
-                                  filteredPosts.length - 5
-                                } more)`}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </section>
+                {/* Posts Section — disabled: dummy data, feature not ready */}
               </>
             )}
           </main>
@@ -2513,10 +2201,10 @@ export default function UserProfilePage() {
             {!showSkillsFilter && (
               <button
                 onClick={() => setShowSkillsFilter(true)}
-                className={`flex items-center gap-2 px-3 py-3 rounded-full shadow-lg transition-all duration-300 ${
+                className={`flex items-center gap-2 px-3 py-3 rounded-full shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 ${
                   theme === "light"
-                    ? "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-                    : "bg-neutral-800 text-gray-300 hover:bg-neutral-700 border border-neutral-700"
+                    ? "bg-forge-bg text-forge-ink hover:bg-forge-bg border border-forge-line"
+                    : "bg-forge-bg-raised text-forge-ink hover:bg-forge-bg-raised border border-forge-line"
                 }`}
               >
                 <FiFilter className="text-lg" />
@@ -2524,7 +2212,7 @@ export default function UserProfilePage() {
                   Show Filters
                 </span>
                 {selectedSkills.length > 0 && (
-                  <span className="bg-cyan-500 text-white text-xs rounded-full px-2 py-1 ml-1">
+                  <span className="bg-forge-ember text-forge-ink text-xs rounded-sm font-mono tracking-widest uppercase px-2 py-1 ml-1">
                     {selectedSkills.length}
                   </span>
                 )}
@@ -2539,28 +2227,28 @@ export default function UserProfilePage() {
               <aside className="hidden lg:block w-80 xl:w-96  right-10 py-8">
                 <div className="sticky top-8">
                   <section
-                    className={`rounded-2xl sm:rounded-3xl p-6 border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+                    className={`rounded-sm sm:rounded-sm p-6 border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                       theme === "light"
-                        ? "bg-white/90 border-gray-200"
-                        : "bg-neutral-900/70 border-neutral-800"
+                        ? "bg-forge-bg/90 border-forge-line"
+                        : "bg-forge-bg-raised/70 border-forge-line"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-6">
                       <h3
                         className={`text-xl font-light tracking-tight flex items-center gap-3 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
-                        <FiFilter className="text-cyan-400" />
+                        <FiFilter className="text-forge-ember" />
                         Filter by Skills
                       </h3>
                       {selectedSkills.length > 0 && (
                         <button
                           onClick={clearSkillsFilter}
-                          className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
+                          className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-sm transition-all duration-200 ${
                             theme === "light"
-                              ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                              : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
+                              ? "bg-forge-bg hover:bg-forge-bg text-forge-ink"
+                              : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
                           }`}
                         >
                           <FiX className="text-sm" />
@@ -2574,8 +2262,8 @@ export default function UserProfilePage() {
                         <div
                           className={`text-sm mb-2 theme-transition ${
                             theme === "light"
-                              ? "text-gray-600"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           Selected skills ({tempSelectedSkills.length}):
@@ -2587,8 +2275,8 @@ export default function UserProfilePage() {
                               onClick={() => handleSkillToggle(skill)}
                               className={`px-2 py-1 text-xs rounded-full font-medium border transition-all duration-200 flex items-center gap-1 ${
                                 theme === "light"
-                                  ? "bg-cyan-100 border-cyan-300 text-cyan-800 hover:bg-cyan-200"
-                                  : "bg-cyan-900/50 border-cyan-600/50 text-cyan-300 hover:bg-cyan-800/50"
+                                  ? "bg-forge-ember border-forge-ember text-forge-ember hover:bg-forge-ember"
+                                  : "bg-forge-ember/50 border-forge-ember/50 text-forge-ember hover:bg-forge-ember/50"
                               }`}
                             >
                               {skill}
@@ -2605,8 +2293,8 @@ export default function UserProfilePage() {
                         <FiSearch
                           className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-sm ${
                             theme === "light"
-                              ? "text-gray-400"
-                              : "text-gray-500"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         />
                         <input
@@ -2615,10 +2303,10 @@ export default function UserProfilePage() {
                           value={skillSearchQuery}
                           onChange={(e) => setSkillSearchQuery(e.target.value)}
                           onKeyDown={handleSearchKeyDown}
-                          className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
+                          className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-sm border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-forge-line focus:border-transparent ${
                             theme === "light"
-                              ? "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400"
-                              : "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500"
+                              ? "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400"
+                              : "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500"
                           }`}
                         />
                       </div>
@@ -2626,7 +2314,7 @@ export default function UserProfilePage() {
 
                     <div
                       className={`text-sm mb-4 theme-transition ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
+                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       Select skills to filter reviews ({filteredSkills.length}{" "}
@@ -2652,14 +2340,14 @@ export default function UserProfilePage() {
                               <button
                                 key={skill}
                                 onClick={() => handleSkillToggle(skill)}
-                                className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-200 text-left ${
+                                className={`w-full flex items-center justify-between p-3 rounded-sm border transition-all duration-200 text-left ${
                                   isSelected
                                     ? theme === "light"
-                                      ? "bg-cyan-50 border-cyan-300 text-cyan-900"
-                                      : "bg-cyan-900/30 border-cyan-600/50 text-cyan-200"
+                                      ? "bg-forge-ember border-forge-ember text-forge-ember"
+                                      : "bg-forge-ember/30 border-forge-ember/50 text-forge-ember"
                                     : theme === "light"
-                                    ? "bg-white/60 border-gray-200/50 text-gray-700 hover:bg-gray-50"
-                                    : "bg-neutral-800/30 border-neutral-700/50 text-gray-300 hover:bg-neutral-700/50"
+                                    ? "bg-forge-bg/60 border-forge-line/50 text-forge-ink hover:bg-forge-bg"
+                                    : "bg-forge-bg-raised/30 border-forge-line/50 text-forge-ink hover:bg-forge-bg-raised/50"
                                 }`}
                               >
                                 <span className="font-medium">{skill}</span>
@@ -2667,8 +2355,8 @@ export default function UserProfilePage() {
                                   <span
                                     className={`text-xs px-2 py-1 rounded-full ${
                                       theme === "light"
-                                        ? "bg-gray-100 text-gray-600"
-                                        : "bg-neutral-700 text-gray-400"
+                                        ? "bg-forge-bg text-forge-ink-muted"
+                                        : "bg-forge-bg-raised text-forge-ink-muted"
                                     }`}
                                   >
                                     {gigCount} gigs
@@ -2676,15 +2364,15 @@ export default function UserProfilePage() {
                                   <div
                                     className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                                       isSelected
-                                        ? "bg-cyan-500 border-cyan-500"
+                                        ? "bg-forge-ember border-forge-ember"
                                         : theme === "light"
-                                        ? "border-gray-300"
-                                        : "border-neutral-600"
+                                        ? "border-forge-line"
+                                        : "border-forge-line"
                                     }`}
                                   >
                                     {isSelected && (
                                       <svg
-                                        className="w-2.5 h-2.5 text-white"
+                                        className="w-2.5 h-2.5 text-forge-ink"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                       >
@@ -2706,8 +2394,8 @@ export default function UserProfilePage() {
                         <div
                           className={`text-center py-8 ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           <FiSearch className="mx-auto mb-2 text-2xl opacity-50" />
@@ -2721,8 +2409,8 @@ export default function UserProfilePage() {
                               onClick={() => setSkillSearchQuery("")}
                               className={`mt-2 text-xs px-3 py-1 rounded-full transition-colors ${
                                 theme === "light"
-                                  ? "bg-gray-100 hover:bg-gray-200 text-gray-600"
-                                  : "bg-neutral-700 hover:bg-neutral-600 text-gray-300"
+                                  ? "bg-forge-bg hover:bg-forge-bg text-forge-ink-muted"
+                                  : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
                               }`}
                             >
                               Clear search
@@ -2733,18 +2421,18 @@ export default function UserProfilePage() {
                     </div>
 
                     {/* Apply Filter Button */}
-                    <div className="mt-6 pt-4 border-t border-gray-200/50">
+                    <div className="mt-6 pt-4 border-t border-forge-line/50">
                       <button
                         onClick={applySkillsFilter}
                         disabled={tempSelectedSkills.length === 0}
-                        className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+                        className={`w-full py-3 px-4 rounded-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
                           tempSelectedSkills.length > 0
                             ? theme === "light"
-                              ? "bg-cyan-600 hover:bg-cyan-700 text-white"
-                              : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                              ? "bg-forge-ember hover:bg-forge-ember text-forge-ink"
+                              : "bg-forge-ember hover:bg-forge-ember text-forge-ink"
                             : theme === "light"
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : "bg-neutral-800 text-gray-500 cursor-not-allowed"
+                            ? "bg-forge-bg text-forge-ink-muted cursor-not-allowed"
+                            : "bg-forge-bg-raised text-forge-ink-muted cursor-not-allowed"
                         }`}
                       >
                         <FiFilter className="text-sm" />
@@ -2761,37 +2449,37 @@ export default function UserProfilePage() {
                 <div className="lg:hidden fixed inset-0 z-40 overflow-hidden">
                   {/* Backdrop */}
                   <div
-                    className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                    className="absolute inset-0 bg-forge-bg/50 "
                     onClick={handleCloseSkillsFilter}
                   />
 
                   {/* Modal Content */}
                   <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-hidden">
                     <section
-                      className={`rounded-t-3xl p-6 border-0 relative backdrop-blur-md theme-transition ${
+                      className={`rounded-t-3xl p-6 border-0 relative  theme-transition ${
                         theme === "light"
-                          ? "bg-white/95 border-gray-200"
-                          : "bg-neutral-900/95 border-neutral-800"
+                          ? "bg-forge-bg/95 border-forge-line"
+                          : "bg-forge-bg-raised/95 border-forge-line"
                       }`}
                     >
                       {/* Header with close button */}
                       <div className="flex items-center justify-between mb-6">
                         <h3
                           className={`text-xl font-light tracking-tight flex items-center gap-3 ${
-                            theme === "light" ? "text-gray-900" : "text-white"
+                            theme === "light" ? "text-forge-ink" : "text-forge-ink"
                           }`}
                         >
-                          <FiFilter className="text-cyan-400" />
+                          <FiFilter className="text-forge-ember" />
                           Filter by Skills
                         </h3>
                         <div className="flex items-center gap-2">
                           {selectedSkills.length > 0 && (
                             <button
                               onClick={clearSkillsFilter}
-                              className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
+                              className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-sm transition-all duration-200 ${
                                 theme === "light"
-                                  ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                  : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
+                                  ? "bg-forge-bg hover:bg-forge-bg text-forge-ink"
+                                  : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
                               }`}
                             >
                               <FiX className="text-sm" />
@@ -2803,8 +2491,8 @@ export default function UserProfilePage() {
                             onClick={handleCloseSkillsFilter}
                             className={`p-2 rounded-full transition-all duration-200 ${
                               theme === "light"
-                                ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                                : "bg-neutral-800 hover:bg-neutral-700 text-gray-300"
+                                ? "bg-forge-bg hover:bg-forge-bg text-forge-ink"
+                                : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
                             }`}
                           >
                             <FiX className="text-lg" />
@@ -2817,8 +2505,8 @@ export default function UserProfilePage() {
                           <div
                             className={`text-sm mb-2 theme-transition ${
                               theme === "light"
-                                ? "text-gray-600"
-                                : "text-gray-400"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             Selected skills ({tempSelectedSkills.length}):
@@ -2830,8 +2518,8 @@ export default function UserProfilePage() {
                                 onClick={() => handleSkillToggle(skill)}
                                 className={`px-2 py-1 text-xs rounded-full font-medium border transition-all duration-200 flex items-center gap-1 ${
                                   theme === "light"
-                                    ? "bg-cyan-100 border-cyan-300 text-cyan-800 hover:bg-cyan-200"
-                                    : "bg-cyan-900/50 border-cyan-600/50 text-cyan-300 hover:bg-cyan-800/50"
+                                    ? "bg-forge-ember border-forge-ember text-forge-ember hover:bg-forge-ember"
+                                    : "bg-forge-ember/50 border-forge-ember/50 text-forge-ember hover:bg-forge-ember/50"
                                 }`}
                               >
                                 {skill}
@@ -2848,8 +2536,8 @@ export default function UserProfilePage() {
                           <FiSearch
                             className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-sm ${
                               theme === "light"
-                                ? "text-gray-400"
-                                : "text-gray-500"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           />
                           <input
@@ -2860,10 +2548,10 @@ export default function UserProfilePage() {
                               setSkillSearchQuery(e.target.value)
                             }
                             onKeyDown={handleSearchKeyDown}
-                            className={`w-full pl-10 pr-4 py-3 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
+                            className={`w-full pl-10 pr-4 py-3 text-sm rounded-sm border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-forge-line focus:border-transparent ${
                               theme === "light"
-                                ? "bg-white/80 border-gray-200 text-gray-900 placeholder-gray-400"
-                                : "bg-neutral-800/50 border-neutral-700 text-white placeholder-gray-500"
+                                ? "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-400"
+                                : "bg-forge-bg-raised/50 border-forge-line text-forge-ink placeholder-gray-500"
                             }`}
                           />
                         </div>
@@ -2871,7 +2559,7 @@ export default function UserProfilePage() {
 
                       <div
                         className={`text-sm mb-4 theme-transition ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Select skills to filter reviews ({filteredSkills.length}{" "}
@@ -2895,14 +2583,14 @@ export default function UserProfilePage() {
                             <button
                               key={skill}
                               onClick={() => handleSkillToggle(skill)}
-                              className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-200 text-left ${
+                              className={`w-full flex items-center justify-between p-3 rounded-sm border transition-all duration-200 text-left ${
                                 isSelected
                                   ? theme === "light"
-                                    ? "bg-cyan-50 border-cyan-300 text-cyan-900"
-                                    : "bg-cyan-900/30 border-cyan-600/50 text-cyan-200"
+                                    ? "bg-forge-ember border-forge-ember text-forge-ember"
+                                    : "bg-forge-ember/30 border-forge-ember/50 text-forge-ember"
                                   : theme === "light"
-                                  ? "bg-white/60 border-gray-200/50 text-gray-700 hover:bg-gray-50"
-                                  : "bg-neutral-800/30 border-neutral-700/50 text-gray-300 hover:bg-neutral-700/50"
+                                  ? "bg-forge-bg/60 border-forge-line/50 text-forge-ink hover:bg-forge-bg"
+                                  : "bg-forge-bg-raised/30 border-forge-line/50 text-forge-ink hover:bg-forge-bg-raised/50"
                               }`}
                             >
                               <span className="font-medium">{skill}</span>
@@ -2910,8 +2598,8 @@ export default function UserProfilePage() {
                                 <span
                                   className={`text-xs px-2 py-1 rounded-full ${
                                     theme === "light"
-                                      ? "bg-gray-100 text-gray-600"
-                                      : "bg-neutral-700 text-gray-400"
+                                      ? "bg-forge-bg text-forge-ink-muted"
+                                      : "bg-forge-bg-raised text-forge-ink-muted"
                                   }`}
                                 >
                                   {gigCount} gigs
@@ -2919,15 +2607,15 @@ export default function UserProfilePage() {
                                 <div
                                   className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                                     isSelected
-                                      ? "bg-cyan-500 border-cyan-500"
+                                      ? "bg-forge-ember border-forge-ember"
                                       : theme === "light"
-                                      ? "border-gray-300"
-                                      : "border-neutral-600"
+                                      ? "border-forge-line"
+                                      : "border-forge-line"
                                   }`}
                                 >
                                   {isSelected && (
                                     <svg
-                                      className="w-2.5 h-2.5 text-white"
+                                      className="w-2.5 h-2.5 text-forge-ink"
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
@@ -2948,8 +2636,8 @@ export default function UserProfilePage() {
                           <div
                             className={`text-center py-8 ${
                               theme === "light"
-                                ? "text-gray-500"
-                                : "text-gray-400"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             <FiSearch className="mx-auto mb-2 text-2xl opacity-50" />
@@ -2963,8 +2651,8 @@ export default function UserProfilePage() {
                                 onClick={() => setSkillSearchQuery("")}
                                 className={`mt-2 text-xs px-3 py-1 rounded-full transition-colors ${
                                   theme === "light"
-                                    ? "bg-gray-100 hover:bg-gray-200 text-gray-600"
-                                    : "bg-neutral-700 hover:bg-neutral-600 text-gray-300"
+                                    ? "bg-forge-bg hover:bg-forge-bg text-forge-ink-muted"
+                                    : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
                                 }`}
                               >
                                 Clear search
@@ -2978,10 +2666,10 @@ export default function UserProfilePage() {
                       <div className="flex gap-3">
                         <button
                           onClick={handleCloseSkillsFilter}
-                          className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 border ${
+                          className={`flex-1 py-3 px-4 rounded-sm font-medium transition-all duration-200 border ${
                             theme === "light"
-                              ? "border-gray-300 text-gray-700 hover:bg-gray-50"
-                              : "border-neutral-600 text-gray-300 hover:bg-neutral-800"
+                              ? "border-forge-line text-forge-ink hover:bg-forge-bg"
+                              : "border-forge-line text-forge-ink hover:bg-forge-bg-raised"
                           }`}
                         >
                           Cancel
@@ -2992,14 +2680,14 @@ export default function UserProfilePage() {
                             handleCloseSkillsFilter();
                           }}
                           disabled={tempSelectedSkills.length === 0}
-                          className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+                          className={`flex-1 py-3 px-4 rounded-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
                             tempSelectedSkills.length > 0
                               ? theme === "light"
-                                ? "bg-cyan-600 hover:bg-cyan-700 text-white"
-                                : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                                ? "bg-forge-ember hover:bg-forge-ember text-forge-ink"
+                                : "bg-forge-ember hover:bg-forge-ember text-forge-ink"
                               : theme === "light"
-                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : "bg-neutral-800 text-gray-500 cursor-not-allowed"
+                              ? "bg-forge-bg text-forge-ink-muted cursor-not-allowed"
+                              : "bg-forge-bg-raised text-forge-ink-muted cursor-not-allowed"
                           }`}
                         >
                           <FiFilter className="text-sm" />
@@ -3019,18 +2707,18 @@ export default function UserProfilePage() {
 
       {/* Image Modal */}
       {showImageModal && selectedImage && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-forge-bg/80  z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center">
             <button
               onClick={closeImageModal}
-              className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+              className="absolute top-4 right-4 z-10 p-2 bg-forge-bg/50 text-forge-ink rounded-full hover:bg-forge-bg/70 transition-colors"
             >
               <FiX className="text-xl" />
             </button>
             <img
               src={selectedImage}
               alt="Full size image"
-              className="max-w-full max-h-full object-contain rounded-lg"
+              className="max-w-full max-h-full object-contain rounded-sm"
             />
           </div>
         </div>

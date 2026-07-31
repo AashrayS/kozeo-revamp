@@ -165,31 +165,31 @@ export default function ReviewPage() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
           <div className="flex-1 flex flex-col pb-20 lg:pb-0">
             <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
               <div
-                className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
+                className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md"
-                    : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg"
+                    ? "bg-transparent border-forge-line drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                    : "bg-forge-bg/80 border-forge-line  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 <div className="text-6xl mb-4">✅</div>
                 <h1
                   className={`text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Review Submitted!
                 </h1>
                 <p
                   className={`text-lg mb-4 transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-300" : "text-gray-600"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
                   }`}
                 >
                   Thank you for your feedback.{" "}
@@ -197,13 +197,13 @@ export default function ReviewPage() {
                   be redirected to the projects page shortly.
                 </p>
                 <div className="flex gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-forge-ember rounded-full animate-pulse-slow"></div>
                   <div
-                    className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
+                    className="w-2 h-2 bg-forge-ember-low rounded-full animate-pulse-slow"
                     style={{ animationDelay: "0.2s" }}
                   ></div>
                   <div
-                    className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"
+                    className="w-2 h-2 bg-forge-ember rounded-full animate-pulse-slow"
                     style={{ animationDelay: "0.4s" }}
                   ></div>
                 </div>
@@ -213,8 +213,8 @@ export default function ReviewPage() {
           {/* Glows */}
           {theme === "dark" && (
             <>
-              <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-              <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+              <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+              <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
             </>
           )}
         </div>
@@ -228,8 +228,8 @@ export default function ReviewPage() {
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-            : "bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
         }`}
       >
         <Sidebar />
@@ -237,15 +237,15 @@ export default function ReviewPage() {
           <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
             <form
               onSubmit={handleSubmit}
-              className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-2xl border-0 sm:border shadow-none sm:shadow-xl p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
+              className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-transparent border-neutral-800 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:backdrop-blur-md"
-                  : "bg-white/80 border-gray-200 backdrop-blur-sm shadow-lg"
+                  ? "bg-transparent border-forge-line drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                  : "bg-forge-bg/80 border-forge-line  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
               }`}
             >
               <h1
                 className={`text-2xl sm:text-3xl font-bold mb-2 text-center tracking-tight transition-colors duration-300 ${
-                  theme === "dark" ? "text-white" : "text-gray-900"
+                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                 }`}
               >
                 Review Your Collaboration
@@ -254,15 +254,15 @@ export default function ReviewPage() {
               {/* Project Info */}
               {gigInfo && (
                 <div
-                  className={`border rounded-xl p-4 sm:p-6 transition-all duration-300 ${
+                  className={`border rounded-sm p-4 sm:p-6 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-neutral-900/50 border-neutral-800"
-                      : "bg-gray-50/80 border-gray-200"
+                      ? "bg-forge-bg-raised/50 border-forge-line"
+                      : "bg-forge-bg/80 border-forge-line"
                   }`}
                 >
                   <h2
                     className={`text-lg font-semibold mb-3 transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Project Details
@@ -271,14 +271,14 @@ export default function ReviewPage() {
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Project:{" "}
                       </span>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-white" : "text-gray-900"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {gigInfo.title}
@@ -287,24 +287,24 @@ export default function ReviewPage() {
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Working with:{" "}
                       </span>
-                      <span className="text-cyan-400">
+                      <span className="text-forge-ember">
                         {gigInfo.guest?.username || revieweeUsername}
                       </span>
                     </div>
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Host:{" "}
                       </span>
-                      <span className="text-cyan-400">
+                      <span className="text-forge-ember">
                         {gigInfo.host.username}
                       </span>
                     </div>
@@ -314,12 +314,12 @@ export default function ReviewPage() {
 
               {/* Error Message */}
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                  <p className="text-red-500 text-sm mb-2">{error}</p>
+                <div className="bg-[forge-error-bg/10 border border-[forge-error/20 rounded-sm p-4">
+                  <p className="text-[forge-error text-sm mb-2">{error}</p>
                   {error.includes(
                     "Missing gigs ID or receiver information"
                   ) && (
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-forge-ink-muted">
                       <p>To leave a review, you need to:</p>
                       <ul className="list-disc list-inside mt-1 space-y-1">
                         <li>Complete a project collaboration</li>
@@ -330,7 +330,7 @@ export default function ReviewPage() {
                       </ul>
                       <button
                         onClick={() => router.push("/projects")}
-                        className="mt-2 text-blue-500 hover:text-blue-600 underline"
+                        className="mt-2 text-forge-ember hover:text-forge-ember underline"
                       >
                         Go to Projects Page
                       </button>
@@ -343,7 +343,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Rate Your Experience
@@ -361,11 +361,11 @@ export default function ReviewPage() {
                       <FaStar
                         className={`${
                           star <= (hoverRating || rating)
-                            ? "text-yellow-400"
+                            ? "text-forge-ember"
                             : theme === "dark"
-                            ? "text-gray-600"
-                            : "text-gray-300"
-                        } hover:text-yellow-300`}
+                            ? "text-forge-ink-muted"
+                            : "text-forge-ink"
+                        } hover:text-forge-ember`}
                       />
                     </button>
                   ))}
@@ -373,7 +373,7 @@ export default function ReviewPage() {
                 {rating > 0 && (
                   <p
                     className={`text-sm text-center sm:text-left transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     {rating === 1 && "Poor"}
@@ -389,7 +389,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Review Title
@@ -399,10 +399,10 @@ export default function ReviewPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Brief summary of your experience..."
-                  className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  className={`w-full px-4 sm:px-5 py-3 rounded-sm border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
-                      : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                      ? "bg-forge-bg-raised/70 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                      : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
                   }`}
                   required
                 />
@@ -412,7 +412,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   Share Your Experience
@@ -422,16 +422,16 @@ export default function ReviewPage() {
                   onChange={(e) => setReview(e.target.value)}
                   placeholder="Tell others about your collaboration experience..."
                   rows={6}
-                  className={`w-full px-4 sm:px-5 py-3 rounded-xl border text-base sm:text-lg resize-none focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  className={`w-full px-4 sm:px-5 py-3 rounded-sm border text-base sm:text-lg resize-none focus:outline-none focus:ring-2 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-neutral-900/70 border-neutral-800 text-white placeholder-gray-400 focus:ring-neutral-700"
-                      : "bg-white/80 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
+                      ? "bg-forge-bg-raised/70 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                      : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
                   }`}
                   required
                 />
                 <p
                   className={`text-xs transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-500" : "text-gray-400"
+                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                   }`}
                 >
                   {review.length}/500 characters
@@ -444,15 +444,15 @@ export default function ReviewPage() {
                 disabled={
                   submitting || !rating || !title.trim() || !review.trim()
                 }
-                className={`w-full py-3 rounded-xl font-semibold transition-colors text-base sm:text-lg shadow-none border mt-2 ${
+                className={`w-full py-3 rounded-sm font-semibold transition-colors text-base sm:text-lg shadow-none border mt-2 ${
                   theme === "dark"
-                    ? "bg-neutral-900/80 text-white hover:bg-neutral-800 border-neutral-800 disabled:opacity-60"
-                    : "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 disabled:opacity-60"
+                    ? "bg-forge-bg-raised/80 text-forge-ink hover:bg-forge-bg-raised border-forge-line disabled:opacity-60"
+                    : "bg-forge-ember-low text-forge-ink hover:bg-forge-ember-low border-forge-ember disabled:opacity-60"
                 } disabled:cursor-not-allowed`}
               >
                 {submitting ? (
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-forge-line border-t-transparent rounded-full animate-spin"></div>
                     Submitting Review...
                   </div>
                 ) : (
@@ -465,8 +465,8 @@ export default function ReviewPage() {
         {/* Glows */}
         {theme === "dark" && (
           <>
-            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
           </>
         )}
       </div>

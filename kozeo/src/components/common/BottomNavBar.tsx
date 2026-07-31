@@ -102,10 +102,10 @@ export default function BottomNavBar() {
       }`}
     >
       <nav
-        className={`flex items-center px-2 py-2 border-t backdrop-blur-md overflow-x-auto scrollbar-hide ${
+        className={`flex items-center px-2 py-2 border-t  overflow-x-auto scrollbar-hide ${
           theme === "light"
-            ? "bg-white/95 text-gray-900 border-gray-200"
-            : "bg-neutral-900/95 text-white border-neutral-700"
+            ? "bg-forge-bg/95 text-forge-ink border-forge-line"
+            : "bg-forge-bg-raised/95 text-forge-ink border-forge-line"
         }`}
         style={{
           scrollbarWidth: "none", // Firefox
@@ -123,11 +123,11 @@ export default function BottomNavBar() {
               className={`flex flex-col items-center justify-center px-3 py-2 min-w-[60px] whitespace-nowrap transition-colors duration-200 ${
                 isActive
                   ? theme === "light"
-                    ? "text-blue-600 cursor-default"
-                    : "text-blue-400 cursor-default"
+                    ? "text-forge-ember cursor-default"
+                    : "text-forge-ember cursor-default"
                   : theme === "light"
-                  ? "text-gray-600 hover:text-gray-900 cursor-pointer"
-                  : "text-gray-400 hover:text-white cursor-pointer"
+                  ? "text-forge-ink-muted hover:text-forge-ink cursor-pointer"
+                  : "text-forge-ink-muted hover:text-forge-ink cursor-pointer"
               }`}
             >
               <Icon
@@ -145,7 +145,7 @@ export default function BottomNavBar() {
               {isActive && (
                 <div
                   className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${
-                    theme === "light" ? "bg-blue-600" : "bg-blue-400"
+                    theme === "light" ? "bg-forge-ember-low" : "bg-forge-ember-low"
                   }`}
                 ></div>
               )}

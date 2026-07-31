@@ -48,8 +48,8 @@ export default function DiscussionPage() {
       {/* Glows */}
       {theme === "dark" && (
         <>
-          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
         </>
       )}
 
@@ -58,8 +58,8 @@ export default function DiscussionPage() {
         <div
           className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
@@ -70,15 +70,15 @@ export default function DiscussionPage() {
               <div className="mb-8">
                 <h1
                   className={`text-3xl font-bold mb-2 flex items-center gap-3 transition-colors duration-300 ${
-                    theme === "dark" ? "text-white" : "text-gray-900"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
-                  {/* <FaComments className="text-cyan-400" /> */}
+                  {/* <FaComments className="text-forge-ember" /> */}
                   Discussion Rooms
                 </h1>
                 <p
                   className={`transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                   }`}
                 >
                   Join topic-based discussion rooms and connect with like-minded
@@ -92,17 +92,17 @@ export default function DiscussionPage() {
                   <input
                     type="text"
                     placeholder="Search discussion rooms..."
-                    className={`w-full py-2 pl-4 pr-10 rounded-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                    className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 transition-all duration-300 ${
                       theme === "dark"
-                        ? "bg-neutral-900 border-neutral-700 placeholder-gray-400 focus:ring-neutral-600 text-white"
-                        : "bg-white border-gray-300 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        ? "bg-forge-bg-raised border-forge-line placeholder-gray-400 focus:ring-forge-line text-forge-ink"
+                        : "bg-forge-bg border-forge-line placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember text-forge-ink"
                     }`}
                   />
                   <button
                     className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
                       theme === "dark"
-                        ? "text-gray-400 hover:text-white"
-                        : "text-gray-500 hover:text-gray-700"
+                        ? "text-forge-ink-muted hover:text-forge-ink"
+                        : "text-forge-ink-muted hover:text-forge-ink"
                     }`}
                   >
                     <FiSearch className="text-xl" />
@@ -115,14 +115,14 @@ export default function DiscussionPage() {
                 <div className="text-center py-12">
                   <div
                     className={`text-xl mb-2 transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Loading discussion rooms...
                   </div>
                   <div
                     className={`text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     Please wait...
@@ -130,19 +130,19 @@ export default function DiscussionPage() {
                 </div>
               ) : error ? (
                 <div className="text-center py-12">
-                  <div className="text-xl mb-2 text-red-400">
+                  <div className="text-xl mb-2 text-[forge-error">
                     Error loading discussion rooms
                   </div>
                   <div
                     className={`text-sm mb-4 transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     {error}
                   </div>
                   <button
                     onClick={() => window.location.reload()}
-                    className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition-colors"
+                    className="px-4 py-2 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded transition-colors"
                   >
                     Try Again
                   </button>
@@ -151,14 +151,14 @@ export default function DiscussionPage() {
                 <div className="text-center py-12">
                   <div
                     className={`text-xl mb-2 transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     No discussion rooms available
                   </div>
                   <div
                     className={`text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     Check back later for new rooms to join.
@@ -169,18 +169,18 @@ export default function DiscussionPage() {
                   {discussionRooms.map((room) => (
                     <div
                       key={room.id}
-                      className={`border rounded-xl p-6 transition-all duration-200 group cursor-pointer ${
+                      className={`border rounded-sm p-6 transition-all duration-200 group cursor-pointer ${
                         theme === "dark"
-                          ? "bg-neutral-900/50 border-neutral-800 hover:bg-neutral-800/50 hover:border-cyan-500/30"
-                          : "bg-white/80 border-gray-200 hover:bg-white hover:border-blue-300 shadow-lg hover:shadow-xl"
+                          ? "bg-forge-bg-raised/50 border-forge-line hover:bg-forge-bg-raised/50 hover:border-forge-ember/30"
+                          : "bg-forge-bg/80 border-forge-line hover:bg-forge-bg hover:border-forge-ember shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                       }`}
                       onClick={() => joinRoom(room.id)}
                     >
                       {/* Room Avatar */}
                       <div className="flex items-center gap-4 mb-4">
                         <div
-                          className={`w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                            theme === "dark" ? "bg-neutral-800" : "bg-gray-100"
+                          className={`w-12 h-12 rounded-sm overflow-hidden flex items-center justify-center ${
+                            theme === "dark" ? "bg-forge-bg-raised" : "bg-forge-bg"
                           }`}
                         >
                           <img
@@ -197,8 +197,8 @@ export default function DiscussionPage() {
                           <h3
                             className={`text-lg font-semibold transition-colors duration-300 ${
                               theme === "dark"
-                                ? "text-white group-hover:text-cyan-400"
-                                : "text-gray-900 group-hover:text-blue-600"
+                                ? "text-forge-ink group-hover:text-forge-ember"
+                                : "text-forge-ink group-hover:text-forge-ember"
                             }`}
                           >
                             {room.title}
@@ -206,8 +206,8 @@ export default function DiscussionPage() {
                           <div
                             className={`flex items-center gap-2 text-sm transition-colors duration-300 ${
                               theme === "dark"
-                                ? "text-gray-400"
-                                : "text-gray-600"
+                                ? "text-forge-ink-muted"
+                                : "text-forge-ink-muted"
                             }`}
                           >
                             <FaUsers className="text-xs" />
@@ -221,7 +221,7 @@ export default function DiscussionPage() {
                       {/* Description */}
                       <p
                         className={`text-sm mb-4 line-clamp-3 transition-colors duration-300 ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {room.description}
@@ -231,7 +231,7 @@ export default function DiscussionPage() {
                       <div className="flex justify-between items-center">
                         <div
                           className={`text-xs transition-colors duration-300 ${
-                            theme === "dark" ? "text-gray-500" : "text-gray-400"
+                            theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                           }`}
                         >
                           Room #{room.id}
@@ -252,15 +252,15 @@ export default function DiscussionPage() {
               )}
 
               {/* Create Room CTA */}
-              {/* <div className="mt-8 p-6 bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border border-cyan-500/20 rounded-xl text-center">
-                <h3 className="text-xl font-semibold text-white mb-2">
+              {/* <div className="mt-8 p-6 bg-forge-bg bg-forge-bg-raised border border-forge-ember/20 rounded-sm text-center">
+                <h3 className="text-xl font-semibold text-forge-ink mb-2">
                   Want to create your own room?
                 </h3>
-                <p className="text-gray-400 mb-4">
+                <p className="text-forge-ink-muted mb-4">
                   Contact us to set up a custom discussion room for your
                   community
                 </p>
-                <button className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-lg font-medium hover:from-cyan-700 hover:to-purple-700 transition-all duration-200">
+                <button className="px-6 py-2 bg-forge-bg  text-forge-ink rounded-sm font-medium  transition-all duration-200">
                   Request Custom Room
                 </button>
               </div> */}

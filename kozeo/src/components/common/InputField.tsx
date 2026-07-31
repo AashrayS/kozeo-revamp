@@ -18,7 +18,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`p-3 rounded-md border w-full ${className ?? ""}`}
+        className={`p-3 rounded-sm border w-full ${className ?? ""}`}
         style={style}
       />
     );

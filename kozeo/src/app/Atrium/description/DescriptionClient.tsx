@@ -418,13 +418,13 @@ export default function DescriptionClient() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
-            <div className="text-red-400">{error}</div>
+            <div className="text-[forge-error">{error}</div>
           </main>
         </div>
       </>
@@ -438,15 +438,15 @@ export default function DescriptionClient() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-white"
-              : "bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 text-gray-900"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+              : "bg-forge-bg    text-forge-ink"
           }`}
         >
           <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div
               className={`transition-colors duration-300 ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
+                theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
               }`}
             >
               No gig data available
@@ -465,14 +465,14 @@ export default function DescriptionClient() {
     <>
       <Header logoText="Kozeo" />
       {/* Glows */}
-      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90 bg-purple-500 shadow-[0_0_250px_100px_rgba(168,85,247,0.35)] pointer-events-none z-0" />
-      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90 bg-cyan-400 shadow-[0_0_250px_100px_rgba(34,211,238,0.35)] pointer-events-none z-0" />
+      <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+      <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       <div
         className={`min-h-screen relative z-10 flex flex-row theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-gray-900"
-            : "bg-gradient-dark text-white"
+            ? "bg-gradient-light text-forge-ink"
+            : "bg-gradient-dark text-forge-ink"
         }`}
       >
         <Sidebar />
@@ -480,17 +480,17 @@ export default function DescriptionClient() {
           <main className="flex-1 flex flex-col md:flex-row gap-4 md:gap-8 items-stretch justify-center w-full mx-auto py-4 md:py-8 px-4 md:px-0">
             {/* Gig Details Container - Golden Ratio smaller section (38.2%) */}
             <section
-              className={`md:flex-[0.618] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 min-w-[0] w-full border-0 relative drop-shadow-glow backdrop-blur-md overflow-hidden theme-transition ${
+              className={`md:flex-[0.618] rounded-sm sm:rounded-sm p-4 sm:p-6 md:p-8 min-w-[0] w-full border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
                 theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
+                  ? "bg-forge-bg/90 border-forge-line"
+                  : "bg-forge-bg-raised/70 border-forge-line"
               }`}
             >
               {/* Header */}
               <div className="mb-8">
                 <h1
                   className={`text-2xl sm:text-3xl md:text-4xl font-light tracking-tight mb-2 ${
-                    theme === "light" ? "text-gray-900" : "text-white"
+                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   {gig.title}
@@ -498,29 +498,29 @@ export default function DescriptionClient() {
                 <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                   <span
                     className={`text-sm sm:text-base font-medium ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     @{gig.host?.username || "Unknown"}
                   </span>
                   <div
                     className={`h-1 w-1 rounded-full ${
-                      theme === "light" ? "bg-gray-300" : "bg-gray-600"
+                      theme === "light" ? "bg-forge-bg" : "bg-forge-line"
                     }`}
                   />
                   <div
                     className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium border ${
                       gig.status === "open"
                         ? theme === "light"
-                          ? "bg-green-50 border-green-200 text-green-700"
-                          : "bg-green-950/50 border-green-800/50 text-green-300"
+                          ? "bg-forge-ember-low border-forge-ember text-forge-ember"
+                          : "bg-forge-ember-low/50 border-forge-ember/50 text-forge-ember"
                         : gig.status === "in_progress"
                         ? theme === "light"
-                          ? "bg-yellow-50 border-yellow-200 text-yellow-700"
-                          : "bg-yellow-950/50 border-yellow-800/50 text-yellow-300"
+                          ? "bg-forge-bg border-forge-line text-forge-ember"
+                          : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ember"
                         : theme === "light"
-                        ? "bg-gray-50 border-gray-200 text-gray-600"
-                        : "bg-gray-800/50 border-gray-700/50 text-gray-400"
+                        ? "bg-forge-bg border-forge-line text-forge-ink-muted"
+                        : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted"
                     }`}
                   >
                     {gig.status?.charAt(0).toUpperCase() +
@@ -535,8 +535,8 @@ export default function DescriptionClient() {
                   <div
                     className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       theme === "dark"
-                        ? "bg-gradient-to-r from-purple-900/60 to-blue-900/60 text-purple-300 border border-purple-700/50"
-                        : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200"
+                        ? "bg-forge-bg bg-forge-bg-raised text-forge-ink-muted border border-forge-line/50"
+                        : "bg-forge-bg bg-forge-bg text-forge-ink-muted border border-forge-line"
                     }`}
                   >
                     <FiStar className="w-4 h-4 mr-2" />
@@ -546,14 +546,14 @@ export default function DescriptionClient() {
                   <>
                     <div
                       className={`text-xl sm:text-2xl md:text-3xl font-semibold ${
-                        theme === "light" ? "text-gray-900" : "text-white"
+                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       {gig.currency} {Number(gig.amount).toLocaleString("en-IN")}
                     </div>
                     <div
                       className={`text-sm sm:text-base ${
-                        theme === "light" ? "text-gray-500" : "text-gray-500"
+                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       Project value
@@ -568,14 +568,14 @@ export default function DescriptionClient() {
                 <div>
                   <h3
                     className={`text-sm sm:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-gray-700" : "text-gray-300"
+                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Description
                   </h3>
                   <p
                     className={`text-sm sm:text-base leading-relaxed ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     {gig.description}
@@ -586,14 +586,14 @@ export default function DescriptionClient() {
                 <div>
                   <h3
                     className={`text-sm sm:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-gray-700" : "text-gray-300"
+                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Looking For
                   </h3>
                   <p
                     className={`text-sm sm:text-base leading-relaxed ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     {gig.looking_For}
@@ -604,7 +604,7 @@ export default function DescriptionClient() {
                 <div>
                   <h3
                     className={`text-sm sm:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-gray-700" : "text-gray-300"
+                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Required Skills
@@ -615,8 +615,8 @@ export default function DescriptionClient() {
                         key={idx}
                         className={`px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium rounded-full border ${
                           theme === "light"
-                            ? "bg-gray-50 border-gray-200 text-gray-700"
-                            : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+                            ? "bg-forge-bg border-forge-line text-forge-ink"
+                            : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
                         }`}
                       >
                         {skill}
@@ -626,19 +626,19 @@ export default function DescriptionClient() {
                 </div>
 
                 {/* Project Status Information */}
-                <div className="pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+                <div className="pt-6 border-t border-forge-line/50 dark:border-forge-line/50">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span
                         className={`text-sm uppercase tracking-wide font-medium ${
-                          theme === "light" ? "text-gray-500" : "text-gray-500"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Active Requests
                       </span>
                       <span
                         className={`text-sm font-medium ${
-                          theme === "light" ? "text-gray-700" : "text-gray-300"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {gig.activeRequest?.length || 0}
@@ -647,7 +647,7 @@ export default function DescriptionClient() {
                     {/* <div className="flex items-center justify-between">
                       <span
                         className={`text-sm uppercase tracking-wide font-medium ${
-                          theme === "light" ? "text-gray-500" : "text-gray-500"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Project ID
@@ -655,8 +655,8 @@ export default function DescriptionClient() {
                       <code
                         className={`text-sm font-mono px-2 py-1 rounded ${
                           theme === "light"
-                            ? "bg-gray-100 text-gray-700"
-                            : "bg-gray-800 text-gray-300"
+                            ? "bg-forge-bg text-forge-ink"
+                            : "bg-forge-bg-raised text-forge-ink"
                         }`}
                       >
                         {gigId}
@@ -667,11 +667,11 @@ export default function DescriptionClient() {
               </div>
 
               {/* Action Button - Bottom of container */}
-              <div className="mt-8 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+              <div className="mt-8 pt-6 border-t border-forge-line/50 dark:border-forge-line/50">
                 <div className="flex items-center justify-between mb-4">
                   <span
                     className={`text-sm uppercase tracking-wide font-medium ${
-                      theme === "light" ? "text-gray-500" : "text-gray-500"
+                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                     }`}
                   >
                     Your Status
@@ -680,21 +680,21 @@ export default function DescriptionClient() {
                     className={`text-sm font-medium ${
                       user && gig.host?.id === user.id
                         ? theme === "light"
-                          ? "text-blue-600"
-                          : "text-blue-400"
+                          ? "text-forge-ember"
+                          : "text-forge-ember"
                         : user &&
                           gig.guest &&
                           gig.guest.username === user.username
                         ? theme === "light"
-                          ? "text-green-600"
-                          : "text-green-400"
+                          ? "text-forge-ember"
+                          : "text-forge-ember"
                         : requested
                         ? theme === "light"
-                          ? "text-yellow-600"
-                          : "text-yellow-400"
+                          ? "text-forge-ember"
+                          : "text-forge-ember"
                         : theme === "light"
-                        ? "text-gray-600"
-                        : "text-gray-400"
+                        ? "text-forge-ink-muted"
+                        : "text-forge-ink-muted"
                     }`}
                   >
                     {user && gig.host?.id === user.id
@@ -905,16 +905,16 @@ export default function DescriptionClient() {
 
             {/* Host Profile Container - Golden Ratio larger section (61.8%) */}
             <section
-              className={`md:flex-[1] rounded-2xl p-4 sm:p-6 shadow-xl drop-shadow-glow backdrop-blur-md min-w-[300px] border theme-transition ${
+              className={`md:flex-[1] rounded-sm p-4 sm:p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] border theme-transition ${
                 theme === "light"
-                  ? "bg-white/90 border-gray-200"
-                  : "bg-neutral-900/70 border-neutral-800"
+                  ? "bg-forge-bg/90 border-forge-line"
+                  : "bg-forge-bg-raised/70 border-forge-line"
               }`}
             >
               <div className="flex justify-between items-center mb-6">
                 <h2
                   className={`text-2xl font-light tracking-tight ${
-                    theme === "light" ? "text-gray-900" : "text-white"
+                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
                   }`}
                 >
                   About the Host
@@ -946,10 +946,10 @@ export default function DescriptionClient() {
               {hostLoading ? (
                 <div className="flex items-center justify-center py-20">
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-2 border-forge-ember border-t-transparent rounded-full animate-spin"></div>
                     <div
                       className={`text-base ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
+                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                       }`}
                     >
                       Loading host profile...
@@ -965,7 +965,7 @@ export default function DescriptionClient() {
                         <img
                           src={displayHost.profile_Picture}
                           alt={displayHost.username}
-                          className="w-20 h-20 rounded-full object-cover shadow-lg"
+                          className="w-20 h-20 rounded-full object-cover shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                           style={{
                             backgroundColor: "#1f2937",
                             border: "2px solid #374151",
@@ -985,7 +985,7 @@ export default function DescriptionClient() {
                         />
                       ) : (
                         <div
-                          className="w-20 h-20 rounded-full bg-gray-800 border-2 border-gray-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                          className="w-20 h-20 rounded-full bg-forge-bg-raised border-2 border-forge-line flex items-center justify-center text-forge-ink text-2xl font-bold shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                           style={{
                             aspectRatio: "1/1",
                             minWidth: "80px",
@@ -994,7 +994,7 @@ export default function DescriptionClient() {
                             maxHeight: "80px",
                           }}
                         >
-                          <FiUser className="w-10 h-10 text-gray-400" />
+                          <FiUser className="w-10 h-10 text-forge-ink-muted" />
                         </div>
                       )}
                     </div>
@@ -1002,7 +1002,7 @@ export default function DescriptionClient() {
                     <div className="flex-1">
                       <div
                         className={`text-2xl font-semibold mb-1 ${
-                          theme === "light" ? "text-gray-900" : "text-white"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {displayHost.first_name && displayHost.last_name
@@ -1011,7 +1011,7 @@ export default function DescriptionClient() {
                       </div>
                       <div
                         className={`text-base mb-3 ${
-                          theme === "light" ? "text-gray-600" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         @{displayHost.username || hostUsername}
@@ -1020,13 +1020,13 @@ export default function DescriptionClient() {
                       {/* Rating */}
                       <div className="flex items-center gap-2 mb-3">
                         <div
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border ${
                             theme === "light"
-                              ? "bg-white/70 border-gray-200/70 text-gray-600"
-                              : "bg-black/20 border-neutral-600/50 text-gray-300"
+                              ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink-muted"
+                              : "bg-forge-bg/20 border-forge-line/50 text-forge-ink"
                           }`}
                         >
-                          <FaStar className="text-yellow-500" size={14} />
+                          <FaStar className="text-forge-ember" size={14} />
                           <span className="text-sm font-medium">
                             {displayHost.rating?.toFixed(1) || "N/A"}
                           </span>
@@ -1034,10 +1034,10 @@ export default function DescriptionClient() {
 
                         {/* {displayHost.country_Code && (
                           <div
-                            className={`px-3 py-1.5 rounded-lg border text-sm font-medium ${
+                            className={`px-3 py-1.5 rounded-sm border text-sm font-medium ${
                               theme === "light"
-                                ? "bg-gray-50/80 border-gray-200/60 text-gray-700"
-                                : "bg-gray-800/50 border-gray-700/50 text-gray-300"
+                                ? "bg-forge-bg/80 border-forge-line/60 text-forge-ink"
+                                : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
                             }`}
                           >
                             📍 {displayHost.country_Code}
@@ -1050,18 +1050,18 @@ export default function DescriptionClient() {
                   {/* Bio Section */}
                   {displayHost.bio && (
                     <div
-                      className={`p-4 rounded-xl border ${
+                      className={`p-4 rounded-sm border ${
                         theme === "light"
-                          ? "bg-gray-50/60 border-gray-200/60"
-                          : "bg-neutral-800/30 border-neutral-700/50"
+                          ? "bg-forge-bg/60 border-forge-line/60"
+                          : "bg-forge-bg-raised/30 border-forge-line/50"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <svg
                           className={`w-4 h-4 ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                           fill="currentColor"
                           viewBox="0 0 20 20"
@@ -1075,8 +1075,8 @@ export default function DescriptionClient() {
                         <span
                           className={`text-sm font-medium uppercase tracking-wide ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           About
@@ -1084,7 +1084,7 @@ export default function DescriptionClient() {
                       </div>
                       <p
                         className={`text-base leading-relaxed ${
-                          theme === "light" ? "text-gray-700" : "text-gray-300"
+                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         {displayHost.bio}
@@ -1095,18 +1095,18 @@ export default function DescriptionClient() {
                   {/* Links Section */}
                   {displayHost.links && displayHost.links.length > 0 && (
                     <div
-                      className={`p-4 rounded-xl border ${
+                      className={`p-4 rounded-sm border ${
                         theme === "light"
-                          ? "bg-gray-50/60 border-gray-200/60"
-                          : "bg-neutral-800/30 border-neutral-700/50"
+                          ? "bg-forge-bg/60 border-forge-line/60"
+                          : "bg-forge-bg-raised/30 border-forge-line/50"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <svg
                           className={`w-4 h-4 ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                           fill="none"
                           stroke="currentColor"
@@ -1122,8 +1122,8 @@ export default function DescriptionClient() {
                         <span
                           className={`text-sm font-medium uppercase tracking-wide ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           Links
@@ -1138,10 +1138,10 @@ export default function DescriptionClient() {
                               href={link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`px-3 py-2 text-sm font-medium rounded-full border hover:shadow-md transition-all duration-200 ${
+                              className={`px-3 py-2 text-sm font-medium rounded-full border hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-200 ${
                                 theme === "light"
-                                  ? "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
-                                  : "bg-gray-800/50 border-gray-700/50 text-gray-300 hover:border-gray-600/50"
+                                  ? "bg-forge-bg border-forge-line text-forge-ink hover:border-forge-line"
+                                  : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink hover:border-forge-line/50"
                               }`}
                             >
                               {link
@@ -1156,16 +1156,16 @@ export default function DescriptionClient() {
 
                   {/* Reviews Section */}
                   <div
-                    className={`p-4 rounded-xl border ${
+                    className={`p-4 rounded-sm border ${
                       theme === "light"
-                        ? "bg-gray-50/60 border-gray-200/60"
-                        : "bg-neutral-800/30 border-neutral-700/50"
+                        ? "bg-forge-bg/60 border-forge-line/60"
+                        : "bg-forge-bg-raised/30 border-forge-line/50"
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-4">
                       <svg
                         className={`w-4 h-4 ${
-                          theme === "light" ? "text-gray-500" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -1174,7 +1174,7 @@ export default function DescriptionClient() {
                       </svg>
                       <span
                         className={`text-sm font-medium uppercase tracking-wide ${
-                          theme === "light" ? "text-gray-500" : "text-gray-400"
+                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
                         }`}
                       >
                         Reviews ({displayHost.reviewsReceived?.length || 0})
@@ -1189,25 +1189,25 @@ export default function DescriptionClient() {
                           .map((review: any, idx: number) => (
                             <div
                               key={idx}
-                              className={`p-3 rounded-lg border ${
+                              className={`p-3 rounded-sm border ${
                                 theme === "light"
-                                  ? "bg-white/80 border-gray-200/80"
-                                  : "bg-neutral-900/50 border-neutral-700/50"
+                                  ? "bg-forge-bg/80 border-forge-line/80"
+                                  : "bg-forge-bg-raised/50 border-forge-line/50"
                               }`}
                             >
                               <div className="flex justify-between items-start mb-2">
                                 <div
                                   className={`font-semibold text-sm ${
                                     theme === "light"
-                                      ? "text-gray-900"
-                                      : "text-white"
+                                      ? "text-forge-ink"
+                                      : "text-forge-ink"
                                   }`}
                                 >
                                   {review.title || "Great work!"}
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <FaStar className="text-yellow-400 text-xs" />
-                                  <span className="text-xs font-medium text-yellow-400">
+                                  <FaStar className="text-forge-ember text-xs" />
+                                  <span className="text-xs font-medium text-forge-ember">
                                     {review.rating}
                                   </span>
                                 </div>
@@ -1215,8 +1215,8 @@ export default function DescriptionClient() {
                               <p
                                 className={`text-sm mb-2 leading-relaxed ${
                                   theme === "light"
-                                    ? "text-gray-600"
-                                    : "text-gray-300"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink"
                                 }`}
                               >
                                 {review.description ||
@@ -1225,8 +1225,8 @@ export default function DescriptionClient() {
                               <div
                                 className={`text-xs ${
                                   theme === "light"
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
+                                    ? "text-forge-ink-muted"
+                                    : "text-forge-ink-muted"
                                 }`}
                               >
                                 by @{review.author?.username || "Anonymous"} •{" "}
@@ -1242,8 +1242,8 @@ export default function DescriptionClient() {
                         <div
                           className={`text-center py-8 ${
                             theme === "light"
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                              ? "text-forge-ink-muted"
+                              : "text-forge-ink-muted"
                           }`}
                         >
                           <div className="text-2xl mb-2">
@@ -1267,25 +1267,25 @@ export default function DescriptionClient() {
       {/* Message Modal */}
       {showMessageModal && (
         <>
-          <div className="fixed inset-0 bg-black/80 z-40 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-forge-bg/80 z-40 " />
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
-              className={`rounded-2xl p-8 max-w-md w-full mx-4 border shadow-2xl drop-shadow-glow backdrop-blur-md transition-colors duration-300 ${
+              className={`rounded-sm p-8 max-w-md w-full mx-4 border shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  transition-colors duration-300 ${
                 theme === "dark"
-                  ? "bg-neutral-900/90 border-neutral-700"
-                  : "bg-white/90 border-gray-200"
+                  ? "bg-forge-bg-raised/90 border-forge-line"
+                  : "bg-forge-bg/90 border-forge-line"
               }`}
             >
               <h3
                 className={`text-2xl font-light mb-4 tracking-tight transition-colors duration-300 ${
-                  theme === "dark" ? "text-white" : "text-gray-900"
+                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                 }`}
               >
                 Send Request Message
               </h3>
               <p
                 className={`mb-5 text-base transition-colors duration-300 ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-600"
+                  theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
                 }`}
               >
                 Tell the host why you're interested in this gig and what you can
@@ -1296,10 +1296,10 @@ export default function DescriptionClient() {
                 onChange={(e) => setRequestMessage(e.target.value)}
                 placeholder="Hi! I'm interested in this gig because..."
                 rows={4}
-                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-colors duration-300 text-base shadow-sm ${
+                className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line resize-none transition-colors duration-300 text-base shadow-[0_4px_20px_rgba(21,18,13,0.5)] ${
                   theme === "dark"
-                    ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                    ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                    : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                 }`}
               />
               <div className="flex gap-3 justify-end mt-6">
@@ -1308,10 +1308,10 @@ export default function DescriptionClient() {
                     setShowMessageModal(false);
                     setRequestMessage("");
                   }}
-                  className={`px-5 py-2 rounded-lg font-medium transition-colors duration-300 shadow-sm border ${
+                  className={`px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                     theme === "dark"
-                      ? "bg-neutral-800 border-neutral-700 text-gray-200 hover:bg-neutral-700"
-                      : "bg-white border-gray-200 text-gray-800 hover:bg-gray-100"
+                      ? "bg-forge-bg-raised border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                      : "bg-forge-bg border-forge-line text-forge-ink hover:bg-forge-bg"
                   }`}
                 >
                   Cancel
@@ -1319,10 +1319,10 @@ export default function DescriptionClient() {
                 <button
                   onClick={handleSendRequest}
                   disabled={!requestMessage.trim() || sendingRequest}
-                  className={`px-5 py-2 rounded-lg font-medium transition-colors duration-300 shadow-sm border text-white ${
+                  className={`px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border text-forge-ink ${
                     !requestMessage.trim() || sendingRequest
-                      ? "bg-gray-400 border-gray-300 cursor-not-allowed"
-                      : "bg-emerald-600 border-emerald-700 hover:bg-emerald-700"
+                      ? "bg-forge-bg border-forge-line cursor-not-allowed"
+                      : "bg-forge-ember border-forge-ember hover:bg-forge-ember"
                   }`}
                 >
                   {sendingRequest ? "Sending..." : "Send Request"}
@@ -1336,30 +1336,30 @@ export default function DescriptionClient() {
       {/* Edit Gig Modal */}
       {isEditMode && (
         <>
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+          <div className="fixed inset-0 bg-forge-bg/50  z-50" />
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div
-              className={`w-full max-w-2xl rounded-2xl border shadow-2xl transition-colors duration-300 max-h-[90vh] overflow-y-auto ${
+              className={`w-full max-w-2xl rounded-sm border shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-colors duration-300 max-h-[90vh] overflow-y-auto ${
                 theme === "dark"
-                  ? "bg-neutral-900 border-neutral-700"
-                  : "bg-white border-gray-200"
+                  ? "bg-forge-bg-raised border-forge-line"
+                  : "bg-forge-bg border-forge-line"
               }`}
             >
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h3
                     className={`text-xl font-semibold transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Edit Gig
                   </h3>
                   <button
                     onClick={cancelEdit}
-                    className={`p-2 rounded-lg transition-colors duration-300 ${
+                    className={`p-2 rounded-sm transition-colors duration-300 ${
                       theme === "dark"
-                        ? "text-gray-400 hover:text-white hover:bg-neutral-800"
-                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                        ? "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg-raised"
+                        : "text-forge-ink-muted hover:text-forge-ink hover:bg-forge-bg"
                     }`}
                   >
                     <FiX className="w-5 h-5" />
@@ -1371,7 +1371,7 @@ export default function DescriptionClient() {
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       Title *
@@ -1385,10 +1385,10 @@ export default function DescriptionClient() {
                           title: e.target.value,
                         })
                       }
-                      className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
+                      className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line transition-colors duration-300 ${
                         theme === "dark"
-                          ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                          : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                          ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                          : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                       }`}
                       placeholder="Enter gig title"
                     />
@@ -1398,7 +1398,7 @@ export default function DescriptionClient() {
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       Description *
@@ -1412,10 +1412,10 @@ export default function DescriptionClient() {
                         })
                       }
                       rows={4}
-                      className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-colors duration-300 ${
+                      className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line resize-none transition-colors duration-300 ${
                         theme === "dark"
-                          ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                          : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                          ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                          : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                       }`}
                       placeholder="Describe your gig"
                     />
@@ -1425,7 +1425,7 @@ export default function DescriptionClient() {
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       Looking For *
@@ -1439,10 +1439,10 @@ export default function DescriptionClient() {
                         })
                       }
                       rows={3}
-                      className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none transition-colors duration-300 ${
+                      className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line resize-none transition-colors duration-300 ${
                         theme === "dark"
-                          ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                          : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                          ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                          : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                       }`}
                       placeholder="What kind of collaborator are you looking for?"
                     />
@@ -1452,7 +1452,7 @@ export default function DescriptionClient() {
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                       }`}
                     >
                       Skills Required *
@@ -1467,16 +1467,16 @@ export default function DescriptionClient() {
                           (e.preventDefault(), addEditSkill())
                         }
                         placeholder="Add a skill (e.g., React, Figma...)"
-                        className={`flex-1 px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
+                        className={`flex-1 px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line transition-colors duration-300 ${
                           theme === "dark"
-                            ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                            : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                            ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                            : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                         }`}
                       />
                       <button
                         type="button"
                         onClick={addEditSkill}
-                        className="px-4 py-2 rounded-lg bg-cyan-600 text-white font-medium hover:bg-cyan-700 transition-colors"
+                        className="px-4 py-2 rounded-sm bg-forge-ember text-forge-ink font-medium hover:bg-forge-ember transition-colors"
                       >
                         Add
                       </button>
@@ -1485,10 +1485,10 @@ export default function DescriptionClient() {
                       {editFormData.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300 hover:scale-105 text-sm ${
+                          className={`flex items-center gap-2 px-3 py-2 rounded-sm border transition-all duration-300 hover:scale-105 text-sm ${
                             theme === "dark"
-                              ? "bg-neutral-800 border-neutral-600 text-gray-200"
-                              : "bg-gray-50 border-gray-200 text-gray-800"
+                              ? "bg-forge-bg-raised border-forge-line text-forge-ink"
+                              : "bg-forge-bg border-forge-line text-forge-ink"
                           }`}
                         >
                           <span className="font-medium">{skill}</span>
@@ -1497,8 +1497,8 @@ export default function DescriptionClient() {
                             onClick={() => removeEditSkill(skill)}
                             className={`transition-colors duration-300 hover:scale-110 ${
                               theme === "dark"
-                                ? "text-gray-400 hover:text-red-400"
-                                : "text-gray-500 hover:text-red-500"
+                                ? "text-forge-ink-muted hover:text-[forge-error"
+                                : "text-forge-ink-muted hover:text-[forge-error"
                             }`}
                           >
                             ×
@@ -1513,7 +1513,7 @@ export default function DescriptionClient() {
                     <div>
                       <label
                         className={`block text-sm font-medium mb-2 ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         Amount
@@ -1529,10 +1529,10 @@ export default function DescriptionClient() {
                         }
                         min="0"
                         step="0.01"
-                        className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
+                        className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line transition-colors duration-300 ${
                           theme === "dark"
-                            ? "bg-neutral-800 border-neutral-700 text-white placeholder-gray-400"
-                            : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                            ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
+                            : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
                         }`}
                         placeholder="0"
                       />
@@ -1540,7 +1540,7 @@ export default function DescriptionClient() {
                     <div>
                       <label
                         className={`block text-sm font-medium mb-2 ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                         }`}
                       >
                         Currency
@@ -1553,10 +1553,10 @@ export default function DescriptionClient() {
                             currency: e.target.value,
                           })
                         }
-                        className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300 ${
+                        className={`w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-2 focus:ring-forge-line transition-colors duration-300 ${
                           theme === "dark"
-                            ? "bg-neutral-800 border-neutral-700 text-white"
-                            : "bg-white border-gray-200 text-gray-900"
+                            ? "bg-forge-bg-raised border-forge-line text-forge-ink"
+                            : "bg-forge-bg border-forge-line text-forge-ink"
                         }`}
                       >
                         <option value="INR">INR</option>
@@ -1570,10 +1570,10 @@ export default function DescriptionClient() {
                 <div className="flex gap-3 justify-end mt-8">
                   <button
                     onClick={cancelEdit}
-                    className={`px-6 py-3 rounded-lg font-medium transition-colors duration-300 shadow-sm border ${
+                    className={`px-6 py-3 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                       theme === "dark"
-                        ? "bg-neutral-800 border-neutral-700 text-gray-200 hover:bg-neutral-700"
-                        : "bg-white border-gray-200 text-gray-800 hover:bg-gray-100"
+                        ? "bg-forge-bg-raised border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                        : "bg-forge-bg border-forge-line text-forge-ink hover:bg-forge-bg"
                     }`}
                   >
                     Cancel
@@ -1585,16 +1585,16 @@ export default function DescriptionClient() {
                       !editFormData.description.trim() ||
                       isUpdating
                     }
-                    className={`px-6 py-3 rounded-lg font-medium transition-colors duration-300 shadow-sm border text-white flex items-center gap-2 ${
+                    className={`px-6 py-3 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border text-forge-ink flex items-center gap-2 ${
                       !editFormData.title.trim() ||
                       !editFormData.description.trim() ||
                       isUpdating
-                        ? "bg-gray-400 border-gray-300 cursor-not-allowed"
-                        : "bg-emerald-600 border-emerald-700 hover:bg-emerald-700"
+                        ? "bg-forge-bg border-forge-line cursor-not-allowed"
+                        : "bg-forge-ember border-forge-ember hover:bg-forge-ember"
                     }`}
                   >
                     {isUpdating && (
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-forge-line/30 border-t-white rounded-full animate-spin" />
                     )}
                     {isUpdating ? "Updating..." : "Update Gig"}
                   </button>
@@ -1608,23 +1608,23 @@ export default function DescriptionClient() {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <>
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+          <div className="fixed inset-0 bg-forge-bg/50  z-50" />
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div
-              className={`w-full max-w-md rounded-2xl border shadow-2xl transition-colors duration-300 ${
+              className={`w-full max-w-md rounded-sm border shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-colors duration-300 ${
                 theme === "dark"
-                  ? "bg-neutral-900 border-neutral-700"
-                  : "bg-white border-gray-200"
+                  ? "bg-forge-bg-raised border-forge-line"
+                  : "bg-forge-bg border-forge-line"
               }`}
             >
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
-                    <FiTrash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  <div className="p-2 rounded-sm bg-[forge-error-bg dark:bg-[forge-error-bg/30">
+                    <FiTrash2 className="w-5 h-5 text-[forge-error dark:text-[forge-error" />
                   </div>
                   <h3
                     className={`text-lg font-semibold transition-colors duration-300 ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
                     }`}
                   >
                     Delete Gig
@@ -1633,7 +1633,7 @@ export default function DescriptionClient() {
 
                 <p
                   className={`mb-6 text-base transition-colors duration-300 ${
-                    theme === "dark" ? "text-gray-300" : "text-gray-600"
+                    theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
                   }`}
                 >
                   Are you sure you want to delete this gig? This action cannot
@@ -1643,10 +1643,10 @@ export default function DescriptionClient() {
                 <div className="flex gap-3 justify-end">
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
-                    className={`px-5 py-2 rounded-lg font-medium transition-colors duration-300 shadow-sm border ${
+                    className={`px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                       theme === "dark"
-                        ? "bg-neutral-800 border-neutral-700 text-gray-200 hover:bg-neutral-700"
-                        : "bg-white border-gray-200 text-gray-800 hover:bg-gray-100"
+                        ? "bg-forge-bg-raised border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                        : "bg-forge-bg border-forge-line text-forge-ink hover:bg-forge-bg"
                     }`}
                   >
                     Cancel
@@ -1656,7 +1656,7 @@ export default function DescriptionClient() {
                       handleDeleteGig();
                       setShowDeleteConfirm(false);
                     }}
-                    className="px-5 py-2 rounded-lg font-medium transition-colors duration-300 shadow-sm border bg-red-600 border-red-700 text-white hover:bg-red-700"
+                    className="px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border bg-[forge-error-bg border-[forge-error text-forge-ink hover:bg-[forge-error-bg"
                   >
                     Delete Gig
                   </button>
