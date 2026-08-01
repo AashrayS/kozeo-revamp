@@ -1,0 +1,247 @@
+"use client";
+
+import Header from "@/components/common/Header";
+import Sidebar from "@/components/common/Sidebar";
+import storeItems from "../../../data/store.json";
+import { FiSearch, FiPlus } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+import { useTheme } from "../../contexts/ThemeContext";
+import { getUserWallet } from "../../../utilities/kozeoApi";
+import { useSelector } from "react-redux";
+
+export interface StoreItem {
+  id: number;
+  title: string;
+  description: string;
+  displayPicture: string;
+  type: string; // e.g., "tshirt", "mug", etc.
+  amount: number;
+}
+
+export default function StorePage() {
+  const { theme } = useTheme();
+  const { user } = useSelector((state: any) => state.user);
+  const [cart, setCart] = useState<number[]>([]);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [isLoadingWallet, setIsLoadingWallet] = useState<boolean>(true);
+
+  // Fetch wallet balance on component mount
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      if (user?.id) {
+        try {
+          setIsLoadingWallet(true);
+          const walletData = await getUserWallet(user.id, "INR");
+          setWalletBalance((walletData as any)?.amount || 0);
+        } catch (error) {
+          console.error("Error fetching wallet balance:", error);
+          setWalletBalance(0);
+        } finally {
+          setIsLoadingWallet(false);
+        }
+      } else {
+        setIsLoadingWallet(false);
+      }
+    };
+
+    fetchWalletBalance();
+  }, [user?.id]);
+
+  const toggleCartItem = (item: any) => {
+    setCart((prev) =>
+      prev.includes(item.id)
+        ? prev.filter((id) => id !== item.id)
+        : [...prev, item.id]
+    );
+  };
+
+  return (
+    <>
+      <Header logoText="Kozeo" />
+
+      {/* Glow Effects */}
+      {theme === "dark" && (
+        <>
+          <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+          <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
+        </>
+      )}
+
+      {/* Main Layout */}
+      <div
+        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
+            : "bg-forge-bg    text-forge-ink"
+        }`}
+      >
+        <Sidebar />
+
+        <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
+          {/* Search Bar */}
+          <div className="flex justify-center items-center gap-4 mb-8">
+            <div className="relative w-full max-w-xl">
+              <input
+                type="text"
+                placeholder="Search items..."
+                className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "bg-forge-bg-raised border-forge-line placeholder-gray-400 focus:ring-forge-line text-forge-ink"
+                    : "bg-forge-bg border-forge-line placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember text-forge-ink"
+                }`}
+              />
+              <button
+                className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
+                  theme === "dark"
+                    ? "text-forge-ink-muted hover:text-forge-ink"
+                    : "text-forge-ink-muted hover:text-forge-ink"
+                }`}
+              >
+                <FiSearch className="text-xl" />
+              </button>
+            </div>
+          </div>
+
+          {/* Store Closed Banner */}
+          <div
+            className={`w-full mb-8 p-6 rounded-sm border transition-all duration-300 ${
+              theme === "dark"
+                ? "border-forge-line bg-forge-bg /50 /50 text-forge-ink"
+                : "border-forge-line bg-forge-bg  to-white text-forge-ink shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+            }`}
+          >
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <div
+                className={`w-2 h-2 rounded-full animate-pulse-slow ${
+                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
+                }`}
+              ></div>
+              <h3
+                className={`text-xl font-semibold ${
+                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                }`}
+              >
+                Store Coming Soon
+              </h3>
+              <div
+                className={`w-2 h-2 rounded-full animate-pulse-slow ${
+                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
+                }`}
+              ></div>
+            </div>
+            <p
+              className={`text-center leading-relaxed ${
+                theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+              }`}
+            >
+              We're curating an exclusive collection of premium developer
+              merchandise and tools. Stay tuned for the official launch of the
+              Kozeo Store. You can still checkout our existing products in the
+              meantime and add them to cart!
+            </p>
+          </div>
+
+          {/* Store Heading */}
+          <div className="flex justify-between items-center mb-4">
+            <h2
+              className={`text-2xl font-bold transition-colors duration-300 ${
+                theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+              }`}
+            >
+              Kozeo Store
+            </h2>
+            <span className="text-forge-ember font-semibold text-lg">
+              Available: ₹{isLoadingWallet ? "..." : walletBalance.toFixed(2)}
+            </span>
+          </div>
+
+          {/* Store Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {storeItems.map((item) => (
+              <div
+                key={item.id}
+                className={`relative flex flex-col justify-between rounded-sm p-4 shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:scale-[1.02] transition-all duration-300 text-sm ${
+                  theme === "dark"
+                    ? "bg-forge-bg   hover:"
+                    : "bg-forge-bg/90 hover:bg-forge-bg border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                }`}
+              >
+                <img
+                  src={item.displayPicture}
+                  alt={item.title}
+                  className="w-full h-80 object-cover rounded-sm mb-3"
+                />
+
+                <div className="mb-2">
+                  <h3
+                    className={`text-base font-semibold transition-colors duration-300 ${
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                    }`}
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    className={`text-sm transition-colors duration-300 ${
+                      theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
+                    }`}
+                  >
+                    {item.description}
+                  </p>
+                </div>
+
+                {item.type.toLowerCase() === "tshirt" && (
+                  <select
+                    className={`w-full mb-2 border text-xs p-1 rounded-sm transition-all duration-300 ${
+                      theme === "dark"
+                        ? "bg-forge-bg-raised border-forge-line text-forge-ink"
+                        : "bg-forge-bg border-forge-line text-forge-ink"
+                    }`}
+                  >
+                    <option value="S">Size S</option>
+                    <option value="M">Size M</option>
+                    <option value="L">Size L</option>
+                    <option value="XL">Size XL</option>
+                  </select>
+                )}
+
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-forge-ember font-semibold text-sm">
+                    ₹{item.creditsAmount}
+                  </span>
+                  <button
+                    onClick={() => toggleCartItem(item)}
+                    className={`px-3 py-1 rounded-sm text-xs font-semibold transition-colors ${
+                      cart.includes(item.id)
+                        ? "bg-[forge-error-bg text-forge-ink hover:bg-[forge-error-bg"
+                        : "bg-forge-ember text-forge-ink hover:bg-forge-ember"
+                    }`}
+                  >
+                    {cart.includes(item.id) ? "Remove" : <FiPlus size={14} />}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Checkout Button */}
+          {cart.length > 0 && (
+            <div className="mt-10 flex justify-center">
+              <button
+                className={`border font-semibold tracking-wide shadow-[0_4px_20px_rgba(21,18,13,0.5)] py-3 px-8 rounded-sm transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
+                  theme === "dark"
+                    ? "border-forge-line hover:from-fuchsia-600 hover:to-cyan-500 text-forge-ink"
+                    : "border-forge-line bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink"
+                }`}
+              >
+                <FaShoppingCart className="text-lg" />
+                Items added to cart ({cart.length}{" "}
+                {cart.length === 1 ? "item" : "items"})
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+    </>
+  );
+}
