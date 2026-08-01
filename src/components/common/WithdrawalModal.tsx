@@ -432,7 +432,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               </p>
               {formData.amount && parseFloat(formData.amount) > 0 && (
                 <p className="text-xs mt-1 opacity-75">
-                  You'll receive:{" "}
+                  You&apos;ll receive:{" "}
                   <span className="font-semibold">
                     ₹{(parseFloat(formData.amount) - 5).toFixed(2)}
                   </span>
