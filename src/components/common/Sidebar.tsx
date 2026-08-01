@@ -81,16 +81,16 @@ export default function Sidebar() {
       {/* Desktop/Tablet Sidebar */}
       <div className="relative z-[9999] hidden sm:block">
         <aside
-          className={`sticky top-0 h-screen border-r transition-all duration-300 z-[9999] flex flex-col justify-between ${
+          className={`sticky top-0 h-screen border-r transition-all duration-300 z-[9999] flex flex-col justify-between backdrop-blur-xl ${
             collapsed ? "w-20" : "w-64"
           } ${
             theme === "light"
-              ? "bg-transaprent text-forge-ink border-forge-line"
-              : "bg-transparent text-forge-ink border-forge-line"
+              ? "bg-white/70 text-black border-black/5"
+              : "bg-black/70 text-white border-white/10"
           }`}
         >
           <div className="flex flex-col p-4 space-y-6">
-            <nav className="space-y-8">
+            <nav className="space-y-3">
               {allTabs.map(({ name, icon: Icon, path }) => {
                 const isActive = isActivePath(path);
 
@@ -99,44 +99,39 @@ export default function Sidebar() {
                     <button
                       onClick={() => handleNavigation(path)}
                       disabled={isActive}
-                      className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
+                      className={`flex items-center w-full px-4 py-3 rounded-2xl transition-all duration-300 ${
                         collapsed ? "justify-center" : "gap-3"
                       } ${
                         isActive
-                          ? "bg-forge-ember-low text-forge-ember cursor-default"
-                          : "hover:bg-forge-bg-raised cursor-pointer text-forge-ink"
+                          ? "bg-black/10 dark:bg-white/10 text-black dark:text-white font-semibold cursor-default shadow-xs"
+                          : "hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
                       }`}
                     >
                       <Icon
-                        className={`text-2xl shrink-0 ${
-                          isActive ? "opacity-100" : "opacity-80"
-                        }`}
+                        className={`text-xl shrink-0 ${
+                          isActive ? "opacity-100 scale-110" : "opacity-75"
+                        } transition-transform duration-300`}
                       />
                       {!collapsed && (
                         <span
-                          className={`text-base ${
-                            isActive ? "font-medium" : ""
+                          className={`text-sm tracking-tight ${
+                            isActive ? "font-semibold" : "font-medium"
                           }`}
                         >
                           {name}
                         </span>
                       )}
                       {isActive && !collapsed && (
-                        <div className="ml-auto w-2 h-2 rounded-sm bg-forge-ember" />
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-black dark:bg-white shadow-xs" />
                       )}
                     </button>
                     {/* Tooltip for collapsed view */}
                     {collapsed && (
                       <div
-                        className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 border ${
-                          isActive
-                            ? "bg-forge-ember-low text-forge-ember border-forge-ember-low"
-                            : "bg-forge-bg-raised text-forge-ink border-forge-line"
-                        }`}
+                        className="absolute left-full ml-3 px-3 py-1 text-xs font-semibold rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 kozeo-glass shadow-md text-black dark:text-white"
                       >
                         {name}
                         {isActive && " (Current)"}
-                        <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-forge-bg-raised" />
                       </div>
                     )}
                   </div>
@@ -144,86 +139,29 @@ export default function Sidebar() {
               })}
             </nav>
 
-            {/* Theme Toggle */}
-            {/* <div className="relative group">
-            <button
-              onClick={toggleTheme}
-              className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
-                collapsed ? "justify-center" : "gap-3"
-              } ${
-                theme === "light" ? "hover:bg-forge-bg" : "hover:bg-forge-bg-raised"
-              }`}
-            >
-              {theme === "light" ? (
-                <FiMoon className="text-2xl shrink-0" />
-              ) : (
-                <FiSun className="text-2xl shrink-0" />
-              )}
-              {!collapsed && (
-                <span className="text-base">
-                  {theme === "light" ? "Dark Mode" : "Light Mode"}
-                </span>
-              )}
-            </button>
-            {/* Tooltip for collapsed view */}
-            {/* {collapsed && (
-              <div
-                className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
-                  theme === "light"
-                    ? "bg-forge-bg text-forge-ink border-forge-line"
-                    : "bg-forge-bg-raised text-forge-ink border-forge-line"
-                }`}
-              >
-                {theme === "light" ? "Dark Mode" : "Light Mode"}
-                <div
-                  className={`absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent ${
-                    theme === "light"
-                      ? "border-r-white"
-                      : "border-r-neutral-800"
-                  }`}
-                ></div>
-              </div>
-            )} */}
-            {/* </div> */}
-
             {/* Collapse Button - hidden on mobile devices */}
             <div className="relative group hidden sm:block">
               <button
                 onClick={() => setCollapsed(!collapsed)}
-                className={`flex items-center w-full px-4 py-2 rounded-sm transition-colors ${
+                className={`flex items-center w-full px-4 py-3 rounded-2xl transition-all duration-300 ${
                   collapsed ? "justify-center" : "gap-3"
-                } ${
-                  theme === "light"
-                    ? "hover:bg-forge-bg"
-                    : "hover:bg-forge-bg-raised"
-                }`}
+                } hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white`}
               >
                 {collapsed ? (
-                  <FiChevronRight className="text-2xl shrink-0" />
+                  <FiChevronRight className="text-xl shrink-0" />
                 ) : (
                   <>
-                    <FiChevronLeft className="text-2xl shrink-0" />
-                    <span className="text-base">Collapse</span>
+                    <FiChevronLeft className="text-xl shrink-0" />
+                    <span className="text-sm font-medium">Collapse</span>
                   </>
                 )}
               </button>
               {/* Tooltip for collapsed view */}
               {collapsed && (
                 <div
-                  className={`absolute left-full ml-2 px-2 py-1 text-sm rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
-                    theme === "light"
-                      ? "bg-forge-bg text-forge-ink border-forge-line"
-                      : "bg-forge-bg-raised text-forge-ink border-forge-line"
-                  }`}
+                  className="absolute left-full ml-3 px-3 py-1 text-xs font-semibold rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[99999] top-1/2 transform -translate-y-1/2 kozeo-glass shadow-md text-black dark:text-white"
                 >
-                  Expand
-                  <div
-                    className={`absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent ${
-                      theme === "light"
-                        ? "border-r-white"
-                        : "border-r-neutral-800"
-                    }`}
-                  ></div>
+                  Expand Sidebar
                 </div>
               )}
             </div>

@@ -16,6 +16,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { PageLoader } from "../../components/common/PageLoader";
 import Image from "next/image";
 import Link from "next/link";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 // ─── Canvas Dash Field ────────────────────────────────────────────────────────
 type Dash = {
@@ -168,6 +169,8 @@ export default function LoginSignupPage() {
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -309,14 +312,24 @@ export default function LoginSignupPage() {
                           Forgot?
                         </Link>
                       </div>
-                      <input
-                        id="login-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
-                      />
+                      <div className="relative">
+                        <input
+                          id="login-password"
+                          type={showLoginPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
+                          className="w-full px-4 py-3 pr-11 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginPassword(!showLoginPassword)}
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-colors"
+                          aria-label={showLoginPassword ? "Hide password" : "Show password"}
+                        >
+                          {showLoginPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
 
                     {loginError && <p className="text-red-500 text-xs mt-1 text-center font-medium">{loginError}</p>}
@@ -493,12 +506,22 @@ export default function LoginSignupPage() {
                         </div>
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold text-black/40 uppercase tracking-wider ml-1">Password</label>
-                          <input
-                            type="password"
-                            value={signupData.password}
-                            onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm"
-                          />
+                          <div className="relative">
+                            <input
+                              type={showSignupPassword ? "text" : "password"}
+                              value={signupData.password}
+                              onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                              className="w-full px-3 py-2.5 pr-9 rounded-xl border border-black/10 text-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowSignupPassword(!showSignupPassword)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 hover:text-black transition-colors"
+                              aria-label={showSignupPassword ? "Hide password" : "Show password"}
+                            >
+                              {showSignupPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                            </button>
+                          </div>
                         </div>
                         {signupError && <p className="text-red-500 text-xs text-center">{signupError}</p>}
                         <button

@@ -3,16 +3,16 @@
 /* Theme Variables */
 :root {
   /* Dark Theme (Default) */
-  --bg-primary: #000000;
-  --bg-secondary: #111111;
+  --bg-primary: #080808;
+  --bg-secondary: #121212;
   --bg-tertiary: #1a1a1a;
   --text-primary: #ffffff;
   --text-secondary: #a3a3a3;
-  --text-accent: #06b6d4;
-  --border-primary: #404040;
-  --border-secondary: #262626;
-  --accent-primary: #06b6d4;
-  --accent-secondary: #8b5cf6;
+  --text-accent: #ffffff;
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --accent-primary: #ffffff;
+  --accent-secondary: #d4d4d4;
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
@@ -20,16 +20,16 @@
 
 [data-theme="light"] {
   /* Light Theme - Softer, more aesthetic colors */
-  --bg-primary: #fefefe;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --text-primary: #374151;
-  --text-secondary: #6b7280;
-  --text-accent: #059669;
-  --border-primary: #e5e7eb;
-  --border-secondary: #d1d5db;
-  --accent-primary: #059669;
-  --accent-secondary: #7c3aed;
+  --bg-primary: #f4f4f5;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e4e4e7;
+  --text-primary: #09090b;
+  --text-secondary: #71717a;
+  --text-accent: #000000;
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-secondary: rgba(0, 0, 0, 0.05);
+  --accent-primary: #000000;
+  --accent-secondary: #27272a;
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;

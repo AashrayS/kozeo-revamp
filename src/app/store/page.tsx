@@ -69,91 +69,48 @@ export default function StorePage() {
       )}
 
       {/* Main Layout */}
-      <div
-        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-          theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-            : "bg-forge-bg    text-forge-ink"
-        }`}
-      >
+      <div className="min-h-screen relative z-10 flex flex-row theme-transition">
         <Sidebar />
 
-        <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto pb-20 lg:pb-6">
           {/* Search Bar */}
           <div className="flex justify-center items-center gap-4 mb-8">
             <div className="relative w-full max-w-xl">
               <input
                 type="text"
                 placeholder="Search items..."
-                className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 transition-all duration-300 ${
-                  theme === "dark"
-                    ? "bg-forge-bg-raised border-forge-line placeholder-gray-400 focus:ring-forge-line text-forge-ink"
-                    : "bg-forge-bg border-forge-line placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember text-forge-ink"
-                }`}
+                className="kozeo-input !rounded-full pl-5 pr-11 py-3 text-sm shadow-xs"
               />
-              <button
-                className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors duration-300 ${
-                  theme === "dark"
-                    ? "text-forge-ink-muted hover:text-forge-ink"
-                    : "text-forge-ink-muted hover:text-forge-ink"
-                }`}
-              >
-                <FiSearch className="text-xl" />
+              <button className="absolute top-1/2 right-3.5 -translate-y-1/2 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">
+                <FiSearch className="text-lg" />
               </button>
             </div>
           </div>
 
           {/* Store Closed Banner */}
-          <div
-            className={`w-full mb-8 p-6 rounded-sm border transition-all duration-300 ${
-              theme === "dark"
-                ? "border-forge-line bg-forge-bg /50 /50 text-forge-ink"
-                : "border-forge-line bg-forge-bg  to-white text-forge-ink shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div
-                className={`w-2 h-2 rounded-full animate-pulse-slow ${
-                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
-                }`}
-              ></div>
-              <h3
-                className={`text-xl font-semibold ${
-                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-                }`}
-              >
+          <div className="w-full mb-8 p-6 md:p-8 kozeo-card text-center relative overflow-hidden">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <h3 className="text-xl font-bold tracking-tight text-black dark:text-white">
                 Store Coming Soon
               </h3>
-              <div
-                className={`w-2 h-2 rounded-full animate-pulse-slow ${
-                  theme === "dark" ? "bg-forge-ember" : "bg-forge-ember-low"
-                }`}
-              ></div>
             </div>
-            <p
-              className={`text-center leading-relaxed ${
-                theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-              }`}
-            >
+            <p className="text-sm text-black/60 dark:text-white/60 max-w-2xl mx-auto leading-relaxed">
               We're curating an exclusive collection of premium developer
               merchandise and tools. Stay tuned for the official launch of the
-              Kozeo Store. You can still checkout our existing products in the
+              Kozeo Store. You can still check out our existing products in the
               meantime and add them to cart!
             </p>
           </div>
 
           {/* Store Heading */}
-          <div className="flex justify-between items-center mb-4">
-            <h2
-              className={`text-2xl font-bold transition-colors duration-300 ${
-                theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-              }`}
-            >
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold tracking-tight text-black dark:text-white">
               Kozeo Store
             </h2>
-            <span className="text-forge-ember font-semibold text-lg">
+            <div className="kozeo-badge text-xs px-3 py-1 font-semibold">
               Available: ₹{isLoadingWallet ? "..." : walletBalance.toFixed(2)}
-            </span>
+            </div>
           </div>
 
           {/* Store Grid */}
@@ -161,43 +118,25 @@ export default function StorePage() {
             {storeItems.map((item) => (
               <div
                 key={item.id}
-                className={`relative flex flex-col justify-between rounded-sm p-4 shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:scale-[1.02] transition-all duration-300 text-sm ${
-                  theme === "dark"
-                    ? "bg-forge-bg   hover:"
-                    : "bg-forge-bg/90 hover:bg-forge-bg border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                }`}
+                className="relative flex flex-col justify-between kozeo-card p-5 group"
               >
                 <img
                   src={item.displayPicture}
                   alt={item.title}
-                  className="w-full h-80 object-cover rounded-sm mb-3"
+                  className="w-full h-64 object-cover rounded-2xl mb-4 border border-black/5 dark:border-white/10"
                 />
 
-                <div className="mb-2">
-                  <h3
-                    className={`text-base font-semibold transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-                    }`}
-                  >
+                <div className="mb-3">
+                  <h3 className="text-base font-bold tracking-tight text-black dark:text-white mb-1">
                     {item.title}
                   </h3>
-                  <p
-                    className={`text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
-                    }`}
-                  >
+                  <p className="text-xs text-black/60 dark:text-white/60 line-clamp-2 leading-relaxed">
                     {item.description}
                   </p>
                 </div>
 
                 {item.type.toLowerCase() === "tshirt" && (
-                  <select
-                    className={`w-full mb-2 border text-xs p-1 rounded-sm transition-all duration-300 ${
-                      theme === "dark"
-                        ? "bg-forge-bg-raised border-forge-line text-forge-ink"
-                        : "bg-forge-bg border-forge-line text-forge-ink"
-                    }`}
-                  >
+                  <select className="kozeo-input !py-1.5 !px-3 text-xs mb-3">
                     <option value="S">Size S</option>
                     <option value="M">Size M</option>
                     <option value="L">Size L</option>
@@ -205,19 +144,19 @@ export default function StorePage() {
                   </select>
                 )}
 
-                <div className="flex justify-between items-center mt-1">
-                  <span className="text-forge-ember font-semibold text-sm">
+                <div className="flex justify-between items-center pt-2 border-t border-black/5 dark:border-white/10">
+                  <span className="text-base font-bold tracking-tight text-black dark:text-white">
                     ₹{item.creditsAmount}
                   </span>
                   <button
                     onClick={() => toggleCartItem(item)}
-                    className={`px-3 py-1 rounded-sm text-xs font-semibold transition-colors ${
+                    className={
                       cart.includes(item.id)
-                        ? "bg-[forge-error-bg text-forge-ink hover:bg-[forge-error-bg"
-                        : "bg-forge-ember text-forge-ink hover:bg-forge-ember"
-                    }`}
+                        ? "kozeo-btn-secondary !px-3 !py-1.5 !text-xs !bg-red-500/10 !text-red-500 !border-red-500/20"
+                        : "kozeo-btn-primary !px-3 !py-1.5 !text-xs"
+                    }
                   >
-                    {cart.includes(item.id) ? "Remove" : <FiPlus size={14} />}
+                    {cart.includes(item.id) ? "Remove" : <><FiPlus size={14} /> Add</>}
                   </button>
                 </div>
               </div>
@@ -227,13 +166,7 @@ export default function StorePage() {
           {/* Checkout Button */}
           {cart.length > 0 && (
             <div className="mt-10 flex justify-center">
-              <button
-                className={`border font-semibold tracking-wide shadow-[0_4px_20px_rgba(21,18,13,0.5)] py-3 px-8 rounded-sm transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
-                  theme === "dark"
-                    ? "border-forge-line hover:from-fuchsia-600 hover:to-cyan-500 text-forge-ink"
-                    : "border-forge-line bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink"
-                }`}
-              >
+              <button className="kozeo-btn-primary !py-3.5 !px-8 shadow-xl text-base">
                 <FaShoppingCart className="text-lg" />
                 Items added to cart ({cart.length}{" "}
                 {cart.length === 1 ? "item" : "items"})
