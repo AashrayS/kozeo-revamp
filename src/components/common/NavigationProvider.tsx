@@ -48,6 +48,7 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
   // Immediately show loader on any route change attempt
   useEffect(() => {
     // Show loader immediately when navigation starts
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
     setManualLoading(false); // Reset manual loading
 
@@ -64,6 +65,7 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
   // Handle manual loading trigger
   useEffect(() => {
     if (manualLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
     }
   }, [manualLoading]);

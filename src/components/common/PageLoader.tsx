@@ -29,6 +29,7 @@ export const PageLoader = ({
     const hasShown = sessionStorage.getItem("kozeo_loader_shown");
 
     if (forceShow || !hasShown) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
       setIsAnimating(true);
       
