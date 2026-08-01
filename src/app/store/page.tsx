@@ -1,7 +1,5 @@
 "use client";
 
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import storeItems from "../../../data/store.json";
 import { FiSearch, FiPlus } from "react-icons/fi";
 import { useState, useEffect } from "react";
@@ -58,7 +56,6 @@ export default function StorePage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
 
       {/* Glow Effects */}
       {theme === "dark" && (
@@ -70,7 +67,6 @@ export default function StorePage() {
 
       {/* Main Layout */}
       <div className="min-h-screen relative z-10 flex flex-row theme-transition">
-        <Sidebar />
 
         <main className="flex-1 p-6 md:p-8 overflow-y-auto pb-20 lg:pb-6">
           {/* Search Bar */}

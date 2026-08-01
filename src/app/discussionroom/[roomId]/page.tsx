@@ -1,7 +1,5 @@
 "use client";
 
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { FaRegSmile, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { useMemo, useState, useRef, useEffect } from "react";
@@ -307,7 +305,6 @@ export default function DiscussionRoomPage({
   if (loading) {
     return (
       <>
-        <Header logoText="Kozeo" />
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -315,7 +312,6 @@ export default function DiscussionRoomPage({
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <div className="text-xl mb-2">Loading discussion room...</div>
@@ -382,7 +378,6 @@ export default function DiscussionRoomPage({
         </>
       )}
       <div className="flex flex-col h-screen">
-        <Header logoText="Kozeo" />
         <div
           className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -390,7 +385,6 @@ export default function DiscussionRoomPage({
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
 
           <main className="flex-1 p-0 flex flex-col overflow-hidden">
             {/* Room Header */}

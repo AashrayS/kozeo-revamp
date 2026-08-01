@@ -5,8 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { theme } from "../../../../theme";
 import InputField from "../../../../components/common/InputField";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import { FaCamera, FaUpload, FaTimes, FaLock, FaUnlock } from "react-icons/fa";
@@ -351,13 +349,11 @@ export default function EditProfilePage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       {/* Main Layout */}
       <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
-        <Sidebar />
         <div className="flex flex-1 pb-20 lg:pb-0">
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="w-full max-w-3xl mx-auto">

@@ -1,6 +1,4 @@
 "use client";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import {
@@ -414,7 +412,6 @@ export default function DescriptionClient() {
   if (error) {
     return (
       <>
-        <Header logoText="Kozeo" />
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -422,7 +419,6 @@ export default function DescriptionClient() {
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-[forge-error">{error}</div>
           </main>
@@ -434,7 +430,6 @@ export default function DescriptionClient() {
   if (!gig) {
     return (
       <>
-        <Header logoText="Kozeo" />
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -442,7 +437,6 @@ export default function DescriptionClient() {
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div
               className={`transition-colors duration-300 ${
@@ -463,7 +457,6 @@ export default function DescriptionClient() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       {/* Glows */}
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
@@ -475,7 +468,6 @@ export default function DescriptionClient() {
             : "bg-gradient-dark text-forge-ink"
         }`}
       >
-        <Sidebar />
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-4 md:gap-8 items-stretch justify-center w-full mx-auto py-4 md:py-8 px-4 md:px-0">
             {/* Gig Details Container - Golden Ratio smaller section (38.2%) */}

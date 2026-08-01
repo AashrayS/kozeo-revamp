@@ -1,7 +1,5 @@
 "use client";
 
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { PageLoader } from "@/components/common/PageLoader";
 import { FiStar, FiVideo, FiPhone } from "react-icons/fi";
 import {
@@ -2177,9 +2175,7 @@ export default function GigPage({
   if (gigError) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header logoText="Kozeo" />
         <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
-          <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-center">
               <div className="text-xl text-[forge-error mb-4">
@@ -2203,9 +2199,7 @@ export default function GigPage({
   if (!gig) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header logoText="Kozeo" />
         <div className="relative z-10 flex flex-1 flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
-          <Sidebar />
           <main className="flex-1 p-10 flex justify-center items-center">
             <div className="text-center">
               <div className="text-xl text-forge-ink-muted mb-4">
@@ -2229,7 +2223,6 @@ export default function GigPage({
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="flex flex-col h-screen bg-transparent">
-        <Header logoText="Kozeo" />
         <div
           className={`relative z-10 flex flex-1 flex-row theme-transition ${
             theme === "light"
@@ -2237,7 +2230,6 @@ export default function GigPage({
               : "bg-gradient-dark text-forge-ink"
           }`}
         >
-          <Sidebar />
 
           <main
             className="flex-1 p-0 flex flex-col overflow-hidden overflow-x-hidden"

@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -39,14 +37,12 @@ export default function PortfolioBuilderPage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
 
       {/* Glow Effects */}
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       <div className="min-h-screen relative z-10 flex flex-row theme-transition">
-        <Sidebar />
         <div className="flex-1 flex flex-col p-4 sm:p-8">
           <main className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-4 sm:px-6">
             {/* Main Coming Soon Section */}

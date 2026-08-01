@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { FiSearch, FiStar, FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import {
@@ -150,7 +148,6 @@ export default function Home() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
@@ -242,7 +239,6 @@ export default function Home() {
               : "bg-gradient-dark text-forge-ink"
           }`}
         >
-          <Sidebar />
           <div className="flex flex-1 pb-20 lg:pb-0">
             <main className="flex-1 p-6 overflow-y-auto">
               {/* Search & Create Gig Section */}

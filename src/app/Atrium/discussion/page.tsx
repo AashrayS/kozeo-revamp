@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { FaUsers, FaComments, FaArrowRight } from "react-icons/fa";
@@ -54,7 +52,6 @@ export default function DiscussionPage() {
       )}
 
       <div className="flex flex-col h-screen">
-        <Header logoText="Kozeo" />
         <div
           className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -62,7 +59,6 @@ export default function DiscussionPage() {
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
 
           <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
             <div className="max-w-full mx-auto">

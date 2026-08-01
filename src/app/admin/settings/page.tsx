@@ -2,8 +2,6 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { PageLoader } from "@/components/common/PageLoader";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useUser } from "../../../../store/hooks";
@@ -44,7 +42,6 @@ export default function AdminSettingsPage() {
 
   return (
     <>
-      <Header logoText="Kozeo Admin" />
 
       {/* Background glows */}
       {theme === "dark" && (
@@ -61,7 +58,6 @@ export default function AdminSettingsPage() {
             : "bg-forge-bg    text-forge-ink"
         }`}
       >
-        <Sidebar />
 
         <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
           <div className="max-w-4xl mx-auto">

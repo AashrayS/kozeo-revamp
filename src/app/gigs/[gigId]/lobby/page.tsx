@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import RequestCard from "@/components/common/RequestCard";
 import { PageLoader } from "@/components/common/PageLoader";
@@ -531,7 +529,6 @@ export default function GigLobbyPage({
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div
         className={`min-h-screen relative z-10 flex theme-transition ${
           theme === "light"
@@ -539,7 +536,6 @@ export default function GigLobbyPage({
             : "bg-gradient-dark text-forge-ink"
         }`}
       >
-        <Sidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Glows */}
           <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />

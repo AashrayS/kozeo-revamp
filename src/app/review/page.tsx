@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { PageLoader } from "@/components/common/PageLoader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaStar } from "react-icons/fa";
@@ -161,7 +159,6 @@ export default function ReviewPage() {
   if (submitted) {
     return (
       <>
-        <Header logoText="Kozeo" />
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -169,7 +166,6 @@ export default function ReviewPage() {
               : "bg-forge-bg    text-forge-ink"
           }`}
         >
-          <Sidebar />
           <div className="flex-1 flex flex-col pb-20 lg:pb-0">
             <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
               <div
@@ -224,7 +220,6 @@ export default function ReviewPage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
@@ -232,7 +227,6 @@ export default function ReviewPage() {
             : "bg-forge-bg    text-forge-ink"
         }`}
       >
-        <Sidebar />
         <div className="flex-1 flex flex-col pb-20 lg:pb-0">
           <main className="flex-1 p-0 sm:p-8 flex flex-col items-center sm:justify-center">
             <form

@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import { FiStar } from "react-icons/fi";
@@ -96,7 +94,6 @@ export default function GigListPage() {
   if (error) {
     return (
       <>
-        <Header logoText="Kozeo" />
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
@@ -104,7 +101,6 @@ export default function GigListPage() {
               : "bg-forge-bg  via-blue-50 to-indigo-50 text-forge-ink"
           }`}
         >
-          <Sidebar />
           <div className="flex-1 flex flex-col">
             <main className="flex-1 p-8 flex items-center justify-center">
               <div className="text-center">
@@ -136,9 +132,7 @@ export default function GigListPage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div className="min-h-screen relative z-10 flex flex-row theme-transition">
-        <Sidebar />
         <div className="flex-1 flex flex-col pb-20 lg:pb-0">
           <main className="flex-1 p-6 md:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">

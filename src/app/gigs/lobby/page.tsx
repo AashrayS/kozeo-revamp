@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { io, Socket } from "socket.io-client";
 
 interface GigInfo {
@@ -60,9 +58,7 @@ export default function GigLobbyPage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
-        <Sidebar />
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
             {/* Gig Info Container */}

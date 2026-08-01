@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { useRouter } from "next/navigation";
 import { createGig } from "../../../../utilities/kozeoApi";
@@ -213,7 +211,6 @@ export default function CreateGigPage() {
 
   return (
     <>
-      <Header logoText="Kozeo" />
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
@@ -221,7 +218,6 @@ export default function CreateGigPage() {
             : "bg-forge-bg    text-forge-ink"
         }`}
       >
-        <Sidebar />
         <div className="flex-1 flex flex-col pb-20 lg:pb-0">
           <main className="flex-1 p-2 sm:p-4 lg:p-8 flex flex-col items-center justify-center min-h-screen">
             <div className="w-full max-w-4xl px-2 sm:px-4">

@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import { PageLoader } from "@/components/common/PageLoader";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useUser } from "../../../../store/hooks";
@@ -289,7 +287,6 @@ export default function WithdrawRequestsAdminPage() {
 
   return (
     <>
-      <Header logoText="Kozeo Admin" />
 
       {/* Background glows */}
       {theme === "dark" && (
@@ -306,7 +303,6 @@ export default function WithdrawRequestsAdminPage() {
             : "bg-forge-bg    text-forge-ink"
         }`}
       >
-        <Sidebar />
 
         <main className="flex-1 p-6 overflow-y-auto pb-20 lg:pb-6">
           <div className="max-w-7xl mx-auto">
