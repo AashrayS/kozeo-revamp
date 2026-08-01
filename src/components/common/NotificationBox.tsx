@@ -92,8 +92,9 @@ const NotificationBox = ({
 
   const handleAction = (notification: Notification) => {
     markAsRead(notification.id);
-    window.location.href = "gigs";
-    // Here you would handle the actual action (navigate, open modal, etc.)
+    if (typeof window !== "undefined") {
+      window.location.href = "/gigs";
+    }
   };
 
   if (!isOpen) return null;
@@ -148,7 +149,7 @@ const NotificationBox = ({
                 <FiBell className="text-forge-ink-muted text-4xl mb-4" />
                 <p className="text-forge-ink-muted text-lg">No notifications</p>
                 <p className="text-forge-ink-muted text-sm mt-1">
-                  You're all caught up!
+                  You&apos;re all caught up!
                 </p>
               </div>
             ) : (
