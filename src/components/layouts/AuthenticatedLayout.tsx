@@ -14,7 +14,7 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
   return (
     <div 
       suppressHydrationWarning
-      className={`min-h-screen flex flex-col theme-transition bg-white text-black dark:bg-black dark:text-white transition-colors duration-500`}
+      className={`h-screen overflow-hidden flex flex-col theme-transition bg-white text-black dark:bg-black dark:text-white transition-colors duration-500`}
     >
       {/* Global Header */}
       <Header logoText="Kozeo" />

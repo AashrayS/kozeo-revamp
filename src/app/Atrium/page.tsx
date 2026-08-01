@@ -154,7 +154,7 @@ export default function Home() {
       {/* Welcome Page */}
       {showWelcomePage ? (
         <div
-          className={`min-h-screen relative z-10 flex items-center justify-center theme-transition ${
+          className={`h-full min-h-[500px] relative z-10 flex items-center justify-center theme-transition ${
             theme === "light"
               ? "bg-gradient-light text-forge-ink"
               : "bg-gradient-dark text-forge-ink"
@@ -233,7 +233,7 @@ export default function Home() {
       ) : (
         // Main Atrium Page
         <div
-          className={`min-h-screen relative z-10 flex flex-row theme-transition ${
+          className={`h-full relative z-10 flex flex-row theme-transition ${
             theme === "light"
               ? "bg-gradient-light text-forge-ink"
               : "bg-gradient-dark text-forge-ink"

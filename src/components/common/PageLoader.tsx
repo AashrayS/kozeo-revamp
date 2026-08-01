@@ -1,155 +1,44 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 
 interface PageLoaderProps {
   duration?: number;
   onComplete?: () => void;
-  useSlideAnimation?: boolean;
-  forceShow?: boolean;
+  useSlideAnimation?: boolean; // kept for API compat, ignored
 }
 
-export const PageLoader = ({
-  duration = 2400,
-  onComplete,
-  useSlideAnimation = false,
-  forceShow = false,
-}: PageLoaderProps) => {
-  const [shouldSlideUp, setShouldSlideUp] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const initialized = useRef(false);
+export const PageLoader = ({ onComplete }: PageLoaderProps) => {
+  // Call onComplete once on mount — caller controls when to unmount
 
   useEffect(() => {
-    if (typeof window === "undefined" || initialized.current) return;
-    initialized.current = true;
+    onComplete?.();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const hasShown = sessionStorage.getItem("kozeo_loader_shown");
 
-    if (forceShow || !hasShown) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsVisible(true);
-      setIsAnimating(true);
-      
-      // Progress bar animation
-      const startTime = Date.now();
-      const progressInterval = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const nextProgress = Math.min((elapsed / duration) * 100, 100);
-        setProgress(nextProgress);
-        
-        if (elapsed >= duration) {
-          clearInterval(progressInterval);
-        }
-      }, 16);
-
-      if (useSlideAnimation) {
-        const slideTimer = setTimeout(() => {
-          setShouldSlideUp(true);
-          sessionStorage.setItem("kozeo_loader_shown", "true");
-        }, duration);
-
-        const removeTimer = setTimeout(() => {
-          setIsVisible(false);
-          setIsAnimating(false);
-          onComplete?.();
-        }, duration + 1000);
-
-        return () => {
-          clearInterval(progressInterval);
-          clearTimeout(slideTimer);
-          clearTimeout(removeTimer);
-        };
-      } else {
-        const removeTimer = setTimeout(() => {
-          setIsVisible(false);
-          setIsAnimating(false);
-          sessionStorage.setItem("kozeo_loader_shown", "true");
-          onComplete?.();
-        }, duration);
-
-        return () => {
-          clearInterval(progressInterval);
-          clearTimeout(removeTimer);
-        };
-      }
-    } else {
-      // Loader already shown in this session, skip it
-      onComplete?.();
-      setIsVisible(false);
-    }
-  }, [duration, onComplete, useSlideAnimation, forceShow]);
-
-  if (!isVisible) return null;
 
   return (
-    <div
-      suppressHydrationWarning
-      className={`fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center overflow-hidden ${
-        useSlideAnimation
-          ? `transition-transform duration-1000 cubic-bezier(0.85, 0, 0.15, 1) ${
-              shouldSlideUp ? "transform -translate-y-full" : ""
-            }`
-          : `transition-opacity duration-700 ${
-              isAnimating ? "opacity-100" : "opacity-0"
-            }`
-      }`}
-    >
-      {/* Dynamic Background Accents */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] bg-white/5 pointer-events-none animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] bg-white/5 pointer-events-none animate-pulse" style={{ animationDelay: '1s' }} />
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.55)" }}>
+      {/* Logo + wordmark */}
+      <div className="flex flex-col items-center select-none">
+        <Image
+          src="/kozeoLogo.png"
+          alt="Kozeo Logo"
+          width={64}
+          height={64}
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-5 opacity-90"
+          priority
+        />
+        <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-forge-ink font-serif mb-8">
 
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center">
-        {/* Logo with scaling entrance */}
-        <div
-          className="mb-8 relative animate-premiumLogoIn"
-        >
-          <div className="absolute inset-0 bg-white/20 blur-2xl rounded-full animate-pulse z-0" />
-          <Image
-            src="/kozeoLogo.png"
-            alt="Kozeo Logo"
-            width={96}
-            height={96}
-            className="w-20 h-20 sm:w-24 sm:h-24 relative z-10"
-            style={{ borderRadius: "100%" }}
-            priority
-          />
-        </div>
+          Kozeo
+        </h1>
 
-        {/* Brand Name with letter spacing animation */}
-        <div className="overflow-hidden flex flex-col items-center">
-          <h1
-            className="text-white text-4xl sm:text-6xl font-bold tracking-[0.2em] uppercase mb-1 opacity-0 animate-premiumTextIn-14"
-            style={{
-              animationDelay: "0.2s",
-            }}
-          >
-            Kozeo
-          </h1>
-          <p 
-            className="text-white/40 text-[10px] uppercase tracking-[0.4em] font-medium opacity-0 animate-premiumTextIn-16"
-            style={{
-              animationDelay: "0.4s",
-            }}
-          >
-            A Proof-First Era
-          </p>
-        </div>
-
-        {/* Minimalist Progress Indicator */}
-        <div className="mt-16 w-32 sm:w-48 h-[1px] bg-white/10 rounded-full relative overflow-hidden">
-          <div 
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-white/40 via-white/80 to-white/40 transition-all duration-75 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        
-        <div className="mt-4 text-[10px] font-mono text-white/20 uppercase tracking-widest">
-            {Math.round(progress)}%
-        </div>
+        {/* Indeterminate loading bar */}
+        <div className="w-16 h-[1px] bg-forge-line overflow-hidden rounded-sm">
+          <div className="h-full bg-forge-ember animate-loading" />
+ </div>
       </div>
     </div>
   );
