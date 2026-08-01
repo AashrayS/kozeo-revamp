@@ -171,7 +171,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Font loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -366,6 +366,7 @@ export default function RootLayout({
         />
       </head>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${plexMono.variable} ${fraunces.variable} antialiased theme-transition font-sans`}
       >
         <ReduxProvider>
