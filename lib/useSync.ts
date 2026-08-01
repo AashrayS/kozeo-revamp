@@ -44,7 +44,9 @@ export function useRefState<T>(initialValue: T): [T, Dispatch<SetStateAction<T>>
   const [state, setState] = useState(initialValue)
 
   // Keep React state in sync with the ref
+  // eslint-disable-next-line react-hooks/refs
   if (state !== ref.current) {
+    // eslint-disable-next-line react-hooks/refs
     setState(ref.current)
   }
 
@@ -79,10 +81,13 @@ function shallowEqual(obj1: any, obj2: any) {
 export function useShallowObjectIdentity<T extends object | null | undefined>(obj: T): T {
   const ref = useRef(obj)
 
+  // eslint-disable-next-line react-hooks/refs
   if (shallowEqual(obj, ref.current)) {
+    // eslint-disable-next-line react-hooks/refs
     return ref.current
   }
 
+  // eslint-disable-next-line react-hooks/refs
   ref.current = obj
   return obj
 }
@@ -93,10 +98,12 @@ export function useReactiveEvent<Args extends Array<unknown>, Result>(
   const handlerRef = useRef(handler)
 
   // Update ref on every render
+  // eslint-disable-next-line react-hooks/refs
   handlerRef.current = handler
 
   // Return stable function
   return useCallback((...args: Args) => {
+    // eslint-disable-next-line react-hooks/refs
     return handlerRef.current(...args)
   }, [])
 }

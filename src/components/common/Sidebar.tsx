@@ -79,7 +79,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop/Tablet Sidebar */}
-      <div className="relative z-[9999] hidden sm:block">
+      <div className="sticky top-0 h-screen z-[9999] hidden sm:block">
         <aside
           className={`sticky top-0 h-screen border-r transition-all duration-300 z-[9999] flex flex-col justify-between backdrop-blur-xl ${
             collapsed ? "w-20" : "w-64"
