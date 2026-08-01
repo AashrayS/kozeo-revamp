@@ -215,7 +215,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
       {/* Modal Content */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div
-          className={`w-full max-w-4xl max-h-[90vh] rounded-sm border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
+          className={`w-full max-w-4xl max-h-[90vh] rounded-sm border-0 relative hover:drop-shadow-glow transition-all duration-300 overflow-hidden theme-transition ${
             theme === "light"
               ? "bg-forge-bg/95 border-container-3"
               : "bg-forge-bg-raised/95 border-container-3"

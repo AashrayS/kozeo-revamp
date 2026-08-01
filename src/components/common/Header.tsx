@@ -32,7 +32,7 @@ export default function Header({
 
   return (
     <>
-      <header className="premium-header">
+      <header className="premium-header bg-header-bg">
         <div className="w-full h-full px-6 lg:px-8 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
             <Image

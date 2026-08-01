@@ -51,7 +51,7 @@
   }
 
   .premium-header {
-    @apply sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--forge-line)] bg-[var(--header-bg)] text-[var(--forge-ink)];
+    @apply sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--forge-line)] text-[var(--forge-ink)];
   }
 
   .premium-input {

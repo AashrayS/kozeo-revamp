@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { useRouter } from "next/navigation";
+import { FiArrowLeft } from "react-icons/fi";
 
 interface GigInfo {
   Title: string;
@@ -18,6 +20,7 @@ interface Request {
 }
 
 export default function GigLobbyPage() {
+  const router = useRouter();
   const [gigInfo, setGigInfo] = useState<GigInfo | null>(null);
   const [requests, setRequests] = useState<Request[]>([]);
   const socketRef = React.useRef<Socket | null>(null);
@@ -58,11 +61,20 @@ export default function GigLobbyPage() {
 
   return (
     <>
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1">
+      <div className="min-h-screen relative z-10 flex flex-row text-text-1">
         <div className="flex-1 flex flex-col p-0 sm:p-8">
+          <div className="w-full max-w-6xl mx-auto px-4 md:px-0 pt-4 flex justify-start">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center text-sm font-medium transition-colors text-text-3 hover:text-text-1 hover:scale-[1.02]"
+            >
+              <FiArrowLeft className="mr-2 w-4 h-4" />
+              Back
+            </button>
+          </div>
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
             {/* Gig Info Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-container-2 border border-container-3 rounded-sm p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Gig Info</h2>
               {gigInfo ? (
                 <div className="space-y-2">
@@ -95,7 +107,7 @@ export default function GigLobbyPage() {
               )}
             </section>
             {/* Incoming Requests Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-container-2 border border-container-3 rounded-sm p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Incoming Requests</h2>
               {requests && requests.length > 0 ? (
                 <ul className="space-y-4">

@@ -102,8 +102,8 @@ body {
 }
 
 :root[data-theme="light"] {
-  --background: #6a6a6a1d;
-  --foreground: #171717;
+  --background: #f3f0f0db;
+  --foreground: #272727;
   --bg-base: #6a6a6a1d;
 
   --container-1: #ffffff;
@@ -111,13 +111,13 @@ body {
   --container-3: #f5f5f5;
   --container-4: #e5e5e5;
 
-  --text-1: #171717;
+  --text-1: #272727dc;
   --text-2: #262626;
   --text-3: #525252;
   --text-4: #737373;
   --text-5: #a3a3a3;
 
-  --input-1: rgba(0, 0, 0, 0.02);
+  --input-1: rgba(43, 43, 43, 0.02);
   --input-2: rgba(0, 0, 0, 0.06);
   --input-3: rgba(0, 0, 0, 0.01);
 
@@ -128,7 +128,7 @@ body {
   --header-bg: #ffffff;
   --forge-bg: #eaefed;
   --forge-bg-raised: #ffffff;
-  --forge-ink: #171717;
+  --forge-ink: #4d4d4d;
   --forge-ink-muted: rgba(23, 23, 23, 0.6);
   --forge-ember: #171717;
   --forge-ember-low: rgba(23, 23, 23, 0.05);
@@ -517,7 +517,7 @@ img {
   padding: 0.75rem 1.25rem;
   border-radius: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(0, 0, 0, 0.02);
+  background: white;
   color: inherit;
   font-size: 0.875rem;
   transition: all 0.2s ease;

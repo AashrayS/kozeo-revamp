@@ -2226,7 +2226,7 @@ export default function GigPage({
         <div
           className={`relative z-10 flex flex-1 flex-row theme-transition ${
             theme === "light"
-              ? "bg-gradient-light text-text-1"
+              ? "bg-container-1 text-text-1"
               : "bg-gradient-dark text-text-1"
           }`}
         >
@@ -2632,8 +2632,8 @@ export default function GigPage({
                           <div
                             className={`p-3 rounded-sm border max-w-[85%] min-w-[120px] break-words ${
                               msg.sender === getCurrentUserEmail()
-                                ? "bg-forge-bg-raised/30 border-forge-line/30 self-end ml-auto"
-                                : "bg-forge-bg-raised/30 border-forge-line/30"
+                                ? "bg-container-3  text-text-1 border-forge-line/30 self-end ml-auto"
+                                : "bg-container-3  text-text-1 border-forge-line/30"
                             }`}
                           >
                             {msg.sender !== getCurrentUserEmail() && (

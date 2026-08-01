@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import RequestCard from "@/components/common/RequestCard";
 import { PageLoader } from "@/components/common/PageLoader";
-import { FiStar } from "react-icons/fi";
+import { FiStar, FiArrowLeft } from "react-icons/fi";
 import { io, Socket } from "socket.io-client";
 import {
   getGigById,
@@ -532,8 +532,8 @@ export default function GigLobbyPage({
       <div
         className={`min-h-screen relative z-10 flex theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-text-1"
-            : "bg-gradient-dark text-text-1"
+            ? " text-text-1"
+            : " text-text-1"
         }`}
       >
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -541,13 +541,25 @@ export default function GigLobbyPage({
           <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
           <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
+          <div className="w-full px-2 sm:px-3 lg:px-4 xl:px-6 pt-4 flex justify-start">
+            <button
+              onClick={() => router.back()}
+              className={`flex items-center text-sm font-medium transition-colors hover:scale-[1.02] ${
+                theme === "dark" ? "text-text-3 hover:text-text-1" : "text-text-3 hover:text-text-1"
+              }`}
+            >
+              <FiArrowLeft className="mr-2 w-4 h-4" />
+              Back
+            </button>
+          </div>
+
           <main className="flex-1 flex flex-col xl:flex-row gap-2 sm:gap-3 lg:gap-4 xl:gap-6 p-2 sm:p-3 lg:p-4 xl:p-6 min-h-0 overflow-hidden">
             {/* Gig Info Container - Responsive section */}
             <section
-              className={`xl:flex-[0.4] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 xl:p-8 w-full border-0 relative drop-shadow-glow  overflow-hidden theme-transition min-h-0 ${
+              className={`xl:flex-[0.4] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 xl:p-8 w-full border-0 relative hover:drop-shadow-glow transition-all duration-300 overflow-hidden theme-transition min-h-0 ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-container-3"
-                  : "bg-forge-bg-raised/70 border-container-3"
+                  ? "bg-container-2 border-container-3"
+                  : "bg-container-2 border-container-3"
               }`}
             >
               {/* Header */}
@@ -820,10 +832,10 @@ export default function GigLobbyPage({
 
             {/* Incoming Requests Container - Responsive section */}
             <section
-              className={`xl:flex-[0.6] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  w-full border theme-transition min-h-0 flex flex-col ${
+              className={`xl:flex-[0.6] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 w-full border theme-transition min-h-0 flex flex-col ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-container-3"
-                  : "bg-forge-bg-raised/70 border-container-3"
+                  ? "bg-container-2 border-container-3"
+                  : "bg-container-2 border-container-3"
               }`}
             >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4 lg:mb-6 gap-2 sm:gap-3 flex-shrink-0">
@@ -940,9 +952,7 @@ export default function GigLobbyPage({
                   </div>
                 ) : (
                   <div className="text-text-3 text-center py-8 flex-1 flex flex-col justify-center">
-                    <div className="text-2xl sm:text-3xl lg:text-4xl mb-4">
-                      📥
-                    </div>
+                    
                     <div className="text-sm sm:text-base">No requests yet.</div>
                     <div className="text-xs sm:text-sm mt-2 opacity-70">
                       People interested in this gig will appear here.

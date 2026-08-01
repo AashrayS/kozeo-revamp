@@ -353,7 +353,7 @@ export default function EditProfilePage() {
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       {/* Main Layout */}
-      <div className="min-h-screen relative z-10 flex flex-row bg-bg-base text-text-1">
+      <div className="min-h-screen relative z-10 flex flex-row  text-text-1">
         <div className="flex flex-1 pb-20 lg:pb-0">
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="w-full max-w-3xl mx-auto">
@@ -362,7 +362,7 @@ export default function EditProfilePage() {
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-8 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-8 border border-container-3"
+                  className="space-y-8 rounded-sm hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-shadow duration-300 p-8 border border-container-3"
                 >
                   <h1 className="text-4xl font-bold text-text-1 text-center mb-6">
                     Edit Profile
@@ -377,7 +377,7 @@ export default function EditProfilePage() {
                     <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                       {/* Avatar Display */}
                       <div className="relative">
-                        <div className="w-32 h-32 bg-container-2 border border-container-3 rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
+                        <div className="w-32 h-32 bg-container-2 border border-container-3 rounded-full flex items-center justify-center overflow-hidden hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-shadow duration-300">
                           {profileImage ? (
                             <img
                               src={profileImage}

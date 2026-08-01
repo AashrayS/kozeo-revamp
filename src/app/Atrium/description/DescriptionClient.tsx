@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { PageLoader } from "@/components/common/PageLoader";
 import {
@@ -8,6 +8,7 @@ import {
   FiTrash2,
   FiX,
   FiCheck,
+  FiArrowLeft,
 } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
@@ -464,18 +465,29 @@ export default function DescriptionClient() {
       <div
         className={`min-h-screen relative z-10 flex flex-row theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-text-1"
-            : "bg-gradient-dark text-text-1"
+            ? " text-text-1"
+            : " text-text-1"
         }`}
       >
         <div className="flex-1 flex flex-col p-0 sm:p-8">
+          <div className="w-full mx-auto px-4 md:px-0 pt-4 sm:pt-0 flex justify-start">
+            <button
+              onClick={() => router.back()}
+              className={`flex items-center text-sm font-medium transition-colors hover:scale-[1.02] ${
+                theme === "dark" ? "text-text-3 hover:text-text-1" : "text-text-3 hover:text-text-1"
+              }`}
+            >
+              <FiArrowLeft className="mr-2 w-4 h-4" />
+              Back
+            </button>
+          </div>
           <main className="flex-1 flex flex-col md:flex-row gap-4 md:gap-8 items-stretch justify-center w-full mx-auto py-4 md:py-8 px-4 md:px-0">
             {/* Gig Details Container - Golden Ratio smaller section (38.2%) */}
             <section
-              className={`md:flex-[0.618] rounded-sm sm:rounded-sm p-4 sm:p-6 md:p-8 min-w-[0] w-full border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
+              className={`md:flex-[0.618] rounded-sm sm:rounded-sm p-4 sm:p-6 md:p-8 min-w-[0] w-full border-0 relative hover:drop-shadow-glow transition-all duration-300 overflow-hidden theme-transition ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-container-3"
-                  : "bg-forge-bg-raised/70 border-container-3"
+                  ? "bg-container-2 border-container-3"
+                  : "bg-container-2 border-container-3"
               }`}
             >
               {/* Header */}
@@ -897,10 +909,10 @@ export default function DescriptionClient() {
 
             {/* Host Profile Container - Golden Ratio larger section (61.8%) */}
             <section
-              className={`md:flex-[1] rounded-sm p-4 sm:p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] border theme-transition ${
+              className={`md:flex-[1] rounded-sm p-4 sm:p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 min-w-[300px] border theme-transition ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-container-3"
-                  : "bg-forge-bg-raised/70 border-container-3"
+                  ? "bg-container-2 border-container-3"
+                  : "bg-container-2 border-container-3"
               }`}
             >
               <div className="flex justify-between items-center mb-6">
@@ -1044,8 +1056,8 @@ export default function DescriptionClient() {
                     <div
                       className={`p-4 rounded-sm border ${
                         theme === "light"
-                          ? "bg-forge-bg/60 border-forge-line/60"
-                          : "bg-forge-bg-raised/30 border-forge-line/50"
+                          ? "bg-container-3 border-container-2"
+                          : "bg-container-3 border-container-2"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
@@ -1089,8 +1101,8 @@ export default function DescriptionClient() {
                     <div
                       className={`p-4 rounded-sm border ${
                         theme === "light"
-                          ? "bg-forge-bg/60 border-forge-line/60"
-                          : "bg-forge-bg-raised/30 border-forge-line/50"
+                          ? "bg-container-3 border-container-2"
+                          : "bg-container-3 border-container-2"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
@@ -1150,8 +1162,8 @@ export default function DescriptionClient() {
                   <div
                     className={`p-4 rounded-sm border ${
                       theme === "light"
-                        ? "bg-forge-bg/60 border-forge-line/60"
-                        : "bg-forge-bg-raised/30 border-forge-line/50"
+                        ? "bg-container-3  border-container-2"
+                        : "bg-container-3 border-container-2"
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-4">
@@ -1262,7 +1274,7 @@ export default function DescriptionClient() {
           <div className="fixed inset-0 bg-forge-bg/80 z-40 " />
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
-              className={`rounded-sm p-8 max-w-md w-full mx-4 border shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  transition-colors duration-300 ${
+              className={`rounded-sm p-8 max-w-md w-full mx-4 border hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow  transition-all duration-300 ${
                 theme === "dark"
                   ? "bg-forge-bg-raised/90 border-container-3"
                   : "bg-forge-bg/90 border-container-3"
@@ -1311,10 +1323,10 @@ export default function DescriptionClient() {
                 <button
                   onClick={handleSendRequest}
                   disabled={!requestMessage.trim() || sendingRequest}
-                  className={`px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border text-text-1 ${
+                  className={`px-5 py-2 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border ${
                     !requestMessage.trim() || sendingRequest
-                      ? "bg-container-1 border-container-3 cursor-not-allowed"
-                      : "bg-forge-ember border-forge-ember hover:bg-forge-ember"
+                      ? "bg-container-1 border-container-3 text-text-3 cursor-not-allowed"
+                      : "bg-forge-ember border-forge-ember text-forge-bg hover:opacity-90"
                   }`}
                 >
                   {sendingRequest ? "Sending..." : "Send Request"}
@@ -1468,7 +1480,7 @@ export default function DescriptionClient() {
                       <button
                         type="button"
                         onClick={addEditSkill}
-                        className="px-4 py-2 rounded-sm bg-forge-ember text-text-1 font-medium hover:bg-forge-ember transition-colors"
+                        className="px-4 py-2 rounded-sm bg-forge-ember text-forge-bg font-medium hover:opacity-90 transition-colors"
                       >
                         Add
                       </button>
@@ -1577,12 +1589,12 @@ export default function DescriptionClient() {
                       !editFormData.description.trim() ||
                       isUpdating
                     }
-                    className={`px-6 py-3 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border text-text-1 flex items-center gap-2 ${
+                    className={`px-6 py-3 rounded-sm font-medium transition-colors duration-300 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border flex items-center gap-2 ${
                       !editFormData.title.trim() ||
                       !editFormData.description.trim() ||
                       isUpdating
-                        ? "bg-container-1 border-container-3 cursor-not-allowed"
-                        : "bg-forge-ember border-forge-ember hover:bg-forge-ember"
+                        ? "bg-container-1 border-container-3 text-text-3 cursor-not-allowed"
+                        : "bg-forge-ember border-forge-ember text-forge-bg hover:opacity-90"
                     }`}
                   >
                     {isUpdating && (

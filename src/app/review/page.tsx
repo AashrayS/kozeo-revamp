@@ -171,7 +171,7 @@ export default function ReviewPage() {
               <div
                 className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-transparent border-container-3 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                    ? "bg-transparent border-container-3 drop-shadow-none sm:hover:drop-shadow-glow transition-all duration-300 backdrop-blur-none sm:"
                     : "bg-forge-bg/80 border-container-3  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
@@ -233,7 +233,7 @@ export default function ReviewPage() {
               onSubmit={handleSubmit}
               className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-transparent border-container-3 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                  ? "bg-transparent border-container-3 drop-shadow-none sm:hover:drop-shadow-glow transition-all duration-300 backdrop-blur-none sm:"
                   : "bg-forge-bg/80 border-container-3  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
               }`}
             >

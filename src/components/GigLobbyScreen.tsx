@@ -35,7 +35,7 @@ export default function GigLobbyScreen({
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
             {/* Project Info Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Project Info</h2>
               {gigInfo ? (
                 <div className="space-y-2">
@@ -68,7 +68,7 @@ export default function GigLobbyScreen({
               )}
             </section>
             {/* Incoming Requests Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:drop-shadow-glow transition-all duration-300 min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Incoming Requests</h2>
               {requests && requests.length > 0 ? (
                 <ul className="space-y-4">

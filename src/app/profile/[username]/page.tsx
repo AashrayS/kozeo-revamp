@@ -606,7 +606,7 @@ export default function UserProfilePage() {
   return (
     <div className="flex-1 flex flex-col gap-8 items-stretch w-full max-w-8xl mx-auto py-8">
       {/* Profile Header */}
-      <section className="bg-container-3 border border-container-3 rounded-lg p-6 md:p-8">
+      <section className="bg-container-1 border border-container-3 rounded-lg p-6 md:p-8">
         <h2 className="premium-section-title">User Profile</h2>
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
           <ProfileImage
@@ -698,7 +698,7 @@ export default function UserProfilePage() {
       <div className="flex flex-col lg:flex-row gap-8 mt-12 pb-20">
         <div className="flex-1 space-y-12">
           {/* Projects Hosted Section */}
-          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
+          <section className="bg-container-3 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiUsers className="opacity-40" />
@@ -764,7 +764,7 @@ export default function UserProfilePage() {
           </section>
 
           {/* Collaborations Section */}
-          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
+          <section className="bg-container-3 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiUsers className="opacity-40" />
@@ -807,7 +807,7 @@ export default function UserProfilePage() {
           </section>
 
           {/* Ongoing Projects Section */}
-          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
+          <section className="bg-container-3 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiCalendar className="opacity-40" />
@@ -848,7 +848,7 @@ export default function UserProfilePage() {
         {/* Sticky Sidebar */}
         <aside className="hidden lg:block w-80 xl:w-96">
           <div className="sticky top-24">
-            <section className="bg-container-4 border border-container-3 rounded-lg p-6">
+            <section className="bg-container-3 border border-container-3 rounded-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-[10px] font-bold tracking-widest uppercase opacity-40 flex items-center gap-2">
                   <FiFilter /> Skill Filter
