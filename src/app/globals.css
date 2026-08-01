@@ -3,8 +3,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f4f5;
+  --foreground: #09090b;
+  --kozeo-bg-dark: #080808;
+  --kozeo-bg-raised: #121212;
+  --kozeo-bg-card: rgba(255, 255, 255, 0.03);
+  --kozeo-border-dark: rgba(255, 255, 255, 0.08);
+  --kozeo-border-light: rgba(0, 0, 0, 0.08);
+  --kozeo-accent-glow: rgba(255, 255, 255, 0.15);
+  --kozeo-text-muted: rgba(255, 255, 255, 0.6);
   --premium-glow: rgba(255, 255, 255, 0.2);
   --premium-accent: #888888;
 }
@@ -17,14 +24,14 @@ body {
   transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
-body.dark-theme {
-  --background: #000000;
+body.dark-theme, [data-theme="dark"] {
+  --background: #080808;
   --foreground: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
+    --background: #080808;
     --foreground: #ffffff;
   }
 }
@@ -248,6 +255,151 @@ img {
 
 .text-glow-premium {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+/* ===================== KOZEO GLOBAL DESIGN SYSTEM UTILITIES ===================== */
+.kozeo-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark-theme .kozeo-glass, [data-theme="dark"] .kozeo-glass {
+  background: rgba(8, 8, 8, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.kozeo-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+.kozeo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .kozeo-card, [data-theme="dark"] .kozeo-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .kozeo-card:hover, [data-theme="dark"] .kozeo-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.kozeo-btn-primary {
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.kozeo-btn-primary:hover {
+  transform: translateY(-1px);
+  background-color: #27272a;
+}
+
+.dark-theme .kozeo-btn-primary, [data-theme="dark"] .kozeo-btn-primary {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-theme .kozeo-btn-primary:hover, [data-theme="dark"] .kozeo-btn-primary:hover {
+  background-color: #e4e4e7;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.kozeo-btn-secondary {
+  background-color: transparent;
+  color: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.kozeo-btn-secondary:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .kozeo-btn-secondary, [data-theme="dark"] .kozeo-btn-secondary {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-theme .kozeo-btn-secondary:hover, [data-theme="dark"] .kozeo-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.kozeo-input {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+  color: inherit;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.kozeo-input:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .kozeo-input, [data-theme="dark"] .kozeo-input {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dark-theme .kozeo-input:focus, [data-theme="dark"] .kozeo-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.kozeo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark-theme .kozeo-badge, [data-theme="dark"] .kozeo-badge {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* ===================== SCROLLBAR ===================== */

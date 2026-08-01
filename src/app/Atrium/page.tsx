@@ -255,40 +255,26 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                    className={`w-full py-2 pl-4 pr-10 rounded-sm border focus:outline-none focus:ring-2 theme-transition text-base ${
-                      theme === "light"
-                        ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
-                        : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
-                    }`}
+                    className="kozeo-input !rounded-full pl-5 pr-11 py-3 text-sm shadow-xs"
                   />
                   <button
                     onClick={handleSearch}
-                    className={`absolute top-1/2 right-2 -translate-y-1/2 transition-colors ${
-                      theme === "light"
-                        ? "text-forge-ink-muted hover:text-forge-ink-muted"
-                        : "text-forge-ink-muted hover:text-forge-ink"
-                    }`}
+                    className="absolute top-1/2 right-3.5 -translate-y-1/2 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors"
                     aria-label="Search"
                   >
-                    <FiSearch className="text-xl" />
+                    <FiSearch className="text-lg" />
                   </button>
                 </div>
 
                 {/* Toggle Button for Projects/Users - responsive shrink and grow */}
                 <div className="relative inline-flex items-center w-full sm:w-auto">
                   <div
-                    className={`relative flex items-center rounded-sm p-1 transition-all duration-200 w-full sm:w-auto ${
-                      theme === "light" ? "bg-forge-bg" : "bg-forge-bg-raised"
-                    }`}
+                    className="relative flex items-center rounded-full p-1.5 kozeo-glass w-full sm:w-auto shadow-xs"
                     style={{ minWidth: 0 }}
                   >
-                    {/* Background Slider - More subtle */}
+                    {/* Background Slider */}
                     <div
-                      className={`absolute top-1 bottom-1 w-1/2 rounded-sm transition-all duration-200 ease-out ${
-                        theme === "light"
-                          ? "bg-forge-bg shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                          : "bg-forge-bg-raised shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                      } ${
+                      className={`absolute top-1.5 bottom-1.5 w-1/2 rounded-full bg-black dark:bg-white transition-all duration-300 ease-out shadow-xs ${
                         viewMode === "users"
                           ? "translate-x-full"
                           : "translate-x-0"
@@ -299,16 +285,11 @@ export default function Home() {
                     {/* Projects Option */}
                     <button
                       onClick={() => setViewMode("gigs")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                      className={`relative z-10 flex items-center justify-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-colors duration-300 flex-1 focus:outline-none ${
                         viewMode === "gigs"
-                          ? theme === "light"
-                            ? "text-forge-ink"
-                            : "text-forge-ink"
-                          : theme === "light"
-                          ? "text-forge-ink-muted hover:text-forge-ink"
-                          : "text-forge-ink-muted hover:text-forge-ink"
+                          ? "text-white dark:text-black"
+                          : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
                       }`}
-                      style={{ minWidth: 0 }}
                     >
                       Projects
                     </button>
@@ -316,16 +297,11 @@ export default function Home() {
                     {/* Users Option */}
                     <button
                       onClick={() => setViewMode("users")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 flex-1 focus:outline-none min-w-0 ${
+                      className={`relative z-10 flex items-center justify-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-colors duration-300 flex-1 focus:outline-none ${
                         viewMode === "users"
-                          ? theme === "light"
-                            ? "text-forge-ink"
-                            : "text-forge-ink"
-                          : theme === "light"
-                          ? "text-forge-ink-muted hover:text-forge-ink"
-                          : "text-forge-ink-muted hover:text-forge-ink"
+                          ? "text-white dark:text-black"
+                          : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
                       }`}
-                      style={{ minWidth: 0 }}
                     >
                       Users
                     </button>
@@ -334,19 +310,17 @@ export default function Home() {
 
                 {/* Create Project Button - full width on mobile */}
                 <div className="w-full sm:w-auto flex-shrink-0">
-                  <ProfessionalButton
+                  <button
                     onClick={() => router.push("/gigs/create")}
-                    variant="neutral"
-                    size="md"
-                    className="w-full sm:w-auto !bg-forge-bg !text-forge-ink !border-forge-line hover:!bg-forge-bg hover:!border-forge-line !shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                    className="kozeo-btn-primary w-full sm:w-auto !py-3 shadow-md"
                   >
                     Create Project
-                  </ProfessionalButton>
+                  </button>
                 </div>
               </div>
 
               {/* Heading */}
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="text-2xl font-bold tracking-tight mb-6">
                 {viewMode === "gigs" ? "Open Projects" : "Users"}
               </h2>
 
@@ -362,7 +336,7 @@ export default function Home() {
               {/* Error State */}
               {error && (
                 <div className="flex justify-center items-center py-20">
-                  <div className="text-[forge-error">{error}</div>
+                  <div className="text-red-500 font-medium">{error}</div>
                 </div>
               )}
 
@@ -373,9 +347,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
                     {currentGigs.length === 0 ? (
                       <div
-                        className={`col-span-full text-center py-20 ${
-                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                        }`}
+                        className="col-span-full text-center py-20 text-black/50 dark:text-white/50"
                       >
                         No gigs found.{" "}
                         {searchTerm && "Try a different search term."}
@@ -387,46 +359,30 @@ export default function Home() {
                           onClick={() => {
                             router.push(`/Atrium/description?gigId=${gig.id}`);
                           }}
-                          className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-sm p-5 cursor-pointer transition-all duration-200 ease-in-out hover:scale-[1.02] theme-transition border ${
-                            gig.host.username === "Jayash"
-                              ? "bg-forge-bg-raised border-forge-ember/50 hover:border-forge-ember"
-                              : "bg-forge-bg-raised border-forge-line hover:border-forge-ember"
-                          }`}
+                          className="relative flex flex-col justify-between h-full min-h-[320px] kozeo-card p-6 cursor-pointer"
                         >
                           {/* Host Rating Top-Right */}
-                          <div className="absolute top-3 right-3 text-xs px-2 py-0.5 flex items-center gap-1 text-forge-ink-muted font-mono tracking-wide">
-                            <FiStar className="text-xs opacity-60" />
+                          <div className="absolute top-4 right-4 text-xs px-2.5 py-1 flex items-center gap-1.5 kozeo-badge">
+                            <FiStar className="text-xs text-amber-500 fill-amber-500" />
                             <span>{gig.host?.rating?.toFixed(1) || "—"}</span>
                           </div>
 
                           {/* Sponsored Tag */}
-                          {gig.host.username === "Jayash" && (
-                            <div className="absolute -top-2 left-3 px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase z-10 bg-forge-bg border border-forge-ember text-forge-ember">
+                          {gig.host?.username === "Jayash" && (
+                            <div className="absolute -top-3 left-4 px-3 py-0.5 text-[10px] font-semibold tracking-widest uppercase z-10 rounded-full bg-black text-white dark:bg-white dark:text-black shadow-xs">
                               SPONSORED
                             </div>
                           )}
 
                           {/* Top Content */}
                           <div>
-                            <div
-                              className={`text-sm font-medium mb-1 ${
-                                theme === "light"
-                                  ? "text-forge-ember"
-                                  : "text-forge-ember"
-                              }`}
-                            >
+                            <div className="text-xs font-semibold tracking-wider uppercase mb-1.5 text-black/50 dark:text-white/50">
                               {gig.host?.username ||
                                 gig.creator?.username ||
                                 "Unknown"}
                             </div>
 
-                            <h3
-                              className={`text-lg font-semibold mb-2 ${
-                                theme === "light"
-                                  ? "text-forge-ink"
-                                  : "text-forge-ink"
-                              }`}
-                            >
+                            <h3 className="text-lg font-bold tracking-tight mb-2 text-black dark:text-white group-hover:underline">
                               {gig.title}
                             </h3>
 
@@ -438,41 +394,23 @@ export default function Home() {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                               }}
-                              className={`text-sm mb-3 ${
-                                theme === "light"
-                                  ? "text-forge-ink-muted"
-                                  : "text-forge-ink"
-                              }`}
+                              className="text-sm mb-4 text-black/70 dark:text-white/70 leading-relaxed"
                             >
                               {gig.description}
                             </p>
 
-                            <p className="text-sm mb-2">
-                              <span
-                                className={
-                                  theme === "light"
-                                    ? "text-forge-ink-muted"
-                                    : "text-forge-ink-muted"
-                                }
-                              >
-                                Looking For:{" "}
-                              </span>
-                              <span
-                                className={
-                                  theme === "light"
-                                    ? "text-forge-ink"
-                                    : "text-forge-ink"
-                                }
-                              >
+                            <p className="text-xs mb-3 text-black/60 dark:text-white/60">
+                              <span className="font-medium">Looking For: </span>
+                              <span className="font-semibold text-black dark:text-white">
                                 {gig.looking_For}
                               </span>
                             </p>
 
-                            <div className="flex flex-wrap gap-1.5 mb-3">
+                            <div className="flex flex-wrap gap-1.5 mb-4">
                               {gig.skills?.map((skill: string, idx: number) => (
                                 <span
                                   key={idx}
-                                  className="font-mono text-[10px] tracking-widest uppercase px-2 py-0.5 border border-forge-line text-forge-ink-muted bg-forge-bg"
+                                  className="kozeo-badge text-[10px]"
                                 >
                                   {skill}
                                 </span>
@@ -481,20 +419,14 @@ export default function Home() {
                           </div>
 
                           {/* Bottom Bar */}
-                          <div
-                            className={`flex justify-between items-center border-t pt-3 mt-4 ${
-                              theme === "light"
-                                ? "border-forge-line"
-                                : "border-forge-line"
-                            }`}
-                          >
+                          <div className="flex justify-between items-center border-t border-black/5 dark:border-white/10 pt-4 mt-2">
                             {gig.amount === 0 ? (
-                              <div className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase text-forge-ink-muted border border-forge-line px-2 py-0.5 bg-forge-bg">
-                                <FiStar className="w-2.5 h-2.5" />
+                              <div className="kozeo-badge text-[10px]">
+                                <FiStar className="w-3 h-3 text-amber-500" />
                                 Skill Forge
                               </div>
                             ) : (
-                              <span className="text-sm font-semibold text-forge-ember">
+                              <span className="text-base font-bold tracking-tight text-black dark:text-white">
                                 {gig.currency}{" "}
                                 {Number(gig.amount).toLocaleString("en-IN")}
                               </span>

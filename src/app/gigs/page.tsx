@@ -137,117 +137,94 @@ export default function GigListPage() {
   return (
     <>
       <Header logoText="Kozeo" />
-      <div
-        className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
-          theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-            : "bg-forge-bg  via-blue-50 to-indigo-50 text-forge-ink"
-        }`}
-      >
-        {/* Glows - only show in dark mode */}
-        {theme === "dark" && (
-          <>
-            <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
-            <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
-          </>
-        )}
+      <div className="min-h-screen relative z-10 flex flex-row theme-transition">
         <Sidebar />
         <div className="flex-1 flex flex-col pb-20 lg:pb-0">
-          <main className="flex-1 p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <h1
-                className={`text-3xl font-bold drop-shadow-glow transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-                }`}
-              >
-                My Projects ({filteredGigs.length})
+          <main className="flex-1 p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+              <h1 className="text-3xl font-bold tracking-tight text-black dark:text-white">
+                My Projects <span className="text-sm font-medium opacity-60">({filteredGigs.length})</span>
               </h1>
 
               {/* Filter buttons */}
               {user && gigs.length > 0 && (
-                <div className="flex gap-1 mt-4 sm:mt-0">
-                  <ProfessionalButton
+                <div className="flex flex-wrap gap-2 p-1.5 rounded-full kozeo-glass">
+                  <button
                     onClick={() => setFilter("all")}
-                    variant={filter === "all" ? "primary" : "neutral"}
-                    size="sm"
-                    className="text-xs"
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
+                      filter === "all"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                    }`}
                   >
                     All ({gigs.length})
-                  </ProfessionalButton>
-                  <ProfessionalButton
+                  </button>
+                  <button
                     onClick={() => setFilter("hosted")}
-                    variant={filter === "hosted" ? "primary" : "neutral"}
-                    size="sm"
-                    className="text-xs"
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
+                      filter === "hosted"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                    }`}
                   >
                     Hosting ({gigs.filter((g) => g.host.id === user.id).length})
-                  </ProfessionalButton>
-                  <ProfessionalButton
+                  </button>
+                  <button
                     onClick={() => setFilter("collaborating")}
-                    variant={filter === "collaborating" ? "primary" : "neutral"}
-                    size="sm"
-                    className="text-xs"
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
+                      filter === "collaborating"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                    }`}
                   >
                     Collaborating (
                     {gigs.filter((g) => g.host.id !== user.id).length})
-                  </ProfessionalButton>
+                  </button>
                 </div>
               )}
             </div>
             {!user ? (
-              <div
-                className={`text-center py-12 transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                }`}
-              >
-                <div className="text-xl mb-2">Please log in</div>
-                <div className="text-sm">
+              <div className="text-center py-16 kozeo-card p-8 max-w-md mx-auto">
+                <div className="text-xl font-bold mb-2">Please log in</div>
+                <div className="text-sm text-black/60 dark:text-white/60 mb-6">
                   You need to be logged in to view your gigs.
                 </div>
-                <ProfessionalButton
+                <button
                   onClick={() => router.push("/login")}
-                  variant="primary"
-                  size="md"
-                  className="mt-4"
+                  className="kozeo-btn-primary"
                 >
                   Go to Login
-                </ProfessionalButton>
+                </button>
               </div>
             ) : filteredGigs.length === 0 ? (
-              <div
-                className={`text-center py-12 transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                }`}
-              >
-                <div className="text-xl mb-2">
+              <div className="text-center py-16 kozeo-card p-8 max-w-md mx-auto">
+                <div className="text-xl font-bold mb-2">
                   {filter === "all"
                     ? "No projects yet"
                     : filter === "hosted"
                     ? "No hosted projects"
                     : "No collaborating projects"}
                 </div>
-                <div className="text-sm">
+                <div className="text-sm text-black/60 dark:text-white/60 mb-6">
                   {filter === "all"
                     ? "You haven't hosted or joined any projects yet."
                     : filter === "hosted"
                     ? "You haven't hosted any projects yet."
                     : "You aren't collaborating on any projects yet."}
                 </div>
-                <div className="mt-4 space-x-4">
-                  <ProfessionalButton
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
                     onClick={() => router.push("/gigs/create")}
-                    variant="primary"
-                    size="md"
+                    className="kozeo-btn-primary"
                   >
                     Create a Gig
-                  </ProfessionalButton>
-                  <ProfessionalButton
+                  </button>
+                  <button
                     onClick={() => router.push("/Atrium")}
-                    variant="neutral"
-                    size="md"
+                    className="kozeo-btn-secondary"
                   >
-                    Browse Available Gigs
-                  </ProfessionalButton>
+                    Browse Gigs
+                  </button>
                 </div>
               </div>
             ) : (
@@ -256,84 +233,29 @@ export default function GigListPage() {
                   <div
                     key={gig.id}
                     onClick={() => handleGigNavigation(gig)}
-                    className={`relative flex flex-col justify-between h-full min-h-[320px] rounded-sm p-5 shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-200 ease-in-out hover:scale-[1.03] cursor-pointer ${
-                      theme === "dark"
-                        ? "bg-forge-bg   hover:"
-                        : "bg-forge-bg/90 hover:bg-forge-bg border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                    }`}
+                    className="relative flex flex-col justify-between h-full min-h-[320px] kozeo-card p-6 cursor-pointer group"
                   >
-                    {/* Host Rating Top-Right */}
-                    {/* <div
-                      className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-sm border  flex items-center gap-1 transition-colors duration-300 ${
-                        theme === "dark"
-                          ? "text-forge-ink bg-forge-bg-raised bg-opacity-80 border-forge-line"
-                          : "text-forge-ink bg-forge-bg/80 border-forge-line"
-                      }`}
-                    >
-                      <span className="font-medium">
-                        {gig.host.rating.toFixed(1)}★
-                      </span>
-                      {user && gig.host.id === user.id && (
-                        <span className="ml-2 px-2 py-0.5 rounded bg-forge-ember text-forge-ember text-[10px] font-bold uppercase tracking-wider">
-                          Self
-                        </span>
-                      )}
-                    </div> */}
-
                     {/* Top Content */}
                     <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="text-sm text-forge-ember font-medium">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-xs font-semibold uppercase tracking-wider text-black/50 dark:text-white/50">
                           @{gig.host.username}
                         </div>
                         {user && gig.host.id === user.id ? (
-                          <span
-                            className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
-                              theme === "dark"
-                                ? "bg-forge-bg-raised/60 text-forge-ink-muted border border-forge-line/50"
-                                : "bg-forge-bg/80 text-forge-ink-muted border border-forge-line/60"
-                            }`}
-                          >
+                          <span className="kozeo-badge text-[10px]">
                             Host
                           </span>
                         ) : (
-                          <span
-                            className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${
-                              theme === "dark"
-                                ? "bg-forge-bg-raised/60 text-forge-ink-muted border border-forge-line/50"
-                                : "bg-forge-bg/80 text-forge-ink-muted border border-forge-line/60"
-                            }`}
-                          >
-                            Member
+                          <span className="kozeo-badge text-[10px]">
+                            Collaborator
                           </span>
                         )}
                       </div>
                       <div className="flex items-center justify-between mb-2">
-                        <h3
-                          className={`text-lg font-semibold transition-colors duration-300 ${
-                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-                          }`}
-                        >
+                        <h3 className="text-lg font-bold tracking-tight text-black dark:text-white group-hover:underline">
                           {gig.title}
                         </h3>
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wide transition-colors duration-300 ${(() => {
-                            const status = gig.status.toLowerCase();
-                            if (status === "open") {
-                              return theme === "dark"
-                                ? "bg-forge-ember/40 text-forge-ember border border-forge-ember/50"
-                                : "bg-forge-ember/80 text-forge-ember border border-forge-ember/60";
-                            } else if (status === "in_progress") {
-                              return theme === "dark"
-                                ? "bg-amber-900/40 text-amber-400 border border-amber-800/50"
-                                : "bg-amber-50/80 text-amber-700 border border-amber-200/60";
-                            } else {
-                              return theme === "dark"
-                                ? "bg-forge-bg-raised/60 text-forge-ink-muted border border-forge-line/50"
-                                : "bg-forge-bg/80 text-forge-ink-muted border border-forge-line/60";
-                            }
-                          })()}`}
-                        >
+                        <span className="kozeo-badge text-[10px] uppercase">
                           {gig.status.replace("_", " ")}
                         </span>
                       </div>
@@ -345,25 +267,13 @@ export default function GigListPage() {
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                         }}
-                        className={`text-sm mb-3 transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
-                        }`}
+                        className="text-sm mb-3 text-black/70 dark:text-white/70 leading-relaxed"
                       >
                         {gig.description}
                       </p>
-                      <p className="text-sm mb-2">
-                        <span
-                          className={`transition-colors duration-300 ${
-                            theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                          }`}
-                        >
-                          Looking For:{" "}
-                        </span>
-                        <span
-                          className={`transition-colors duration-300 ${
-                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
-                          }`}
-                        >
+                      <p className="text-xs mb-3 text-black/60 dark:text-white/60">
+                        <span className="font-medium">Looking For: </span>
+                        <span className="font-semibold text-black dark:text-white">
                           {gig.looking_For}
                         </span>
                       </p>
@@ -371,11 +281,7 @@ export default function GigListPage() {
                         {gig.skills.map((skill: string, idx: number) => (
                           <span
                             key={idx}
-                            className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors duration-300 ${
-                              theme === "dark"
-                                ? "bg-forge-bg-raised/60 text-forge-ink border border-forge-line/50"
-                                : "bg-forge-bg/80 text-slate-700 border border-forge-line/60"
-                            }`}
+                            className="kozeo-badge text-[10px]"
                           >
                             {skill}
                           </span>
@@ -383,55 +289,30 @@ export default function GigListPage() {
                       </div>
 
                       {/* Created date */}
-                      <div
-                        className={`text-xs transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                        }`}
-                      >
+                      <div className="text-xs text-black/50 dark:text-white/50">
                         Created: {new Date(gig.createdAt).toLocaleDateString()}
                       </div>
                     </div>
 
                     {/* Bottom Bar */}
-                    <div
-                      className={`flex justify-between items-center border-t pt-3 mt-4 transition-colors duration-300 ${
-                        theme === "dark"
-                          ? "border-forge-line"
-                          : "border-forge-line"
-                      }`}
-                    >
+                    <div className="flex justify-between items-center border-t border-black/5 dark:border-white/10 pt-4 mt-4">
                       {gig.amount === 0 ? (
-                        <div
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
-                            theme === "dark"
-                              ? "bg-forge-bg bg-forge-bg-raised text-forge-ink-muted border border-forge-line/50"
-                              : "bg-forge-bg bg-forge-bg text-forge-ink-muted border border-forge-line"
-                          }`}
-                        >
-                          <FiStar className="w-3 h-3 mr-1" />
+                        <div className="kozeo-badge text-[10px]">
+                          <FiStar className="w-3 h-3 text-amber-500" />
                           Skill Forge
                         </div>
                       ) : (
-                        <span className="text-sm font-semibold text-forge-ember">
-                          {gig.currency} {gig.amount}
+                        <span className="text-base font-bold tracking-tight text-black dark:text-white">
+                          {gig.currency} {Number(gig.amount).toLocaleString("en-IN")}
                         </span>
                       )}
                       <div className="flex items-center gap-2">
-                        <span
-                          className={`text-xs transition-colors duration-300 ${
-                            theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
-                          }`}
-                        >
+                        <span className="text-xs text-black/50 dark:text-white/50">
                           {gig.activeRequest?.length || 0} request(s)
                         </span>
-                        <ProfessionalButton
-                          onClick={() => handleGigNavigation(gig)}
-                          variant="neutral"
-                          size="sm"
-                          className="text-[10px]"
-                        >
-                          {user && gig.host.id === user.id ? "Manage" : "Enter"}
-                        </ProfessionalButton>
+                        <button className="kozeo-btn-secondary !px-3 !py-1 !text-xs">
+                          {user && gig.host.id === user.id ? "Manage" : "Workspace"}
+                        </button>
                       </div>
                     </div>
                   </div>

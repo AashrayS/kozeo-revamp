@@ -97,15 +97,15 @@ export default function BottomNavBar() {
 
   return (
     <div
-      className={`sm:hidden fixed bottom-0 left-0 right-0 z-[9999] transition-transform duration-300 ease-in-out ${
+      className={`sm:hidden fixed bottom-3 left-3 right-3 z-[9999] transition-transform duration-300 ease-in-out ${
         isVisible ? "translate-y-0" : "translate-y-full"
       }`}
     >
       <nav
-        className={`flex items-center px-2 py-2 border-t  overflow-x-auto scrollbar-hide ${
+        className={`flex items-center justify-around px-3 py-2 border rounded-full backdrop-blur-xl shadow-lg overflow-x-auto scrollbar-hide ${
           theme === "light"
-            ? "bg-forge-bg/95 text-forge-ink border-forge-line"
-            : "bg-forge-bg-raised/95 text-forge-ink border-forge-line"
+            ? "bg-white/80 text-black border-black/10"
+            : "bg-black/80 text-white border-white/10"
         }`}
         style={{
           scrollbarWidth: "none", // Firefox
@@ -120,33 +120,27 @@ export default function BottomNavBar() {
               key={name}
               onClick={() => handleNavigation(path)}
               disabled={isActive}
-              className={`flex flex-col items-center justify-center px-3 py-2 min-w-[60px] whitespace-nowrap transition-colors duration-200 ${
+              className={`relative flex flex-col items-center justify-center px-3 py-1.5 min-w-[55px] whitespace-nowrap transition-all duration-200 ${
                 isActive
-                  ? theme === "light"
-                    ? "text-forge-ember cursor-default"
-                    : "text-forge-ember cursor-default"
-                  : theme === "light"
-                  ? "text-forge-ink-muted hover:text-forge-ink cursor-pointer"
-                  : "text-forge-ink-muted hover:text-forge-ink cursor-pointer"
+                  ? "text-black dark:text-white font-semibold scale-105"
+                  : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"
               }`}
             >
               <Icon
-                className={`text-xl mb-1 ${
-                  isActive ? "opacity-100" : "opacity-80"
+                className={`text-lg mb-0.5 ${
+                  isActive ? "opacity-100" : "opacity-70"
                 }`}
               />
               <span
-                className={`text-xs leading-tight text-center ${
-                  isActive ? "font-medium" : "font-normal"
+                className={`text-[11px] leading-tight text-center ${
+                  isActive ? "font-semibold" : "font-normal"
                 }`}
               >
                 {name}
               </span>
               {isActive && (
                 <div
-                  className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${
-                    theme === "light" ? "bg-forge-ember-low" : "bg-forge-ember-low"
-                  }`}
+                  className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-black dark:bg-white"
                 ></div>
               )}
             </button>
