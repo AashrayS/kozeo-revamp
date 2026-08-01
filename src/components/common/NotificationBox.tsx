@@ -157,10 +157,10 @@ const NotificationBox = ({
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`p-3 sm:p-4 border-l-4 transition-colors hover:bg-forge-ember hover:bg-opacity-30 ${
+                    className={`p-3 sm:p-4 border-l-4 transition-colors hover:bg-state-hover ${
                       notification.read
-                        ? "border-container-3 bg-opacity-20"
-                        : "border-forge-ember bg-forge-ember bg-opacity-10"
+                        ? "border-container-3 bg-transparent"
+                        : "border-forge-ember bg-forge-ember-low"
                     }`}
                   >
                     <div className="flex items-start gap-2 sm:gap-3">

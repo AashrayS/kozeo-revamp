@@ -376,7 +376,7 @@ export default function LoginSignupPage() {
                             placeholder="name@company.com"
                             value={signupData.email}
                             onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/20 focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/40 transition-all duration-300"
+                            className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
                           />
                         </div>
                         {emailError && <p className="text-red-500 text-xs text-center font-medium">{emailError}</p>}
@@ -424,7 +424,7 @@ export default function LoginSignupPage() {
                             placeholder="Enter 6-digit code"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 text-center tracking-widest text-lg font-bold focus:outline-none focus:ring-1 focus:ring-black/40 focus:border-black/40 transition-all duration-300"
+                            className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 text-center tracking-widest text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
                           />
                         </div>
                         {otpError && <p className="text-red-500 text-xs text-center font-medium">{otpError}</p>}
@@ -482,7 +482,7 @@ export default function LoginSignupPage() {
                               type="text"
                               value={signupData.first_name}
                               onChange={(e) => setSignupData({ ...signupData, first_name: e.target.value })}
-                              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm"
+                              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm"
                             />
                           </div>
                           <div className="space-y-1.5">
@@ -491,7 +491,7 @@ export default function LoginSignupPage() {
                               type="text"
                               value={signupData.last_name}
                               onChange={(e) => setSignupData({ ...signupData, last_name: e.target.value })}
-                              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm"
+                              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm"
                             />
                           </div>
                         </div>
@@ -501,7 +501,7 @@ export default function LoginSignupPage() {
                             type="text"
                             value={signupData.username}
                             onChange={(e) => setSignupData({ ...signupData, username: e.target.value.replace(/\s/g, "") })}
-                            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm"
+                            className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm"
                           />
                         </div>
                         <div className="space-y-1.5">
@@ -511,7 +511,7 @@ export default function LoginSignupPage() {
                               type={showSignupPassword ? "text" : "password"}
                               value={signupData.password}
                               onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                              className="w-full px-3 py-2.5 pr-9 rounded-xl border border-black/10 text-sm"
+                              className="w-full px-3 py-2.5 pr-9 rounded-xl border border-black/10 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-sm"
                             />
                             <button
                               type="button"
