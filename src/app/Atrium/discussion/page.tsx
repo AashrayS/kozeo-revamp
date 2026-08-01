@@ -167,8 +167,8 @@ export default function DiscussionPage() {
                       key={room.id}
                       className={`border rounded-sm p-6 transition-all duration-200 group cursor-pointer ${
                         theme === "dark"
-                          ? "bg-forge-bg-raised/50 border-container-3 hover:bg-forge-bg-raised/50 hover:border-forge-ember/30"
-                          : "bg-forge-bg/80 border-container-3 hover:bg-state-hover hover:border-forge-ember shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                          ? "bg-container-2 border-container-3 hover:bg-forge-bg-raised/50 hover:border-forge-ember/30"
+                          : "bg-container-2 border-container-3 hover:bg-state-hover hover:border-forge-ember  hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                       }`}
                       onClick={() => joinRoom(room.id)}
                     >
