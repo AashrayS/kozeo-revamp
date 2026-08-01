@@ -97,8 +97,8 @@ export default function GigListPage() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-              : "bg-forge-bg  via-blue-50 to-indigo-50 text-forge-ink"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+              : "bg-container-1  via-blue-50 to-indigo-50 text-text-1"
           }`}
         >
           <div className="flex-1 flex flex-col">
@@ -109,7 +109,7 @@ export default function GigListPage() {
                 </div>
                 <div
                   className={`text-sm ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   {error}
@@ -148,7 +148,7 @@ export default function GigListPage() {
                     className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
                       filter === "all"
                         ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
-                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                        : "text-text-3 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     All ({gigs.length})
@@ -158,7 +158,7 @@ export default function GigListPage() {
                     className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
                       filter === "hosted"
                         ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
-                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                        : "text-text-3 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     Hosting ({gigs.filter((g) => g.host.id === user.id).length})
@@ -168,7 +168,7 @@ export default function GigListPage() {
                     className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
                       filter === "collaborating"
                         ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
-                        : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                        : "text-text-3 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     Collaborating (
@@ -180,7 +180,7 @@ export default function GigListPage() {
             {!user ? (
               <div className="text-center py-16 kozeo-card p-8 max-w-md mx-auto">
                 <div className="text-xl font-bold mb-2">Please log in</div>
-                <div className="text-sm text-black/60 dark:text-white/60 mb-6">
+                <div className="text-sm text-text-3 mb-6">
                   You need to be logged in to view your gigs.
                 </div>
                 <button
@@ -199,7 +199,7 @@ export default function GigListPage() {
                     ? "No hosted projects"
                     : "No collaborating projects"}
                 </div>
-                <div className="text-sm text-black/60 dark:text-white/60 mb-6">
+                <div className="text-sm text-text-3 mb-6">
                   {filter === "all"
                     ? "You haven't hosted or joined any projects yet."
                     : filter === "hosted"
@@ -265,7 +265,7 @@ export default function GigListPage() {
                       >
                         {gig.description}
                       </p>
-                      <p className="text-xs mb-3 text-black/60 dark:text-white/60">
+                      <p className="text-xs mb-3 text-text-3">
                         <span className="font-medium">Looking For: </span>
                         <span className="font-semibold text-black dark:text-white">
                           {gig.looking_For}

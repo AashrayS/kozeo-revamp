@@ -79,14 +79,10 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop/Tablet Sidebar */}
-      <div className="sticky top-0 h-screen z-[9999] hidden sm:block">
+      <div className="sticky top-0 h-full z-[9999] hidden sm:block">
         <aside
-          className={`sticky top-0 h-screen border-r transition-all duration-300 z-[9999] flex flex-col justify-between backdrop-blur-xl ${
+          className={`sticky top-0 h-full border-r transition-all duration-300 z-[9999] flex flex-col justify-between backdrop-blur-xl bg-header-bg text-text-1 border-container-3 ${
             collapsed ? "w-20" : "w-64"
-          } ${
-            theme === "light"
-              ? "bg-white/70 text-black border-black/5"
-              : "bg-black/70 text-white border-white/10"
           }`}
         >
           <div className="flex flex-col p-4 space-y-6">
@@ -103,8 +99,8 @@ export default function Sidebar() {
                         collapsed ? "justify-center" : "gap-3"
                       } ${
                         isActive
-                          ? "bg-black/10 dark:bg-white/10 text-black dark:text-white font-semibold cursor-default shadow-xs"
-                          : "hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                          ? "bg-container-3 text-text-1 font-semibold cursor-default shadow-xs"
+                          : "hover:bg-state-hover cursor-pointer text-text-3 hover:text-text-1"
                       }`}
                     >
                       <Icon
@@ -145,7 +141,7 @@ export default function Sidebar() {
                 onClick={() => setCollapsed(!collapsed)}
                 className={`flex items-center w-full px-4 py-3 rounded-2xl transition-all duration-300 ${
                   collapsed ? "justify-center" : "gap-3"
-                } hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white`}
+                } hover:bg-state-hover cursor-pointer text-text-3 hover:text-text-1`}
               >
                 {collapsed ? (
                   <FiChevronRight className="text-xl shrink-0" />

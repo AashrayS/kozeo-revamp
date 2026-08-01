@@ -195,8 +195,8 @@ export default function AdminDiscussionRoomsPage() {
       <div
         className={`min-h-screen relative z-10 flex flex-row theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-forge-ink"
-            : "bg-gradient-dark text-forge-ink"
+            ? "bg-gradient-light text-text-1"
+            : "bg-gradient-dark text-text-1"
         }`}
       >
         <div className="flex flex-1">
@@ -210,7 +210,7 @@ export default function AdminDiscussionRoomsPage() {
                   </h1>
                   <p
                     className={`theme-transition ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "light" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     Create and manage discussion rooms for your community
@@ -218,7 +218,7 @@ export default function AdminDiscussionRoomsPage() {
                 </div>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-forge-ember-low text-forge-ink rounded-sm hover:bg-forge-ember-low transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-forge-ember-low text-text-1 rounded-sm hover:bg-forge-ember-low transition-colors"
                 >
                   <FiPlus size={20} />
                   Create Room
@@ -237,8 +237,8 @@ export default function AdminDiscussionRoomsPage() {
                 <div
                   className={`mb-8 p-6 rounded-sm border theme-transition ${
                     theme === "light"
-                      ? "bg-forge-bg border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                      : "bg-forge-bg-raised border-forge-line"
+                      ? "bg-container-1 border border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                      : "bg-container-2 border-container-3"
                   }`}
                 >
                   <h2 className="text-xl font-semibold mb-4">
@@ -265,8 +265,8 @@ export default function AdminDiscussionRoomsPage() {
                         }
                         className={`w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 theme-transition ${
                           theme === "light"
-                            ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
-                            : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                            ? "bg-container-1 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight focus:border-forge-ember"
+                            : "bg-container-2 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight"
                         }`}
                         placeholder="Enter room title..."
                         required
@@ -287,8 +287,8 @@ export default function AdminDiscussionRoomsPage() {
                         rows={4}
                         className={`w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 theme-transition ${
                           theme === "light"
-                            ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
-                            : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                            ? "bg-container-1 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight focus:border-forge-ember"
+                            : "bg-container-2 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight"
                         }`}
                         placeholder="Enter room description..."
                         required
@@ -309,8 +309,8 @@ export default function AdminDiscussionRoomsPage() {
                         }
                         className={`w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 theme-transition ${
                           theme === "light"
-                            ? "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
-                            : "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
+                            ? "bg-container-1 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight focus:border-forge-ember"
+                            : "bg-container-2 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight"
                         }`}
                         placeholder="https://example.com/image.jpg"
                       />
@@ -319,7 +319,7 @@ export default function AdminDiscussionRoomsPage() {
                       <button
                         type="submit"
                         disabled={!!actionLoading}
-                        className="flex items-center gap-2 px-6 py-2 bg-forge-ember-low text-forge-ink rounded-sm hover:bg-forge-ember-low transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 px-6 py-2 bg-forge-ember-low text-text-1 rounded-sm hover:bg-forge-ember-low transition-colors disabled:opacity-50"
                       >
                         <FiSave size={16} />
                         {actionLoading === "create" ||
@@ -332,8 +332,8 @@ export default function AdminDiscussionRoomsPage() {
                         onClick={handleCancel}
                         className={`flex items-center gap-2 px-6 py-2 border rounded-sm transition-colors theme-transition ${
                           theme === "light"
-                            ? "bg-forge-bg border border-forge-line text-forge-ink hover:bg-forge-bg"
-                            : "bg-forge-bg-raised border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                            ? "bg-container-1 border border-container-3 text-text-1 hover:bg-state-hover"
+                            : "bg-container-2 border-container-3 text-text-1 hover:bg-state-hover"
                         }`}
                       >
                         <FiX size={16} />
@@ -348,7 +348,7 @@ export default function AdminDiscussionRoomsPage() {
               {loading ? (
                 <div className="text-center py-12">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forge-ember mx-auto"></div>
-                  <p className="mt-4 text-forge-ink-muted">
+                  <p className="mt-4 text-text-3">
                     Loading discussion rooms...
                   </p>
                 </div>
@@ -358,27 +358,27 @@ export default function AdminDiscussionRoomsPage() {
                     <div
                       className={`text-center py-12 rounded-sm border-2 border-dashed theme-transition ${
                         theme === "light"
-                          ? "border-forge-line bg-forge-bg/50"
-                          : "border-forge-line bg-forge-bg-raised/50"
+                          ? "border-container-3 bg-forge-bg/50"
+                          : "border-container-3 bg-forge-bg-raised/50"
                       }`}
                     >
                       <FiMessageSquare
                         size={48}
-                        className="mx-auto mb-4 text-forge-ink-muted"
+                        className="mx-auto mb-4 text-text-3"
                       />
                       <p className="text-xl font-medium mb-2">
                         No Discussion Rooms Yet
                       </p>
                       <p
                         className={`mb-4 theme-transition ${
-                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "light" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Create your first discussion room to get started
                       </p>
                       <button
                         onClick={() => setShowCreateModal(true)}
-                        className="px-6 py-3 bg-forge-ember-low text-forge-ink rounded-sm hover:bg-forge-ember-low transition-colors"
+                        className="px-6 py-3 bg-forge-ember-low text-text-1 rounded-sm hover:bg-forge-ember-low transition-colors"
                       >
                         Create First Room
                       </button>
@@ -389,8 +389,8 @@ export default function AdminDiscussionRoomsPage() {
                         key={room.id}
                         className={`p-6 rounded-sm border transition-all duration-300 theme-transition ${
                           theme === "light"
-                            ? "bg-forge-bg border border-forge-line hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:bg-forge-bg "
-                            : "bg-forge-bg-raised border-forge-line hover:border-forge-line hover:bg-forge-bg-raised"
+                            ? "bg-container-1 border border-container-3 hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:bg-state-hover "
+                            : "bg-container-2 border-container-3 hover:border-forge-line hover:bg-state-hover"
                         }`}
                       >
                         <div className="flex items-start justify-between">
@@ -433,8 +433,8 @@ export default function AdminDiscussionRoomsPage() {
                               <p
                                 className={`mb-3 theme-transition ${
                                   theme === "light"
-                                    ? "text-forge-ink-muted"
-                                    : "text-forge-ink"
+                                    ? "text-text-3"
+                                    : "text-text-1"
                                 }`}
                               >
                                 {room.description}
@@ -449,8 +449,8 @@ export default function AdminDiscussionRoomsPage() {
                                 <span
                                   className={`theme-transition ${
                                     theme === "light"
-                                      ? "text-forge-ink-muted"
-                                      : "text-forge-ink-muted"
+                                      ? "text-text-3"
+                                      : "text-text-3"
                                   }`}
                                 >
                                   Created:{" "}
@@ -467,7 +467,7 @@ export default function AdminDiscussionRoomsPage() {
                               className={`p-2 rounded-sm transition-colors theme-transition ${
                                 theme === "light"
                                   ? "hover:bg-forge-ember-low text-forge-ember"
-                                  : "hover:bg-forge-bg-raised text-forge-ember"
+                                  : "hover:bg-state-hover text-forge-ember"
                               }`}
                               title="Edit room"
                             >
@@ -479,7 +479,7 @@ export default function AdminDiscussionRoomsPage() {
                               className={`p-2 rounded-sm transition-colors theme-transition ${
                                 theme === "light"
                                   ? "hover:bg-[forge-error-bg text-[forge-error"
-                                  : "hover:bg-forge-bg-raised text-[forge-error"
+                                  : "hover:bg-state-hover text-[forge-error"
                               } disabled:opacity-50`}
                               title="Delete room"
                             >

@@ -308,8 +308,8 @@ export default function DiscussionRoomPage({
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-              : "bg-forge-bg    text-forge-ink"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+              : "bg-container-1    text-text-1"
           }`}
         >
           <div className="flex-1 flex items-center justify-center">
@@ -317,7 +317,7 @@ export default function DiscussionRoomPage({
               <div className="text-xl mb-2">Loading discussion room...</div>
               <div
                 className={`text-sm ${
-                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                  theme === "dark" ? "text-text-3" : "text-text-3"
                 }`}
               >
                 Please wait...
@@ -334,14 +334,14 @@ export default function DiscussionRoomPage({
       <div
         className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-            : "bg-forge-bg    text-forge-ink"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+            : "bg-container-1    text-text-1"
         }`}
       >
         <div className="text-center">
           <h1
             className={`text-2xl font-bold mb-4 transition-colors duration-300 ${
-              theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+              theme === "dark" ? "text-text-1" : "text-text-1"
             }`}
           >
             {error
@@ -359,7 +359,7 @@ export default function DiscussionRoomPage({
           )}
           <button
             onClick={() => router.push("/Atrium/discussion")}
-            className="px-6 py-2 bg-forge-ember hover:bg-forge-ember rounded-sm transition-colors text-forge-ink"
+            className="px-6 py-2 bg-forge-ember hover:bg-forge-ember rounded-sm transition-colors text-text-1"
           >
             Back to Discussion Rooms
           </button>
@@ -381,8 +381,8 @@ export default function DiscussionRoomPage({
         <div
           className={`relative z-10 flex flex-1 flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-              : "bg-forge-bg    text-forge-ink"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+              : "bg-container-1    text-text-1"
           }`}
         >
 
@@ -391,22 +391,22 @@ export default function DiscussionRoomPage({
             <div
               className={`p-3 md:p-4 border-b transition-all duration-300 ${
                 theme === "dark"
-                  ? "border-forge-line bg-forge-bg-raised/50"
-                  : "border-forge-line bg-forge-bg/80"
+                  ? "border-container-3 bg-forge-bg-raised/50"
+                  : "border-container-3 bg-forge-bg/80"
               }`}
             >
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <h1
                     className={`text-lg md:text-xl font-bold truncate transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "dark" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     {room.title}
                   </h1>
                   <p
                     className={`text-xs md:text-sm truncate transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "dark" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     {room.description}
@@ -417,8 +417,8 @@ export default function DiscussionRoomPage({
                     onClick={() => setShowMobileUsers(!showMobileUsers)}
                     className={`md:hidden flex items-center gap-1 text-xs transition-colors duration-300 ${
                       theme === "dark"
-                        ? "text-forge-ink-muted hover:text-forge-ink"
-                        : "text-forge-ink-muted hover:text-forge-ink"
+                        ? "text-text-3 hover:text-forge-ink"
+                        : "text-text-3 hover:text-forge-ink"
                     }`}
                   >
                     <FaUsers />
@@ -426,7 +426,7 @@ export default function DiscussionRoomPage({
                   </button>
                   <div
                     className={`hidden md:flex items-center gap-1 md:gap-2 text-xs md:text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "dark" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     <FaUsers />
@@ -454,8 +454,8 @@ export default function DiscussionRoomPage({
               <div
                 className={`md:hidden border-b max-h-32 overflow-y-auto transition-all duration-300 ${
                   theme === "dark"
-                    ? "border-forge-line bg-forge-bg-raised/50"
-                    : "border-forge-line bg-forge-bg/80"
+                    ? "border-container-3 bg-forge-bg-raised/50"
+                    : "border-container-3 bg-forge-bg/80"
                 }`}
               >
                 <div className="p-3">
@@ -474,7 +474,7 @@ export default function DiscussionRoomPage({
                         <div className="w-1.5 h-1.5 bg-forge-ember-low rounded-full flex-shrink-0"></div>
                         <span
                           className={`truncate transition-colors duration-300 ${
-                            theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                            theme === "dark" ? "text-text-1" : "text-text-1"
                           }`}
                         >
                           {user} {user === currentUser && "(You)"}
@@ -485,7 +485,7 @@ export default function DiscussionRoomPage({
                   {connectedUsers.length === 0 && (
                     <div
                       className={`text-xs text-center py-2 transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       No users online
@@ -505,8 +505,8 @@ export default function DiscussionRoomPage({
                         ? "bg-forge-ember text-forge-ember border border-forge-ember"
                         : "bg-forge-ember text-forge-ember border border-forge-ember"
                       : theme === "dark"
-                      ? "bg-forge-bg-raised text-forge-ink border border-forge-line"
-                      : "bg-forge-bg text-forge-ink border border-forge-line"
+                      ? "bg-container-2 text-text-1 border border-container-3"
+                      : "bg-container-1 text-text-1 border border-container-3"
                   }`}
                 >
                   <div className="text-sm font-medium flex items-center gap-2">
@@ -526,7 +526,7 @@ export default function DiscussionRoomPage({
                       {msg.type === "system" ? (
                         <div
                           className={`text-center text-xs italic py-1 transition-colors duration-300 cursor-text select-text ${
-                            theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                            theme === "dark" ? "text-text-3" : "text-text-3"
                           }`}
                         >
                           {msg.message}
@@ -544,8 +544,8 @@ export default function DiscussionRoomPage({
                             <div
                               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 ${
                                 theme === "dark"
-                                  ? "bg-forge-bg-raised text-forge-ink"
-                                  : "bg-forge-bg text-forge-ink"
+                                  ? "bg-container-2 text-text-1"
+                                  : "bg-container-1 text-text-1"
                               }`}
                             >
                               {msg.sender.charAt(0).toUpperCase()}
@@ -557,8 +557,8 @@ export default function DiscussionRoomPage({
                               msg.type !== "system" ? "hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]" : ""
                             } ${
                               msg.sender === currentUser
-                                ? "bg-forge-bg-raised/30 border-forge-line/30 text-forge-ink"
-                                : "bg-forge-bg-raised/30 border-forge-line/30 text-forge-ink"
+                                ? "bg-forge-bg-raised/30 border-forge-line/30 text-text-1"
+                                : "bg-forge-bg-raised/30 border-forge-line/30 text-text-1"
                             } ${
                               draggedMessage?.id === msg.id
                                 ? isDragOver
@@ -573,8 +573,8 @@ export default function DiscussionRoomPage({
                               <div
                                 className={`text-xs mb-2 p-2 rounded border-l-2 max-w-full overflow-hidden cursor-text select-text ${
                                   theme === "dark"
-                                    ? "bg-forge-bg-raised/50 border-forge-ember text-forge-ink"
-                                    : "bg-forge-bg/80 border-forge-ember text-forge-ink-muted"
+                                    ? "bg-forge-bg-raised/50 border-forge-ember text-text-1"
+                                    : "bg-forge-bg/80 border-forge-ember text-text-3"
                                 }`}
                               >
                                 <div className="font-semibold text-forge-ember text-[10px] mb-1 truncate cursor-text select-text">
@@ -604,8 +604,8 @@ export default function DiscussionRoomPage({
                               <div
                                 className={`text-xs mb-1 font-semibold truncate cursor-text select-text ${
                                   theme === "dark"
-                                    ? "text-forge-ink-muted"
-                                    : "text-forge-ink-muted"
+                                    ? "text-text-3"
+                                    : "text-text-3"
                                 }`}
                               >
                                 {msg.sender}
@@ -645,7 +645,7 @@ export default function DiscussionRoomPage({
                           {/* User Avatar - Only show for current user (right side) */}
                           {msg.sender === currentUser && (
                             <div
-                              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 bg-forge-ember text-forge-ink`}
+                              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-1 bg-forge-ember text-text-1`}
                             >
                               {msg.sender.charAt(0).toUpperCase()}
                             </div>
@@ -660,7 +660,7 @@ export default function DiscussionRoomPage({
                 {/* Message Input */}
                 <div
                   className={`border-t p-2 md:p-4 relative transition-colors duration-300 ${
-                    theme === "dark" ? "border-forge-line" : "border-forge-line"
+                    theme === "dark" ? "border-container-3" : "border-container-3"
                   } ${
                     isDragOver
                       ? theme === "dark"
@@ -674,8 +674,8 @@ export default function DiscussionRoomPage({
                     <div
                       className={`mb-3 p-2 rounded border-l-4 max-w-full overflow-hidden ${
                         theme === "dark"
-                          ? "bg-forge-bg-raised/50 border-forge-ember text-forge-ink"
-                          : "bg-forge-bg/80 border-forge-ember text-forge-ink-muted"
+                          ? "bg-forge-bg-raised/50 border-forge-ember text-text-1"
+                          : "bg-forge-bg/80 border-forge-ember text-text-3"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -742,8 +742,8 @@ export default function DiscussionRoomPage({
                         onClick={() => setShowEmoji(!showEmoji)}
                         className={`text-lg md:text-xl p-1 transition-colors duration-300 ${
                           theme === "dark"
-                            ? "text-forge-ink-muted hover:text-forge-ink"
-                            : "text-forge-ink-muted hover:text-forge-ink"
+                            ? "text-text-3 hover:text-forge-ink"
+                            : "text-text-3 hover:text-forge-ink"
                         }`}
                       >
                         <FaRegSmile />
@@ -755,12 +755,12 @@ export default function DiscussionRoomPage({
                       onKeyDown={handleKeyDown}
                       disabled={!user}
                       rows={Math.min(Math.max(input.split("\n").length, 1), 5)}
-                      className={`flex-1 border p-2 md:p-3 rounded-sm text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-forge-line transition-all duration-300 resize-none ${
+                      className={`flex-1 border p-2 md:p-3 rounded-sm text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-state-highlight transition-all duration-300 resize-none ${
                         !user ? "opacity-50 cursor-not-allowed" : ""
                       } ${
                         theme === "dark"
-                          ? "bg-forge-bg-raised border-forge-line text-forge-ink placeholder-gray-400"
-                          : "bg-forge-bg border-forge-line text-forge-ink placeholder-gray-500"
+                          ? "bg-container-2 border-container-3 text-text-1 placeholder:text-text-4"
+                          : "bg-container-1 border-container-3 text-text-1 placeholder:text-text-4"
                       }`}
                       placeholder={
                         replyTo
@@ -776,7 +776,7 @@ export default function DiscussionRoomPage({
                     <button
                       onClick={handleSendMessage}
                       disabled={!input.trim() || !user}
-                      className="px-2 md:px-4 py-2 md:py-3 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-ember disabled:opacity-50 rounded-sm text-forge-ink font-semibold transition-colors text-sm md:text-base"
+                      className="px-2 md:px-4 py-2 md:py-3 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-ember disabled:opacity-50 rounded-sm text-text-1 font-semibold transition-colors text-sm md:text-base"
                     >
                       <span className="hidden sm:inline">Send</span>
                       <span className="sm:hidden">→</span>
@@ -789,18 +789,18 @@ export default function DiscussionRoomPage({
               <div
                 className={`hidden md:block w-48 lg:w-64 border-l transition-colors duration-300 ${
                   theme === "dark"
-                    ? "border-forge-line bg-forge-bg-raised/30"
-                    : "border-forge-line bg-forge-bg/50"
+                    ? "border-container-3 bg-forge-bg-raised/30"
+                    : "border-container-3 bg-forge-bg/50"
                 }`}
               >
                 <div
                   className={`p-3 lg:p-4 border-b transition-colors duration-300 ${
-                    theme === "dark" ? "border-forge-line" : "border-forge-line"
+                    theme === "dark" ? "border-container-3" : "border-container-3"
                   }`}
                 >
                   <h3
                     className={`font-semibold flex items-center gap-2 text-sm lg:text-base transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "dark" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     <FaUsers className="text-forge-ember" />
@@ -827,7 +827,7 @@ export default function DiscussionRoomPage({
                       <div className="w-2 h-2 bg-forge-ember-low rounded-full flex-shrink-0"></div>
                       <span
                         className={`text-xs lg:text-sm truncate transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                          theme === "dark" ? "text-text-1" : "text-text-1"
                         }`}
                       >
                         {user} {user === currentUser && "(You)"}
@@ -837,7 +837,7 @@ export default function DiscussionRoomPage({
                   {connectedUsers.length === 0 && (
                     <div
                       className={`text-xs lg:text-sm text-center py-4 transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       No users online

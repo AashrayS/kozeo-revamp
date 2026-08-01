@@ -36,7 +36,7 @@ export default function TldrawWrapper({ gigId, height = "100%" }: TldrawWrapperP
 
   return (
     <div
-      className="bg-forge-bg-raised rounded-sm overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)] border border-forge-line"
+      className="bg-container-2 rounded-sm overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)] border border-container-3"
       style={{ height }}
     >
       <Tldraw store={store} autoFocus inferDarkMode>

@@ -1,5 +1,5 @@
 import React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, IBM_Plex_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import "../styles/themes.css";
@@ -27,6 +27,17 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "var(--forge-ink)" },
+    { media: "(prefers-color-scheme: dark)", color: "var(--forge-bg)" },
+  ],
+  colorScheme: "dark light",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -118,16 +129,6 @@ export const metadata: Metadata = {
   category: "Technology",
   classification: "Professional Development Platform",
   referrer: "origin-when-cross-origin",
-  colorScheme: "dark light",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "var(--forge-ink)" },
-    { media: "(prefers-color-scheme: dark)", color: "var(--forge-bg)" },
-  ],
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   icons: {
     icon: [
       { url: "/icon.png", sizes: "32x32", type: "image/png" },

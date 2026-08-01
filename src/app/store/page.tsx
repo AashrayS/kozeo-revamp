@@ -91,7 +91,7 @@ export default function StorePage() {
                 Store Coming Soon
               </h3>
             </div>
-            <p className="text-sm text-black/60 dark:text-white/60 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm text-text-3 max-w-2xl mx-auto leading-relaxed">
               We're curating an exclusive collection of premium developer
               merchandise and tools. Stay tuned for the official launch of the
               Kozeo Store. You can still check out our existing products in the
@@ -126,7 +126,7 @@ export default function StorePage() {
                   <h3 className="text-base font-bold tracking-tight text-black dark:text-white mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-black/60 dark:text-white/60 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-text-3 line-clamp-2 leading-relaxed">
                     {item.description}
                   </p>
                 </div>

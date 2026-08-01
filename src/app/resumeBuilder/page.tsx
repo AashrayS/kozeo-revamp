@@ -65,7 +65,7 @@ export default function PortfolioBuilderPage() {
                 </div>
               </div>
 
-              <p className="text-lg sm:text-xl font-medium mb-8 max-w-2xl mx-auto text-black/60 dark:text-white/60 leading-relaxed">
+              <p className="text-lg sm:text-xl font-medium mb-8 max-w-2xl mx-auto text-text-3 leading-relaxed">
                 Create stunning online portfolios in minutes. Just enter your
                 basic information and showcase your work to the world.
               </p>
@@ -113,13 +113,13 @@ export default function PortfolioBuilderPage() {
                   className="kozeo-card p-6 flex flex-col justify-between group"
                 >
                   <div className="flex flex-col h-full">
-                    <div className="mb-4 p-3 rounded-2xl w-fit bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 group-hover:scale-110 transition-transform duration-300">
+                    <div className="mb-4 p-3 rounded-2xl w-fit bg-container-2 border border-black/5 dark:border-white/10 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="w-6 h-6 text-black dark:text-white" />
                     </div>
                     <h3 className="text-lg font-bold tracking-tight mb-2 text-black dark:text-white">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-black/60 dark:text-white/60">
+                    <p className="text-sm leading-relaxed text-text-3">
                       {feature.description}
                     </p>
                   </div>
@@ -132,13 +132,13 @@ export default function PortfolioBuilderPage() {
               {!isSubmitted ? (
                 <>
                   <div className="text-center mb-6">
-                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/10">
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-container-2 flex items-center justify-center border border-black/5 dark:border-white/10">
                       <FiBell className="w-6 h-6 text-black dark:text-white" />
                     </div>
                     <h3 className="text-xl font-bold tracking-tight text-black dark:text-white mb-2">
                       Get Notified
                     </h3>
-                    <p className="text-sm text-black/60 dark:text-white/60">
+                    <p className="text-sm text-text-3">
                       Be the first to know when our portfolio builder launches
                     </p>
                   </div>
@@ -167,13 +167,13 @@ export default function PortfolioBuilderPage() {
                 </>
               ) : (
                 <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-container-3 flex items-center justify-center">
                     <FiMail className="w-8 h-8 text-black dark:text-white" />
                   </div>
                   <h3 className="text-xl font-bold tracking-tight text-black dark:text-white mb-2">
                     You're All Set!
                   </h3>
-                  <p className="text-sm text-black/60 dark:text-white/60">
+                  <p className="text-sm text-text-3">
                     We'll email you as soon as the portfolio builder is ready
                   </p>
                 </div>

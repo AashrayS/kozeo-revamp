@@ -295,22 +295,22 @@ export default function ProfileSetupPage() {
         <div
           className={`min-h-screen relative z-10 flex overflow-y-auto transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-              : "bg-forge-bg    text-forge-ink"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+              : "bg-container-1    text-text-1"
           }`}
         >
           <div className="flex-1 max-w-2xl mx-auto p-6">
             <div className="mb-8 text-center">
               <h1
                 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                  theme === "dark" ? "text-text-1" : "text-text-1"
                 }`}
               >
                 Complete Your Profile
               </h1>
               <p
                 className={`transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                  theme === "dark" ? "text-text-3" : "text-text-3"
                 }`}
               >
                 Tell us more about yourself to get started
@@ -321,8 +321,8 @@ export default function ProfileSetupPage() {
               <div
                 className={`rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-forge-bg  "
-                    : "bg-forge-bg/90 border border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                    ? "bg-container-1  "
+                    : "bg-forge-bg/90 border border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 {/* Basic Information */}
@@ -331,7 +331,7 @@ export default function ProfileSetupPage() {
                     <label
                       htmlFor="first_name"
                       className={`block text-sm font-medium mb-2 transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "dark" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       First Name *
@@ -342,7 +342,7 @@ export default function ProfileSetupPage() {
                       name="first_name"
                       value={form.first_name}
                       onChange={handleInputChange}
-                      className="w-full p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line"
+                      className="w-full p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight"
                       required
                     />
                   </div>
@@ -359,7 +359,7 @@ export default function ProfileSetupPage() {
                       name="last_name"
                       value={form.last_name}
                       onChange={handleInputChange}
-                      className="w-full p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line"
+                      className="w-full p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight"
                       required
                     />
                   </div>
@@ -380,7 +380,7 @@ export default function ProfileSetupPage() {
                     onChange={handleInputChange}
                     placeholder="Tell us about yourself..."
                     rows={4}
-                    className="w-full p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line resize-none"
+                    className="w-full p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight resize-none"
                   />
                 </div>
 
@@ -399,7 +399,7 @@ export default function ProfileSetupPage() {
                     value={form.phone}
                     onChange={handleInputChange}
                     placeholder="+1234567890"
-                    className="w-full p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line"
+                    className="w-full p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight"
                   />
                 </div>
 
@@ -412,7 +412,7 @@ export default function ProfileSetupPage() {
                   <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                     {/* Avatar Display */}
                     <div className="relative">
-                      <div className="w-24 h-24 bg-forge-bg-raised border border-forge-line rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
+                      <div className="w-24 h-24 bg-container-2 border border-container-3 rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
                         {profileImage ? (
                           <img
                             src={profileImage}
@@ -424,16 +424,16 @@ export default function ProfileSetupPage() {
                             }}
                           />
                         ) : (
-                          <FiUser className="w-12 h-12 text-forge-ink-muted" />
+                          <FiUser className="w-12 h-12 text-text-3" />
                         )}
                       </div>
 
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="absolute bottom-1 right-1 w-8 h-8 bg-forge-bg-raised hover:bg-forge-bg-raised rounded-full flex items-center justify-center transition-colors border-2 border-forge-line"
+                        className="absolute bottom-1 right-1 w-8 h-8 bg-container-2 hover:bg-state-hover rounded-full flex items-center justify-center transition-colors border-2 border-container-3"
                       >
-                        <FaCamera className="text-forge-ink text-xs" />
+                        <FaCamera className="text-text-1 text-xs" />
                       </button>
                     </div>
 
@@ -446,18 +446,18 @@ export default function ProfileSetupPage() {
                         className={`relative border-2 border-dashed rounded-sm p-4 text-center transition-colors ${
                           isDragging
                             ? "border-forge-ember bg-forge-ember/10"
-                            : "border-forge-line hover:border-forge-line"
+                            : "border-container-3 hover:border-forge-line"
                         }`}
                       >
-                        <FaUpload className="mx-auto text-forge-ink-muted text-xl mb-2" />
-                        <p className="text-forge-ink mb-1 text-sm">
+                        <FaUpload className="mx-auto text-text-3 text-xl mb-2" />
+                        <p className="text-text-1 mb-1 text-sm">
                           Drag and drop your image here
                         </p>
-                        <p className="text-forge-ink-muted text-xs mb-3">or</p>
+                        <p className="text-text-3 text-xs mb-3">or</p>
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="px-4 py-2 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded-sm transition text-sm"
+                          className="px-4 py-2 bg-forge-ember hover:bg-forge-ember text-text-1 rounded-sm transition text-sm"
                         >
                           Browse Files
                         </button>
@@ -468,7 +468,7 @@ export default function ProfileSetupPage() {
                           <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="px-3 py-1 bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink rounded-sm transition text-sm"
+                            className="px-3 py-1 bg-container-2 hover:bg-state-hover text-text-1 rounded-sm transition text-sm"
                           >
                             Change
                           </button>
@@ -479,7 +479,7 @@ export default function ProfileSetupPage() {
                               setProfileImageFile(null);
                               setIsProfileImageUpdated(false);
                             }}
-                            className="px-3 py-1 bg-[forge-error-bg hover:bg-[forge-error-bg text-forge-ink rounded-sm transition text-sm flex items-center gap-1"
+                            className="px-3 py-1 bg-[forge-error-bg hover:bg-[forge-error-bg text-text-1 rounded-sm transition text-sm flex items-center gap-1"
                           >
                             <FaTimes className="text-xs" />
                             Remove
@@ -513,7 +513,7 @@ export default function ProfileSetupPage() {
                     value={form.resume}
                     onChange={handleInputChange}
                     placeholder="https://example.com/your-resume.pdf"
-                    className="w-full p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line"
+                    className="w-full p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight"
                   />
                 </div>
 
@@ -533,12 +533,12 @@ export default function ProfileSetupPage() {
                         e.key === "Enter" && (e.preventDefault(), addLink())
                       }
                       placeholder="https://your-portfolio.com"
-                      className="flex-1 p-3 rounded-sm border border-forge-line bg-forge-bg-raised text-forge-ink placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forge-line"
+                      className="flex-1 p-3 rounded-sm border border-container-3 bg-container-2 text-text-1 placeholder:text-text-4 focus:outline-none focus:ring-2 focus:ring-state-highlight"
                     />
                     <button
                       type="button"
                       onClick={addLink}
-                      className="px-4 py-3 bg-forge-ember hover:bg-forge-ember text-forge-ink rounded-sm transition flex items-center gap-2"
+                      className="px-4 py-3 bg-forge-ember hover:bg-forge-ember text-text-1 rounded-sm transition flex items-center gap-2"
                     >
                       <FiPlus className="text-sm" />
                       Add
@@ -550,7 +550,7 @@ export default function ProfileSetupPage() {
                     {form.links.map((link, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-2 p-2 bg-forge-bg-raised border border-forge-line rounded-sm"
+                        className="flex items-center gap-2 p-2 bg-container-2 border border-container-3 rounded-sm"
                       >
                         <span className="flex-1 text-forge-ember truncate">
                           {link}
@@ -558,7 +558,7 @@ export default function ProfileSetupPage() {
                         <button
                           type="button"
                           onClick={() => removeLink(link)}
-                          className="text-forge-ink-muted hover:text-forge-ink transition p-1"
+                          className="text-text-3 hover:text-forge-ink transition p-1"
                         >
                           <FiX className="text-sm" />
                         </button>
@@ -585,18 +585,18 @@ export default function ProfileSetupPage() {
                   <button
                     type="button"
                     onClick={() => router.push("/Atrium")}
-                    className="flex-1 py-3 px-6 border border-forge-line text-forge-ink rounded-sm hover:bg-forge-bg-raised transition"
+                    className="flex-1 py-3 px-6 border border-container-3 text-text-1 rounded-sm hover:bg-state-hover transition"
                   >
                     Skip for Now
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 py-3 px-6 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-line disabled:cursor-not-allowed text-forge-ink rounded-sm transition flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-6 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-line disabled:cursor-not-allowed text-text-1 rounded-sm transition flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-forge-line border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-container-3 border-t-transparent rounded-full animate-spin"></div>
                         {uploadProgress || "Saving..."}
                       </>
                     ) : (

@@ -174,7 +174,7 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
 
   return (
     <div
-      className={`${sizeClasses[size]} bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm`}
+      className={`${sizeClasses[size]} bg-container-3 border border-container-3 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative shadow-sm`}
     >
       {shouldShowImage && (
         <img
@@ -192,7 +192,7 @@ function ProfileImage({ profilePic, username, size }: ProfileImageProps) {
         />
       )}
       {!shouldShowImage && (
-        <FiUser className={`${iconSizeClasses[size]} text-gray-400`} />
+        <FiUser className={`${iconSizeClasses[size]} text-text-3`} />
       )}
     </div>
   );
@@ -531,7 +531,7 @@ export default function UserProfilePage() {
       <div className="flex justify-center items-center py-20 min-h-[60vh]">
         <div
           className={`transition-colors duration-300 ${
-            theme === "dark" ? "text-gray-400" : "text-gray-600"
+            theme === "dark" ? "text-text-3" : "text-text-4"
           }`}
         >
           Loading profile...
@@ -544,7 +544,7 @@ export default function UserProfilePage() {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="text-center max-w-md mx-auto">
-          <div className="text-8xl mb-6 animate-bounce">🤖</div>
+          <div className="text-8xl mb-6 animate-bounce"></div>
           <h2
             className={`text-4xl font-bold mb-4 bg-gradient-to-r from-black via-black/80 to-black/60 dark:from-white dark:via-white/80 dark:to-white/60 bg-clip-text text-transparent ${
               theme === "dark" ? "drop-shadow-lg" : ""
@@ -554,33 +554,33 @@ export default function UserProfilePage() {
           </h2>
           <p
             className={`text-xl mb-6 font-medium ${
-              theme === "dark" ? "text-gray-300" : "text-gray-700"
+              theme === "dark" ? "text-text-2" : "text-text-2"
             }`}
           >
-            Even our best developers can't find this page! 🕵️‍♂️
+            Even our best developers can't find this page! 
           </p>
           <p
             className={`text-lg mb-8 leading-relaxed ${
-              theme === "dark" ? "text-gray-400" : "text-gray-600"
+              theme === "dark" ? "text-text-3" : "text-text-4"
             }`}
           >
             It seems this profile has mastered the ancient art of
             digital hide-and-seek. Maybe try refreshing, or check if
-            you've got the right username? 🎭
+            you've got the right username? 
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => window.location.reload()}
                className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
             >
-              Try Again 🔄
+              Try Again 
             </button>
             <button
               onClick={() => router.push("/gigs")}
               className={`px-8 py-3 rounded-xl font-semibold border-2 transition-all duration-200 hover:scale-105 ${
                 theme === "dark"
-                  ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
-                  : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                  ? "border-gray-600 text-text-2 hover:bg-gray-800 hover:border-gray-500"
+                  : "border-container-3 text-text-2 hover:bg-gray-50 hover:border-gray-400"
               }`}
             >
               Browse Projects
@@ -606,7 +606,7 @@ export default function UserProfilePage() {
   return (
     <div className="flex-1 flex flex-col gap-8 items-stretch w-full max-w-8xl mx-auto py-8">
       {/* Profile Header */}
-      <section className="premium-card p-6 md:p-8">
+      <section className="bg-container-3 border border-container-3 rounded-lg p-6 md:p-8">
         <h2 className="premium-section-title">User Profile</h2>
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
           <ProfileImage
@@ -644,10 +644,10 @@ export default function UserProfilePage() {
                 </div>
               )}
             </div>
-            <div className={`text-lg font-medium mb-3 theme-transition ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>
+            <div className={`text-lg font-medium mb-3 theme-transition ${theme === "light" ? "text-text-4" : "text-text-3"}`}>
               @{profile.username}
             </div>
-            <p className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${theme === "light" ? "text-gray-600" : "text-gray-300"}`}>
+            <p className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${theme === "light" ? "text-text-4" : "text-text-2"}`}>
               {profile.bio}
             </p>
             <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
@@ -663,7 +663,7 @@ export default function UserProfilePage() {
       <section className="premium-card p-6 md:p-8">
         <h2 className="premium-section-title">Kozeo Ledger</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
             <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Total Earnings</div>
             <div className="text-2xl font-bold">{getCurrencySymbol(walletCurrency)} {totalEarnings.toLocaleString()}</div>
             {canViewSensitiveInfo && (
@@ -672,7 +672,7 @@ export default function UserProfilePage() {
               </button>
             )}
           </div>
-          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
             <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Gig Rating</div>
             <div className="flex items-center gap-2">
               <div className="text-2xl font-bold">{avgRating.toFixed(1)}</div>
@@ -683,11 +683,11 @@ export default function UserProfilePage() {
               </div>
             </div>
           </div>
-          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
             <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Projects Hosted</div>
             <div className="text-2xl font-bold">{profile.gigsHosted.length || 0}</div>
           </div>
-          <div className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
             <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Collaborations</div>
             <div className="text-2xl font-bold">{profile.gigsCollaborated?.length || 0}</div>
           </div>
@@ -698,7 +698,7 @@ export default function UserProfilePage() {
       <div className="flex flex-col lg:flex-row gap-8 mt-12 pb-20">
         <div className="flex-1 space-y-12">
           {/* Projects Hosted Section */}
-          <section className="premium-card p-6 md:p-8">
+          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiUsers className="opacity-40" />
@@ -706,7 +706,7 @@ export default function UserProfilePage() {
               </h3>
               <button
                 onClick={() => setIsHostedSectionCollapsed(!isHostedSectionCollapsed)}
-                className="p-2 rounded-lg opacity-40 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                className="p-2 rounded-lg opacity-40 hover:opacity-100 hover:bg-state-hover transition-all"
               >
                 {isHostedSectionCollapsed ? <FiChevronDown /> : <FiChevronUp />}
               </button>
@@ -720,7 +720,7 @@ export default function UserProfilePage() {
                   </div>
                 ) : (
                   displayedHostedGigs.map((gig, index) => (
-                    <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                    <div key={index} className="p-6 rounded-2xl bg-container-2 border border-container-3">
                       <div className="flex justify-between items-start gap-4 mb-4">
                         <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
                         <div className="flex items-center gap-1 opacity-60">
@@ -742,7 +742,7 @@ export default function UserProfilePage() {
                         ))}
                       </div>
                       {gig.reviews?.[0] && (
-                        <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 italic text-sm opacity-60">
+                        <div className="p-4 rounded-xl bg-container-2 border border-container-2 italic text-sm opacity-60">
                           \"{gig.reviews[0].description}\"
                           <div className="mt-2 text-[10px] font-bold uppercase tracking-widest opacity-40">
                             — @{gig.reviews[0].author?.username}
@@ -754,7 +754,7 @@ export default function UserProfilePage() {
                 )}
                 {filteredHostedGigs.length > 5 && (
                   <div className="mt-6 flex justify-center">
-                    <button onClick={toggleHostedGigs} className="px-6 py-2 text-xs font-bold uppercase tracking-widest border border-black/10 dark:border-white/10 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all">
+                    <button onClick={toggleHostedGigs} className="px-6 py-2 text-xs font-bold uppercase tracking-widest border border-container-3 rounded-xl hover:bg-state-hover transition-all">
                       {showAllHostedGigs ? "Show Less" : "Load More"}
                     </button>
                   </div>
@@ -764,7 +764,7 @@ export default function UserProfilePage() {
           </section>
 
           {/* Collaborations Section */}
-          <section className="premium-card p-6 md:p-8">
+          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiUsers className="opacity-40" />
@@ -779,7 +779,7 @@ export default function UserProfilePage() {
                 </div>
               ) : (
                 displayedCollaboratedGigs.map((gig: any, index: number) => (
-                  <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                  <div key={index} className="p-6 rounded-2xl bg-container-2 border border-container-3">
                     <div className="flex justify-between items-start gap-4 mb-4">
                       <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
                       <div className="flex items-center gap-1 opacity-60">
@@ -807,7 +807,7 @@ export default function UserProfilePage() {
           </section>
 
           {/* Ongoing Projects Section */}
-          <section className="premium-card p-6 md:p-8">
+          <section className="bg-container-4 border border-container-3 rounded-lg p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="premium-section-title !mb-0 flex items-center gap-3">
                 <FiCalendar className="opacity-40" />
@@ -822,7 +822,7 @@ export default function UserProfilePage() {
                 </div>
               ) : (
                 displayedOngoingProjects.map((gig: any, index: number) => (
-                  <div key={index} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                  <div key={index} className="p-6 rounded-2xl bg-container-2 border border-container-3">
                     <div className="flex justify-between items-center mb-4">
                       <h4 className="text-lg font-bold tracking-tight">{gig.title}</h4>
                       <div className="px-3 py-1 rounded-full bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold uppercase tracking-widest">
@@ -848,7 +848,7 @@ export default function UserProfilePage() {
         {/* Sticky Sidebar */}
         <aside className="hidden lg:block w-80 xl:w-96">
           <div className="sticky top-24">
-            <section className="premium-card p-6">
+            <section className="bg-container-4 border border-container-3 rounded-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-[10px] font-bold tracking-widest uppercase opacity-40 flex items-center gap-2">
                   <FiFilter /> Skill Filter
@@ -867,7 +867,7 @@ export default function UserProfilePage() {
                     placeholder="SEARCH SKILLS..."
                     value={skillSearchQuery}
                     onChange={(e) => setSkillSearchQuery(e.target.value)}
-                    className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl pl-10 pr-4 py-3 text-[10px] font-bold tracking-widest uppercase focus:outline-none focus:border-black/30 dark:focus:border-white/30 transition-all placeholder:opacity-20"
+                    className="w-full bg-container-2 border border-container-3 rounded-xl pl-10 pr-4 py-3 text-[10px] font-bold tracking-widest uppercase focus:outline-none focus:border-black/30 dark:focus:border-white/30 transition-all placeholder:opacity-20"
                   />
                 </div>
               </div>
@@ -881,7 +881,7 @@ export default function UserProfilePage() {
                       className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all duration-300 ${
                         isSelected
                           ? "bg-black dark:bg-white text-white dark:text-black border-transparent"
-                          : "bg-transparent border-black/5 dark:border-white/5 hover:bg-black/5 dark:hover:bg-white/5"
+                          : "bg-transparent border-container-2 hover:bg-state-hover"
                       }`}
                     >
                       <span className="text-[10px] font-bold uppercase tracking-widest">{skill}</span>

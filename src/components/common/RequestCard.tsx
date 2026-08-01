@@ -49,16 +49,16 @@ function ProfilePictureWithFallback({
       <div
         className={`
           w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center
-          bg-forge-bg font-bold text-forge-ink shadow-[0_4px_20px_rgba(21,18,13,0.5)] border-2 transition-all duration-300
+          bg-container-1 font-bold text-text-1 shadow-[0_4px_20px_rgba(21,18,13,0.5)] border-2 transition-all duration-300
           text-xs sm:text-sm md:text-base
           ${
             status === "pending"
-              ? "  border-forge-line"
+              ? "  border-container-3"
               : status === "accepted"
-              ? "  border-forge-line"
+              ? "  border-container-3"
               : status === "rejected"
-              ? "  border-forge-line"
-              : "  border-forge-line"
+              ? "  border-container-3"
+              : "  border-container-3"
           }
         `}
       >
@@ -73,12 +73,12 @@ function ProfilePictureWithFallback({
         w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)] border-2 transition-all duration-300
         ${
           status === "pending"
-            ? "border-forge-line"
+            ? "border-container-3"
             : status === "accepted"
-            ? "border-forge-line"
+            ? "border-container-3"
             : status === "rejected"
-            ? "border-forge-line"
-            : "border-forge-line"
+            ? "border-container-3"
+            : "border-container-3"
         }
       `}
     >
@@ -134,7 +134,7 @@ export default function RequestCard({
         className={`
           absolute inset-0 opacity-0 transition-opacity duration-500
           ${req.status === "pending" ? "group-hover:opacity-100" : ""}
-          bg-forge-bg from-transparent via-white/3 to-transparent
+          bg-container-1 from-transparent via-white/3 to-transparent
           transform -skew-x-12 translate-x-full group-hover:-translate-x-full
           transition-transform duration-700 pointer-events-none
         `}
@@ -158,7 +158,7 @@ export default function RequestCard({
           <div className="flex flex-col min-w-0 flex-1">
             <div
               className={`font-bold text-sm sm:text-base md:text-lg transition-colors duration-300 truncate ${
-                theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                theme === "light" ? "text-text-1" : "text-text-1"
               }`}
             >
               @{req.requesterName || req.name}
@@ -172,8 +172,8 @@ export default function RequestCard({
                    border transition-colors duration-300
                   ${
                     theme === "light"
-                      ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
-                      : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+                      ? "bg-forge-bg/70 border-forge-line/70 text-text-1"
+                      : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
                   }
                 `}
               >
@@ -198,8 +198,8 @@ export default function RequestCard({
                    border transition-colors duration-300
                   ${
                     theme === "light"
-                      ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
-                      : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+                      ? "bg-forge-bg/70 border-forge-line/70 text-text-1"
+                      : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
                   }
                 `}
               >
@@ -223,18 +223,18 @@ export default function RequestCard({
                  border shadow-[0_4px_20px_rgba(21,18,13,0.5)] transition-all duration-300 w-fit
                 ${
                   req.status === "pending"
-                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-text-1 dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                     : req.status === "accepted"
-                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-text-1 dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                     : req.status === "rejected"
-                    ? "bg-forge-bg/80 border-forge-line/50 text-forge-ink-muted dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink-muted"
-                    : "bg-forge-bg/80 border-forge-line/50 text-forge-ink dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
+                    ? "bg-forge-bg/80 border-forge-line/50 text-text-3 dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink-muted"
+                    : "bg-forge-bg/80 border-forge-line/50 text-text-1 dark:bg-forge-bg-raised/50 dark:border-forge-line/50 dark:text-forge-ink"
                 }
               `}
             >
               {req.status === "pending" && (
                 <>
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-forge-bg animate-pulse-slow" />
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-container-1 animate-pulse-slow" />
                   <span className="text-xs">Pending Review</span>
                 </>
               )}
@@ -282,8 +282,8 @@ export default function RequestCard({
              border transition-colors duration-300
             ${
               theme === "light"
-                ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink-muted"
-                : "bg-forge-bg/20 border-forge-line/50 text-forge-ink"
+                ? "bg-forge-bg/70 border-forge-line/70 text-text-3"
+                : "bg-forge-bg/20 border-forge-line/50 text-text-1"
             }
           `}
           >
@@ -304,7 +304,7 @@ export default function RequestCard({
 
           <div
             className={`text-xs font-medium text-center ${
-              theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+              theme === "light" ? "text-text-3" : "text-text-3"
             }`}
           >
             {req.timestamp
@@ -322,11 +322,11 @@ export default function RequestCard({
               className={`text-xs px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded  border font-medium ${
                 req.status === "accepted"
                   ? theme === "light"
-                    ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink"
-                    : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+                    ? "bg-forge-bg/70 border-forge-line/70 text-text-1"
+                    : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
                   : theme === "light"
-                  ? "bg-forge-bg/70 border-forge-line/70 text-forge-ink-muted"
-                  : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted"
+                  ? "bg-forge-bg/70 border-forge-line/70 text-text-3"
+                  : "bg-forge-bg-raised/50 border-forge-line/50 text-text-3"
               }`}
             >
               {new Date(req.responseTime).toLocaleString([], {
@@ -348,15 +348,15 @@ export default function RequestCard({
              border
             ${
               theme === "light"
-                ? "bg-forge-bg/60 border-forge-line/60 text-forge-ink"
-                : "bg-forge-bg-raised/30 border-forge-line/50 text-forge-ink"
+                ? "bg-forge-bg/60 border-forge-line/60 text-text-1"
+                : "bg-forge-bg-raised/30 border-forge-line/50 text-text-1"
             }
           `}
         >
           <div className="flex items-center gap-2 mb-2">
             <svg
               className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                theme === "light" ? "text-text-3" : "text-text-3"
               }`}
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -369,7 +369,7 @@ export default function RequestCard({
             </svg>
             <span
               className={`text-xs font-semibold uppercase tracking-wide ${
-                theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                theme === "light" ? "text-text-3" : "text-text-3"
               }`}
             >
               About
@@ -388,8 +388,8 @@ export default function RequestCard({
            border flex-grow
           ${
             theme === "light"
-              ? "bg-forge-bg/40 border-forge-line/40 text-forge-ink"
-              : "bg-forge-bg/20 border-forge-line/30 text-forge-ink"
+              ? "bg-forge-bg/40 border-forge-line/40 text-text-1"
+              : "bg-forge-bg/20 border-forge-line/30 text-text-1"
           }
         `}
       >
@@ -494,8 +494,8 @@ export default function RequestCard({
           transition-all duration-300
           ${
             theme === "light"
-              ? "bg-forge-bg/80 border-forge-line/80 text-forge-ink"
-              : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+              ? "bg-forge-bg/80 border-forge-line/80 text-text-1"
+              : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
           }
         `}
         >
@@ -505,8 +505,8 @@ export default function RequestCard({
               w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center
               ${
                 theme === "light"
-                  ? "bg-forge-bg text-forge-ink"
-                  : "bg-gray-700/70 text-forge-ink"
+                  ? "bg-container-1 text-text-1"
+                  : "bg-gray-700/70 text-text-1"
               }
             `}
             >
@@ -541,8 +541,8 @@ export default function RequestCard({
           transition-all duration-300 text-center
           ${
             theme === "light"
-              ? "bg-forge-bg/60 border-forge-line/60 text-forge-ink-muted"
-              : "bg-forge-bg-raised/40 border-forge-line/50 text-forge-ink-muted"
+              ? "bg-forge-bg/60 border-forge-line/60 text-text-3"
+              : "bg-forge-bg-raised/40 border-forge-line/50 text-text-3"
           }
         `}
         >

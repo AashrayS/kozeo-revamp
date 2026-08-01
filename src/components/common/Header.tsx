@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiLogOut, FiBell } from "react-icons/fi";
+import { FiLogOut, FiBell, FiSun, FiMoon } from "react-icons/fi";
 import { useLogout } from "../../../store/useLogout";
 import NotificationBox from "./NotificationBox";
 import { useNotificationContext } from "./NotificationContext";
@@ -19,7 +19,7 @@ export default function Header({
   const { notifications, markAsRead, markAllAsRead, unreadCount } =
     useNotificationContext();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const logout = useLogout();
 
   const toggleNotifications = () => {
@@ -42,28 +42,37 @@ export default function Header({
               height={28}
               className="rounded-full"
             />
-            <span className="font-bold text-[15px] tracking-tight text-black dark:text-white">
+            <span className="font-bold text-[15px] tracking-tight text-text-1">
               Kozeo
             </span>
           </Link>
 
         <div className="flex items-center gap-4">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <FiMoon className="text-xl" /> : <FiSun className="text-xl" />}
+          </button>
+
           {/* Notification Button */}
           <button
             onClick={toggleNotifications}
-            className="relative flex items-center gap-2 px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+            className="relative flex items-center gap-2 px-4 py-2 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
           >
             <FiBell className="text-xl" />
             <span className="hidden sm:inline font-medium text-sm">Notifications</span>
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-4 w-1.5 h-1.5 bg-black dark:bg-white rounded-full" />
+              <span className="absolute top-2 right-4 w-1.5 h-1.5 bg-text-1 rounded-full" />
             )}
           </button>
 
           {/* Logout Button */}
           <button
             onClick={logout}
-            className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+            className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
           >
             <FiLogOut className="text-xl" />
             <span className="hidden sm:inline font-medium text-sm">Logout</span>

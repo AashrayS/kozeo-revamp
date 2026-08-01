@@ -267,16 +267,16 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
       <div
         className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] theme-transition ${
           theme === "light"
-            ? "bg-forge-bg border border-forge-line"
-            : "bg-forge-bg-raised border border-forge-line"
+            ? "bg-container-1 border border-container-3"
+            : "bg-container-2 border border-container-3"
         }`}
       >
         {/* Header */}
         <div
           className={`sticky top-0 px-6 py-4 border-b flex items-center justify-between theme-transition ${
             theme === "light"
-              ? "bg-forge-bg/95 border-forge-line "
-              : "bg-forge-bg-raised/95 border-forge-line "
+              ? "bg-forge-bg/95 border-container-3 "
+              : "bg-forge-bg-raised/95 border-container-3 "
           }`}
         >
           <div className="flex items-center gap-3">
@@ -286,14 +286,14 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
             <div>
               <h2
                 className={`text-xl font-semibold theme-transition ${
-                  theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                  theme === "light" ? "text-text-1" : "text-text-1"
                 }`}
               >
                 Withdraw Funds
               </h2>
               <p
                 className={`text-sm theme-transition ${
-                  theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                  theme === "light" ? "text-text-3" : "text-text-3"
                 }`}
               >
                 Available:{" "}
@@ -309,8 +309,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
             disabled={isProcessing}
             className={`p-2 rounded-sm transition-colors ${
               theme === "light"
-                ? "hover:bg-forge-bg text-forge-ink-muted"
-                : "hover:bg-forge-bg-raised text-forge-ink-muted"
+                ? "hover:bg-state-hover text-text-3"
+                : "hover:bg-state-hover text-text-3"
             }`}
           >
             <FiX className="text-lg" />
@@ -326,7 +326,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               <div className="space-y-3">
                 <label
                   className={`block text-sm font-medium theme-transition ${
-                    theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                    theme === "light" ? "text-text-3" : "text-text-1"
                   }`}
                 >
                   Withdrawal Amount
@@ -334,7 +334,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                 <div className="relative">
                   <span
                     className={`absolute left-3 top-1/2 -translate-y-1/2 text-sm theme-transition ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "light" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     {getCurrencySymbol(currency)}
@@ -350,12 +350,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       errors.amount
                         ? "border-[forge-error focus:border-[forge-error"
                         : theme === "light"
-                        ? "border-forge-line focus:border-forge-ember"
-                        : "border-forge-line focus:border-forge-ember"
+                        ? "border-container-3 focus:border-forge-ember"
+                        : "border-container-3 focus:border-forge-ember"
                     } ${
                       theme === "light"
-                        ? "bg-forge-bg text-forge-ink"
-                        : "bg-forge-bg-raised text-forge-ink"
+                        ? "bg-container-1 text-text-1"
+                        : "bg-container-2 text-text-1"
                     } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                     max={walletAmount}
                     min="6"
@@ -372,7 +372,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               <div className="space-y-3">
                 <label
                   className={`block text-sm font-medium theme-transition ${
-                    theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                    theme === "light" ? "text-text-3" : "text-text-1"
                   }`}
                 >
                   Withdrawal Method
@@ -389,8 +389,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       withdrawalMethod === "bank"
                         ? "border-forge-ember bg-forge-ember-low text-forge-ember"
                         : theme === "light"
-                        ? "border-forge-line hover:border-forge-line text-forge-ink-muted"
-                        : "border-forge-line hover:border-forge-line text-forge-ink"
+                        ? "border-container-3 hover:border-forge-line text-text-3"
+                        : "border-container-3 hover:border-forge-line text-text-1"
                     }`}
                     disabled={isProcessing}
                   >
@@ -406,8 +406,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     }}
                     className={`p-3 rounded-sm border-2 transition-all duration-200 opacity-50 cursor-not-allowed ${
                       theme === "light"
-                        ? "border-forge-line text-forge-ink-muted bg-forge-bg"
-                        : "border-forge-line text-forge-ink-muted bg-forge-bg-raised"
+                        ? "border-container-3 text-text-3 bg-container-1"
+                        : "border-container-3 text-text-3 bg-container-2"
                     }`}
                     disabled={true}
                   >
@@ -424,7 +424,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               className={`p-3 rounded-sm border-l-4 border-forge-ember theme-transition ${
                 theme === "light"
                   ? "bg-forge-ember-low text-forge-ember"
-                  : "bg-forge-ember-low/30 text-forge-ink-muted"
+                  : "bg-forge-ember-low/30 text-text-3"
               }`}
             >
               <p className="text-xs font-medium">
@@ -449,7 +449,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
             <div className="space-y-3">
               <label
                 className={`block text-sm font-medium theme-transition ${
-                  theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                  theme === "light" ? "text-text-3" : "text-text-1"
                 }`}
               >
                 Email Address
@@ -463,12 +463,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   errors.email
                     ? "border-[forge-error focus:border-[forge-error"
                     : theme === "light"
-                    ? "border-forge-line focus:border-forge-ember"
-                    : "border-forge-line focus:border-forge-ember"
+                    ? "border-container-3 focus:border-forge-ember"
+                    : "border-container-3 focus:border-forge-ember"
                 } ${
                   theme === "light"
-                    ? "bg-forge-bg text-forge-ink placeholder-gray-500"
-                    : "bg-forge-bg-raised text-forge-ink placeholder-gray-400"
+                    ? "bg-container-1 text-text-1 placeholder:text-text-4"
+                    : "bg-container-2 text-text-1 placeholder:text-text-4"
                 } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                 disabled={isProcessing}
               />
@@ -482,13 +482,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               <div
                 className={`p-4 rounded-sm border theme-transition ${
                   theme === "light"
-                    ? "bg-forge-bg border-forge-line"
-                    : "bg-forge-bg-raised/50 border-forge-line"
+                    ? "bg-container-1 border-container-3"
+                    : "bg-forge-bg-raised/50 border-container-3"
                 }`}
               >
                 <h3
                   className={`text-lg font-medium mb-4 flex items-center gap-2 theme-transition ${
-                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "light" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   <FiUser className="text-forge-ember" />
@@ -498,7 +498,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                 <div className="space-y-3">
                   <label
                     className={`block text-sm font-medium theme-transition ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                      theme === "light" ? "text-text-3" : "text-text-1"
                     }`}
                   >
                     UPI ID
@@ -517,12 +517,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                           : upiVerificationStatus === "verified"
                           ? "border-forge-ember focus:border-forge-ember"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       disabled={isProcessing || isVerifyingUpi}
                     />
@@ -534,10 +534,10 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                       }
                       className={`px-4 py-3 rounded-sm font-medium transition-all duration-200 text-sm ${
                         upiVerificationStatus === "verified"
-                          ? "bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink"
+                          ? "bg-forge-ember-low hover:bg-forge-ember-low text-text-1"
                           : upiVerificationStatus === "failed"
-                          ? "bg-[forge-error-bg hover:bg-[forge-error-bg text-forge-ink"
-                          : "bg-forge-ember hover:bg-forge-ember text-forge-ink"
+                          ? "bg-[forge-error-bg hover:bg-[forge-error-bg text-text-1"
+                          : "bg-forge-ember hover:bg-forge-ember text-text-1"
                       } ${
                         isProcessing || isVerifyingUpi || !formData.upiId.trim()
                           ? "opacity-50 cursor-not-allowed"
@@ -574,13 +574,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               <div
                 className={`p-4 rounded-sm border theme-transition ${
                   theme === "light"
-                    ? "bg-forge-bg border-forge-line"
-                    : "bg-forge-bg-raised/50 border-forge-line"
+                    ? "bg-container-1 border-container-3"
+                    : "bg-forge-bg-raised/50 border-container-3"
                 }`}
               >
                 <h3
                   className={`text-lg font-medium mb-4 flex items-center gap-2 theme-transition ${
-                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "light" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   <FiCreditCard className="text-forge-ember" />
@@ -592,7 +592,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <div className="md:col-span-2">
                     <label
                       className={`block text-sm font-medium mb-2 theme-transition ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                        theme === "light" ? "text-text-3" : "text-text-1"
                       }`}
                     >
                       Account Holder Name
@@ -608,12 +608,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         errors.accountHolderName
                           ? "border-[forge-error focus:border-[forge-error"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       disabled={isProcessing}
                     />
@@ -628,7 +628,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <div className="md:col-span-2">
                     <label
                       className={`block text-sm font-medium mb-2 theme-transition ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                        theme === "light" ? "text-text-3" : "text-text-1"
                       }`}
                     >
                       Bank Name
@@ -644,12 +644,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         errors.bankName
                           ? "border-[forge-error focus:border-[forge-error"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       disabled={isProcessing}
                     />
@@ -664,7 +664,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 theme-transition ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                        theme === "light" ? "text-text-3" : "text-text-1"
                       }`}
                     >
                       Account Number
@@ -683,12 +683,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         errors.accountNumber
                           ? "border-[forge-error focus:border-[forge-error"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       disabled={isProcessing}
                     />
@@ -703,7 +703,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 theme-transition ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                        theme === "light" ? "text-text-3" : "text-text-1"
                       }`}
                     >
                       Confirm Account Number
@@ -722,12 +722,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         errors.confirmAccountNumber
                           ? "border-[forge-error focus:border-[forge-error"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       disabled={isProcessing}
                     />
@@ -742,7 +742,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                   <div className="md:col-span-2">
                     <label
                       className={`block text-sm font-medium mb-2 theme-transition ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink"
+                        theme === "light" ? "text-text-3" : "text-text-1"
                       }`}
                     >
                       IFSC Code
@@ -761,12 +761,12 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         errors.ifscCode
                           ? "border-[forge-error focus:border-[forge-error"
                           : theme === "light"
-                          ? "border-forge-line focus:border-forge-ember"
-                          : "border-forge-line focus:border-forge-ember"
+                          ? "border-container-3 focus:border-forge-ember"
+                          : "border-container-3 focus:border-forge-ember"
                       } ${
                         theme === "light"
-                          ? "bg-forge-bg text-forge-ink"
-                          : "bg-forge-bg-raised text-forge-ink"
+                          ? "bg-container-1 text-text-1"
+                          : "bg-container-2 text-text-1"
                       } focus:outline-none focus:ring-2 focus:ring-forge-line/40`}
                       maxLength={11}
                       disabled={isProcessing}
@@ -805,8 +805,8 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                 disabled={isProcessing}
                 className={`flex-1 px-6 py-3 rounded-sm border transition-colors ${
                   theme === "light"
-                    ? "border-forge-line text-forge-ink-muted hover:bg-forge-bg"
-                    : "border-forge-line text-forge-ink hover:bg-forge-bg-raised"
+                    ? "border-container-3 text-text-3 hover:bg-state-hover"
+                    : "border-container-3 text-text-1 hover:bg-state-hover"
                 } ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 Cancel
@@ -814,11 +814,11 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
               <button
                 type="submit"
                 disabled={isProcessing}
-                className={`flex-1 px-6 py-3 rounded-sm bg-forge-bg from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-forge-ink font-medium transition-all duration-200 ${
+                className={`flex-1 px-6 py-3 rounded-sm bg-container-1 from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-text-1 font-medium transition-all duration-200 ${
                   isProcessing
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                } focus:outline-none focus:ring-2 focus:ring-forge-line`}
+                } focus:outline-none focus:ring-2 focus:ring-state-highlight`}
               >
                 {isProcessing ? (
                   <div className="flex items-center justify-center gap-2">

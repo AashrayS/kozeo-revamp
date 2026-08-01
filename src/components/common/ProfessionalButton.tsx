@@ -57,7 +57,7 @@ const ProfessionalButton = ({
             : "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500/50 focus:ring-red-500/30",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500"
+            ? "bg-gray-100/80 border-container-2 text-text-3"
             : "bg-red-50 border-red-200 text-red-600 hover:bg-red-100/90 hover:border-red-300 focus:ring-red-400/30",
       },
       warning: {
@@ -67,18 +67,18 @@ const ProfessionalButton = ({
             : "bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 focus:ring-amber-500/30",
         light:
           disabled || loading
-            ? "bg-gray-100/80 border-gray-200 text-gray-500"
+            ? "bg-gray-100/80 border-container-2 text-text-3"
             : "bg-amber-50 border-amber-200 text-amber-600 hover:bg-amber-100/90 hover:border-amber-300 focus:ring-amber-400/30",
       },
       neutral: {
         dark:
           disabled || loading
-            ? "bg-white/5 border-white/5 text-white/20"
-            : "bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20 focus:ring-white/10",
+            ? "bg-container-2 border-container-2 text-text-4"
+            : "bg-container-2 border-container-3 text-text-1 hover:bg-state-hover hover:border-container-4 focus:ring-state-highlight",
         light:
           disabled || loading
-            ? "bg-black/5 border-black/5 text-black/20"
-            : "bg-black/5 border-black/10 text-black hover:bg-black/10 hover:border-black/20 focus:ring-black/10",
+            ? "bg-container-2 border-container-2 text-text-4"
+            : "bg-container-2 border-container-3 text-text-1 hover:bg-state-hover hover:border-container-4 focus:ring-state-highlight",
       },
     };
 

@@ -7,12 +7,12 @@
 export const theme = {
   light: {
     colors: {
-      primary:    "#1a1a1a",   /* dark gray for light-mode buttons */
-      secondary:  "#f2f2f2",   /* forge-paper */
-      background: "#f2f2f2",   /* forge-paper */
-      text:       "#0a0a0a",   /* forge-paper-ink */
-      input:      "#e0e0e0",
-      border:     "#c0c0c0",
+      primary:    "#000000",   /* forge-ember */
+      secondary:  "#fafafa",   /* forge-bg-raised */
+      background: "#ffffff",   /* forge-bg */
+      text:       "#000000",   /* forge-ink */
+      input:      "#fafafa",   /* forge-bg-raised */
+      border:     "rgba(0, 0, 0, 0.1)", /* forge-line */
     },
     fonts: {
       base: "Inter, ui-sans-serif, system-ui, sans-serif",
@@ -26,12 +26,12 @@ export const theme = {
   },
   dark: {
     colors: {
-      primary:    "#d4d4d4",   /* forge-ember — silver accent */
-      secondary:  "#111111",   /* forge-bg-raised */
+      primary:    "#ffffff",   /* forge-ember */
+      secondary:  "#121212",   /* forge-bg-raised */
       background: "#080808",   /* forge-bg */
-      text:       "#f0f0f0",   /* forge-ink */
-      input:      "#111111",   /* forge-bg-raised */
-      border:     "#2c2c2c",   /* forge-line */
+      text:       "#ffffff",   /* forge-ink */
+      input:      "#121212",   /* forge-bg-raised */
+      border:     "rgba(255, 255, 255, 0.1)", /* forge-line */
     },
     fonts: {
       base: "Inter, ui-sans-serif, system-ui, sans-serif",

@@ -38,7 +38,7 @@
 /* Premium Design System Utilities */
 @layer components {
   .premium-card {
-    @apply rounded-3xl border border-black/5 dark:border-white/10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-sm transition-all duration-500;
+    @apply rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl shadow-sm transition-all duration-500;
   }
 
   .premium-card:hover {
@@ -47,23 +47,23 @@
   }
 
   .premium-glass {
-    @apply backdrop-blur-2xl bg-white/40 dark:bg-black/40 border border-white/20 dark:border-white/10;
+    @apply backdrop-blur-2xl bg-container-1 border border-container-3;
   }
 
   .premium-header {
-    @apply sticky top-0 z-50 backdrop-blur-xl border-b border-black/5 dark:border-white/10 bg-white/70 dark:bg-black/70;
+    @apply sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--forge-line)] bg-[var(--header-bg)] text-[var(--forge-ink)];
   }
 
   .premium-input {
-    @apply w-full px-6 py-4 rounded-2xl border-2 border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] text-black dark:text-white placeholder-black/30 dark:placeholder-white/30 focus:outline-none focus:border-black/20 dark:focus:border-white/20 focus:ring-4 focus:ring-black/[0.02] dark:focus:ring-white/[0.02] transition-all duration-300;
+    @apply w-full px-6 py-4 rounded-2xl border-2 border-container-2 bg-container-1 text-text-1 placeholder:text-text-4 focus:outline-none focus:border-state-highlight focus:ring-4 focus:ring-state-highlight transition-all duration-300;
   }
 
   .premium-label {
-    @apply block text-xs font-bold tracking-[0.2em] uppercase text-black/40 dark:text-white/40 mb-3 ml-1;
+    @apply block text-xs font-bold tracking-[0.2em] uppercase text-text-4 mb-3 ml-1;
   }
 
   .premium-section-title {
-    @apply text-3xl md:text-4xl font-light tracking-tight text-black dark:text-white mb-8;
+    @apply text-3xl md:text-4xl font-light tracking-tight text-text-1 mb-8;
   }
 
   .premium-heading {
@@ -71,6 +71,6 @@
   }
 
   .premium-subheading {
-    @apply tracking-tight text-black/50 dark:text-white/50 font-medium;
+    @apply tracking-tight text-text-3 font-medium;
   }
 }

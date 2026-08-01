@@ -30,7 +30,7 @@ export const PageLoader = ({ onComplete }: PageLoaderProps) => {
           className="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-5 opacity-90"
           priority
         />
-        <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-forge-ink font-serif mb-8">
+        <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-text-1 font-serif mb-8">
 
           Kozeo
         </h1>

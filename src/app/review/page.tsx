@@ -162,8 +162,8 @@ export default function ReviewPage() {
         <div
           className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-              : "bg-forge-bg    text-forge-ink"
+              ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+              : "bg-container-1    text-text-1"
           }`}
         >
           <div className="flex-1 flex flex-col pb-20 lg:pb-0">
@@ -171,21 +171,21 @@ export default function ReviewPage() {
               <div
                 className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-center items-center text-center transition-all duration-300 ${
                   theme === "dark"
-                    ? "bg-transparent border-forge-line drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
-                    : "bg-forge-bg/80 border-forge-line  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                    ? "bg-transparent border-container-3 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                    : "bg-forge-bg/80 border-container-3  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 <div className="text-6xl mb-4">✅</div>
                 <h1
                   className={`text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "dark" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   Review Submitted!
                 </h1>
                 <p
                   className={`text-lg mb-4 transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-1" : "text-text-3"
                   }`}
                 >
                   Thank you for your feedback.{" "}
@@ -223,8 +223,8 @@ export default function ReviewPage() {
       <div
         className={`min-h-screen relative z-10 flex flex-row transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-            : "bg-forge-bg    text-forge-ink"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+            : "bg-container-1    text-text-1"
         }`}
       >
         <div className="flex-1 flex flex-col pb-20 lg:pb-0">
@@ -233,13 +233,13 @@ export default function ReviewPage() {
               onSubmit={handleSubmit}
               className={`w-full h-screen sm:h-auto max-w-2xl rounded-none sm:rounded-sm border-0 sm:border shadow-none sm:shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-4 sm:p-8 md:p-12 flex flex-col gap-6 sm:gap-8 justify-start transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-transparent border-forge-line drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
-                  : "bg-forge-bg/80 border-forge-line  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                  ? "bg-transparent border-container-3 drop-shadow-none sm:drop-shadow-glow backdrop-blur-none sm:"
+                  : "bg-forge-bg/80 border-container-3  shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
               }`}
             >
               <h1
                 className={`text-2xl sm:text-3xl font-bold mb-2 text-center tracking-tight transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                  theme === "dark" ? "text-text-1" : "text-text-1"
                 }`}
               >
                 Review Your Collaboration
@@ -250,13 +250,13 @@ export default function ReviewPage() {
                 <div
                   className={`border rounded-sm p-4 sm:p-6 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-forge-bg-raised/50 border-forge-line"
-                      : "bg-forge-bg/80 border-forge-line"
+                      ? "bg-forge-bg-raised/50 border-container-3"
+                      : "bg-forge-bg/80 border-container-3"
                   }`}
                 >
                   <h2
                     className={`text-lg font-semibold mb-3 transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "dark" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     Project Details
@@ -265,14 +265,14 @@ export default function ReviewPage() {
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "dark" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Project:{" "}
                       </span>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                          theme === "dark" ? "text-text-1" : "text-text-1"
                         }`}
                       >
                         {gigInfo.title}
@@ -281,7 +281,7 @@ export default function ReviewPage() {
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "dark" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Working with:{" "}
@@ -293,7 +293,7 @@ export default function ReviewPage() {
                     <div>
                       <span
                         className={`transition-colors duration-300 ${
-                          theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "dark" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Host:{" "}
@@ -313,7 +313,7 @@ export default function ReviewPage() {
                   {error.includes(
                     "Missing gigs ID or receiver information"
                   ) && (
-                    <div className="text-xs text-forge-ink-muted">
+                    <div className="text-xs text-text-3">
                       <p>To leave a review, you need to:</p>
                       <ul className="list-disc list-inside mt-1 space-y-1">
                         <li>Complete a project collaboration</li>
@@ -337,7 +337,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "dark" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   Rate Your Experience
@@ -357,8 +357,8 @@ export default function ReviewPage() {
                           star <= (hoverRating || rating)
                             ? "text-forge-ember"
                             : theme === "dark"
-                            ? "text-forge-ink-muted"
-                            : "text-forge-ink"
+                            ? "text-text-3"
+                            : "text-text-1"
                         } hover:text-forge-ember`}
                       />
                     </button>
@@ -367,7 +367,7 @@ export default function ReviewPage() {
                 {rating > 0 && (
                   <p
                     className={`text-sm text-center sm:text-left transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "dark" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     {rating === 1 && "Poor"}
@@ -383,7 +383,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "dark" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   Review Title
@@ -395,8 +395,8 @@ export default function ReviewPage() {
                   placeholder="Brief summary of your experience..."
                   className={`w-full px-4 sm:px-5 py-3 rounded-sm border text-base sm:text-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-forge-bg-raised/70 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
-                      : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
+                      ? "bg-forge-bg-raised/70 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight"
+                      : "bg-forge-bg/80 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight focus:border-forge-ember"
                   }`}
                   required
                 />
@@ -406,7 +406,7 @@ export default function ReviewPage() {
               <div className="space-y-3">
                 <label
                   className={`block font-medium text-base sm:text-lg transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "dark" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   Share Your Experience
@@ -418,14 +418,14 @@ export default function ReviewPage() {
                   rows={6}
                   className={`w-full px-4 sm:px-5 py-3 rounded-sm border text-base sm:text-lg resize-none focus:outline-none focus:ring-2 transition-all duration-300 ${
                     theme === "dark"
-                      ? "bg-forge-bg-raised/70 border-forge-line text-forge-ink placeholder-gray-400 focus:ring-forge-line"
-                      : "bg-forge-bg/80 border-forge-line text-forge-ink placeholder-gray-500 focus:ring-forge-line focus:border-forge-ember"
+                      ? "bg-forge-bg-raised/70 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight"
+                      : "bg-forge-bg/80 border-container-3 text-text-1 placeholder:text-text-4 focus:ring-state-highlight focus:border-forge-ember"
                   }`}
                   required
                 />
                 <p
                   className={`text-xs transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   {review.length}/500 characters
@@ -440,13 +440,13 @@ export default function ReviewPage() {
                 }
                 className={`w-full py-3 rounded-sm font-semibold transition-colors text-base sm:text-lg shadow-none border mt-2 ${
                   theme === "dark"
-                    ? "bg-forge-bg-raised/80 text-forge-ink hover:bg-forge-bg-raised border-forge-line disabled:opacity-60"
-                    : "bg-forge-ember-low text-forge-ink hover:bg-forge-ember-low border-forge-ember disabled:opacity-60"
+                    ? "bg-forge-bg-raised/80 text-text-1 hover:bg-state-hover border-container-3 disabled:opacity-60"
+                    : "bg-forge-ember-low text-text-1 hover:bg-forge-ember-low border-forge-ember disabled:opacity-60"
                 } disabled:cursor-not-allowed`}
               >
                 {submitting ? (
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-forge-line border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-container-3 border-t-transparent rounded-full animate-spin"></div>
                     Submitting Review...
                   </div>
                 ) : (

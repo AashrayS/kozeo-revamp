@@ -33,7 +33,8 @@ export default function AdminSettingsPage() {
       return;
     }
 
-    setLoading(false);
+    const timer = setTimeout(() => setLoading(false), 0);
+    return () => clearTimeout(timer);
   }, [userAuthenticated, currentUser, router]);
 
   if (loading) {
@@ -54,8 +55,8 @@ export default function AdminSettingsPage() {
       <div
         className={`min-h-screen relative z-10 flex transition-colors duration-300 ${
           theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink"
-            : "bg-forge-bg    text-forge-ink"
+            ? "bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1"
+            : "bg-container-1    text-text-1"
         }`}
       >
 
@@ -65,14 +66,14 @@ export default function AdminSettingsPage() {
             <div className="mb-8">
               <h1
                 className={`text-3xl font-bold mb-4 transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                  theme === "dark" ? "text-text-1" : "text-text-1"
                 }`}
               >
                 Admin Settings
               </h1>
               <p
                 className={`transition-colors duration-300 ${
-                  theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                  theme === "dark" ? "text-text-3" : "text-text-3"
                 }`}
               >
                 Manage platform settings and configurations
@@ -85,8 +86,8 @@ export default function AdminSettingsPage() {
               <div
                 className={`p-6 rounded-sm border transition-all duration-300 hover:scale-105 cursor-pointer ${
                   theme === "dark"
-                    ? "bg-forge-bg-raised/50 border-forge-line hover:border-forge-line"
-                    : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:border-forge-line"
+                    ? "bg-forge-bg-raised/50 border-container-3 hover:border-forge-line"
+                    : "bg-container-1 border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:border-forge-line"
                 }`}
                 onClick={() => router.push("/admin/withdraw-requests")}
               >
@@ -97,14 +98,14 @@ export default function AdminSettingsPage() {
                   <div>
                     <h3
                       className={`text-lg font-semibold transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "dark" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       Withdraw Requests
                     </h3>
                     <p
                       className={`text-sm transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Manage user withdrawal requests
@@ -113,7 +114,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <p
                   className={`text-sm transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   View and update the status of pending withdrawal requests from
@@ -125,8 +126,8 @@ export default function AdminSettingsPage() {
               <div
                 className={`p-6 rounded-sm border transition-all duration-300 opacity-50 ${
                   theme === "dark"
-                    ? "bg-forge-bg-raised/50 border-forge-line"
-                    : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                    ? "bg-forge-bg-raised/50 border-container-3"
+                    : "bg-container-1 border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -136,14 +137,14 @@ export default function AdminSettingsPage() {
                   <div>
                     <h3
                       className={`text-lg font-semibold transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "dark" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       User Management
                     </h3>
                     <p
                       className={`text-sm transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Coming Soon
@@ -152,7 +153,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <p
                   className={`text-sm transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   Manage user accounts, roles, and permissions across the
@@ -165,25 +166,25 @@ export default function AdminSettingsPage() {
                 onClick={() => router.push("/admin/discussion-rooms")}
                 className={`p-6 rounded-sm border transition-all duration-300 cursor-pointer hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] ${
                   theme === "dark"
-                    ? "bg-forge-bg-raised border-forge-line hover:border-forge-line"
-                    : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:border-forge-line"
+                    ? "bg-container-2 border-container-3 hover:border-forge-line"
+                    : "bg-container-1 border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:shadow-[0_4px_20px_rgba(21,18,13,0.5)] hover:border-forge-line"
                 }`}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="p-3 bg-forge-ember-low/10 rounded-sm">
-                    <FiMessageSquare className="text-2xl text-forge-ink-muted" />
+                    <FiMessageSquare className="text-2xl text-text-3" />
                   </div>
                   <div>
                     <h3
                       className={`text-lg font-semibold transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "dark" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       Discussion Rooms
                     </h3>
                     <p
                       className={`text-sm transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Manage community discussions
@@ -192,7 +193,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <p
                   className={`text-sm transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   Create and manage discussion rooms for community engagement.
@@ -203,8 +204,8 @@ export default function AdminSettingsPage() {
               <div
                 className={`p-6 rounded-sm border transition-all duration-300 opacity-50 ${
                   theme === "dark"
-                    ? "bg-forge-bg-raised/50 border-forge-line"
-                    : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                    ? "bg-forge-bg-raised/50 border-container-3"
+                    : "bg-container-1 border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
                 }`}
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -214,14 +215,14 @@ export default function AdminSettingsPage() {
                   <div>
                     <h3
                       className={`text-lg font-semibold transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "dark" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       Platform Settings
                     </h3>
                     <p
                       className={`text-sm transition-colors duration-300 ${
-                        theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "dark" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Coming Soon
@@ -230,7 +231,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <p
                   className={`text-sm transition-colors duration-300 ${
-                    theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                    theme === "dark" ? "text-text-3" : "text-text-3"
                   }`}
                 >
                   Configure platform-wide settings, fees, and policies.
@@ -242,27 +243,27 @@ export default function AdminSettingsPage() {
             <div
               className={`mt-8 p-6 rounded-sm border transition-all duration-300 ${
                 theme === "dark"
-                  ? "bg-forge-bg-raised/50 border-forge-line"
-                  : "bg-forge-bg border-forge-line shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                  ? "bg-forge-bg-raised/50 border-container-3"
+                  : "bg-container-1 border-container-3 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-forge-bg bg-forge-ember rounded-full flex items-center justify-center">
-                  <span className="text-forge-ink text-lg font-bold">
+                <div className="w-12 h-12 bg-container-1 bg-forge-ember rounded-full flex items-center justify-center">
+                  <span className="text-text-1 text-lg font-bold">
                     {currentUser?.first_name?.charAt(0) || "A"}
                   </span>
                 </div>
                 <div>
                   <h3
                     className={`text-lg font-semibold transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "dark" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     Welcome, {currentUser?.first_name} {currentUser?.last_name}
                   </h3>
                   <p
                     className={`text-sm transition-colors duration-300 ${
-                      theme === "dark" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "dark" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     Platform Administrator • @{currentUser?.username}

@@ -19,12 +19,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       const savedTheme = localStorage.getItem("kozeo-theme") as Theme;
       if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
     }
-    return "dark";
+    return "light";
   });
 
   // Apply theme to document and save to localStorage
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     localStorage.setItem("kozeo-theme", theme);
   }, [theme]);
 

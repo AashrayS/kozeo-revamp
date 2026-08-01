@@ -32,10 +32,10 @@ export default function GigLobbyPage() {
     if (gigStr) {
       try {
         const gig = JSON.parse(gigStr);
-        setGigInfo(gig);
+        setTimeout(() => setGigInfo(gig), 0);
         gigId = gig.gigId || gig.id || gig.Title || "1";
       } catch {
-        setGigInfo(null);
+        setTimeout(() => setGigInfo(null), 0);
       }
     }
     // Connect to WebSocket for incoming requests
@@ -58,11 +58,11 @@ export default function GigLobbyPage() {
 
   return (
     <>
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
+      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-text-1">
         <div className="flex-1 flex flex-col p-0 sm:p-8">
           <main className="flex-1 flex flex-col md:flex-row gap-8 items-stretch justify-center w-full max-w-6xl mx-auto py-8">
             {/* Gig Info Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-forge-line rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Gig Info</h2>
               {gigInfo ? (
                 <div className="space-y-2">
@@ -91,11 +91,11 @@ export default function GigLobbyPage() {
                   </div>
                 </div>
               ) : (
-                <div className="text-forge-ink-muted">No gig info available.</div>
+                <div className="text-text-3">No gig info available.</div>
               )}
             </section>
             {/* Incoming Requests Container */}
-            <section className="flex-1 bg-forge-bg-raised/70 border border-forge-line rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
+            <section className="flex-1 bg-forge-bg-raised/70 border border-container-3 rounded-sm p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  min-w-[300px] max-w-xl">
               <h2 className="text-2xl font-bold mb-4">Incoming Requests</h2>
               {requests && requests.length > 0 ? (
                 <ul className="space-y-4">
@@ -105,9 +105,9 @@ export default function GigLobbyPage() {
                       className="bg-forge-bg-raised/80 rounded-sm p-4 flex flex-col gap-2"
                     >
                       <div className="font-semibold">{req.requesterName || req.name}</div>
-                      <div className="text-sm text-forge-ink">{req.message}</div>
+                      <div className="text-sm text-text-1">{req.message}</div>
                       <div className="flex gap-2 mt-2">
-                        <button className="px-4 py-2 rounded-sm bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink text-sm font-semibold"
+                        <button className="px-4 py-2 rounded-sm bg-forge-ember-low hover:bg-forge-ember-low text-text-1 text-sm font-semibold"
                           onClick={() => {
                             const username = req.requesterName || req.name;
                             if (username) window.open(`/profile/${username.replace(/^@/,"")}`);
@@ -115,10 +115,10 @@ export default function GigLobbyPage() {
                         >
                           View Profile
                         </button>
-                        <button className="px-4 py-2 rounded-sm bg-forge-ember-low hover:bg-forge-ember-low text-forge-ink text-sm font-semibold">
+                        <button className="px-4 py-2 rounded-sm bg-forge-ember-low hover:bg-forge-ember-low text-text-1 text-sm font-semibold">
                           Accept
                         </button>
-                        <button className="px-4 py-2 rounded-sm bg-[forge-error-bg hover:bg-[forge-error-bg text-forge-ink text-sm font-semibold">
+                        <button className="px-4 py-2 rounded-sm bg-[forge-error-bg hover:bg-[forge-error-bg text-text-1 text-sm font-semibold">
                           Reject
                         </button>
                       </div>
@@ -126,7 +126,7 @@ export default function GigLobbyPage() {
                   ))}
                 </ul>
               ) : (
-                <div className="text-forge-ink-muted">No incoming requests.</div>
+                <div className="text-text-3">No incoming requests.</div>
               )}
             </section>
           </main>

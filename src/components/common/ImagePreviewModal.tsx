@@ -22,8 +22,10 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
   // Reset loading state when imgUrl changes
   useEffect(() => {
     if (imgUrl) {
-      setImageLoaded(false);
-      setImageError(false);
+      setTimeout(() => {
+        setImageLoaded(false);
+        setImageError(false);
+      }, 0);
     }
   }, [imgUrl]);
   // Close modal on Escape key press

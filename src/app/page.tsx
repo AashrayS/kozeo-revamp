@@ -260,7 +260,7 @@ const Navbar = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => setIsMounted(true), 0);
     const handler = () => {
       const scrollY = window.scrollY;
       setScrolled(scrollY > 10);
@@ -505,7 +505,7 @@ const ShowcaseSection = () => (
               </h2>
             </HeaderReveal>
             <WordReveal className="text-white/40 text-xl leading-relaxed font-medium">
-              Kozeo is the world's first platform where every entry in your portfolio is backed by verifiable proof.
+              Kozeo is the world&apos;s first platform where every entry in your portfolio is backed by verifiable proof.
             </WordReveal>
           </div>
           
@@ -839,7 +839,7 @@ const CTA = () => {
 const Footer = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true);
+    setTimeout(() => setMounted(true), 0);
   }, []);
 
   return (

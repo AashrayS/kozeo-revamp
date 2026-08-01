@@ -139,12 +139,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
       case "success":
         return <FiCheckCircle className="text-forge-ember" />;
       case "pending":
-        return <FiClock className="text-forge-ink-muted" />;
+        return <FiClock className="text-text-3" />;
       case "failed":
       case "cancelled":
         return <FiXCircle className="text-[forge-error" />;
       default:
-        return <FiClock className="text-forge-ink-muted" />;
+        return <FiClock className="text-text-3" />;
     }
   };
 
@@ -157,8 +157,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
           : "text-forge-ember bg-forge-ember-low/30";
       case "pending":
         return theme === "light"
-          ? "text-forge-ink-muted bg-forge-bg"
-          : "text-forge-ink-muted bg-forge-bg-raised/30";
+          ? "text-text-3 bg-container-1"
+          : "text-text-3 bg-forge-bg-raised/30";
       case "failed":
       case "cancelled":
         return theme === "light"
@@ -166,8 +166,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
           : "text-[forge-error bg-[forge-error-bg/30";
       default:
         return theme === "light"
-          ? "text-forge-ink-muted bg-forge-bg"
-          : "text-forge-ink-muted bg-forge-bg-raised/30";
+          ? "text-text-3 bg-container-1"
+          : "text-text-3 bg-forge-bg-raised/30";
     }
   };
 
@@ -217,15 +217,15 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         <div
           className={`w-full max-w-4xl max-h-[90vh] rounded-sm border-0 relative drop-shadow-glow  overflow-hidden theme-transition ${
             theme === "light"
-              ? "bg-forge-bg/95 border-forge-line"
-              : "bg-forge-bg-raised/95 border-forge-line"
+              ? "bg-forge-bg/95 border-container-3"
+              : "bg-forge-bg-raised/95 border-container-3"
           }`}
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-forge-line/50">
             <h2
               className={`text-2xl font-light tracking-tight ${
-                theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                theme === "light" ? "text-text-1" : "text-text-1"
               }`}
             >
               Transaction History
@@ -234,8 +234,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               onClick={onClose}
               className={`p-2 rounded-full transition-all duration-200 ${
                 theme === "light"
-                  ? "bg-forge-bg hover:bg-forge-bg text-forge-ink"
-                  : "bg-forge-bg-raised hover:bg-forge-bg-raised text-forge-ink"
+                  ? "bg-container-1 hover:bg-state-hover text-text-1"
+                  : "bg-container-2 hover:bg-state-hover text-text-1"
               }`}
             >
               <FiX className="text-lg" />
@@ -247,7 +247,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             {visibleTransactions.length === 0 && (
               <div
                 className={`text-center py-12 ${
-                  theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                  theme === "light" ? "text-text-3" : "text-text-3"
                 }`}
               >
                 <FiDollarSign className="mx-auto mb-4 text-4xl opacity-50" />
@@ -277,7 +277,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         {getStatusIcon(transaction.status)}
                         <h3
                           className={`text-lg font-medium ${
-                            theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                            theme === "light" ? "text-text-1" : "text-text-1"
                           }`}
                         >
                           {transaction.title}
@@ -296,8 +296,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                                 ? "bg-forge-ember-low text-forge-ember"
                                 : "bg-forge-ember-low text-forge-ember"
                               : theme === "light"
-                              ? "bg-forge-ember-low text-forge-ink-muted"
-                              : "bg-forge-ember-low/30 text-forge-ink-muted"
+                              ? "bg-forge-ember-low text-text-3"
+                              : "bg-forge-ember-low/30 text-text-3"
                           }`}
                         >
                           {transaction.type === "withdrawal"
@@ -312,8 +312,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-forge-ink-muted"
-                                : "text-forge-ink-muted"
+                                ? "text-text-3"
+                                : "text-text-3"
                             }`}
                           >
                             {transaction.transactionNumber}
@@ -325,8 +325,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-forge-ink-muted"
-                                : "text-forge-ink-muted"
+                                ? "text-text-3"
+                                : "text-text-3"
                             }`}
                           >
                             {formatDate(transaction.createdAt)}
@@ -334,12 +334,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <FiUser className="text-forge-ink-muted" />
+                          <FiUser className="text-text-3" />
                           <span
                             className={`${
                               theme === "light"
-                                ? "text-forge-ink-muted"
-                                : "text-forge-ink-muted"
+                                ? "text-text-3"
+                                : "text-text-3"
                             }`}
                           >
                             {transaction.type === "withdrawal" ? "User" : "To"}:
@@ -353,8 +353,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                             <span
                               className={`${
                                 theme === "light"
-                                  ? "text-forge-ink-muted"
-                                  : "text-forge-ink-muted"
+                                  ? "text-text-3"
+                                  : "text-text-3"
                               }`}
                             >
                               From: @
@@ -369,7 +369,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                     <div className="text-right">
                       <div
                         className={`text-2xl font-bold mb-1 ${
-                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                          theme === "light" ? "text-text-1" : "text-text-1"
                         }`}
                       >
                         {formatAmount(
@@ -381,8 +381,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         <div
                           className={`text-sm ${
                             theme === "light"
-                              ? "text-forge-ink-muted"
-                              : "text-forge-ink-muted"
+                              ? "text-text-3"
+                              : "text-text-3"
                           }`}
                         >
                           Charges:{" "}
@@ -396,8 +396,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                         <div
                           className={`text-sm ${
                             theme === "light"
-                              ? "text-forge-ink-muted"
-                              : "text-forge-ink-muted"
+                              ? "text-text-3"
+                              : "text-text-3"
                           }`}
                         >
                           Commission:{" "}
@@ -409,7 +409,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                       )}
                       <div
                         className={`text-sm font-medium ${
-                          theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                          theme === "light" ? "text-text-1" : "text-text-1"
                         }`}
                       >
                         Total:{" "}

@@ -353,7 +353,7 @@ export default function EditProfilePage() {
       <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-90  pointer-events-none z-0" />
 
       {/* Main Layout */}
-      <div className="min-h-screen relative z-10 flex flex-row bg-[radial-gradient(circle_at_center,_rgba(17,17,17,0.8),_rgba(0,0,0,0.6))] text-forge-ink">
+      <div className="min-h-screen relative z-10 flex flex-row bg-bg-base text-text-1">
         <div className="flex flex-1 pb-20 lg:pb-0">
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="w-full max-w-3xl mx-auto">
@@ -362,22 +362,22 @@ export default function EditProfilePage() {
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-8 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-8 border border-forge-line"
+                  className="space-y-8 rounded-sm shadow-[0_4px_20px_rgba(21,18,13,0.5)] p-8 border border-container-3"
                 >
-                  <h1 className="text-4xl font-bold text-forge-ink text-center mb-6">
+                  <h1 className="text-4xl font-bold text-text-1 text-center mb-6">
                     Edit Profile
                   </h1>
 
                   {/* Profile Picture Section */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
+                    <h2 className="text-xl font-semibold text-text-1 border-b border-container-3 pb-2">
                       Profile Picture
                     </h2>
 
                     <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-6">
                       {/* Avatar Display */}
                       <div className="relative">
-                        <div className="w-32 h-32 bg-forge-bg-raised border border-forge-line rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
+                        <div className="w-32 h-32 bg-container-2 border border-container-3 rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
                           {profileImage ? (
                             <img
                               src={profileImage}
@@ -389,16 +389,16 @@ export default function EditProfilePage() {
                               }}
                             />
                           ) : (
-                            <FiUser className="w-16 h-16 text-forge-ink-muted" />
+                            <FiUser className="w-16 h-16 text-text-3" />
                           )}
                         </div>
 
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="absolute bottom-2 right-2 w-10 h-10 bg-forge-bg-raised hover:bg-forge-bg-raised rounded-full flex items-center justify-center transition-colors border-2 border-forge-line"
+                          className="absolute bottom-2 right-2 w-10 h-10 bg-container-2 hover:bg-state-hover rounded-full flex items-center justify-center transition-colors border-2 border-container-3"
                         >
-                          <FaCamera className="text-forge-ink text-sm" />
+                          <FaCamera className="text-text-1 text-sm" />
                         </button>
                       </div>
 
@@ -410,15 +410,15 @@ export default function EditProfilePage() {
                           onDrop={handleDrop}
                           className={`relative border-2 border-dashed rounded-sm p-6 text-center transition-colors ${
                             isDragging
-                              ? "border-forge-ember bg-forge-ember/10"
-                              : "border-forge-line hover:border-forge-line"
+                              ? "border-container-4 bg-state-highlight"
+                              : "border-container-3 hover:border-container-4"
                           }`}
                         >
-                          <FaUpload className="mx-auto text-forge-ink-muted text-2xl mb-3" />
-                          <p className="text-forge-ink mb-2">
+                          <FaUpload className="mx-auto text-text-3 text-2xl mb-3" />
+                          <p className="text-text-1 mb-2">
                             Drag and drop your image here
                           </p>
-                          <p className="text-forge-ink-muted text-sm mb-4">or</p>
+                          <p className="text-text-3 text-sm mb-4">or</p>
                           <ProfessionalButton
                             onClick={() => fileInputRef.current?.click()}
                             variant="primary"
@@ -461,7 +461,7 @@ export default function EditProfilePage() {
 
                   {/* Personal Details */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
+                    <h2 className="text-xl font-semibold text-text-1 border-b border-container-3 pb-2">
                       Personal Details
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -499,7 +499,7 @@ export default function EditProfilePage() {
 
                   {/* Contact Info */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
+                    <h2 className="text-xl font-semibold text-text-1 border-b border-container-3 pb-2">
                       Contact Information
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -531,8 +531,8 @@ export default function EditProfilePage() {
 
                   {/* Security */}
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-forge-line pb-2">
-                      <h2 className="text-xl font-semibold text-forge-ink">
+                    <div className="flex items-center justify-between border-b border-container-3 pb-2">
+                      <h2 className="text-xl font-semibold text-text-1">
                         Security
                       </h2>
                       <ProfessionalButton
@@ -551,7 +551,7 @@ export default function EditProfilePage() {
                     </div>
 
                     {showPasswordSection && (
-                      <div className="bg-forge-bg-raised/30 border border-forge-line rounded-sm p-4 space-y-4">
+                      <div className="bg-container-2 border border-container-3 rounded-sm p-4 space-y-4">
                         <form
                           onSubmit={handlePasswordSubmit}
                           className="space-y-4"
@@ -607,19 +607,13 @@ export default function EditProfilePage() {
                                 passwordError.includes(
                                   "Current password is incorrect"
                                 )
-                                  ? "bg-[forge-error-bg/20 border-[forge-error/50 shadow-red-500/10 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
-                                  : "bg-[forge-error-bg/10 border-[forge-error/30"
+                                  ? "bg-red-500/20 border-red-500/50 shadow-red-500/10 shadow-[0_4px_20px_rgba(21,18,13,0.5)]"
+                                  : "bg-red-500/10 border-red-500/30"
                               }`}
                             >
                               <div className="flex items-start gap-3">
                                 <svg
-                                  className={`w-6 h-6 mt-0.5 flex-shrink-0 ${
-                                    passwordError.includes(
-                                      "Current password is incorrect"
-                                    )
-                                      ? "text-[forge-error"
-                                      : "text-[forge-error"
-                                  }`}
+                                  className={`w-6 h-6 mt-0.5 flex-shrink-0 text-red-500`}
                                   fill="currentColor"
                                   viewBox="0 0 20 20"
                                 >
@@ -631,13 +625,7 @@ export default function EditProfilePage() {
                                 </svg>
                                 <div className="flex-1">
                                   <p
-                                    className={`text-sm font-semibold mb-1 ${
-                                      passwordError.includes(
-                                        "Current password is incorrect"
-                                      )
-                                        ? "text-[forge-error"
-                                        : "text-[forge-error"
-                                    }`}
+                                    className={`text-sm font-semibold mb-1 text-red-500`}
                                   >
                                     {passwordError}
                                   </p>
@@ -645,15 +633,15 @@ export default function EditProfilePage() {
                                     "Current password is incorrect"
                                   ) && (
                                     <div className="space-y-1">
-                                      <p className="text-[forge-error/90 text-xs">
+                                      <p className="text-red-400 text-xs">
                                         Make sure you're entering your current
                                         password correctly.
                                       </p>
-                                      <p className="text-[forge-error/80 text-xs">
+                                      <p className="text-red-400 text-xs">
                                         • Double-check for typos or incorrect
                                         capitalization
                                       </p>
-                                      <p className="text-[forge-error/80 text-xs">
+                                      <p className="text-red-400 text-xs">
                                         • Ensure Caps Lock is not accidentally
                                         enabled
                                       </p>
@@ -664,7 +652,7 @@ export default function EditProfilePage() {
                             </div>
                           )}
 
-                          <p className="text-sm text-forge-ink-muted">
+                          <p className="text-sm text-text-3">
                             Enter your current password and new password in the
                             fields above.
                           </p>
@@ -712,7 +700,7 @@ export default function EditProfilePage() {
 
                   {/* Professional Details */}
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-forge-ink border-b border-forge-line pb-2">
+                    <h2 className="text-xl font-semibold text-text-1 border-b border-container-3 pb-2">
                       Professional Details
                     </h2>
 
@@ -727,7 +715,7 @@ export default function EditProfilePage() {
                     />
 
                     <div className="space-y-3">
-                      <label className="text-forge-ink block">Relevant Links</label>
+                      <label className="text-text-1 block">Relevant Links</label>
                       {form.links.map((link, idx) => (
                         <div key={idx} className="flex gap-2 items-center">
                           <InputField
@@ -760,7 +748,7 @@ export default function EditProfilePage() {
                               updated.splice(idx, 1);
                               setForm({ ...form, links: updated });
                             }}
-                            className="text-[forge-error font-bold"
+                            className="text-red-500 font-bold"
                           >
                             ✕
                           </button>
@@ -794,11 +782,11 @@ export default function EditProfilePage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-3 bg-forge-ember hover:bg-forge-ember disabled:bg-forge-bg-raised text-forge-ink rounded-sm font-medium transition-colors flex items-center gap-2"
+                      className="px-6 py-3 bg-container-4 hover:bg-state-hover disabled:bg-container-2 text-text-1 rounded-sm font-medium transition-colors flex items-center gap-2 border border-container-3"
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-forge-line border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4 border-2 border-container-3 border-t-transparent rounded-full animate-spin"></div>
                           {uploadProgress || "Saving..."}
                         </>
                       ) : (

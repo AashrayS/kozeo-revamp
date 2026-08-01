@@ -83,8 +83,8 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
       {/* Top loading bar */}
       {(isLoading || manualLoading) && (
-        <div className="fixed top-0 left-0 w-full h-1 bg-forge-bg-raised z-50">
-          <div className="h-full bg-forge-bg bg-forge-ember animate-loading"></div>
+        <div className="fixed top-0 left-0 w-full h-1 bg-container-2 z-50">
+          <div className="h-full bg-container-1 bg-forge-ember animate-loading"></div>
         </div>
       )}
 

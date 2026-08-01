@@ -9,6 +9,7 @@ import {
   FiClock,
   FiExternalLink,
 } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 import { useNotificationContext, Notification } from "./NotificationContext";
 
 interface NotificationBoxProps {
@@ -64,6 +65,7 @@ const NotificationBox = ({
   markAllAsRead,
 }: NotificationBoxProps) => {
   const { setUnreadCount } = useNotificationContext();
+  const router = useRouter();
 
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
@@ -81,7 +83,7 @@ const NotificationBox = ({
         return <FiX className="text-[forge-error" />;
       case "gig_request":
       case "review_received":
-        return <FiBell className="text-forge-ink-muted" />;
+        return <FiBell className="text-text-3" />;
       case "system_announcement":
         return <FiInfo className="text-forge-ember" />;
       case "info":
@@ -92,9 +94,7 @@ const NotificationBox = ({
 
   const handleAction = (notification: Notification) => {
     markAsRead(notification.id);
-    if (typeof window !== "undefined") {
-      window.location.href = "/gigs";
-    }
+    router.push("/gigs");
   };
 
   if (!isOpen) return null;
@@ -103,22 +103,22 @@ const NotificationBox = ({
     <>
       {/* Backdrop with lighter blur */}
       <div
-        className="fixed inset-0 bg-forge-bg opacity-70  z-40 transition-opacity duration-300"
+        className="fixed inset-0 bg-container-1 opacity-70  z-40 transition-opacity duration-300"
         onClick={onClose}
       />
 
       {/* Notification Box - Top Right Corner with Mobile Responsiveness */}
       <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 z-50 w-auto sm:w-full sm:max-w-sm md:max-w-md lg:max-w-lg">
-        <div className="bg-forge-bg   rounded-sm border border-forge-line max-h-[80vh] sm:max-h-[85vh] flex flex-col animate-slideDown shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
+        <div className="bg-container-1   rounded-sm border border-container-3 max-h-[80vh] sm:max-h-[85vh] flex flex-col animate-slideDown shadow-[0_4px_20px_rgba(21,18,13,0.5)]">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-forge-line">
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-container-3">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <FiBell className="text-forge-ember text-lg sm:text-xl flex-shrink-0" />
-              <h2 className="text-lg sm:text-xl font-semibold text-forge-ink truncate">
+              <h2 className="text-lg sm:text-xl font-semibold text-text-1 truncate">
                 Notifications
               </h2>
               {notifications.filter((n) => !n.read).length > 0 && (
-                <span className="bg-forge-ember text-forge-ink text-xs px-2 py-1 rounded-full flex-shrink-0">
+                <span className="bg-forge-ember text-text-1 text-xs px-2 py-1 rounded-full flex-shrink-0">
                   {notifications.filter((n) => !n.read).length}
                 </span>
               )}
@@ -135,7 +135,7 @@ const NotificationBox = ({
               )}
               <button
                 onClick={onClose}
-                className="text-forge-ink-muted hover:text-forge-ink transition-colors p-1"
+                className="text-text-3 hover:text-forge-ink transition-colors p-1"
               >
                 <FiX className="text-lg sm:text-xl" />
               </button>
@@ -146,9 +146,9 @@ const NotificationBox = ({
           <div className="flex-1 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <FiBell className="text-forge-ink-muted text-4xl mb-4" />
-                <p className="text-forge-ink-muted text-lg">No notifications</p>
-                <p className="text-forge-ink-muted text-sm mt-1">
+                <FiBell className="text-text-3 text-4xl mb-4" />
+                <p className="text-text-3 text-lg">No notifications</p>
+                <p className="text-text-3 text-sm mt-1">
                   You&apos;re all caught up!
                 </p>
               </div>
@@ -159,7 +159,7 @@ const NotificationBox = ({
                     key={notification.id}
                     className={`p-3 sm:p-4 border-l-4 transition-colors hover:bg-forge-ember hover:bg-opacity-30 ${
                       notification.read
-                        ? "border-forge-line bg-opacity-20"
+                        ? "border-container-3 bg-opacity-20"
                         : "border-forge-ember bg-forge-ember bg-opacity-10"
                     }`}
                   >
@@ -171,7 +171,7 @@ const NotificationBox = ({
                         <div className="flex items-start justify-between mb-1 gap-2">
                           <h3
                             className={`text-sm font-medium leading-tight ${
-                              notification.read ? "text-forge-ink" : "text-forge-ink"
+                              notification.read ? "text-text-1" : "text-text-1"
                             }`}
                           >
                             {notification.title}
@@ -183,8 +183,8 @@ const NotificationBox = ({
                         <p
                           className={`text-sm leading-relaxed mb-2 ${
                             notification.read
-                              ? "text-forge-ink-muted"
-                              : "text-forge-ink"
+                              ? "text-text-3"
+                              : "text-text-1"
                           }`}
                         >
                           {notification.message}
@@ -194,7 +194,7 @@ const NotificationBox = ({
                         {notification.action && notification.actionLabel && (
                           <button
                             onClick={() => handleAction(notification)}
-                            className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 text-xs bg-forge-ember hover:bg-forge-ember text-forge-ink rounded transition-colors"
+                            className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 text-xs bg-forge-ember hover:bg-forge-ember text-text-1 rounded transition-colors"
                           >
                             <span className="truncate">
                               {notification.actionLabel}
@@ -204,7 +204,7 @@ const NotificationBox = ({
                         )}
 
                         <div className="flex items-center justify-between mt-2 gap-2">
-                          <div className="flex items-center gap-1 text-xs text-forge-ink-muted">
+                          <div className="flex items-center gap-1 text-xs text-text-3">
                             <FiClock className="text-xs flex-shrink-0" />
                             <span className="truncate">
                               {notification.timestamp}
@@ -225,7 +225,7 @@ const NotificationBox = ({
           </div>
 
           {/* Footer */}
-          <div className="border-t border-forge-line p-3 sm:p-4">
+          <div className="border-t border-container-3 p-3 sm:p-4">
             <button className="w-full py-2 text-sm text-forge-ember hover:text-forge-ember transition-colors font-medium">
               View All Notifications
             </button>

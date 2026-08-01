@@ -473,15 +473,15 @@ export default function GigLobbyPage({
       <div
         className={`min-h-screen flex items-center justify-center theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-forge-ink"
-            : "bg-gradient-dark text-forge-ink"
+            ? "bg-gradient-light text-text-1"
+            : "bg-gradient-dark text-text-1"
         }`}
       >
         <div className="text-center">
           <div className="text-xl text-[forge-error mb-4">Error loading gig</div>
           <div
             className={`mb-4 ${
-              theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+              theme === "light" ? "text-text-3" : "text-text-3"
             }`}
           >
             {error}
@@ -503,14 +503,14 @@ export default function GigLobbyPage({
       <div
         className={`min-h-screen flex items-center justify-center theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-forge-ink"
-            : "bg-gradient-dark text-forge-ink"
+            ? "bg-gradient-light text-text-1"
+            : "bg-gradient-dark text-text-1"
         }`}
       >
         <div className="text-center">
           <div
             className={`text-xl mb-4 ${
-              theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+              theme === "light" ? "text-text-3" : "text-text-3"
             }`}
           >
             Gig not found
@@ -532,8 +532,8 @@ export default function GigLobbyPage({
       <div
         className={`min-h-screen relative z-10 flex theme-transition ${
           theme === "light"
-            ? "bg-gradient-light text-forge-ink"
-            : "bg-gradient-dark text-forge-ink"
+            ? "bg-gradient-light text-text-1"
+            : "bg-gradient-dark text-text-1"
         }`}
       >
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -546,15 +546,15 @@ export default function GigLobbyPage({
             <section
               className={`xl:flex-[0.4] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 xl:p-8 w-full border-0 relative drop-shadow-glow  overflow-hidden theme-transition min-h-0 ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-forge-line"
-                  : "bg-forge-bg-raised/70 border-forge-line"
+                  ? "bg-forge-bg/90 border-container-3"
+                  : "bg-forge-bg-raised/70 border-container-3"
               }`}
             >
               {/* Header */}
               <div className="mb-4 sm:mb-6 lg:mb-8">
                 <h1
                   className={`text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-light tracking-tight mb-2 leading-tight ${
-                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "light" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   {gig.title}
@@ -562,14 +562,14 @@ export default function GigLobbyPage({
                 <div className="flex flex-wrap items-center gap-1 sm:gap-2 lg:gap-3">
                   <span
                     className={`text-xs sm:text-sm lg:text-base font-medium ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "light" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     @{gig.host?.username || "Unknown"}
                   </span>
                   <div
                     className={`h-1 w-1 rounded-full ${
-                      theme === "light" ? "bg-forge-bg" : "bg-forge-line"
+                      theme === "light" ? "bg-container-1" : "bg-forge-line"
                     }`}
                   />
                   <div
@@ -579,8 +579,8 @@ export default function GigLobbyPage({
                           ? "bg-forge-ember-low border-forge-ember text-forge-ember"
                           : "bg-forge-ember-low/50 border-forge-ember/50 text-forge-ember"
                         : theme === "light"
-                        ? "bg-forge-bg border-forge-line text-forge-ink-muted"
-                        : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted"
+                        ? "bg-container-1 border-container-3 text-text-3"
+                        : "bg-forge-bg-raised/50 border-forge-line/50 text-text-3"
                     }`}
                   >
                     {gig.status || "Unknown"}
@@ -594,8 +594,8 @@ export default function GigLobbyPage({
                   <div
                     className={`inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       theme === "dark"
-                        ? "bg-forge-bg bg-forge-bg-raised text-forge-ink-muted border border-forge-line/50"
-                        : "bg-forge-bg bg-forge-bg text-forge-ink-muted border border-forge-line"
+                        ? "bg-container-1 bg-container-2 text-text-3 border border-forge-line/50"
+                        : "bg-container-1 bg-container-1 text-text-3 border border-container-3"
                     }`}
                   >
                     <FiStar className="w-4 h-4 mr-2" />
@@ -607,14 +607,14 @@ export default function GigLobbyPage({
                   <>
                     <div
                       className={`text-lg sm:text-xl lg:text-2xl xl:text-3xl font-semibold ${
-                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "light" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       {gig.currency} {gig.amount}
                     </div>
                     <div
                       className={`text-xs sm:text-sm lg:text-base ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "light" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Project value
@@ -629,14 +629,14 @@ export default function GigLobbyPage({
                 <div>
                   <h3
                     className={`text-xs sm:text-sm lg:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "light" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     Description
                   </h3>
                   <p
                     className={`text-sm sm:text-base leading-relaxed ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "light" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     {gig.description}
@@ -647,14 +647,14 @@ export default function GigLobbyPage({
                 <div>
                   <h3
                     className={`text-xs sm:text-sm lg:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "light" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     Looking For
                   </h3>
                   <p
                     className={`text-sm sm:text-base leading-relaxed ${
-                      theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                      theme === "light" ? "text-text-3" : "text-text-3"
                     }`}
                   >
                     {gig.looking_For}
@@ -665,7 +665,7 @@ export default function GigLobbyPage({
                 <div>
                   <h3
                     className={`text-xs sm:text-sm lg:text-base font-medium mb-2 sm:mb-3 tracking-wide uppercase ${
-                      theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                      theme === "light" ? "text-text-1" : "text-text-1"
                     }`}
                   >
                     Required Skills
@@ -676,8 +676,8 @@ export default function GigLobbyPage({
                         key={idx}
                         className={`px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium rounded-full border ${
                           theme === "light"
-                            ? "bg-forge-bg border-forge-line text-forge-ink"
-                            : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+                            ? "bg-container-1 border-container-3 text-text-1"
+                            : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
                         }`}
                       >
                         {skill}
@@ -692,7 +692,7 @@ export default function GigLobbyPage({
                     {/* <div className="flex items-center justify-between">
                       <span
                         className={`text-sm uppercase tracking-wide font-medium ${
-                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "light" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Connection
@@ -717,7 +717,7 @@ export default function GigLobbyPage({
                     <div className="flex items-center justify-between">
                       <span
                         className={`text-sm uppercase tracking-wide font-medium ${
-                          theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                          theme === "light" ? "text-text-3" : "text-text-3"
                         }`}
                       >
                         Project ID
@@ -725,8 +725,8 @@ export default function GigLobbyPage({
                       <code
                         className={`text-sm font-mono px-2 py-1 rounded ${
                           theme === "light"
-                            ? "bg-forge-bg text-forge-ink"
-                            : "bg-forge-bg-raised text-forge-ink"
+                            ? "bg-container-1 text-text-1"
+                            : "bg-container-2 text-text-1"
                         }`}
                       >
                         {gigId}
@@ -742,7 +742,7 @@ export default function GigLobbyPage({
                   <div className="flex items-center justify-between mb-4">
                     <span
                       className={`text-sm uppercase tracking-wide font-medium ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "light" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Workspace Status
@@ -766,14 +766,14 @@ export default function GigLobbyPage({
                   >
                     <div
                       className={`text-sm uppercase tracking-wide font-medium mb-2 ${
-                        theme === "light" ? "text-forge-ink-muted" : "text-forge-ink-muted"
+                        theme === "light" ? "text-text-3" : "text-text-3"
                       }`}
                     >
                       Current Guest
                     </div>
                     <div
                       className={`text-base font-medium ${
-                        theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                        theme === "light" ? "text-text-1" : "text-text-1"
                       }`}
                     >
                       @{gig.guest.username}
@@ -781,8 +781,8 @@ export default function GigLobbyPage({
                         <span
                           className={`ml-2 font-normal ${
                             theme === "light"
-                              ? "text-forge-ink-muted"
-                              : "text-forge-ink-muted"
+                              ? "text-text-3"
+                              : "text-text-3"
                           }`}
                         >
                           ({gig.guest.first_name} {gig.guest.last_name})
@@ -822,14 +822,14 @@ export default function GigLobbyPage({
             <section
               className={`xl:flex-[0.6] rounded-sm sm:rounded-sm lg:rounded-sm p-3 sm:p-4 lg:p-6 shadow-[0_4px_20px_rgba(21,18,13,0.5)] drop-shadow-glow  w-full border theme-transition min-h-0 flex flex-col ${
                 theme === "light"
-                  ? "bg-forge-bg/90 border-forge-line"
-                  : "bg-forge-bg-raised/70 border-forge-line"
+                  ? "bg-forge-bg/90 border-container-3"
+                  : "bg-forge-bg-raised/70 border-container-3"
               }`}
             >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4 lg:mb-6 gap-2 sm:gap-3 flex-shrink-0">
                 <h2
                   className={`text-lg sm:text-xl lg:text-2xl font-light tracking-tight ${
-                    theme === "light" ? "text-forge-ink" : "text-forge-ink"
+                    theme === "light" ? "text-text-1" : "text-text-1"
                   }`}
                 >
                   Gig Requests
@@ -841,12 +841,12 @@ export default function GigLobbyPage({
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border ${
                         theme === "light"
                           ? "bg-forge-bg/80 border-forge-line/60 text-slate-700"
-                          : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink"
+                          : "bg-forge-bg-raised/50 border-forge-line/50 text-text-1"
                       }`}
                     >
                       <div
                         className={`w-1.5 h-1.5 rounded-full ${
-                          theme === "light" ? "bg-forge-bg" : "bg-forge-bg"
+                          theme === "light" ? "bg-container-1" : "bg-container-1"
                         }`}
                       />
                       <span className="text-sm font-medium">
@@ -888,13 +888,13 @@ export default function GigLobbyPage({
                     <div
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border ${
                         theme === "light"
-                          ? "bg-forge-bg/80 border-forge-line/60 text-forge-ink-muted"
-                          : "bg-forge-bg-raised/50 border-forge-line/50 text-forge-ink-muted"
+                          ? "bg-forge-bg/80 border-forge-line/60 text-text-3"
+                          : "bg-forge-bg-raised/50 border-forge-line/50 text-text-3"
                       }`}
                     >
                       <div
                         className={`w-1.5 h-1.5 rounded-full ${
-                          theme === "light" ? "bg-forge-bg" : "bg-forge-line"
+                          theme === "light" ? "bg-container-1" : "bg-forge-line"
                         }`}
                       />
                       <span className="text-sm font-medium">
@@ -939,7 +939,7 @@ export default function GigLobbyPage({
                       ))}
                   </div>
                 ) : (
-                  <div className="text-forge-ink-muted text-center py-8 flex-1 flex flex-col justify-center">
+                  <div className="text-text-3 text-center py-8 flex-1 flex flex-col justify-center">
                     <div className="text-2xl sm:text-3xl lg:text-4xl mb-4">
                       📥
                     </div>
