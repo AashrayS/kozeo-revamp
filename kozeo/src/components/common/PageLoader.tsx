@@ -6,7 +6,7 @@ import Image from "next/image";
 interface PageLoaderProps {
   duration?: number;
   onComplete?: () => void;
-  useSlideAnimation?: boolean; // kept for API compat, ignored
+  useSlideAnimation?: boolean; 
 }
 
 export const PageLoader = ({ onComplete }: PageLoaderProps) => {
