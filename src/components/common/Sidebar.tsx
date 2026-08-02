@@ -13,6 +13,8 @@ import {
   FiDollarSign,
   FiSettings,
   FiFileText,
+  FiZap,
+  FiLayers,
 } from "react-icons/fi";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -37,9 +39,11 @@ export default function Sidebar() {
 
   const tabs: { name: string; icon: IconType; path: string }[] = [
     { name: "Home", icon: FiHome, path: "/Atrium" },
+    { name: "Speedruns", icon: FiZap, path: "/speedruns" },
+    { name: "Work Sprints", icon: FiLayers, path: "/sprints" },
+    { name: "My Projects", icon: FiBriefcase, path: "/gigs" },
     { name: "Profile", icon: FiUser, path: `/profile/${profileUsername}` },
     { name: "Store", icon: FiShoppingBag, path: "/store" },
-    { name: "My Projects", icon: FiBriefcase, path: "/gigs" }, // Update to go to gig list
     { name: "Resume Builder", icon: FiFileText, path: "/resumeBuilder" },
     {
       name: "Discussion Rooms",

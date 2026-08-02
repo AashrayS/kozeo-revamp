@@ -8,6 +8,8 @@ import {
   FiHome,
   FiSettings,
   FiFileText,
+  FiZap,
+  FiLayers,
 } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
@@ -54,15 +56,11 @@ export default function BottomNavBar() {
 
   const tabs: { name: string; icon: IconType; path: string }[] = [
     { name: "Home", icon: FiHome, path: "/Atrium" },
-    { name: "Profile", icon: FiUser, path: `/profile/${profileUsername}` },
+    { name: "Speedruns", icon: FiZap, path: "/speedruns" },
+    { name: "Sprints", icon: FiLayers, path: "/sprints" },
     { name: "Projects", icon: FiBriefcase, path: "/gigs" },
-    { name: "Resume", icon: FiFileText, path: "/resumeBuilder" },
+    { name: "Profile", icon: FiUser, path: `/profile/${profileUsername}` },
     { name: "Store", icon: FiShoppingBag, path: "/store" },
-    {
-      name: "Discussion",
-      icon: FiMessageSquare,
-      path: "/Atrium/discussion",
-    },
   ];
 
   // Admin-specific tabs
