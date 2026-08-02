@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../../store/userSlice";
 import { PageLoader } from "../components/common/PageLoader";
 import { WordReveal, HeaderReveal } from "../components/common/ScrollReveal";
+import { TextLoop } from "@/components/core/text-loop";
+import { Cursor } from "@/components/core/cursor";
 
 // ─── Typewriter Hook ──────────────────────────────────────────────────────────
 function useTypewriter(text: string, speed = 40, startDelay = 0, startTyping = true) {
@@ -439,6 +441,17 @@ const Hero = () => {
           {displayedText}
           <span className="inline-block w-[4px] h-[0.85em] bg-gradient-to-b from-cyan-400 via-blue-500 to-purple-600 ml-2 align-baseline animate-pulse rounded-full" />
         </h1>
+
+        <div className="flex items-center justify-center gap-2 text-sm md:text-base font-semibold text-neutral-600">
+          <span>Building proof-first portfolios for</span>{" "}
+          <TextLoop className="text-black font-extrabold underline decoration-amber-500 underline-offset-4">
+            <span>Founders</span>
+            <span>Developers</span>
+            <span>Designers</span>
+            <span>Design Engineers</span>
+            <span>CS Students</span>
+          </TextLoop>
+        </div>
 
         <div
           className={`transition-all duration-1000 ease-out flex flex-col items-center gap-8 ${

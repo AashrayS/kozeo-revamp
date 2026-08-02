@@ -1,0 +1,101 @@
+"use client";
+
+import React from "react";
+import { useRouter, usePathname } from "next/navigation";
+import {
+  Home as HomeIcon,
+  Zap,
+  Layers,
+  Briefcase,
+  User,
+  ShoppingBag,
+  SunMoon,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
+import { Dock, DockIcon, DockItem, DockLabel } from "@/components/core/dock";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useUser } from "../../../store/hooks";
+
+export function AppleStyleDock() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
+  const { username } = useUser();
+  const profileUsername = username || "profile";
+
+  const data = [
+    {
+      title: "Home",
+      icon: <HomeIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      path: "/Atrium",
+    },
+    {
+      title: "Speedruns",
+      icon: <Zap className="h-5 w-5 text-amber-500" />,
+      path: "/speedruns",
+    },
+    {
+      title: "Work Sprints",
+      icon: <Layers className="h-5 w-5 text-blue-500" />,
+      path: "/sprints",
+    },
+    {
+      title: "Projects",
+      icon: <Briefcase className="h-5 w-5 text-emerald-500" />,
+      path: "/gigs",
+    },
+    {
+      title: "Profile",
+      icon: <User className="h-5 w-5 text-purple-500" />,
+      path: `/profile/${profileUsername}`,
+    },
+    {
+      title: "Store",
+      icon: <ShoppingBag className="h-5 w-5 text-pink-500" />,
+      path: "/store",
+    },
+    {
+      title: "Resume",
+      icon: <FileText className="h-5 w-5 text-indigo-500" />,
+      path: "/resumeBuilder",
+    },
+    {
+      title: "Discussions",
+      icon: <MessageSquare className="h-5 w-5 text-cyan-500" />,
+      path: "/Atrium/discussion",
+    },
+    {
+      title: theme === "light" ? "Dark Mode" : "Light Mode",
+      icon: <SunMoon className="h-5 w-5 text-amber-400" />,
+      action: toggleTheme,
+    },
+  ];
+
+  return (
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[999999] pointer-events-auto">
+      <Dock className="items-end pb-3">
+        {data.map((item, idx) => {
+          const isActive = item.path && pathname === item.path;
+
+          return (
+            <DockItem
+              key={idx}
+              onClick={() => {
+                if (item.action) {
+                  item.action();
+                } else if (item.path && pathname !== item.path) {
+                  router.push(item.path);
+                }
+              }}
+              className={isActive ? "ring-2 ring-amber-500 scale-110" : ""}
+            >
+              <DockLabel>{item.title}</DockLabel>
+              <DockIcon>{item.icon}</DockIcon>
+            </DockItem>
+          );
+        })}
+      </Dock>
+    </div>
+  );
+}

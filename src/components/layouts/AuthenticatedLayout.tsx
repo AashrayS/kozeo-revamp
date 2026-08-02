@@ -2,6 +2,7 @@
 
 import Header from "../common/Header";
 import Sidebar from "../common/Sidebar";
+import { AppleStyleDock } from "../common/AppleStyleDock";
 import { useTheme } from "../../contexts/ThemeContext";
 
 interface AuthenticatedLayoutProps {
@@ -25,7 +26,7 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
         <Sidebar />
 
         {/* Content Area */}
-        <main className="flex-1 relative overflow-y-auto custom-scrollbar z-10">
+        <main className="flex-1 relative overflow-y-auto custom-scrollbar z-10 pb-28">
           {/* Global Atmospheric Glows */}
           <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-60 bg-white shadow-[0_0_250px_120px_rgba(255,255,255,0.15)] pointer-events-none z-0" />
           <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-60 bg-white shadow-[0_0_250px_120px_rgba(255,255,255,0.15)] pointer-events-none z-0" />
@@ -36,7 +37,8 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
         </main>
       </div>
 
-      {/* Mobile background glows (optional refinements can be added here) */}
+      {/* Apple-Style Floating Dock Navigation */}
+      <AppleStyleDock />
     </div>
   );
 }
