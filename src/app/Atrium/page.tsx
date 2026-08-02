@@ -351,46 +351,28 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Toggle Button for Projects/Users - responsive shrink and grow */}
-                <div className="relative inline-flex items-center w-full sm:w-auto">
-                  <div
-                    className="relative flex items-center rounded-full p-1.5 kozeo-glass w-full sm:w-auto shadow-xs"
-                    style={{ minWidth: 0 }}
+                {/* Toggle Button for Projects/Users */}
+                <div className="inline-flex items-center p-1 rounded-full bg-container-1 border border-container-3 shadow-xs">
+                  <button
+                    onClick={() => setViewMode("gigs")}
+                    className={`px-5 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-200 ${
+                      viewMode === "gigs"
+                        ? "bg-text-1 text-container-1 shadow-sm"
+                        : "text-text-3 hover:text-text-1"
+                    }`}
                   >
-                    {/* Background Slider */}
-                    <div
-                      className={`absolute top-1.5 bottom-1.5 w-1/2 rounded-full bg-black dark:bg-white transition-all duration-300 ease-out shadow-xs ${
-                        viewMode === "users"
-                          ? "translate-x-full"
-                          : "translate-x-0"
-                      }`}
-                      style={{ left: 0, right: 0 }}
-                    />
-
-                    {/* Projects Option */}
-                    <button
-                      onClick={() => setViewMode("gigs")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-colors duration-300 flex-1 focus:outline-none ${
-                        viewMode === "gigs"
-                          ? "text-white dark:text-black"
-                          : "text-text-3 hover:text-black dark:hover:text-white"
-                      }`}
-                    >
-                      Projects
-                    </button>
-
-                    {/* Users Option */}
-                    <button
-                      onClick={() => setViewMode("users")}
-                      className={`relative z-10 flex items-center justify-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-colors duration-300 flex-1 focus:outline-none ${
-                        viewMode === "users"
-                          ? "text-white dark:text-black"
-                          : "text-text-3 hover:text-black dark:hover:text-white"
-                      }`}
-                    >
-                      Users
-                    </button>
-                  </div>
+                    Projects
+                  </button>
+                  <button
+                    onClick={() => setViewMode("users")}
+                    className={`px-5 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-200 ${
+                      viewMode === "users"
+                        ? "bg-text-1 text-container-1 shadow-sm"
+                        : "text-text-3 hover:text-text-1"
+                    }`}
+                  >
+                    Users
+                  </button>
                 </div>
 
                 {/* Create Project Button - full width on mobile */}
