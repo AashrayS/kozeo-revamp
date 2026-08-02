@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FiZap, FiClock, FiAward, FiPlay, FiCheckCircle, FiFilter, FiArrowRight, FiShield, FiCode } from "react-icons/fi";
 import { useTheme } from "@/contexts/ThemeContext";
-import Header from "@/components/common/Header";
-import Sidebar from "@/components/common/Sidebar";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { isAuthenticated } from "../../../utilities/api";
 
@@ -89,7 +87,8 @@ export default function SpeedrunsPage() {
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    // Only redirect to login if not in local dev environment and no token
+    if (typeof window !== "undefined" && !isAuthenticated() && process.env.NODE_ENV !== "development") {
       router.push("/login");
     }
   }, [router]);
@@ -116,14 +115,8 @@ export default function SpeedrunsPage() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col ${theme === "light" ? "bg-gradient-light text-text-1" : "bg-gradient-dark text-text-1"}`}>
-      <Header />
-
-      <div className="flex flex-1">
-        <Sidebar />
-
-        <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto overflow-y-auto">
-          {/* Top Banner & Signal Engine Architecture Header */}
+    <div className="max-w-7xl mx-auto">
+      {/* Top Banner & Signal Engine Architecture Header */}
           <div className="mb-10 p-8 rounded-3xl backdrop-blur-xl border border-container-3 bg-container-1 shadow-md relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
               <FiZap className="text-9xl text-text-1" />
@@ -241,8 +234,6 @@ export default function SpeedrunsPage() {
               </div>
             ))}
           </div>
-        </main>
-      </div>
 
       {/* Speedrun Execution Modal */}
       {isModalOpen && activeSpeedrun && (

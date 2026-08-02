@@ -57,7 +57,7 @@ export default function Home() {
 
   // Check authentication
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (typeof window !== "undefined" && !isAuthenticated() && process.env.NODE_ENV !== "development") {
       router.push("/login");
       return;
     }
