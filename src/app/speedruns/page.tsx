@@ -123,7 +123,7 @@ export default function SpeedrunsPage() {
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-state-hover border border-container-3 mb-4 text-text-2">
-              <FiZap className="text-amber-500" /> Platform Signal Engine
+              <FiZap className="text-yellow-400" /> Platform Signal Engine
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
@@ -188,17 +188,17 @@ export default function SpeedrunsPage() {
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
                       speedrun.status === "Live"
                         ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                        : "bg-amber-500/10 text-amber-500 border border-amber-500/20"
+                        : "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
                     }`}>
                       {speedrun.status === "Live" ? "● Live Now" : "Upcoming"}
                     </span>
 
                     <span className="flex items-center gap-1.5 text-xs text-text-3 font-medium bg-container-2 px-3 py-1 rounded-full">
-                      <FiClock className="text-amber-500" /> {speedrun.durationMinutes} mins
+                      <FiClock className="text-yellow-400" /> {speedrun.durationMinutes} mins
                     </span>
                   </div>
 
-                  <h2 className="text-2xl font-bold tracking-tight text-text-1 mb-2 group-hover:text-amber-500 transition-colors">
+                  <h2 className="text-2xl font-bold tracking-tight text-text-1 mb-2 group-hover:text-yellow-400 transition-colors">
                     {speedrun.title}
                   </h2>
 
@@ -217,7 +217,7 @@ export default function SpeedrunsPage() {
 
                 <div className="pt-4 border-t border-container-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <FiAward className="text-amber-500 text-lg" />
+                    <FiAward className="text-yellow-400 text-lg" />
                     <div>
                       <span className="text-xs font-bold block text-text-1">{speedrun.badge}</span>
                       <span className="text-[11px] text-emerald-500 font-semibold">{speedrun.signalMultiplier}</span>
@@ -249,7 +249,7 @@ export default function SpeedrunsPage() {
             {!submittedSuccess ? (
               <>
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="p-3 rounded-2xl bg-amber-500/10 text-amber-500 text-xl font-bold">
+                  <span className="p-3 rounded-2xl bg-yellow-400/10 text-yellow-400 text-xl font-bold">
                     <FiZap />
                   </span>
                   <div>

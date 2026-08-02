@@ -32,12 +32,12 @@ export function AppleStyleDock() {
     },
     {
       title: "Speedruns",
-      icon: <Zap className="h-5 w-5 text-amber-500" />,
+      icon: <Zap className="h-5 w-5 text-yellow-400" />,
       path: "/speedruns",
     },
     {
       title: "Work Sprints",
-      icon: <Layers className="h-5 w-5 text-amber-500 font-semibold" />,
+      icon: <Layers className="h-5 w-5 text-yellow-400 font-semibold" />,
       path: "/sprints",
     },
     {
