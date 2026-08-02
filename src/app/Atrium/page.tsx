@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiSearch, FiStar, FiUser } from "react-icons/fi";
+import Link from "next/link";
+import { FiSearch, FiStar, FiUser, FiZap, FiLayers, FiBriefcase, FiArrowRight } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import {
   getAllGigs,
@@ -240,7 +241,90 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-1 pb-20 lg:pb-0">
-            <main className="flex-1 p-6 overflow-y-auto">
+            <main className="flex-1 p-6 max-w-7xl mx-auto overflow-y-auto">
+              {/* Quick Action Navigation Hub */}
+              <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Link
+                  href="/speedruns"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-amber-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 font-bold text-lg">
+                      <FiZap />
+                    </span>
+                    <FiArrowRight className="text-text-4 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-amber-500 transition-colors">
+                      Speedruns
+                    </h3>
+                    <p className="text-xs text-text-3 mt-1">
+                      Timed micro-skill challenges to earn verified badges.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/sprints"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-blue-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 font-bold text-lg">
+                      <FiLayers />
+                    </span>
+                    <FiArrowRight className="text-text-4 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-blue-500 transition-colors">
+                      Work Sprints
+                    </h3>
+                    <p className="text-xs text-text-3 mt-1">
+                      Ship production deliverables for startup stipends.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/gigs"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-emerald-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 font-bold text-lg">
+                      <FiBriefcase />
+                    </span>
+                    <FiArrowRight className="text-text-4 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-emerald-500 transition-colors">
+                      Projects
+                    </h3>
+                    <p className="text-xs text-text-3 mt-1">
+                      Browse active client gigs and matching opportunities.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href={user ? `/profile/${user.username}` : "/profile"}
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-purple-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 font-bold text-lg">
+                      <FiUser />
+                    </span>
+                    <FiArrowRight className="text-text-4 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-purple-500 transition-colors">
+                      Profile & Portfolio
+                    </h3>
+                    <p className="text-xs text-text-3 mt-1">
+                      Manage your proof of work and reputation signals.
+                    </p>
+                  </div>
+                </Link>
+              </div>
+
               {/* Search & Create Gig Section */}
               <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full">
                 {/* Searchbar - responsive width */}
