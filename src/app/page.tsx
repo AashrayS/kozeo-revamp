@@ -444,7 +444,7 @@ const Hero = () => {
 
         <div className="flex items-center justify-center gap-2 text-sm md:text-base font-semibold text-neutral-600">
           <span>Building proof-first portfolios for</span>{" "}
-          <TextLoop className="text-black font-extrabold underline decoration-yellow-400 underline-offset-4">
+          <TextLoop className="text-black font-extrabold underline decoration-neutral-400 dark:decoration-neutral-600 underline-offset-4">
             <span>Founders</span>
             <span>Developers</span>
             <span>Designers</span>

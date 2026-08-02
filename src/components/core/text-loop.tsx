@@ -63,7 +63,7 @@ export function TextLoop({
           exit="exit"
           variants={variants}
           transition={transition}
-          className="inline-block font-bold text-yellow-400 dark:text-yellow-400"
+          className="inline-block font-bold text-neutral-900 dark:text-neutral-100"
         >
           {items[currentIndex]}
         </motion.span>

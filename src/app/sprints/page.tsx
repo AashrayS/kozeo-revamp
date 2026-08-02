@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FiLayers, FiCalendar, FiDollarSign, FiUserCheck, FiCheckSquare, FiUploadCloud, FiCheckCircle, FiChevronRight, FiBriefcase } from "react-icons/fi";
+import { Spotlight } from "@/components/core/spotlight";
 import { useTheme } from "@/contexts/ThemeContext";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { isAuthenticated } from "../../../utilities/api";
@@ -117,7 +118,7 @@ export default function WorkSprintsPage() {
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-state-hover border border-container-3 mb-4 text-text-2">
-              <FiLayers className="text-yellow-400" /> Platform Work Sprints
+              <FiLayers className="text-text-1" /> Platform Work Sprints
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
@@ -134,7 +135,7 @@ export default function WorkSprintsPage() {
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Avg. Stipend</span>
-                <span className="text-2xl font-bold text-yellow-400">$500</span>
+                <span className="text-2xl font-bold text-text-1">$500</span>
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Sprint Duration</span>
@@ -142,7 +143,7 @@ export default function WorkSprintsPage() {
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Matching Weight</span>
-                <span className="text-2xl font-bold text-yellow-400">+25% Reliability</span>
+                <span className="text-2xl font-bold text-text-1">+25% Reliability</span>
               </div>
             </div>
           </div>
@@ -152,68 +153,71 @@ export default function WorkSprintsPage() {
             {mockWorkSprints.map((sprint) => (
               <div
                 key={sprint.id}
-                className="p-8 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl hover:border-text-1/30 transition-all duration-300 shadow-sm"
+                className="group relative p-8 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl hover:border-text-1/30 transition-all duration-300 shadow-sm overflow-hidden"
               >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-xs px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-400 font-semibold border border-yellow-400/20 uppercase tracking-wider">
-                        {sprint.status}
-                      </span>
-                      <span className="text-xs text-text-4 font-medium flex items-center gap-1">
-                        <FiBriefcase /> {sprint.poster}
-                      </span>
-                    </div>
-
-                    <h2 className="text-2xl font-bold tracking-tight text-text-1">
-                      {sprint.title}
-                    </h2>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="px-4 py-2 rounded-2xl bg-container-2 border border-container-3 text-right">
-                      <span className="text-xs text-text-4 block uppercase font-semibold">Reward</span>
-                      <span className="text-sm font-bold text-yellow-400">{sprint.reward}</span>
-                    </div>
-
-                    <button
-                      onClick={() => handleOpenSprint(sprint)}
-                      className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-text-1 text-container-1 font-bold text-sm hover:scale-105 transition-all shadow-md"
-                    >
-                      Join Sprint <FiChevronRight />
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-sm text-text-3 mb-6 max-w-3xl leading-relaxed">
-                  {sprint.description}
-                </p>
-
-                <div className="mb-6">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-text-4 mb-3">Key Deliverables</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {sprint.deliverables.map((item, idx) => (
-                      <div key={idx} className="p-3 rounded-2xl bg-container-2 text-xs text-text-2 flex items-start gap-2 border border-container-3/50">
-                        <FiCheckSquare className="text-yellow-400 shrink-0 mt-0.5" />
-                        <span>{item}</span>
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={160} />
+                <div className="relative z-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-xs px-3 py-1 rounded-full bg-container-2 text-text-2 font-semibold border border-container-3 uppercase tracking-wider">
+                          {sprint.status}
+                        </span>
+                        <span className="text-xs text-text-4 font-medium flex items-center gap-1">
+                          <FiBriefcase /> {sprint.poster}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="pt-4 border-t border-container-3 flex flex-wrap items-center justify-between text-xs text-text-3 gap-4">
-                  <div className="flex items-center gap-6">
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <FiCalendar className="text-text-4" /> {sprint.deadlineDays} Days Remaining
-                    </span>
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <FiUserCheck className="text-text-4" /> {sprint.openSlots} / {sprint.totalSlots} Slots Available
-                    </span>
+                      <h2 className="text-2xl font-bold tracking-tight text-text-1">
+                        {sprint.title}
+                      </h2>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="px-4 py-2 rounded-2xl bg-container-2 border border-container-3 text-right">
+                        <span className="text-xs text-text-4 block uppercase font-semibold">Reward</span>
+                        <span className="text-sm font-bold text-text-1">{sprint.reward}</span>
+                      </div>
+
+                      <button
+                        onClick={() => handleOpenSprint(sprint)}
+                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-text-1 text-container-1 font-bold text-sm hover:scale-105 transition-all shadow-md"
+                      >
+                        Join Sprint <FiChevronRight />
+                      </button>
+                    </div>
                   </div>
 
-                  <span className="font-semibold text-yellow-400">
-                    {sprint.sprintSignal}
-                  </span>
+                  <p className="text-sm text-text-3 mb-6 max-w-3xl leading-relaxed">
+                    {sprint.description}
+                  </p>
+
+                  <div className="mb-6">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-text-4 mb-3">Key Deliverables</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {sprint.deliverables.map((item, idx) => (
+                        <div key={idx} className="p-3 rounded-2xl bg-container-2 text-xs text-text-2 flex items-start gap-2 border border-container-3/50">
+                          <FiCheckSquare className="text-text-1 shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-container-3 flex flex-wrap items-center justify-between text-xs text-text-3 gap-4">
+                    <div className="flex items-center gap-6">
+                      <span className="flex items-center gap-1.5 font-medium">
+                        <FiCalendar className="text-text-4" /> {sprint.deadlineDays} Days Remaining
+                      </span>
+                      <span className="flex items-center gap-1.5 font-medium">
+                        <FiUserCheck className="text-text-4" /> {sprint.openSlots} / {sprint.totalSlots} Slots Available
+                      </span>
+                    </div>
+
+                    <span className="font-semibold text-text-1">
+                      {sprint.sprintSignal}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

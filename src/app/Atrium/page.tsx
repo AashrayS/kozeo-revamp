@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FiSearch, FiStar, FiUser, FiZap, FiLayers, FiBriefcase, FiArrowRight } from "react-icons/fi";
+import { Spotlight } from "@/components/core/spotlight";
 import { useRouter } from "next/navigation";
 import {
   getAllGigs,
@@ -246,16 +247,17 @@ export default function Home() {
               <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Link
                   href="/speedruns"
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-yellow-400/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group relative p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-text-1/30 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-container-2 text-yellow-400 font-bold text-lg border border-container-3">
+                  <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiZap />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-text-1 group-hover:translate-x-1 transition-all" />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-yellow-400 transition-colors">
+                  <div className="relative z-10">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-text-1 transition-colors">
                       Speedruns
                     </h3>
                     <p className="text-xs text-text-3 mt-1">
@@ -266,16 +268,17 @@ export default function Home() {
 
                 <Link
                   href="/sprints"
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-yellow-400/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group relative p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-text-1/30 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-container-2 text-yellow-400 font-bold text-lg border border-container-3">
+                  <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiLayers />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-text-1 group-hover:translate-x-1 transition-all" />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-yellow-400 transition-colors">
+                  <div className="relative z-10">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-text-1 transition-colors">
                       Work Sprints
                     </h3>
                     <p className="text-xs text-text-3 mt-1">
@@ -286,16 +289,17 @@ export default function Home() {
 
                 <Link
                   href="/gigs"
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-yellow-400/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group relative p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-text-1/30 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-3">
+                  <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                  <div className="flex items-center justify-between mb-3 relative z-10">
                     <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiBriefcase />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-text-1 group-hover:translate-x-1 transition-all" />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-yellow-400 transition-colors">
+                  <div className="relative z-10">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-text-1 transition-colors">
                       Projects
                     </h3>
                     <p className="text-xs text-text-3 mt-1">
@@ -306,16 +310,17 @@ export default function Home() {
 
                 <Link
                   href={user ? `/profile/${user.username}` : "/profile"}
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-yellow-400/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group relative p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-text-1/30 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-3">
+                  <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                  <div className="flex items-center justify-between mb-3 relative z-10">
                     <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiUser />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-text-1 group-hover:translate-x-1 transition-all" />
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-yellow-400 transition-colors">
+                  <div className="relative z-10">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-text-1 transition-colors">
                       Profile & Portfolio
                     </h3>
                     <p className="text-xs text-text-3 mt-1">

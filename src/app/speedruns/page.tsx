@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FiZap, FiClock, FiAward, FiPlay, FiCheckCircle, FiFilter, FiArrowRight, FiShield, FiCode } from "react-icons/fi";
+import { Spotlight } from "@/components/core/spotlight";
 import { useTheme } from "@/contexts/ThemeContext";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import { isAuthenticated } from "../../../utilities/api";
@@ -123,7 +124,7 @@ export default function SpeedrunsPage() {
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-state-hover border border-container-3 mb-4 text-text-2">
-              <FiZap className="text-yellow-400" /> Platform Signal Engine
+              <FiZap className="text-text-1" /> Platform Signal Engine
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
@@ -148,7 +149,7 @@ export default function SpeedrunsPage() {
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Signal Impact</span>
-                <span className="text-2xl font-bold text-emerald-500">+15% Match Rank</span>
+                <span className="text-2xl font-bold text-text-1">+15% Match Rank</span>
               </div>
             </div>
           </div>
@@ -181,24 +182,25 @@ export default function SpeedrunsPage() {
             {filteredSpeedruns.map((speedrun) => (
               <div
                 key={speedrun.id}
-                className="group p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl hover:border-text-1/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                className="group relative p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl hover:border-text-1/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
               >
-                <div>
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
                       speedrun.status === "Live"
                         ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                        : "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
+                        : "bg-container-2 text-text-3 border border-container-3"
                     }`}>
                       {speedrun.status === "Live" ? "● Live Now" : "Upcoming"}
                     </span>
 
-                    <span className="flex items-center gap-1.5 text-xs text-text-3 font-medium bg-container-2 px-3 py-1 rounded-full">
-                      <FiClock className="text-yellow-400" /> {speedrun.durationMinutes} mins
+                    <span className="flex items-center gap-1.5 text-xs text-text-3 font-medium bg-container-2 px-3 py-1 rounded-full border border-container-3">
+                      <FiClock className="text-text-3" /> {speedrun.durationMinutes} mins
                     </span>
                   </div>
 
-                  <h2 className="text-2xl font-bold tracking-tight text-text-1 mb-2 group-hover:text-yellow-400 transition-colors">
+                  <h2 className="text-2xl font-bold tracking-tight text-text-1 mb-2 group-hover:text-text-1 transition-colors">
                     {speedrun.title}
                   </h2>
 
@@ -208,19 +210,19 @@ export default function SpeedrunsPage() {
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {speedrun.tags.map((tag) => (
-                      <span key={tag} className="text-xs px-2.5 py-1 rounded-lg bg-container-2 text-text-3 font-medium">
+                      <span key={tag} className="text-xs px-2.5 py-1 rounded-lg bg-container-2 text-text-3 font-medium border border-container-3/50">
                         #{tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-container-3 flex items-center justify-between">
+                <div className="pt-4 border-t border-container-3 flex items-center justify-between relative z-10">
                   <div className="flex items-center gap-2">
-                    <FiAward className="text-yellow-400 text-lg" />
+                    <FiAward className="text-text-1 text-lg" />
                     <div>
                       <span className="text-xs font-bold block text-text-1">{speedrun.badge}</span>
-                      <span className="text-[11px] text-emerald-500 font-semibold">{speedrun.signalMultiplier}</span>
+                      <span className="text-[11px] text-text-3 font-semibold">{speedrun.signalMultiplier}</span>
                     </div>
                   </div>
 

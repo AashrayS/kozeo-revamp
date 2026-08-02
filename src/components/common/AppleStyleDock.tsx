@@ -32,12 +32,12 @@ export function AppleStyleDock() {
     },
     {
       title: "Speedruns",
-      icon: <Zap className="h-5 w-5 text-yellow-400" />,
+      icon: <Zap className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/speedruns",
     },
     {
       title: "Work Sprints",
-      icon: <Layers className="h-5 w-5 text-yellow-400 font-semibold" />,
+      icon: <Layers className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/sprints",
     },
     {
@@ -67,7 +67,7 @@ export function AppleStyleDock() {
     },
     {
       title: theme === "light" ? "Dark Mode" : "Light Mode",
-      icon: <SunMoon className="h-5 w-5 text-yellow-400" />,
+      icon: <SunMoon className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       action: toggleTheme,
     },
   ];
@@ -88,7 +88,7 @@ export function AppleStyleDock() {
                   router.push(item.path);
                 }
               }}
-              className={isActive ? "ring-2 ring-yellow-400 dark:ring-yellow-400 shadow-md shadow-yellow-400/20 scale-110" : ""}
+              className={isActive ? "ring-2 ring-neutral-400 dark:ring-neutral-400 shadow-xl scale-110" : ""}
             >
               <DockLabel>{item.title}</DockLabel>
               <DockIcon>{item.icon}</DockIcon>
