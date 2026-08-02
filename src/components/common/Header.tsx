@@ -34,36 +34,18 @@ export default function Header({
     <>
       <header className="premium-header bg-header-bg">
         <div className="w-full h-full px-6 lg:px-8 flex justify-between items-center">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-              <Image
-                src="/kozeoLogo.png"
-                alt="Kozeo"
-                width={28}
-                height={28}
-                className="rounded-full"
-              />
-              <span className="font-bold text-[15px] tracking-tight text-text-1">
-                Kozeo
-              </span>
-            </Link>
-
-            {/* Quick Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 text-xs font-semibold">
-              <Link href="/Atrium" className="px-3 py-1.5 rounded-full hover:bg-state-hover text-text-3 hover:text-text-1 transition-colors">
-                Home
-              </Link>
-              <Link href="/speedruns" className="px-3 py-1.5 rounded-full hover:bg-state-hover text-text-3 hover:text-text-1 transition-colors">
-                Speedruns
-              </Link>
-              <Link href="/sprints" className="px-3 py-1.5 rounded-full hover:bg-state-hover text-text-3 hover:text-text-1 transition-colors">
-                Work Sprints
-              </Link>
-              <Link href="/gigs" className="px-3 py-1.5 rounded-full hover:bg-state-hover text-text-3 hover:text-text-1 transition-colors">
-                Projects
-              </Link>
-            </nav>
-          </div>
+          <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+            <Image
+              src="/kozeoLogo.png"
+              alt="Kozeo"
+              width={28}
+              height={28}
+              className="rounded-full"
+            />
+            <span className="font-bold text-[15px] tracking-tight text-text-1">
+              Kozeo
+            </span>
+          </Link>
 
         <div className="flex items-center gap-4">
           {/* Theme Toggle */}

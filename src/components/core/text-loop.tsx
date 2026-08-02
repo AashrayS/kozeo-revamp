@@ -13,13 +13,13 @@ interface TextLoopProps {
 
 export function TextLoop({
   children,
-  interval = 2500,
+  interval = 1400,
   className = "",
   transition = {
     type: "spring",
-    stiffness: 700,
-    damping: 60,
-    mass: 8,
+    stiffness: 900,
+    damping: 50,
+    mass: 5,
   },
   variants = {
     initial: {
