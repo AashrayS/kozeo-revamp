@@ -249,7 +249,7 @@ export default function Home() {
                   className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-amber-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 font-bold text-lg">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-amber-500 font-bold text-lg border border-container-3">
                       <FiZap />
                     </span>
                     <FiArrowRight className="text-text-4 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
@@ -266,16 +266,16 @@ export default function Home() {
 
                 <Link
                   href="/sprints"
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-blue-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-amber-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 font-bold text-lg">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-amber-500 font-bold text-lg border border-container-3">
                       <FiLayers />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-blue-500 transition-colors">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-amber-500 transition-colors">
                       Work Sprints
                     </h3>
                     <p className="text-xs text-text-3 mt-1">
@@ -286,16 +286,16 @@ export default function Home() {
 
                 <Link
                   href="/gigs"
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-emerald-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-amber-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 font-bold text-lg">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiBriefcase />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-emerald-500 transition-colors">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-amber-500 transition-colors">
                       Projects
                     </h3>
                     <p className="text-xs text-text-3 mt-1">
@@ -306,16 +306,16 @@ export default function Home() {
 
                 <Link
                   href={user ? `/profile/${user.username}` : "/profile"}
-                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-purple-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
+                  className="group p-5 rounded-2xl border border-container-3 bg-container-1 hover:border-amber-500/50 hover:bg-state-hover transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 font-bold text-lg">
+                    <span className="p-2.5 rounded-xl bg-container-2 text-text-1 font-bold text-lg border border-container-3">
                       <FiUser />
                     </span>
-                    <FiArrowRight className="text-text-4 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+                    <FiArrowRight className="text-text-4 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-text-1 group-hover:text-purple-500 transition-colors">
+                    <h3 className="text-base font-bold text-text-1 group-hover:text-amber-500 transition-colors">
                       Profile & Portfolio
                     </h3>
                     <p className="text-xs text-text-3 mt-1">

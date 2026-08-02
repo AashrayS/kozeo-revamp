@@ -117,7 +117,7 @@ export default function WorkSprintsPage() {
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-state-hover border border-container-3 mb-4 text-text-2">
-              <FiLayers className="text-blue-500" /> Platform Work Sprints
+              <FiLayers className="text-amber-500" /> Platform Work Sprints
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
@@ -134,7 +134,7 @@ export default function WorkSprintsPage() {
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Avg. Stipend</span>
-                <span className="text-2xl font-bold text-emerald-500">$500</span>
+                <span className="text-2xl font-bold text-amber-500">$500</span>
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Sprint Duration</span>
@@ -142,7 +142,7 @@ export default function WorkSprintsPage() {
               </div>
               <div className="p-3 rounded-2xl bg-container-2">
                 <span className="text-xs text-text-4 uppercase tracking-wider block font-semibold">Matching Weight</span>
-                <span className="text-2xl font-bold text-blue-500">+25% Reliability</span>
+                <span className="text-2xl font-bold text-amber-500">+25% Reliability</span>
               </div>
             </div>
           </div>
@@ -157,7 +157,7 @@ export default function WorkSprintsPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-xs px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 font-semibold border border-blue-500/20 uppercase tracking-wider">
+                      <span className="text-xs px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 font-semibold border border-amber-500/20 uppercase tracking-wider">
                         {sprint.status}
                       </span>
                       <span className="text-xs text-text-4 font-medium flex items-center gap-1">
@@ -173,7 +173,7 @@ export default function WorkSprintsPage() {
                   <div className="flex items-center gap-3">
                     <div className="px-4 py-2 rounded-2xl bg-container-2 border border-container-3 text-right">
                       <span className="text-xs text-text-4 block uppercase font-semibold">Reward</span>
-                      <span className="text-sm font-bold text-emerald-500">{sprint.reward}</span>
+                      <span className="text-sm font-bold text-amber-500">{sprint.reward}</span>
                     </div>
 
                     <button
@@ -194,7 +194,7 @@ export default function WorkSprintsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {sprint.deliverables.map((item, idx) => (
                       <div key={idx} className="p-3 rounded-2xl bg-container-2 text-xs text-text-2 flex items-start gap-2 border border-container-3/50">
-                        <FiCheckSquare className="text-blue-500 shrink-0 mt-0.5" />
+                        <FiCheckSquare className="text-amber-500 shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </div>
                     ))}
@@ -211,7 +211,7 @@ export default function WorkSprintsPage() {
                     </span>
                   </div>
 
-                  <span className="font-semibold text-blue-500">
+                  <span className="font-semibold text-amber-500">
                     {sprint.sprintSignal}
                   </span>
                 </div>

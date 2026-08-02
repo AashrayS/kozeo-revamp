@@ -27,7 +27,7 @@ export function AppleStyleDock() {
   const data = [
     {
       title: "Home",
-      icon: <HomeIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />,
+      icon: <HomeIcon className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/Atrium",
     },
     {
@@ -37,37 +37,37 @@ export function AppleStyleDock() {
     },
     {
       title: "Work Sprints",
-      icon: <Layers className="h-5 w-5 text-blue-500" />,
+      icon: <Layers className="h-5 w-5 text-amber-500 font-semibold" />,
       path: "/sprints",
     },
     {
       title: "Projects",
-      icon: <Briefcase className="h-5 w-5 text-emerald-500" />,
+      icon: <Briefcase className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/gigs",
     },
     {
       title: "Profile",
-      icon: <User className="h-5 w-5 text-purple-500" />,
+      icon: <User className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: `/profile/${profileUsername}`,
     },
     {
       title: "Store",
-      icon: <ShoppingBag className="h-5 w-5 text-pink-500" />,
+      icon: <ShoppingBag className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/store",
     },
     {
       title: "Resume",
-      icon: <FileText className="h-5 w-5 text-indigo-500" />,
+      icon: <FileText className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/resumeBuilder",
     },
     {
       title: "Discussions",
-      icon: <MessageSquare className="h-5 w-5 text-cyan-500" />,
+      icon: <MessageSquare className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/Atrium/discussion",
     },
     {
       title: theme === "light" ? "Dark Mode" : "Light Mode",
-      icon: <SunMoon className="h-5 w-5 text-amber-400" />,
+      icon: <SunMoon className="h-5 w-5 text-yellow-400" />,
       action: toggleTheme,
     },
   ];
@@ -88,7 +88,7 @@ export function AppleStyleDock() {
                   router.push(item.path);
                 }
               }}
-              className={isActive ? "ring-2 ring-amber-500 scale-110" : ""}
+              className={isActive ? "ring-2 ring-yellow-400 dark:ring-yellow-400 shadow-md shadow-yellow-400/20 scale-110" : ""}
             >
               <DockLabel>{item.title}</DockLabel>
               <DockIcon>{item.icon}</DockIcon>
