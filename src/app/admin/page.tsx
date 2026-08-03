@@ -212,35 +212,35 @@ export default function AdminDashboardPage() {
         <div className="flex flex-wrap items-center gap-3 mt-6 pt-6 border-t border-container-3">
           <button
             onClick={() => setIsSpeedrunModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-text-1 text-container-1 font-bold text-sm hover:scale-105 transition-all shadow-md"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             <FiPlus /> Create Speedrun
           </button>
 
           <button
             onClick={() => setIsSprintModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             <FiPlus /> Create Work Sprint
           </button>
 
           <button
             onClick={() => router.push("/admin/withdraw-requests")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             <FiDollarSign /> Withdraw Requests
           </button>
 
           <button
             onClick={() => router.push("/admin/discussion-rooms")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             Room Moderation
           </button>
 
           <button
             onClick={() => router.push("/admin/settings")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             Admin Settings
           </button>
@@ -405,6 +405,104 @@ export default function AdminDashboardPage() {
                   <div className="text-right">
                     <span className="text-xs text-text-4 block uppercase font-semibold">Deadline</span>
                     <span className="text-base font-bold text-text-1">{sp.deadlineDays} Days</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Escrow Audits Tab */}
+      {activeTab === "escrow" && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Milestone Escrow Audits</h2>
+              <p className="text-xs text-text-3 mt-1">Review locked deposits and authorize stipend payouts for completed Work Sprints.</p>
+            </div>
+            <button
+              onClick={() => router.push("/admin/withdraw-requests")}
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-text-1 text-container-1 font-bold text-xs hover:scale-105 transition-all shadow-md"
+            >
+              <FiDollarSign /> View Withdrawal Requests
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              { id: "esc-1", title: "Real-time Notification Engine", poster: "Vercel Labs", candidate: "alex_dev", amount: "$500", status: "Work Verified - Pending Release" },
+              { id: "esc-2", title: "GraphQL Schema Optimization", poster: "DeFi Capital", candidate: "sarah_m", amount: "$750", status: "In Progress" },
+              { id: "esc-3", title: "Monochrome Glassmorphic UI", poster: "Kozeo Core", candidate: "david_ui", amount: "$1,200", status: "Released" },
+            ].map((esc) => (
+              <div key={esc.id} className="group relative p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4">
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-container-2 text-text-2 font-semibold border border-container-3 uppercase">
+                      {esc.status}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-text-1">{esc.title}</h3>
+                  <span className="text-xs text-text-4 font-medium block">Poster: {esc.poster} • Candidate: {esc.candidate}</span>
+                </div>
+
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="text-right">
+                    <span className="text-xs text-text-4 block uppercase font-semibold">Locked Stipend</span>
+                    <span className="text-lg font-extrabold text-text-1">{esc.amount}</span>
+                  </div>
+                  {esc.status.includes("Pending Release") && (
+                    <button
+                      onClick={() => alert(`Stipend of ${esc.amount} released to ${esc.candidate} successfully!`)}
+                      className="px-4 py-2 rounded-2xl bg-text-1 text-container-1 font-bold text-xs hover:scale-105 transition-all shadow-md"
+                    >
+                      Authorize Release
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Users & Signals Tab */}
+      {activeTab === "users" && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Users & Signal Engine Audit</h2>
+              <p className="text-xs text-text-3 mt-1">Audit builder proof-of-work signals, badges awarded, and match rank multipliers.</p>
+            </div>
+            <button
+              onClick={() => router.push("/admin/discussion-rooms")}
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-xs hover:bg-state-hover transition-all"
+            >
+              Room Moderation
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { name: "Alex Rivera", handle: "@alex_dev", role: "Developer", badges: 4, matchRank: "+18% Rank" },
+              { name: "Sarah Chen", handle: "@sarah_m", role: "Design Engineer", badges: 6, matchRank: "+25% Rank" },
+              { name: "Vercel Team", handle: "@vercel_labs", role: "Startup Host", badges: 12, matchRank: "Verified Host" },
+            ].map((usr, i) => (
+              <div key={i} className="group relative p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl overflow-hidden flex flex-col justify-between">
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-container-2 text-text-2 font-semibold border border-container-3 uppercase">
+                      {usr.role}
+                    </span>
+                    <span className="text-xs text-text-3 font-semibold">{usr.matchRank}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-text-1">{usr.name}</h3>
+                  <span className="text-xs text-text-4 font-medium block mb-4">{usr.handle}</span>
+                  <div className="p-3 rounded-2xl bg-container-2 border border-container-3/50 text-xs">
+                    <span className="text-text-4 block uppercase font-semibold">Verified Badges</span>
+                    <span className="text-text-1 font-bold">{usr.badges} Verified Signals</span>
                   </div>
                 </div>
               </div>
