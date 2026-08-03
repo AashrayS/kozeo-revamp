@@ -165,7 +165,7 @@ export default function BusinessPortalPage() {
           Business Hiring Center
         </h1>
         <p className="text-lg text-text-3 max-w-2xl leading-relaxed">
-          Post Main Projects for developer hiring and launch Speedrun Skill Challenges to screen candidates with verified signal scores.
+          Post Main Projects and Work Sprints to hire top developers using Kozeo Speedrun verified signals.
         </p>
 
         {/* Action Bar */}
@@ -181,7 +181,7 @@ export default function BusinessPortalPage() {
             onClick={() => setIsSpeedrunModalOpen(true)}
             className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
-            <FiZap /> Launch Speedrun Test
+            <FiLayers /> Post Work Sprint
           </button>
         </div>
       </div>
@@ -197,7 +197,7 @@ export default function BusinessPortalPage() {
               </span>
               <div>
                 <h3 className="text-base font-bold text-text-1">Main Projects (Hiring & Gigs)</h3>
-                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Full Project Deliverables</span>
+                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Posted by Businesses</span>
               </div>
             </div>
             <p className="text-xs text-text-3 leading-relaxed">
@@ -211,15 +211,15 @@ export default function BusinessPortalPage() {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-3">
               <span className="p-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-base shadow-xs">
-                <FiZap />
+                <FiLayers />
               </span>
               <div>
-                <h3 className="text-base font-bold text-text-1">Speedruns (Candidate Screening)</h3>
-                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Micro-Skill Assessments</span>
+                <h3 className="text-base font-bold text-text-1">Work Sprints (Feature Stipends)</h3>
+                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Posted by Businesses</span>
               </div>
             </div>
             <p className="text-xs text-text-3 leading-relaxed">
-              30–60 minute timed micro-skill tests hosted by your business to automatically evaluate candidate skills with verified signal scores.
+              3–14 day short-term feature deliverables with escrow stipends. Screen candidates with Kozeo's platform-verified Speedrun signals.
             </p>
           </div>
         </div>
