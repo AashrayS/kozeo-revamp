@@ -26,7 +26,7 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           <div className="fixed top-56 right-4 w-2 h-0 rounded-full opacity-60 bg-white shadow-[0_0_250px_120px_rgba(255,255,255,0.15)] pointer-events-none z-0" />
           <div className="fixed bottom-4 left-4 w-2 h-0 rounded-full opacity-60 bg-white shadow-[0_0_250px_120px_rgba(255,255,255,0.15)] pointer-events-none z-0" />
           
-          <div className="p-6 md:p-8 max-w-7xl mx-auto">
+          <div className="p-6 md:p-8 lg:p-10 w-full max-w-[1700px] mx-auto">
             {children}
           </div>
         </main>

@@ -242,7 +242,7 @@ export default function Home() {
           }`}
         >
           <div className="flex flex-1 pb-20 lg:pb-0">
-            <main className="flex-1 p-6 max-w-7xl mx-auto overflow-y-auto">
+            <main className="flex-1 p-2 sm:p-4 md:p-6 w-full max-w-[1700px] mx-auto overflow-y-auto">
               {/* Quick Action Navigation Hub */}
               <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Link
