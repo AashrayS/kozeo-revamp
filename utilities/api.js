@@ -178,6 +178,13 @@ export async function callApi({ query, variables = {}, token = null }) {
   return result.data;
 }
 
+// Configured Admin Email Whitelist
+const ADMIN_EMAILS = [
+  "admin@kozeo.com",
+  "aashray@kozeo.com",
+  "shashwat@kozeo.com",
+];
+
 /**
  * Check if the current user has Admin privileges
  * @param {Object} user - User object from Redux or local context
@@ -187,12 +194,16 @@ export const isAdminUser = (user) => {
   if (user?.role === "admin" || user?.isAdmin === true) {
     return true;
   }
+  if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+    return true;
+  }
   if (typeof window !== "undefined") {
     try {
       const stored = localStorage.getItem("kozeo_user");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed?.role === "admin" || parsed?.isAdmin === true) return true;
+        if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase())) return true;
       }
       const adminOverride = localStorage.getItem("kozeo_admin_mode");
       if (adminOverride === "true") return true;
