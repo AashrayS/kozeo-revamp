@@ -17,15 +17,17 @@ import {
 import { Dock, DockIcon, DockItem, DockLabel } from "@/components/core/dock";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useUser } from "../../../store/hooks";
+import { isAdminUser } from "../../../utilities/api";
 
 export function AppleStyleDock() {
   const router = useRouter();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
-  const { username } = useUser();
+  const { user, username } = useUser();
   const profileUsername = username || "profile";
+  const isAdmin = isAdminUser(user);
 
-  const data = [
+  const rawData = [
     {
       title: "Home",
       icon: <HomeIcon className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
@@ -51,11 +53,15 @@ export function AppleStyleDock() {
       icon: <User className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: `/profile/${profileUsername}`,
     },
-    {
-      title: "Admin",
-      icon: <Shield className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
-      path: "/admin",
-    },
+    ...(isAdmin
+      ? [
+          {
+            title: "Admin",
+            icon: <Shield className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
+            path: "/admin",
+          },
+        ]
+      : []),
     {
       title: "Store",
       icon: <ShoppingBag className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
@@ -81,7 +87,7 @@ export function AppleStyleDock() {
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[999999] pointer-events-auto">
       <Dock className="items-end pb-3">
-        {data.map((item, idx) => {
+        {rawData.map((item, idx) => {
           const isActive = item.path && pathname === item.path;
 
           return (

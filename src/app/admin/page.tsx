@@ -21,6 +21,7 @@ import {
 } from "react-icons/fi";
 import { Spotlight } from "@/components/core/spotlight";
 import { useUser } from "../../../store/hooks";
+import { isAdminUser } from "../../../utilities/api";
 
 interface SpeedrunItem {
   id: string;
@@ -127,13 +128,7 @@ export default function AdminDashboardPage() {
     totalSlots: 3,
   });
 
-  // Auth bypass for local development testing
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") return;
-    if (user && user.role !== "admin") {
-      router.push("/Atrium");
-    }
-  }, [user, router]);
+  const isAdmin = isAdminUser(user);
 
   // Handlers
   const handleCreateSpeedrun = (e: React.FormEvent) => {
@@ -173,6 +168,26 @@ export default function AdminDashboardPage() {
     setNewSprint({ title: "", poster: "", reward: "$500", deadlineDays: 5, totalSlots: 3 });
     setIsSprintModalOpen(false);
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center p-6">
+        <div className="p-4 rounded-3xl bg-container-2 border border-container-3 text-text-1 text-3xl mb-4">
+          <FiShield />
+        </div>
+        <h2 className="text-2xl font-bold tracking-tight mb-2">Access Denied</h2>
+        <p className="text-sm text-text-3 max-w-md mb-6">
+          The Admin Control Center is restricted to authorized platform administrators.
+        </p>
+        <button
+          onClick={() => router.push("/Atrium")}
+          className="px-6 py-3 rounded-2xl bg-text-1 text-container-1 font-bold text-sm hover:scale-105 transition-all shadow-md"
+        >
+          Return to Mission Control
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-text-1 pb-24">
