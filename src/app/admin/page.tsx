@@ -223,6 +223,27 @@ export default function AdminDashboardPage() {
           >
             <FiPlus /> Create Work Sprint
           </button>
+
+          <button
+            onClick={() => router.push("/admin/withdraw-requests")}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+          >
+            <FiDollarSign /> Withdraw Requests
+          </button>
+
+          <button
+            onClick={() => router.push("/admin/discussion-rooms")}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+          >
+            Room Moderation
+          </button>
+
+          <button
+            onClick={() => router.push("/admin/settings")}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+          >
+            Admin Settings
+          </button>
         </div>
       </div>
 
