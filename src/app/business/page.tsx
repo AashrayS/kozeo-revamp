@@ -172,14 +172,14 @@ export default function BusinessPortalPage() {
         <div className="flex flex-wrap items-center gap-3 mt-6 pt-6 border-t border-container-3">
           <button
             onClick={() => setIsProjectModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-text-1 text-container-1 font-bold text-sm hover:scale-105 transition-all shadow-md"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             <FiPlus /> Post Main Project
           </button>
 
           <button
             onClick={() => setIsSpeedrunModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-sm hover:bg-state-hover transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-semibold text-xs uppercase tracking-wider hover:bg-state-hover transition-all"
           >
             <FiZap /> Launch Speedrun Test
           </button>
@@ -187,29 +187,41 @@ export default function BusinessPortalPage() {
       </div>
 
       {/* Distinction Explainer Banner */}
-      <div className="mb-8 p-6 rounded-3xl border border-container-3 bg-container-2/50 backdrop-blur-md grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-2xl bg-container-1 border border-container-3/60">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="p-2 rounded-xl bg-container-2 text-text-1 font-bold">
-              <FiBriefcase />
-            </span>
-            <h3 className="text-base font-bold text-text-1">Main Projects (Hiring & Gigs)</h3>
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="group relative p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="p-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-base shadow-xs">
+                <FiBriefcase />
+              </span>
+              <div>
+                <h3 className="text-base font-bold text-text-1">Main Projects (Hiring & Gigs)</h3>
+                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Full Project Deliverables</span>
+              </div>
+            </div>
+            <p className="text-xs text-text-3 leading-relaxed">
+              Full client deliverables with milestone budgets. Developers submit proposals and complete project milestones for direct payout.
+            </p>
           </div>
-          <p className="text-xs text-text-3 leading-relaxed">
-            Full client deliverables with milestone budgets. Developers submit proposals and complete project milestones for direct payout.
-          </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-container-1 border border-container-3/60">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="p-2 rounded-xl bg-container-2 text-text-1 font-bold">
-              <FiZap />
-            </span>
-            <h3 className="text-base font-bold text-text-1">Speedruns (Candidate Screening)</h3>
+        <div className="group relative p-6 rounded-3xl border border-container-3 bg-container-1 backdrop-blur-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="p-2.5 rounded-2xl bg-container-2 border border-container-3 text-text-1 font-bold text-base shadow-xs">
+                <FiZap />
+              </span>
+              <div>
+                <h3 className="text-base font-bold text-text-1">Speedruns (Candidate Screening)</h3>
+                <span className="text-[10px] font-bold text-text-4 uppercase tracking-wider">Micro-Skill Assessments</span>
+              </div>
+            </div>
+            <p className="text-xs text-text-3 leading-relaxed">
+              30–60 minute timed micro-skill tests hosted by your business to automatically evaluate candidate skills with verified signal scores.
+            </p>
           </div>
-          <p className="text-xs text-text-3 leading-relaxed">
-            30–60 minute timed micro-skill tests hosted by your business to automatically evaluate candidate skills with verified signal scores.
-          </p>
         </div>
       </div>
 
