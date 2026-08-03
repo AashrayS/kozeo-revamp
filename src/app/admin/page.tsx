@@ -248,7 +248,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 border-b border-container-3">
+      <div className="flex items-center gap-2 mb-8 overflow-x-auto py-2 px-1 border-b border-container-3">
         {[
           { id: "overview", label: "Overview Analytics", icon: FiBarChart2 },
           { id: "speedruns", label: "Speedruns Manager", icon: FiZap },
@@ -265,7 +265,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
                 isActive
-                  ? "bg-text-1 text-container-1 shadow-md scale-105"
+                  ? "bg-text-1 text-container-1 shadow-sm"
                   : "bg-container-1 border border-container-3 text-text-3 hover:text-text-1 hover:bg-state-hover"
               }`}
             >
