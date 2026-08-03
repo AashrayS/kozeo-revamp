@@ -7,6 +7,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getUserWallet } from "../../../utilities/kozeoApi";
 import { useSelector } from "react-redux";
+import { Spotlight } from "@/components/core/spotlight";
 
 export interface StoreItem {
   id: number;
@@ -114,8 +115,9 @@ export default function StorePage() {
             {storeItems.map((item) => (
               <div
                 key={item.id}
-                className="relative flex flex-col justify-between kozeo-card p-5 group"
+                className="relative flex flex-col justify-between kozeo-card p-5 group overflow-hidden"
               >
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
                 <img
                   src={item.displayPicture}
                   alt={item.title}

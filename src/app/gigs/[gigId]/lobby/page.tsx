@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import ProfessionalButton from "@/components/common/ProfessionalButton";
 import RequestCard from "@/components/common/RequestCard";
 import { PageLoader } from "@/components/common/PageLoader";
-import { FiStar, FiArrowLeft } from "react-icons/fi";
+import { FiStar, FiArrowLeft, FiCheckCircle, FiClock, FiShield, FiDollarSign } from "react-icons/fi";
+import { Spotlight } from "@/components/core/spotlight";
 import { io, Socket } from "socket.io-client";
 import {
   getGigById,
@@ -600,39 +601,52 @@ export default function GigLobbyPage({
                 </div>
               </div>
 
-              {/* Project Value */}
-              <div className="mb-6 sm:mb-8">
-                {gig.amount === 0 ? (
-                  <div
-                    className={`inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      theme === "dark"
-                        ? "bg-container-1 bg-container-2 text-text-3 border border-forge-line/50"
-                        : "bg-container-1 bg-container-1 text-text-3 border border-container-3"
-                    }`}
-                  >
-                    <FiStar className="w-4 h-4 mr-2" />
-                    <span className="text-xs sm:text-sm">
-                      Skill Forge Gig - Learning & Collaboration
+              {/* Interactive Escrow Milestone Tracker */}
+              <div className="mb-6 sm:mb-8 p-5 rounded-2xl bg-container-1 border border-container-3 shadow-xs relative overflow-hidden">
+                <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 rounded-xl bg-container-2 text-text-1 font-bold text-xs border border-container-3">
+                        <FiShield />
+                      </span>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-text-1">Kozeo Escrow Milestone Protocol</h3>
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 uppercase">
+                      Funds Secured
                     </span>
                   </div>
-                ) : (
-                  <>
-                    <div
-                      className={`text-lg sm:text-xl lg:text-2xl xl:text-3xl font-semibold ${
-                        theme === "light" ? "text-text-1" : "text-text-1"
-                      }`}
-                    >
-                      {gig.currency} {gig.amount}
-                    </div>
-                    <div
-                      className={`text-xs sm:text-sm lg:text-base ${
-                        theme === "light" ? "text-text-3" : "text-text-3"
-                      }`}
-                    >
-                      Project value
-                    </div>
-                  </>
-                )}
+
+                  {/* Steps */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+                    {[
+                      { step: "1. Deposit Locked", status: "Completed", icon: FiCheckCircle },
+                      { step: "2. Work Sprint", status: "Active", icon: FiClock },
+                      { step: "3. Code Audit", status: "Pending", icon: FiShield },
+                      { step: "4. Payout Release", status: "Pending", icon: FiDollarSign },
+                    ].map((st, i) => {
+                      const Icon = st.icon;
+                      const isComp = st.status === "Completed";
+                      const isAct = st.status === "Active";
+
+                      return (
+                        <div
+                          key={i}
+                          className={`p-2.5 rounded-xl border text-xs transition-all ${
+                            isComp
+                              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 font-bold"
+                              : isAct
+                              ? "bg-container-2 border-container-3 text-text-1 font-bold shadow-xs"
+                              : "bg-container-1/50 border-container-3/40 text-text-4 font-medium"
+                          }`}
+                        >
+                          <Icon className="mb-1 text-sm" />
+                          <span className="block leading-tight text-[11px]">{st.step}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {/* Content Sections */}

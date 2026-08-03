@@ -8,6 +8,8 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { getUserGigs } from "../../../utilities/kozeoApi";
 import { useUser } from "../../../store/hooks";
 
+import { Spotlight } from "@/components/core/spotlight";
+
 // Updated interface to match API response
 interface Gig {
   id: string;
@@ -227,8 +229,9 @@ export default function GigListPage() {
                   <div
                     key={gig.id}
                     onClick={() => handleGigNavigation(gig)}
-                    className="relative flex flex-col justify-between h-full min-h-[320px] kozeo-card p-6 cursor-pointer group"
+                    className="relative flex flex-col justify-between h-full min-h-[320px] kozeo-card p-6 cursor-pointer group overflow-hidden"
                   >
+                    <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={140} />
                     {/* Top Content */}
                     <div>
                       <div className="flex items-center justify-between mb-2">

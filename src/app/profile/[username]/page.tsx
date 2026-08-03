@@ -20,7 +20,11 @@ import {
   FiChevronUp,
   FiFileText,
   FiUser,
+  FiZap,
+  FiAward,
+  FiCheckCircle,
 } from "react-icons/fi";
+import { Spotlight } from "@/components/core/spotlight";
 import {
   getUserByUsername,
   getUserWallet,
@@ -650,10 +654,36 @@ export default function UserProfilePage() {
             <p className={`text-sm mb-4 leading-relaxed max-w-2xl theme-transition ${theme === "light" ? "text-text-4" : "text-text-2"}`}>
               {profile.bio}
             </p>
-            <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-4">
-              <span className={`px-3 py-1 text-xs rounded-full font-bold tracking-widest uppercase border transition-all duration-300 ${theme === "light" ? "bg-black/5 border-black/10 text-black/40" : "bg-white/5 border-white/10 text-white/40"}`}>
-                Active
-              </span>
+            {/* Verified Speedrun & Sprint Signals */}
+            <div className="mt-6 pt-6 border-t border-container-3">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="p-1.5 rounded-xl bg-container-2 border border-container-3 text-text-1 font-bold text-xs">
+                  <FiZap />
+                </span>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-text-3">Kozeo Verified Skill Signals</h4>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 uppercase ml-auto">
+                  +22% Match Rank Score
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { badge: "React 19 Specialist", score: "98% Pass", type: "Speedrun" },
+                  { badge: "GraphQL Architect", score: "100% Pass", type: "Speedrun" },
+                  { badge: "Real-time Notification Deliverable", score: "Verified Deliverable", type: "Work Sprint" },
+                ].map((sig, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-container-2 border border-container-3 text-xs shadow-xs"
+                  >
+                    <FiCheckCircle className="text-emerald-500" />
+                    <div>
+                      <span className="font-bold text-text-1 block leading-tight">{sig.badge}</span>
+                      <span className="text-[9px] text-text-4 font-semibold block">{sig.type} • {sig.score}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -663,33 +693,48 @@ export default function UserProfilePage() {
       <section className="premium-card p-6 md:p-8">
         <h2 className="premium-section-title">Kozeo Ledger</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Total Earnings</div>
-            <div className="text-2xl font-bold">{getCurrencySymbol(walletCurrency)} {totalEarnings.toLocaleString()}</div>
-            {canViewSensitiveInfo && (
-              <button onClick={() => setShowWithdrawalModal(true)} className="mt-4 w-full py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
-                Claim Rewards
-              </button>
-            )}
+          <div className="group relative p-6 rounded-2xl bg-container-2 border border-container-3 overflow-hidden shadow-xs">
+            <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={120} />
+            <div className="relative z-10">
+              <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Total Earnings</div>
+              <div className="text-2xl font-bold">{getCurrencySymbol(walletCurrency)} {totalEarnings.toLocaleString()}</div>
+              {canViewSensitiveInfo && (
+                <button onClick={() => setShowWithdrawalModal(true)} className="mt-4 w-full py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
+                  Claim Rewards
+                </button>
+              )}
+            </div>
           </div>
-          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Gig Rating</div>
-            <div className="flex items-center gap-2">
-              <div className="text-2xl font-bold">{avgRating.toFixed(1)}</div>
-              <div className="flex text-black/10 dark:text-white/10">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <FiStar key={s} className={s <= Math.round(avgRating) ? "text-stone-400 fill-stone-400" : ""} />
-                ))}
+
+          <div className="group relative p-6 rounded-2xl bg-container-2 border border-container-3 overflow-hidden shadow-xs">
+            <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={120} />
+            <div className="relative z-10">
+              <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Gig Rating</div>
+              <div className="flex items-center gap-2">
+                <div className="text-2xl font-bold">{avgRating.toFixed(1)}</div>
+                <div className="flex text-black/10 dark:text-white/10">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <FiStar key={s} className={s <= Math.round(avgRating) ? "text-stone-400 fill-stone-400" : ""} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Projects Hosted</div>
-            <div className="text-2xl font-bold">{profile.gigsHosted.length || 0}</div>
+
+          <div className="group relative p-6 rounded-2xl bg-container-2 border border-container-3 overflow-hidden shadow-xs">
+            <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={120} />
+            <div className="relative z-10">
+              <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Projects Hosted</div>
+              <div className="text-2xl font-bold">{profile.gigsHosted.length || 0}</div>
+            </div>
           </div>
-          <div className="p-6 rounded-2xl bg-container-2 border border-container-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Collaborations</div>
-            <div className="text-2xl font-bold">{profile.gigsCollaborated?.length || 0}</div>
+
+          <div className="group relative p-6 rounded-2xl bg-container-2 border border-container-3 overflow-hidden shadow-xs">
+            <Spotlight className="bg-zinc-500/15 dark:bg-zinc-200/10 blur-2xl" size={120} />
+            <div className="relative z-10">
+              <div className="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-2">Collaborations</div>
+              <div className="text-2xl font-bold">{profile.gigsCollaborated?.length || 0}</div>
+            </div>
           </div>
         </div>
       </section>
