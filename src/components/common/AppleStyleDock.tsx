@@ -9,6 +9,7 @@ import {
   Briefcase,
   User,
   ShoppingBag,
+  Shield,
   SunMoon,
   FileText,
   MessageSquare,
@@ -49,6 +50,11 @@ export function AppleStyleDock() {
       title: "Profile",
       icon: <User className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: `/profile/${profileUsername}`,
+    },
+    {
+      title: "Admin",
+      icon: <Shield className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
+      path: "/admin",
     },
     {
       title: "Store",
