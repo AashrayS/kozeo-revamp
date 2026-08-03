@@ -32,52 +32,52 @@ export default function Header({
 
   return (
     <>
-      <header className="premium-header bg-header-bg">
-        <div className="w-full h-full px-6 lg:px-8 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+      <header className="sticky top-0 z-50 w-full h-16 sm:h-20 backdrop-blur-2xl bg-container-1/90 border-b border-container-3 shadow-xs transition-all duration-300">
+        <div className="w-full h-full px-6 md:px-10 lg:px-16 flex justify-between items-center">
+          <Link href="/Atrium" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
               src="/kozeoLogo.png"
               alt="Kozeo"
-              width={28}
-              height={28}
-              className="rounded-full"
+              width={32}
+              height={32}
+              className="rounded-full shadow-xs"
             />
-            <span className="font-bold text-[15px] tracking-tight text-text-1">
+            <span className="font-extrabold text-base tracking-tight text-text-1">
               Kozeo
             </span>
           </Link>
 
-        <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
-            aria-label="Toggle theme"
-          >
-            {theme === "light" ? <FiMoon className="text-xl" /> : <FiSun className="text-xl" />}
-          </button>
+          <div className="flex items-center gap-3 md:gap-5">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-container-2 border border-container-3 hover:bg-state-hover transition-colors text-text-3 hover:text-text-1 shadow-xs"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <FiMoon className="text-lg" /> : <FiSun className="text-lg" />}
+            </button>
 
-          {/* Notification Button */}
-          <button
-            onClick={toggleNotifications}
-            className="relative flex items-center gap-2 px-4 py-2 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
-          >
-            <FiBell className="text-xl" />
-            <span className="hidden sm:inline font-medium text-sm">Notifications</span>
-            {unreadCount > 0 && (
-              <span className="absolute top-2 right-4 w-1.5 h-1.5 bg-text-1 rounded-full" />
-            )}
-          </button>
+            {/* Notification Button */}
+            <button
+              onClick={toggleNotifications}
+              className="relative flex items-center gap-2 px-4 py-2 rounded-full bg-container-2 border border-container-3 hover:bg-state-hover transition-colors text-text-3 hover:text-text-1 shadow-xs"
+            >
+              <FiBell className="text-lg text-text-1" />
+              <span className="hidden sm:inline font-bold text-xs uppercase tracking-wider">Notifications</span>
+              {unreadCount > 0 && (
+                <span className="absolute top-2 right-3.5 w-2 h-2 bg-emerald-500 rounded-full shadow-xs" />
+              )}
+            </button>
 
-          {/* Logout Button */}
-          <button
-            onClick={logout}
-            className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-state-hover transition-colors text-text-3 hover:text-text-1"
-          >
-            <FiLogOut className="text-xl" />
-            <span className="hidden sm:inline font-medium text-sm">Logout</span>
-          </button>
-        </div>
+            {/* Logout Button */}
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-container-2 border border-container-3 hover:bg-state-hover transition-colors text-text-3 hover:text-text-1 shadow-xs"
+            >
+              <FiLogOut className="text-lg text-text-1" />
+              <span className="hidden sm:inline font-bold text-xs uppercase tracking-wider">Logout</span>
+            </button>
+          </div>
         </div>
       </header>
 
