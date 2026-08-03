@@ -215,3 +215,31 @@ export const isAdminUser = (user) => {
   }
   return false;
 };
+
+/**
+ * Evaluate the 3-tier access role for a user
+ * @param {Object} user - User object
+ * @returns {'admin' | 'business' | 'developer'} Access role
+ */
+export const getUserRole = (user) => {
+  if (isAdminUser(user)) {
+    return "admin";
+  }
+  const role = (user?.role || "").toLowerCase();
+  if (role === "business" || role === "client" || role === "founder" || role === "employer") {
+    return "business";
+  }
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem("kozeo_user");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const r = (parsed?.role || "").toLowerCase();
+        if (r === "business" || r === "client" || r === "founder" || r === "employer") return "business";
+      }
+      const roleOverride = localStorage.getItem("kozeo_user_role");
+      if (roleOverride === "business") return "business";
+    } catch (e) {}
+  }
+  return "developer";
+};

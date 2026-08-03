@@ -17,7 +17,7 @@ import {
 import { Dock, DockIcon, DockItem, DockLabel } from "@/components/core/dock";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useUser } from "../../../store/hooks";
-import { isAdminUser } from "../../../utilities/api";
+import { getUserRole } from "../../../utilities/api";
 
 export function AppleStyleDock() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export function AppleStyleDock() {
   const { theme, toggleTheme } = useTheme();
   const { user, username } = useUser();
   const profileUsername = username || "profile";
-  const isAdmin = isAdminUser(user);
+  const role = getUserRole(user);
 
   const rawData = [
     {
@@ -43,6 +43,15 @@ export function AppleStyleDock() {
       icon: <Layers className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: "/sprints",
     },
+    ...(role === "business"
+      ? [
+          {
+            title: "Business Portal",
+            icon: <Briefcase className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
+            path: "/business",
+          },
+        ]
+      : []),
     {
       title: "Projects",
       icon: <Briefcase className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
@@ -53,7 +62,7 @@ export function AppleStyleDock() {
       icon: <User className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />,
       path: `/profile/${profileUsername}`,
     },
-    ...(isAdmin
+    ...(role === "admin"
       ? [
           {
             title: "Admin",
